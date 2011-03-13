@@ -1,18 +1,18 @@
 #include "box.h"
 
 Box::Box(float width, float heigth, float depth, QObject *parent) :
-    QObject(parent)
+    QObject(parent), width(width),heigth(heigth),depth(depth)
 {
 }
 
 float Box::getDepth() {
-    return 0;
+    return depth;
 }
 
 float Box::getWidth() {
-    return 0;
+    return width;
 }
 
 float Box::getHeight() {
-    return 0;
+    return heigth;
 }
