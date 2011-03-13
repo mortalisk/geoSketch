@@ -9,9 +9,10 @@ bool runTests(int argc, char *argv[]) {
 }
 
 int main(int argc, char *argv[]) {
-    QApplication a(argc, argv);
+    //QApplication a(argc, argv);
 
     runTests(argc, argv);
 
-    return a.exec();
+    return 0;
+    //return a.exec();
 }
