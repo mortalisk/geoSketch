@@ -1,0 +1,17 @@
+#include <QtGui/QApplication>
+#include <QtTest/QTest>
+#include <geometry/testbox.h>
+
+bool runTests(int argc, char *argv[]) {
+    TestBox testBox;
+    QTest::qExec(&testBox, argc, argv);
+    return true;
+}
+
+int main(int argc, char *argv[]) {
+    QApplication a(argc, argv);
+
+    runTests(argc, argv);
+
+    return a.exec();
+}
