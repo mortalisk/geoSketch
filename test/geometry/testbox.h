@@ -13,7 +13,8 @@ signals:
 public slots:
 
 private slots:
-    void boxInit();
+    void boxConstructor();
+    void boxMesh();
 
 };
 
