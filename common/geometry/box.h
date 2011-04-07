@@ -1,23 +1,21 @@
 #ifndef BOX_H
 #define BOX_H
 
-#include <QObject>
 #include <QVector>
-#include <QVector3D>
+#include "shape.h"
 
-class Box : public QObject
+class Box : public Shape
 {
-    Q_OBJECT
 private:
     float width, heigth, depth;
-    QVector<QVector3D> vertices;
+    QVector<vertex> vertices;
 public:
-    explicit Box(float width, float heigth, float depth, QObject *parent = 0);
+    Box(float width, float heigth, float depth);
     float getWidth();
     float getHeight();
     float getDepth();
 
-    QVector<QVector3D> & getVertices();
+    virtual QVector<vertex> & getVertices();
 
 signals:
 

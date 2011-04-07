@@ -1,7 +1,7 @@
 #include "box.h"
 
-Box::Box(float width, float heigth, float depth, QObject *parent) :
-    QObject(parent), width(width),heigth(heigth),depth(depth)
+Box::Box(float width, float heigth, float depth) :
+    Shape(), width(width),heigth(heigth),depth(depth)
 {
     /*           H ___________ G
                  /|          /|
@@ -17,15 +17,15 @@ Box::Box(float width, float heigth, float depth, QObject *parent) :
        (0,0,0)
 
       */
-    QVector3D A(0,0,0);
-    QVector3D B(width,0,0);
-    QVector3D C(width,heigth,0);
-    QVector3D D(0,heigth,0);
+    vertex A = {0,0,0,1,0,0,0};
+    vertex B = {width,0,0,0,1,0,0};
+    vertex C = {width,heigth,0,0,0,1,0};
+    vertex D = {0,heigth,0,1,1,0,0};
 
-    QVector3D E(0,0,-depth);
-    QVector3D F(width,0,-depth);
-    QVector3D G(width,heigth,-depth);
-    QVector3D H(0,heigth,-depth);
+    vertex E = {0,0,-depth,1,0,1,0};
+    vertex F = {width,0,-depth,0,1,1,0};
+    vertex G = {width,heigth,-depth,1,1,1,0};
+    vertex H = {0,heigth,-depth,0,0,0,0};
 
     //Front
     vertices.push_back(A);
@@ -94,6 +94,6 @@ float Box::getHeight() {
     return heigth;
 }
 
-QVector<QVector3D> & Box::getVertices(){
+QVector<vertex> & Box::getVertices(){
     return vertices;
 }

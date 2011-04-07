@@ -10,6 +10,8 @@ INCLUDEPATH += . geometry ../common
 LIBS += -L../common -lcommon
 
 # Input
-HEADERS += geometry/testbox.h
+HEADERS += geometry/testbox.h \
+    geometry/testarrays.h
 SOURCES += geometry/testbox.cpp \
-    main.cpp
+    main.cpp \
+    geometry/testarrays.cpp

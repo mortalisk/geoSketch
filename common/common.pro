@@ -9,5 +9,17 @@ DEPENDPATH += . geometry
 INCLUDEPATH += . geometry
 
 # Input
-HEADERS += geometry/box.h
-SOURCES += geometry/box.cpp
+HEADERS += geometry/box.h \
+    geometry/shape.h \
+    geometry/arrays.h \
+    geometry/scene.h \
+    morten3d/Camera.h \
+    morten3d/Vector3.h \
+    morten3d/Splines.h
+SOURCES += geometry/box.cpp \
+    geometry/shape.cpp\
+    geometry/arrays.cpp \
+    geometry/scene.cpp \
+    morten3d/Camera.cpp \
+    morten3d/Vector3.cpp \
+    morten3d/Splines.cpp
