@@ -1,3 +1,4 @@
+#include <GL/glew.h>
 #include "sketchglwidget.h"
 
 SketchGLWidget::SketchGLWidget(QGLFormat * glf, QWidget *parent) :
@@ -10,5 +11,12 @@ void SketchGLWidget::paintGL() {
 }
 
 void SketchGLWidget::initializeGL() {
+    GLenum err = glewInit();
+    if (GLEW_OK != err)
+    {
+      /* Problem: glewInit failed, something is seriously wrong. */
+      std::cerr <<  "Error: " << glewGetErrorString(err) << std::endl;
+    }
+
     glClearColor(0.7,0.7,1.0,1.0);
 }

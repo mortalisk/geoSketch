@@ -7,7 +7,7 @@ TARGET = geoSketch
 QT += core gui opengl
 DEPENDPATH += . gui
 INCLUDEPATH += . gui ../common
-LIBS += -L../common -lcommon
+LIBS += -L../common -lcommon -lGLEW
 
 # Input
 HEADERS += gui/mainwindow.h gui/sketchglwidget.h
