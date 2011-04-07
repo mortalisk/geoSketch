@@ -1,0 +1,19 @@
+geoSketch
+
+Originally made by 
+
+	Morten Bendiksen - morten.bendiksen<at>gmail.com
+
+You are free to use all code published by me in any way you see fit, so long as you never sue me. But you are asked politely to keep my name somewhere nearby the code when redistributing it. (This is only to reduce risk of potential lawsuit from silly people claiming to be the authors)
+
+Description:
+A rapid sketching program for geologists. See doc folder for more details.
+
+Dependencies:
+* GLEW
+* QT 4.7+
+* Opengl 3.3+
+
+Building:
+Standard qmake procedure. qmake then make.
+There are three subfolder projects inside the main project. These are test, common and app. The idea is to keep opengl, and general display stuff inside the app folder, the model and mathmatics inside the common folder, and the unit tests and any other tests inside the test folder.
