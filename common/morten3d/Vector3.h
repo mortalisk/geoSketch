@@ -20,9 +20,10 @@
 
 class Vector3 {
 private:
-	double xvalue, yvalue, zvalue;
+double xvalue, yvalue, zvalue;
 
 public:
+
 	Vector3(double xv = 0, double yv = 0, double zv = 0) :
 		xvalue(xv), yvalue(yv), zvalue(zv) {
 	}

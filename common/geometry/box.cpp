@@ -1,4 +1,5 @@
 #include "box.h"
+#include <morten3d/Vector3.h>
 
 Box::Box(float width, float heigth, float depth) :
     Shape(), width(width),heigth(heigth),depth(depth)
@@ -94,6 +95,6 @@ float Box::getHeight() {
     return heigth;
 }
 
-QVector<vertex> & Box::getVertices(){
-    return vertices;
-}
+
+
+

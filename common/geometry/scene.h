@@ -5,30 +5,41 @@
 #include "geometry/box.h"
 #include "morten3d/Camera.h"
 #include "arrays.h"
+#include "node.h"
+#include "sphere.h"
 
 class Scene
 {
 private:
-    QVector<Shape*> shapes;
+    QVector<Node*> nodes;
 
 public:
     Camera camera;
+    Sphere * sphere;
+    Box * box;
+    Node * activeNode;
     Scene() {
-        add(new Box(5,5,5));
+        sphere = new Sphere(0.01f);
+        box = new Box(1,1,1);
+        Node * drawBox = new Node();
+        drawBox->shape = box;
+        activeNode = drawBox;
+        add(drawBox);
     }
 
-    void add(Shape* shape) {
-        shapes.append(shape);
-        shape->array = Arrays::makeArray(*shape,shape->arraySize);
+    void addPoint(Vector3& point, Vector3& dir);
+
+    void add(Node* node) {
+        nodes.append(node);
     }
 
-    QVector<Shape*>& getShapes(){
-        return shapes;
+    QVector<Node*>& getNodes(){
+        return nodes;
     }
 
     ~Scene() {
-        foreach(Shape* shape , shapes) {
-            delete shape;
+        foreach(Node* node , nodes) {
+            delete node;
         }
     }
 

@@ -15,11 +15,15 @@ HEADERS += geometry/box.h \
     geometry/scene.h \
     morten3d/Camera.h \
     morten3d/Vector3.h \
-    morten3d/Splines.h
+    morten3d/Splines.h \
+    geometry/sphere.h \
+    geometry/node.h
 SOURCES += geometry/box.cpp \
     geometry/shape.cpp\
     geometry/arrays.cpp \
     geometry/scene.cpp \
     morten3d/Camera.cpp \
     morten3d/Vector3.cpp \
-    morten3d/Splines.cpp
+    morten3d/Splines.cpp \
+    geometry/sphere.cpp \
+    geometry/node.cpp

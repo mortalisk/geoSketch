@@ -46,6 +46,7 @@ public:
     void mousePressEvent(QMouseEvent * e) {
         mouse[e->button()] = true;
 
+
         previousMouseX = e->x();
         previousMouseY = e->y();
     }
@@ -65,6 +66,21 @@ public:
             scene.camera.pitch(-movey/100.0);
             scene.camera.turn(-movex/100.0);
         }
+
+        if (isMousePressed(Qt::LeftButton)) {
+            float a = scene.camera.fov/2.0f;
+            float h = height()/2.0f;
+            float w = width()/2.0f;
+            float l = h/tan(a);
+            Vector3 forw = scene.camera.forward.normalize()*l;
+            float u = h - e->y();
+            float r = e->x() - w;
+            Vector3 up = scene.camera.up.normalize()*u;
+            Vector3 right = forw.cross(scene.camera.up).normalize()*r;
+            Vector3 dir = scene.camera.position + forw + up + right;
+            this->scene.addPoint(scene.camera.position,dir);
+        }
+
         previousMouseX = e->x();
         previousMouseY = e->y();
     }

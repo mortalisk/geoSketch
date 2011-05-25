@@ -9,12 +9,5 @@ struct vertex {
     float r,g,b,a;
 };
 
-class Arrays {
-
-public:
-
-    static vertex* makeArray(Shape& shape, int& size);
-
-};
 
 #endif // ARRAYS_H
