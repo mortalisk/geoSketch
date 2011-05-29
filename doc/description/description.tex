@@ -26,6 +26,12 @@ In developing this program, the following techniques will be explored:
      \item Will carve out a plausible river following this path
      \item Allows adjustments of size and depth
     \end{itemize}
+  \item Drawing ridges and valleys
+    \begin{itemize}
+     \item Drawing the path of the new feature on existing terrain
+     \item Adjust look of contour along this path
+     \item Possibly change the height by similar approach as in Teddy
+    \end{itemize}
 \item Picking layers with mouse pointer
     \begin{itemize}
      \item Further editing of layer is then possible
@@ -36,6 +42,16 @@ In developing this program, the following techniques will be explored:
     \begin{itemize}
      \item Drawing layers in the new cube might use the edges of layers in adjacent cube
      \item While drawing lines will snap to existing lines
+    \end{itemize}
+\item Representations
+    \begin{itemize}
+     \item The terrain features will be modeled and stored by som sort of implisit representation
+     \item Might be possible to go back and forth in the history of this structure to make changes withouth loosing later work
+    \end{itemize}
+\item Procedural geologic modeling
+    \begin{itemize}
+     \item Generate deposits by specifying terrain and sea level and such
+     \item Changes to the generated structures might change the initial conditions needed to make such an end result
     \end{itemize}
 \end{itemize}
 
@@ -139,6 +155,26 @@ Here we show a possible sequence of manipulations to  quickly create some geolog
   \footnotesize
   Drawing a new layer. Lines snap towards existing lines in adjacent cube.
   \label{fig:newCubeLayer}
+}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=4in]{createRidge0}
+\caption[]{
+  \footnotesize
+  To create a new ridge or valley, start by drawing the ridge or valley path on the existing terrain. 
+  \label{fig:createRidge0}
+}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=4in]{createRidge1}
+\caption[]{
+  \footnotesize
+  Now chose how the contour will look like and the new feature will be created. It should be possible to create different contours along different positions on the path drawn. 
+  \label{fig:createRidge1}
 }
 \end{figure}
 
