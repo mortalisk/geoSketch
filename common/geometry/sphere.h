@@ -7,7 +7,7 @@ class Sphere : public Shape
 {
     float radius;
 public:
-    Sphere(float r);
+    Sphere(float radius, float r, float g, float b);
 };
 
 #endif // SPHERE_H

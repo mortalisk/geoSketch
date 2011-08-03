@@ -6,9 +6,10 @@
 #include "geometry/node.h"
 
 SketchGLWidget::SketchGLWidget(QGLFormat * glf, QWidget *parent) :
-        QGLWidget(*glf,parent)
+        QGLWidget(*glf,parent), move(0.01f)
 {
     setFocusPolicy(Qt::StrongFocus);
+    setMouseTracking(true);
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
     timer->start(25);
@@ -16,7 +17,9 @@ SketchGLWidget::SketchGLWidget(QGLFormat * glf, QWidget *parent) :
 }
 
 void SketchGLWidget::checkInput() {
+    static float multiplier = 1.0f;
 
+    bool moving = false;
     if (isKeyPressed(Qt::Key_Up)) {
         scene.camera.pitch(0.05);
     }
@@ -30,16 +33,26 @@ void SketchGLWidget::checkInput() {
         scene.camera.pitch(-0.05);
     }
     if (isKeyPressed(Qt::Key_W)) {
-        scene.camera.goForward(0.5);
+        scene.camera.goForward(move*multiplier);
+        moving = true;
     }
     if (isKeyPressed(Qt::Key_A)) {
-        scene.camera.goRight(-0.5);
+        scene.camera.goRight(-move*multiplier);
+        moving = true;
     }
     if (isKeyPressed(Qt::Key_S)) {
-        scene.camera.goForward(-0.5);
+        scene.camera.goForward(-move*multiplier);
+        moving = true;
     }
     if (isKeyPressed(Qt::Key_D)) {
-        scene.camera.goRight(0.5);
+        scene.camera.goRight(move*multiplier);
+        moving = true;
+    }
+
+    if (moving) {
+        multiplier += 0.5f;
+    }else {
+        multiplier = 1.0f;
     }
 }
 

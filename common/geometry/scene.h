@@ -7,19 +7,30 @@
 #include "arrays.h"
 #include "node.h"
 #include "sphere.h"
+#include "spline.h"
 
 class Scene
 {
 private:
     QVector<Node*> nodes;
+    float resolution;
 
 public:
     Camera camera;
     Sphere * sphere;
+    Sphere * cursorSphere;
     Box * box;
+    Node * cursor;
     Node * activeNode;
+    Spline * drawSpline;
     Scene() {
-        sphere = new Sphere(0.01f);
+        resolution = 0.05f;
+        sphere = new Sphere(0.05f, 255.0f, 0.0f, 0.0f);
+        cursorSphere = new Sphere(0.05f, 0.0f,0.0f,0.0f);
+        cursor = new Node();
+        cursor->shape = cursorSphere;
+        cursor->position = Vector3(0,0,0);
+        add(cursor);
         box = new Box(1,1,1);
         Node * drawBox = new Node();
         drawBox->shape = box;
@@ -27,7 +38,8 @@ public:
         add(drawBox);
     }
 
-    void addPoint(Vector3& point, Vector3& dir);
+    void showCursor(Vector3& point, Vector3& dir);
+    void addPoint();
 
     void add(Node* node) {
         nodes.append(node);
@@ -41,6 +53,7 @@ public:
         foreach(Node* node , nodes) {
             delete node;
         }
+        delete cursor;
     }
 
 };

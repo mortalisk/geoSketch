@@ -17,7 +17,8 @@ HEADERS += geometry/box.h \
     morten3d/Vector3.h \
     morten3d/Splines.h \
     geometry/sphere.h \
-    geometry/node.h
+    geometry/node.h \
+    geometry/spline.h
 SOURCES += geometry/box.cpp \
     geometry/shape.cpp\
     geometry/arrays.cpp \
@@ -26,4 +27,5 @@ SOURCES += geometry/box.cpp \
     morten3d/Vector3.cpp \
     morten3d/Splines.cpp \
     geometry/sphere.cpp \
-    geometry/node.cpp
+    geometry/node.cpp \
+    geometry/spline.cpp
