@@ -18,6 +18,7 @@ In developing this program, the following techniques will be explored:
  \item Having an initial empty sandbox from which the structures can be ``carved''
  \item Drawing layers by turning and sketching on the sides of the box
     \begin{itemize}
+     \item Constraints on drawing. No layer-/self-intersection
      \item Layers will be interpolated from this
      \item Modifying layers by sketching on them and pushing or pulling
     \end{itemize}
@@ -25,6 +26,7 @@ In developing this program, the following techniques will be explored:
     \begin{itemize}
      \item Will carve out a plausible river following this path
      \item Allows adjustments of size and depth
+     \item Adjusting of sealeves determines deposits
     \end{itemize}
   \item Drawing ridges and valleys
     \begin{itemize}
@@ -45,7 +47,7 @@ In developing this program, the following techniques will be explored:
     \end{itemize}
 \item Representations
     \begin{itemize}
-     \item The terrain features will be modeled and stored by som sort of implisit representation
+     \item The terrain features will be modeled and stored by some sort of implisit representation
      \item Might be possible to go back and forth in the history of this structure to make changes withouth loosing later work
     \end{itemize}
 \item Procedural geologic modeling
@@ -53,6 +55,9 @@ In developing this program, the following techniques will be explored:
      \item Generate deposits by specifying terrain and sea level and such
      \item Changes to the generated structures might change the initial conditions needed to make such an end result
     \end{itemize}
+\item Visualization options
+    \begin{itemize}
+     \item Generating simulations of seismic data
 \end{itemize}
 
 
@@ -173,10 +178,20 @@ Here we show a possible sequence of manipulations to  quickly create some geolog
 \includegraphics[width=4in]{createRidge1}
 \caption[]{
   \footnotesize
-  Now chose how the contour will look like and the new feature will be created. It should be possible to create different contours along different positions on the path drawn. 
+  Now chose what the contour will look like and the new feature will be created. It should be possible to create different contours along different positions on the path drawn. 
   \label{fig:createRidge1}
 }
 \end{figure}
+
+\clearpage
+
+\section*{Reading list}
+\begin{itemize}
+ \item Sequence stratigraphy-A global theory for local success, Neal
+ \item Interactive thickness visualization of articular cartilage, Mlejnek
+\end{itemize}
+\end{itemize}
+
 
 \end{document}
 

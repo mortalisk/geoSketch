@@ -12,9 +12,12 @@ public:
     Vector3 position;
     Node();
     QVector<Node*> children;
-    QVector<Spline> splines;
+    QVector<Spline*> splines;
     bool drawing;
     QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
+    void addSpline() {
+        splines.append(new Spline());
+    }
 
 
 };

@@ -15,10 +15,15 @@ void Scene::showCursor(Vector3& from, Vector3& direction) {
 }
 void Scene::addPoint() {
     if (cursor != NULL) {
-        Node* point = new Node();
-        point->shape = sphere;
-        point->position = cursor->position;
-        add(point);
+        int activeSpline = activeNode->splines.size();
+        if (activeSpline < 1) {
+            activeNode->addSpline();
+        } else {
+            activeSpline--;
+        }
+        Spline* spline = activeNode->splines[activeSpline];
+
+        spline->addPoint(cursor->position);
         std::cout << "adding new point" << std::endl;
     }
 }

@@ -13,6 +13,7 @@ Camera::Camera() :
 	forward = forward.normalize();
 	up = up.normalize();
 	fix();
+        trackMode = FIRST_PERSON;
 }
 
 Camera::Camera(Vector3 pos, Vector3 forw, Vector3 ups) :

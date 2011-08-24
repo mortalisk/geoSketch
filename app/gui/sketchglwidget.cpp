@@ -10,6 +10,7 @@ SketchGLWidget::SketchGLWidget(QGLFormat * glf, QWidget *parent) :
 {
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
+    setCursor( QCursor( Qt::BlankCursor ) );
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
     timer->start(25);
@@ -102,6 +103,37 @@ void SketchGLWidget::paintGL() {
         glDisableClientState(GL_COLOR_ARRAY);
         glDisableClientState(GL_VERTEX_ARRAY);
         glPopMatrix();
+
+        foreach (Spline* spline, node->splines) {
+            for(int i = 0; i < spline->points.size(); ++i) {
+                glPushMatrix();
+                glTranslatef(spline->points[i].x(),spline->points[i].y(),spline->points[i].z());
+                glEnableClientState(GL_VERTEX_ARRAY);
+                glEnableClientState(GL_COLOR_ARRAY);
+                glCallList(scene.cursorSphere->displayList);
+                glDisableClientState(GL_COLOR_ARRAY);
+                glDisableClientState(GL_VERTEX_ARRAY);
+                glPopMatrix();
+            }
+            if (spline->points.size() >= 4) {
+                for (int i= 1; i<spline->points.size()-2; ++i) {
+
+                    glLineWidth(5.0f);
+                    glBegin(GL_LINES);
+                    float t = 0.0f;
+                    do  {
+                        Vector3 a = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
+                        t+=0.1f;
+                        Vector3 b = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
+                        glVertex3f(a.x(),a.y(),a.z());
+                        glVertex3f(b.x(),b.y(),b.z());
+                    } while (t < 0.99f);
+
+                    glEnd();
+                }
+            }
+        }
+
     }
 
 //    glBegin(GL_TRIANGLES);
