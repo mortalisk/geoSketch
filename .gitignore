@@ -1,1 +1,8 @@
 geoSketch.pro.user.2.1pre1
+*Makefile*
+*.a
+app/geoSketch
+*project
+*/debug/
+test/test
+ui_*
