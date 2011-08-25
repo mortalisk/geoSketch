@@ -14,6 +14,7 @@ class Scene
 private:
     QVector<Node*> nodes;
     float resolution;
+    bool snapToGrid;
 
 public:
     Camera camera;
@@ -25,7 +26,7 @@ public:
     Node * activeNode;
     Spline * drawSpline;
     Scene() {
-
+        snapToGrid = false;
         resolution = 0.05f;
         sphere = new Sphere(0.05f, 255.0f, 0.0f, 0.0f);
         cursorSphere = new Sphere(0.05f, 0.0f,0.0f,0.0f);

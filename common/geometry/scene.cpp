@@ -7,9 +7,14 @@
 void Scene::showCursor(Vector3& from, Vector3& direction) {
     QVector<Vector3> points = activeNode->intersectionPoints(from,direction);
     if ( points.size() > 0) {
-        float x = round(points[0].x() / resolution)*resolution;
-        float y = round(points[0].y() / resolution)*resolution;
-        float z = round(points[0].z() / resolution)*resolution;
+        float x = points[0].x();
+        float y = points[0].y();
+        float z = points[0].z();
+        if (snapToGrid) {
+            x = round( x / resolution)*resolution;
+            y = round( y / resolution)*resolution;
+            z = round( z / resolution)*resolution;
+        }
         cursor->position = Vector3(x,y,z);
     }
 }
