@@ -57,12 +57,12 @@ Box::Box(float width, float heigth, float depth) :
 
     //Bottom
     vertices.push_back(A);
-    vertices.push_back(F);
     vertices.push_back(E);
+    vertices.push_back(F);
 
     vertices.push_back(A);
-    vertices.push_back(B);
     vertices.push_back(F);
+    vertices.push_back(B);
 
     //Top
     vertices.push_back(D);
@@ -75,12 +75,12 @@ Box::Box(float width, float heigth, float depth) :
 
     //Back
     vertices.push_back(E);
-    vertices.push_back(F);
     vertices.push_back(H);
+    vertices.push_back(F);
 
     vertices.push_back(H);
-    vertices.push_back(F);
     vertices.push_back(G);
+    vertices.push_back(F);
 }
 
 float Box::getDepth() {
