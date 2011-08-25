@@ -1,7 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QHBoxLayout>
+#include <QVBoxLayout>
 #include <QGLWidget>
+#include <QPushButton>
 #include "sketchglwidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -9,8 +11,15 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QHBoxLayout * mainLayout = new QHBoxLayout();
+    QVBoxLayout * mainLayout = new QVBoxLayout();
+    QHBoxLayout * menuLayout = new QHBoxLayout();
     centralWidget()->setLayout(mainLayout);
+
+
+    QPushButton * makeSplineButton = new QPushButton("Make horizon");
+    menuLayout->addWidget(makeSplineButton);
+    mainLayout->addLayout(menuLayout);
+
 
     glFormat = new QGLFormat;
     glFormat->setProfile(QGLFormat::CompatibilityProfile);//CoreProfile);
