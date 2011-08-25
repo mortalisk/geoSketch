@@ -76,64 +76,7 @@ void SketchGLWidget::paintGL() {
               scene.camera.up.z());
 
     foreach(Node* node, scene.getNodes()) {
-        Shape * shape = node->shape;
-
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        glPushMatrix();
-        glTranslatef(node->position.x(),node->position.y(),node->position.z());
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_COLOR_ARRAY);
-        if (shape->displayList == -1 ) {
-            // create one display list
-            shape->displayList = glGenLists(1);
-
-            // compile the display list
-            glNewList(shape->displayList, GL_COMPILE);
-
-            glVertexPointer(3,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0]);
-            glColorPointer(4,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0].r);
-            glDrawArrays(GL_TRIANGLES,0,shape->getVertices().size());
-
-            glEndList();
-            // delete it if it is not used any more
-            //
-        }
-        glCallList(shape->displayList);
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glPopMatrix();
-
-        foreach (Spline* spline, node->splines) {
-            for(int i = 0; i < spline->points.size(); ++i) {
-                glPushMatrix();
-                glTranslatef(spline->points[i].x(),spline->points[i].y(),spline->points[i].z());
-                glEnableClientState(GL_VERTEX_ARRAY);
-                glEnableClientState(GL_COLOR_ARRAY);
-                glCallList(scene.cursorSphere->displayList);
-                glDisableClientState(GL_COLOR_ARRAY);
-                glDisableClientState(GL_VERTEX_ARRAY);
-                glPopMatrix();
-            }
-            if (spline->points.size() >= 4) {
-                for (int i= 1; i<spline->points.size()-2; ++i) {
-
-                    glLineWidth(5.0f);
-                    glBegin(GL_LINES);
-                    float t = 0.0f;
-                    do  {
-                        Vector3 a = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
-                        t+=0.1f;
-                        Vector3 b = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
-                        glVertex3f(a.x(),a.y(),a.z());
-                        glVertex3f(b.x(),b.y(),b.z());
-                    } while (t < 0.99f);
-
-                    glEnd();
-                }
-            }
-        }
-
+        paintNode(node);
     }
 
 //    glBegin(GL_TRIANGLES);
@@ -141,6 +84,72 @@ void SketchGLWidget::paintGL() {
 //    glVertex3f(1.0,0.0,0.0);
 //    glVertex3f(0.0,1.0,0.0);
 //    glEnd();
+}
+
+void SketchGLWidget::paintNode(Node* node) {
+
+    foreach(Node* node, node->children) {
+        paintNode(node);
+    }
+
+    Shape * shape = node->shape;
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glPushMatrix();
+    glTranslatef(node->position.x(),node->position.y(),node->position.z());
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    if (shape->displayList == -1 ) {
+        // create one display list
+        shape->displayList = glGenLists(1);
+
+        // compile the display list
+        glNewList(shape->displayList, GL_COMPILE);
+
+        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0]);
+        glColorPointer(4,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0].r);
+        glDrawArrays(GL_TRIANGLES,0,shape->getVertices().size());
+
+        glEndList();
+        // delete it if it is not used any more
+        //
+    }
+    glCallList(shape->displayList);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glPopMatrix();
+
+    foreach (Spline* spline, node->splines) {
+        for(int i = 0; i < spline->points.size(); ++i) {
+            glPushMatrix();
+            glTranslatef(spline->points[i].x(),spline->points[i].y(),spline->points[i].z());
+            glEnableClientState(GL_VERTEX_ARRAY);
+            glEnableClientState(GL_COLOR_ARRAY);
+            glCallList(scene.cursorSphere->displayList);
+            glDisableClientState(GL_COLOR_ARRAY);
+            glDisableClientState(GL_VERTEX_ARRAY);
+            glPopMatrix();
+        }
+        if (spline->points.size() >= 4) {
+            for (int i= 1; i<spline->points.size()-2; ++i) {
+
+                glLineWidth(5.0f);
+                glBegin(GL_LINES);
+                glColor3f(0,0,0);
+                float t = 0.0f;
+                do  {
+                    Vector3 a = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
+                    t+=0.1f;
+                    Vector3 b = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
+                    glVertex3f(a.x(),a.y(),a.z());
+                    glVertex3f(b.x(),b.y(),b.z());
+                } while (t < 0.99f);
+
+                glEnd();
+            }
+        }
+    }
 }
 
 void SketchGLWidget::initializeGL() {

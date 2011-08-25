@@ -24,6 +24,7 @@ private:
 public:
     explicit SketchGLWidget(QGLFormat *glf,QWidget *parent = 0);
     void paintGL();
+    void paintNode(Node* node);
     void initializeGL();
 
     void enterEvent(QEvent *) {
