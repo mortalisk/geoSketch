@@ -15,6 +15,7 @@ public:
     QVector<vertex> & getVertices() {
         return vertices;
     }
+
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 protected:
     QVector<vertex> vertices;

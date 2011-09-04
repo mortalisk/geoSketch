@@ -5,7 +5,7 @@
 #include <QTimer>
 #include "geometry/node.h"
 
-SketchGLWidget::SketchGLWidget(QGLFormat * glf, QWidget *parent) :
+MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
         QGLWidget(*glf,parent), move(0.01f)
 {
     setFocusPolicy(Qt::StrongFocus);
@@ -17,7 +17,7 @@ SketchGLWidget::SketchGLWidget(QGLFormat * glf, QWidget *parent) :
 
 }
 
-void SketchGLWidget::checkInput() {
+void MyGLWidget::checkInput() {
     static float multiplier = 1.0f;
 
     bool moving = false;
@@ -57,7 +57,7 @@ void SketchGLWidget::checkInput() {
     }
 }
 
-void SketchGLWidget::paintGL() {
+void MyGLWidget::paintGL() {
     checkInput();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -86,39 +86,11 @@ void SketchGLWidget::paintGL() {
 //    glEnd();
 }
 
-void SketchGLWidget::paintNode(Node* node) {
+void MyGLWidget::paintNode(Node* node) {
 
     foreach(Node* node, node->children) {
         paintNode(node);
     }
-
-    Shape * shape = node->shape;
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glPushMatrix();
-    glTranslatef(node->position.x(),node->position.y(),node->position.z());
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    if (shape->displayList == -1 ) {
-        // create one display list
-        shape->displayList = glGenLists(1);
-
-        // compile the display list
-        glNewList(shape->displayList, GL_COMPILE);
-
-        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0]);
-        glColorPointer(4,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0].r);
-        glDrawArrays(GL_TRIANGLES,0,shape->getVertices().size());
-
-        glEndList();
-        // delete it if it is not used any more
-        //
-    }
-    glCallList(shape->displayList);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glPopMatrix();
 
     foreach (Spline* spline, node->splines) {
         for(int i = 0; i < spline->points.size(); ++i) {
@@ -150,9 +122,39 @@ void SketchGLWidget::paintNode(Node* node) {
             }
         }
     }
+
+    Shape * shape = node->shape;
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glPushMatrix();
+    glTranslatef(node->position.x(),node->position.y(),node->position.z());
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    if (shape->displayList == -1 ) {
+        // create one display list
+        shape->displayList = glGenLists(1);
+
+        // compile the display list
+        glNewList(shape->displayList, GL_COMPILE);
+
+        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0]);
+        glColorPointer(4,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0].r);
+        glDrawArrays(GL_TRIANGLES,0,shape->getVertices().size());
+
+        glEndList();
+        // delete it if it is not used any more
+        //
+    }
+    glCallList(shape->displayList);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glPopMatrix();
+
+
 }
 
-void SketchGLWidget::initializeGL() {
+void MyGLWidget::initializeGL() {
     GLenum err = glewInit();
     if (GLEW_OK != err)
     {

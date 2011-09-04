@@ -8,7 +8,7 @@
 #include <QMap>
 #include <iostream>
 
-class SketchGLWidget : public QGLWidget
+class MyGLWidget : public QGLWidget
 {
     Q_OBJECT
 
@@ -22,7 +22,7 @@ private:
     float move;
 
 public:
-    explicit SketchGLWidget(QGLFormat *glf,QWidget *parent = 0);
+    explicit MyGLWidget(QGLFormat *glf,QWidget *parent = 0);
     void paintGL();
     void paintNode(Node* node);
     void initializeGL();

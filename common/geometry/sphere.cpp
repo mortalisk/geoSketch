@@ -18,7 +18,7 @@ Sphere::Sphere(float radius, float red, float g, float b) {
             float theta = s/(float)antallStykker * M_PI*2;
             float x = cos (theta) * r;
             float z = sin (theta) * r;
-            vertex v = {x,y,z, red,g,b,0};
+            vertex v = {x,y,z, red,g,b,1.0f};
             punkter[d][s] = v;
         }
     }

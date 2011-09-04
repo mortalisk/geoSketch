@@ -16,8 +16,6 @@ public:
     float getWidth();
     float getHeight();
     float getDepth();
-
-
 };
 
 #endif // BOX_H

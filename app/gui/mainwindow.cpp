@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     glFormat = new QGLFormat;
     glFormat->setProfile(QGLFormat::CompatibilityProfile);//CoreProfile);
     glFormat->setVersion(3,3);
-    SketchGLWidget * gl = new SketchGLWidget(glFormat);
+    MyGLWidget * gl = new MyGLWidget(glFormat);
     mainLayout->addWidget(gl);
 }
 
