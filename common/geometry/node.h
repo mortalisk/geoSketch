@@ -14,11 +14,20 @@ public:
     QVector<Node*> children;
     QVector<Spline*> splines;
     bool drawing;
-    QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
-    void addSpline() {
-        splines.append(new Spline());
-    }
 
+    virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
+
+    virtual void addPoint(Vector3& pos);
+
+    virtual void draw();
+
+    void drawSelf();
+    void drawChildren();
+
+    virtual void makeLayer();
+
+protected:
+    void addSpline();
 
 };
 

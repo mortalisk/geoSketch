@@ -19,7 +19,9 @@ HEADERS += geometry/box.h \
     geometry/sphere.h \
     geometry/node.h \
     geometry/spline.h \
-    geometry/surface.h
+    geometry/surface.h \
+    geometry/boxnode.h \
+    geometry/generalnode.h
 SOURCES += geometry/box.cpp \
     geometry/shape.cpp\
     geometry/arrays.cpp \
@@ -30,4 +32,6 @@ SOURCES += geometry/box.cpp \
     geometry/sphere.cpp \
     geometry/node.cpp \
     geometry/spline.cpp \
-    geometry/surface.cpp
+    geometry/surface.cpp \
+    geometry/boxnode.cpp \
+    geometry/generalnode.cpp

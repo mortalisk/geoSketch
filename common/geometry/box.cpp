@@ -18,15 +18,15 @@ Box::Box(float width, float heigth, float depth) :
        (0,0,0)
 
       */
-    vertex A = {0,0,0,1,1,1,0.5};
-    vertex B = {width,0,0,1,1,1,0.5};
-    vertex C = {width,heigth,0,1,1,1,0.5};
-    vertex D = {0,heigth,0,1,1,1,0.5};
+    vertex A (0,0,0,1,1,1,0.5);
+    vertex B (width,0,0,1,1,1,0.5);
+    vertex C (width,heigth,0,1,1,1,0.5);
+    vertex D (0,heigth,0,1,1,1,0.5);
 
-    vertex E = {0,0,-depth,1,1,1,0.5};
-    vertex F = {width,0,-depth,1,1,1,0.5};
-    vertex G = {width,heigth,-depth,1,1,1,0.5};
-    vertex H = {0,heigth,-depth,1,1,1,0.5};
+    vertex E (0,0,-depth,1,1,1,0.5);
+    vertex F (width,0,-depth,1,1,1,0.5);
+    vertex G (width,heigth,-depth,1,1,1,0.5);
+    vertex H (0,heigth,-depth,1,1,1,0.5);
 
     //Front
     vertices.push_back(A);

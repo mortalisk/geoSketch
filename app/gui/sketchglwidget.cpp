@@ -76,7 +76,7 @@ void MyGLWidget::paintGL() {
               scene.camera.up.z());
 
     foreach(Node* node, scene.getNodes()) {
-        paintNode(node);
+        node->draw();
     }
 
 //    glBegin(GL_TRIANGLES);
@@ -84,74 +84,6 @@ void MyGLWidget::paintGL() {
 //    glVertex3f(1.0,0.0,0.0);
 //    glVertex3f(0.0,1.0,0.0);
 //    glEnd();
-}
-
-void MyGLWidget::paintNode(Node* node) {
-
-    foreach(Node* node, node->children) {
-        paintNode(node);
-    }
-
-    foreach (Spline* spline, node->splines) {
-        for(int i = 0; i < spline->points.size(); ++i) {
-            glPushMatrix();
-            glTranslatef(spline->points[i].x(),spline->points[i].y(),spline->points[i].z());
-            glEnableClientState(GL_VERTEX_ARRAY);
-            glEnableClientState(GL_COLOR_ARRAY);
-            glCallList(scene.cursorSphere->displayList);
-            glDisableClientState(GL_COLOR_ARRAY);
-            glDisableClientState(GL_VERTEX_ARRAY);
-            glPopMatrix();
-        }
-        if (spline->points.size() >= 4) {
-            for (int i= 1; i<spline->points.size()-2; ++i) {
-
-                glLineWidth(5.0f);
-                glBegin(GL_LINES);
-                glColor3f(0,0,0);
-                float t = 0.0f;
-                do  {
-                    Vector3 a = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
-                    t+=0.1f;
-                    Vector3 b = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
-                    glVertex3f(a.x(),a.y(),a.z());
-                    glVertex3f(b.x(),b.y(),b.z());
-                } while (t < 0.99f);
-
-                glEnd();
-            }
-        }
-    }
-
-    Shape * shape = node->shape;
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glPushMatrix();
-    glTranslatef(node->position.x(),node->position.y(),node->position.z());
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    if (shape->displayList == -1 ) {
-        // create one display list
-        shape->displayList = glGenLists(1);
-
-        // compile the display list
-        glNewList(shape->displayList, GL_COMPILE);
-
-        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0]);
-        glColorPointer(4,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0].r);
-        glDrawArrays(GL_TRIANGLES,0,shape->getVertices().size());
-
-        glEndList();
-        // delete it if it is not used any more
-        //
-    }
-    glCallList(shape->displayList);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glPopMatrix();
-
-
 }
 
 void MyGLWidget::initializeGL() {
@@ -166,5 +98,98 @@ void MyGLWidget::initializeGL() {
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
+    //glEnable(GL_CULL_FACE);
+}
+
+void MyGLWidget::enterEvent(QEvent *) {
+    setFocus();
+}
+
+void MyGLWidget::keyPressEvent(QKeyEvent * e) {
+    if (!e->isAutoRepeat()) {
+        keys[e->key()] = true;
+    }
+
+}
+
+void MyGLWidget::keyReleaseEvent(QKeyEvent * e) {
+    if (!e->isAutoRepeat()) {
+        keys[e->key()] = false;
+    }
+
+}
+
+bool MyGLWidget::isKeyPressed(int key) {
+    return keys[key];
+}
+
+void MyGLWidget::mousePressEvent(QMouseEvent * e) {
+    mouse[e->button()] = true;
+
+
+    previousMouseX = e->x();
+    previousMouseY = e->y();
+    if (isMousePressed(Qt::LeftButton)) {
+        addPoint(e);
+    }
+}
+
+void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
+    mouse[e->button()] = false;
+}
+
+bool MyGLWidget::isMousePressed(int button) {
+    return mouse[button];
+}
+
+void MyGLWidget::addPoint(QMouseEvent *e) {
+    scene.addPoint();
+}
+
+void MyGLWidget::mouseMoveEvent(QMouseEvent *e) {
+    std::cout << "mouse move" << std::endl;
+    if (isMousePressed(Qt::RightButton)) {
+        int movex = e->x() -previousMouseX;
+        int movey = e->y() -previousMouseY;
+        scene.camera.goUp(movey/100.0);
+        scene.camera.goRight(-movex/100.0);
+    }
+
+    // cursor move
+    float a = scene.camera.fov/2.0f;
+    float h = height()/2.0f;
+    float w = width()/2.0f;
+    float l = h/tan(a);
+    Vector3 forw = scene.camera.forward.normalize()*l;
+    float u = h - e->y();
+    float r = e->x() - w;
+    Vector3 up = scene.camera.up.normalize()*u;
+    Vector3 right = forw.cross(scene.camera.up).normalize()*r;
+    Vector3 dir = scene.camera.position + forw + up + right;
+    this->scene.showCursor(scene.camera.position,dir);
+
+
+    if (isMousePressed(Qt::LeftButton)) {
+       addPoint(e);
+    }
+
+    previousMouseX = e->x();
+    previousMouseY = e->y();
+}
+
+void MyGLWidget::resizeGL(int w, int h) {
+    aspect = w/(float)h;
+    glViewport(0,0,w,h);
+}
+
+void MyGLWidget::wheelEvent(QWheelEvent *e) {
+    scene.camera.goForward(-e->delta()/40.0f);
+}
+
+void MyGLWidget::makeLayer() {
+    scene.makeLayer();
+}
+
+void MyGLWidget::animate() {
+        updateGL();
 }

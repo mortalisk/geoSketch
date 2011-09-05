@@ -14,6 +14,23 @@ public:
         points.append(point);
     }
 
+    void changeLastPoint(Vector3 pos) {
+        points[points.size()-1] = pos;
+    }
+
+    Vector3 lastPoint() {
+        if (points.size() > 1) {
+        return points[points.size()-2];
+        }else {
+            Vector3 r(-10000,-10000,-10000);
+            return r;
+        }
+    }
+
+    int length() {
+        return points.size();
+    }
+
     Vector3 katmullRom(float t, Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3) {
             float t2 = t * t;
             float t3 = t2 * t;

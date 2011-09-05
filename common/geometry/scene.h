@@ -8,6 +8,7 @@
 #include "node.h"
 #include "sphere.h"
 #include "spline.h"
+#include "boxnode.h"
 
 class Scene
 {
@@ -15,54 +16,28 @@ private:
     QVector<Node*> nodes;
     float resolution;
     bool snapToGrid;
+    bool onSurface;
 
 public:
     Camera camera;
     Sphere * sphere;
     Sphere * cursorSphere;
     Sphere * splineSphere;
-    Box * box;
+    BoxNode * boxNode;
     Node * cursor;
     Node * activeNode;
     Spline * drawSpline;
-    Scene() {
-        snapToGrid = false;
-        resolution = 0.05f;
-        sphere = new Sphere(0.05f, 255.0f, 0.0f, 0.0f);
-        cursorSphere = new Sphere(0.05f, 0.0f,0.0f,0.0f);
-        splineSphere = new Sphere(0.05f, 255.0f,0.0f,0.0f);
-        cursor = new Node();
-        cursor->shape = cursorSphere;
-        cursor->position = Vector3(0,0,0);
-        add(cursor);
-        box = new Box(10,10,10);
-        camera.trackMode = Camera::SPHERE_TRACK;
-        camera.trackCenter = Vector3(box->getWidth()/2,box->getHeight()/2,-box->getDepth()/2);
-        camera.trackSize = box->getWidth()*2;
-        Node * drawBox = new Node();
-        drawBox->shape = box;
-        activeNode = drawBox;
-        add(drawBox);
-
-    }
+    Scene();
 
     void showCursor(Vector3& point, Vector3& dir);
     void addPoint();
+    void makeLayer();
 
-    void add(Node* node) {
-        nodes.append(node);
-    }
+    void add(Node* node);
 
-    QVector<Node*>& getNodes(){
-        return nodes;
-    }
+    QVector<Node*>& getNodes();
 
-    ~Scene() {
-        foreach(Node* node , nodes) {
-            delete node;
-        }
-        delete cursor;
-    }
+    ~Scene();
 
 };
 

@@ -6,9 +6,9 @@ Sphere::Sphere(float radius, float red, float g, float b) {
     int antallStykker =16;
     int antallDisker = 8;
 
-    vertex top = {0,radius,0,red,g,b,0};
+    vertex top (0,radius,0,red,g,b,0);
     vertex punkter[antallDisker][antallStykker];
-    vertex bunn = {0,-radius,0,red,g,b,0};
+    vertex bunn (0,-radius,0,red,g,b,0);
 
     for (int d = 0; d<antallDisker; d++) {
         float phi = d/(float)antallDisker*M_PI;
@@ -18,7 +18,7 @@ Sphere::Sphere(float radius, float red, float g, float b) {
             float theta = s/(float)antallStykker * M_PI*2;
             float x = cos (theta) * r;
             float z = sin (theta) * r;
-            vertex v = {x,y,z, red,g,b,1.0f};
+            vertex v (x,y,z, red,g,b,1.0f);
             punkter[d][s] = v;
         }
     }

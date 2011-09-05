@@ -25,6 +25,9 @@ MainWindow::MainWindow(QWidget *parent) :
     glFormat->setProfile(QGLFormat::CompatibilityProfile);//CoreProfile);
     glFormat->setVersion(3,3);
     MyGLWidget * gl = new MyGLWidget(glFormat);
+
+    QObject::connect(makeSplineButton,SIGNAL(clicked(bool)), gl, SLOT(makeLayer()));
+
     mainLayout->addWidget(gl);
 }
 
