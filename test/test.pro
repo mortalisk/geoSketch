@@ -7,7 +7,7 @@ QT += core testlib
 TARGET = test
 DEPENDPATH += . geometry
 INCLUDEPATH += . geometry ../common
-LIBS += -L../common -lcommon
+LIBS += -L../common -lcommon -lGLEW
 
 # Input
 HEADERS += geometry/testbox.h \

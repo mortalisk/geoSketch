@@ -4,7 +4,8 @@
 
 TEMPLATE = subdirs
 QT += core gui opengl
-SUBDIRS = app common test
+SUBDIRS = app common
+#test
 app.depends = common
-test.depends = common app
+#test.depends = common app
 

@@ -1,9 +1,36 @@
+
+#include <GL/glew.h>
 #include "shape.h"
 #include <QVector>
 #include <float.h>
 
 Shape::Shape() : displayList(-1)
 {
+}
+
+void Shape::draw() {
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+    if (displayList == -1 ) {
+        // create one display list
+        displayList = glGenLists(1);
+
+        // compile the display list
+        glNewList(displayList, GL_COMPILE);
+
+        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getVertices()[0]);
+        glColorPointer(4,GL_FLOAT,sizeof(vertex),&getVertices()[0].r);
+        glDrawArrays(GL_TRIANGLES,0,getVertices().size());
+
+        glEndList();
+        // delete it if it is not used any more
+        //
+    }
+    glCallList(displayList);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glPopMatrix();
 }
 
 QVector<Vector3> Shape::intersectionPoints(Vector3 p,Vector3 dir){

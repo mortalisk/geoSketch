@@ -89,27 +89,8 @@ void Node::drawSelf() {
     glLoadIdentity();
     glPushMatrix();
     glTranslatef(position.x(),position.y(),position.z());
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
-    if (shape->displayList == -1 ) {
-        // create one display list
-        shape->displayList = glGenLists(1);
 
-        // compile the display list
-        glNewList(shape->displayList, GL_COMPILE);
-
-        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0]);
-        glColorPointer(4,GL_FLOAT,sizeof(vertex),&shape->getVertices()[0].r);
-        glDrawArrays(GL_TRIANGLES,0,shape->getVertices().size());
-
-        glEndList();
-        // delete it if it is not used any more
-        //
-    }
-    glCallList(shape->displayList);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
-    glPopMatrix();
+    shape->draw();
 
 }
 
