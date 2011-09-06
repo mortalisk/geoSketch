@@ -7,3 +7,4 @@ app/geoSketch
 test/test
 ui_*
 geoSketch.pro.user
+app-build-desktop
