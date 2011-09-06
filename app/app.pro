@@ -5,11 +5,43 @@
 TEMPLATE = app
 TARGET = geoSketch
 QT += core gui opengl
-DEPENDPATH += . gui
-INCLUDEPATH += . gui ../common
-LIBS += -L../common -lcommon -lGLEW
+DEPENDPATH += . gui geometry morten3d
+INCLUDEPATH += . gui geometry morten3d
+LIBS += -lGLEW
 
 # Input
-HEADERS += gui/mainwindow.h gui/sketchglwidget.h
 FORMS += gui/mainwindow.ui
-SOURCES += main.cpp gui/mainwindow.cpp gui/sketchglwidget.cpp
+
+# Input
+HEADERS += gui/mainwindow.h \
+    gui/sketchglwidget.h \
+    geometry/box.h \
+    geometry/shape.h \
+    geometry/arrays.h \
+    geometry/scene.h \
+    morten3d/Camera.h \
+    morten3d/Vector3.h \
+    morten3d/Splines.h \
+    geometry/sphere.h \
+    geometry/node.h \
+    geometry/spline.h \
+    geometry/surface.h \
+    geometry/boxnode.h \
+    geometry/generalnode.h
+
+SOURCES += main.cpp \
+    gui/mainwindow.cpp \
+    gui/sketchglwidget.cpp \
+    geometry/box.cpp \
+    geometry/shape.cpp\
+    geometry/arrays.cpp \
+    geometry/scene.cpp \
+    morten3d/Camera.cpp \
+    morten3d/Vector3.cpp \
+    morten3d/Splines.cpp \
+    geometry/sphere.cpp \
+    geometry/node.cpp \
+    geometry/spline.cpp \
+    geometry/surface.cpp \
+    geometry/boxnode.cpp \
+    geometry/generalnode.cpp
