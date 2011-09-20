@@ -2,7 +2,7 @@
 \usepackage[utf8]{inputenc}
 
 %opening
-\title{Framdriftsplan}
+\title{Plan}
 \author{Morten Bendiksen}
 
 \begin{document}
@@ -13,29 +13,29 @@
 
 \end{abstract}
 
-\section{DONE}
+\section*{DONE}
 Features that are working
-\subsection{Draw Box}
-Having an initial empty sandbox from which the structures can be ``carved''
-\subsection{Input raw spline points}
+\subsection*{Draw Box}
+Having an initial empty box on which the structures can be sketched
+\subsection*{Input raw spline points}
 Captures the mouse input from the user on the box or other surface.
 
-\section{TODO}
+\section*{TODO}
 These are features that are not done. I tried to put them in order of importance.
-\subsection{Estimate time}
+\subsection*{Estimate time}
 Estimate time for the features that are neccessary in this list.
-\subsection{Cube visualization}
+\subsection*{Cube visualization}
 The cube visualization must be improved. There are several ways to do this, will start with the simplest one.
 \begin{itemize}
- \item The edges of the cube can be drawn. Takes a few hours.
+ \item The edges of the cube can be drawn.
  \item There could be a grid on the cube.
  \item There could be shadows on the cube.
 \end{itemize}
-\subsection{Create parameterization}
+\subsection*{Create parameterization}
 Create a parameterized representation of a surface. This is partially done, but in a half working, stupid way.
-\subsection{Edit surface}
+\subsection*{Edit surface}
 Must be able to pick an existing horizon to edit. Find good user friendly technique for this.
-\subsection{Drawing modes}
+\subsection*{Drawing modes}
 Need some way of switching between modes of editing. I see these modes as being useful. How to switch between them is another thing to think about.
 \begin{itemize}
  \item Make surface
@@ -43,23 +43,23 @@ Need some way of switching between modes of editing. I see these modes as being 
  \item Sketch feature
  \item Edit feature
 \end{itemize}
-\subsection{Oversketching}
+\subsection*{Oversketching}
 The ability to easily modify the sketch by drawing strokes that go outside the lines. 
-\subsection{Shading}
+\subsection*{Shading}
 There must be lighting and shading on the surfaces, in order to better visualize their topology.
-\subsection{Delete}
+\subsection*{Delete}
 To be able to undo/redo
-\subsection{Spline order}
+\subsection*{Spline order}
 There should be an enforced order to draw the splines, or to interpret the splines. Otherwize the result can be unexpected.
-\subsection{Profile drawing}
+\subsection*{Profile drawing}
 To draw the profile of features on the terrain on seperate canvas
-\subsection{Prepare for meeting with geologists}
+\subsection*{Prepare for meeting with geologists}
 For the meeting I want to get as much useful information as possible. In order for this to be possible, there should already be a first ``story''. I want to show them a possible scenario that is now possible with the program, and what I see as possible goals/directions. If they ``get it'' and are able to contribute with their vision for completing the story, this would be very useful.
-\subsection{Procedural linking}
+\subsection*{Procedural linking}
 To be able to model the start scenario witht for example a river, and them have the program modify the terrain to create deposits from the river, is a useful feature. A possibility to also go in the other direction, and demand some deposits in an area, and then have the program create a scaenario with a river, could be interessting.
-\subsection{Drawing on the surfaces}
+\subsection*{Drawing on the surfaces}
 To sketch features on the surfaces, to either modify them directly, or direct a procedural editor/creator.
-\subsection{Brush size}
+\subsection*{Brush size}
 Brush size modifies the accuracy of strokes
 
 \end{document}
