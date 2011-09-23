@@ -4,7 +4,7 @@
 
 Node::Node()
 {
-   shape = NULL;
+    shape = NULL;
 }
 
 Node::~Node()
@@ -33,10 +33,20 @@ void Node::addPoint(Vector3& pos) {
 
 }
 
+void Node::stopDrawing() {
+    if (splines.size() > 0) {
+        Spline* spline = splines[splines.size()-1];
+        Vector3 & first = spline->points[0];
+        Vector3 & last = spline->points[spline->length()-1];
+    }
+
+}
+
 void Node::makeLayer() {
 
     Node * layerNode = new Node();
-    layerNode->shape = new Surface(splines);
+    QVector4D color(1.0,1.0,0.5,1.0);
+    layerNode->shape = new Surface(splines, color);
     children.append(layerNode);
     splines.clear();
 }
@@ -48,7 +58,13 @@ void Node::addSpline() {
 QVector<Vector3> Node::intersectionPoints(Vector3 from,Vector3 direction) {
     from = from - position;
     direction = direction - position;
-    return shape->intersectionPoints(from, direction);
+    if (shape != NULL) {
+        return shape->intersectionPoints(from, direction);
+    }
+    else {
+        QVector<Vector3> empty;
+        return empty;
+    }
 }
 
 void Node::drawChildren() {
@@ -60,20 +76,10 @@ void Node::drawChildren() {
 void Node::drawSelf() {
 
     foreach (Spline* spline, splines) {
-        for(int i = 0; i < spline->points.size(); ++i) {
-            glPushMatrix();
-            glTranslatef(spline->points[i].x(),spline->points[i].y(),spline->points[i].z());
-            glEnableClientState(GL_VERTEX_ARRAY);
-            glEnableClientState(GL_COLOR_ARRAY);
-            //glCallList(scene.cursorSphere->displayList);
-            glDisableClientState(GL_COLOR_ARRAY);
-            glDisableClientState(GL_VERTEX_ARRAY);
-            glPopMatrix();
-        }
         if (spline->points.size() >= 4) {
             for (int i= 1; i<spline->points.size()-2; ++i) {
 
-                glLineWidth(5.0f);
+                glLineWidth(2.0f);
                 glBegin(GL_LINES);
                 glColor3f(0,0,0);
                 float t = 0.0f;
@@ -95,8 +101,10 @@ void Node::drawSelf() {
     glPushMatrix();
     glTranslatef(position.x(),position.y(),position.z());
 
-    if (shape != NULL)
-        shape->draw();
+    if (shape != NULL) {
+        shape->drawLines();
+        shape->drawShape();
+    }
 
 }
 

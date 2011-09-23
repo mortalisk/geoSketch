@@ -98,7 +98,19 @@ void MyGLWidget::initializeGL() {
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
-    //glEnable(GL_CULL_FACE);
+    //glEnable(GL_LIGHTING);
+    //glEnable(GL_LIGHT0);
+    glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
+
+    GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};  /* diffuse light. */
+    GLfloat light_ambient[] = {0.9, 0.9, 0.9, 1.0};  /* diffuse light. */
+    GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. */
+
+
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
+    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
 }
 
 void MyGLWidget::enterEvent(QEvent *) {
@@ -136,6 +148,7 @@ void MyGLWidget::mousePressEvent(QMouseEvent * e) {
 
 void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
     mouse[e->button()] = false;
+    scene.activeNode->stopDrawing();
 }
 
 bool MyGLWidget::isMousePressed(int button) {

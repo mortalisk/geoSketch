@@ -18,11 +18,14 @@ public:
 
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 
+    /** adds a point to currend spline */
     virtual void addPoint(Vector3& pos);
+    /** stops drawing on current spline */
+    virtual void stopDrawing();
 
     virtual void draw();
 
-    void drawSelf();
+    virtual void drawSelf();
     void drawChildren();
 
     virtual void makeLayer();

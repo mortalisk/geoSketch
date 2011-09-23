@@ -9,22 +9,20 @@ class Shape
 {
 public:
     Shape();
-    virtual void draw();
+    virtual void drawLines();
+    virtual void drawShape();
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 protected:
     int displayList;
-    QVector<vertex> vertices;
+    Vector3 color;
+    QVector<triangle> triangles;
     QVector<vertex> lineVertices;
-    QVector<vertex> & getVertices() {
-        return vertices;
+    QVector<triangle> & getTriangles() {
+        return triangles;
     }
     QVector<vertex> & getLineVertices() {
         return lineVertices;
     }
-signals:
-
-public slots:
-
 };
 
 #endif // SHAPE_H

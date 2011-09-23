@@ -8,58 +8,54 @@ Shape::Shape() : displayList(-1)
 {
 }
 
-void Shape::draw() {
-
-    if (displayList == -1 ) {
-        // create one display list
-        displayList = glGenLists(1);
-
-        // compile the display list
-        glNewList(displayList, GL_COMPILE);
-
-
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glLineWidth(1.0f);
-        glColor3b(0,0,0);
-        if (getLineVertices().size() > 0) {
-            glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getLineVertices()[0]);
-            glColorPointer(4,GL_FLOAT,sizeof(vertex),&getLineVertices()[0].r);
-            glDrawArrays(GL_LINE_STRIP,0,getLineVertices().size());
-        }
-
-
-        glEnableClientState(GL_COLOR_ARRAY);
-
-        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getVertices()[0]);
-        glColorPointer(4,GL_FLOAT,sizeof(vertex),&getVertices()[0].r);
-        glDrawArrays(GL_TRIANGLES,0,getVertices().size());
-
-
-        glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_VERTEX_ARRAY);
-
-        glEndList();
-        // delete it if it is not used any more
-        //
+void Shape::drawLines() {
+    glLineWidth(2.0);
+    glColor3b(0,0,0);
+    glEnableClientState(GL_VERTEX_ARRAY);
+    //glEnableClientState(GL_COLOR_ARRAY);
+    if (getLineVertices().size() > 0) {
+        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getLineVertices()[0]);
+        //glColorPointer(4,GL_FLOAT,sizeof(vertex),&getLineVertices()[0].r);
+        glDrawArrays(GL_LINE_STRIP,0,getLineVertices().size());
     }
-    glCallList(displayList);
-    glPopMatrix();
+
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void Shape::drawShape() {
+
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_COLOR_ARRAY);
+
+    glEnableClientState(GL_NORMAL_ARRAY);
+    if (getTriangles().size() > 0) {
+        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getTriangles()[0]);
+        glColorPointer(4,GL_FLOAT,sizeof(vertex),&getTriangles()[0].p1.r);
+        glNormalPointer(GL_FLOAT,sizeof(vertex),&getTriangles()[0].p1.n1);
+        glDrawArrays(GL_TRIANGLES,0,getTriangles().size()*3);
+    }
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_COLOR_ARRAY);
+    glDisableClientState(GL_VERTEX_ARRAY);
+
 }
 
 QVector<Vector3> Shape::intersectionPoints(Vector3 p,Vector3 dir){
     QVector<Vector3> points;
 
-    QVector<vertex> & vertices = getVertices();
+    QVector<triangle> & triangles = getTriangles();
 
     int nearest = -1;
     float distance = FLT_MAX;
     int pointn = 0;
-    for(int i=0; i<vertices.size(); i+=3) {
+    for(int i=0; i<triangles.size(); i++) {
         // hentet fra http://softsurfer.com/Archive/algorithm_0105/algorithm_0105.htm#intersect_RayTriangle%28%29
 
-        Vector3 v0(vertices[i].x,vertices[i].y,vertices[i].z);
-        Vector3 v1(vertices[i+1].x,vertices[i+1].y,vertices[i+1].z);
-        Vector3 v2(vertices[i+2].x,vertices[i+2].y,vertices[i+2].z);
+        Vector3 v0(triangles[i].p1.x,triangles[i].p1.y,triangles[i].p1.z);
+        Vector3 v1(triangles[i].p2.x,triangles[i].p2.y,triangles[i].p2.z);
+        Vector3 v2(triangles[i].p3.x,triangles[i].p3.y,triangles[i].p3.z);
 
         Vector3    u, v, n;             // triangle vectors
         Vector3    w0, w;          // ray vectors
