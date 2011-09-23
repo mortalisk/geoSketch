@@ -10,8 +10,6 @@ Shape::Shape() : displayList(-1)
 
 void Shape::draw() {
 
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
     if (displayList == -1 ) {
         // create one display list
         displayList = glGenLists(1);
@@ -19,17 +17,32 @@ void Shape::draw() {
         // compile the display list
         glNewList(displayList, GL_COMPILE);
 
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glLineWidth(1.0f);
+        glColor3b(0,0,0);
+        if (getLineVertices().size() > 0) {
+            glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getLineVertices()[0]);
+            glColorPointer(4,GL_FLOAT,sizeof(vertex),&getLineVertices()[0].r);
+            glDrawArrays(GL_LINE_STRIP,0,getLineVertices().size());
+        }
+
+
+        glEnableClientState(GL_COLOR_ARRAY);
+
         glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getVertices()[0]);
         glColorPointer(4,GL_FLOAT,sizeof(vertex),&getVertices()[0].r);
         glDrawArrays(GL_TRIANGLES,0,getVertices().size());
+
+
+        glDisableClientState(GL_COLOR_ARRAY);
+        glDisableClientState(GL_VERTEX_ARRAY);
 
         glEndList();
         // delete it if it is not used any more
         //
     }
     glCallList(displayList);
-    glDisableClientState(GL_COLOR_ARRAY);
-    glDisableClientState(GL_VERTEX_ARRAY);
     glPopMatrix();
 }
 

@@ -4,6 +4,11 @@
 
 Node::Node()
 {
+   shape = NULL;
+}
+
+Node::~Node()
+{
     foreach(Spline* s , splines) {
         delete s;
     }
@@ -90,7 +95,8 @@ void Node::drawSelf() {
     glPushMatrix();
     glTranslatef(position.x(),position.y(),position.z());
 
-    shape->draw();
+    if (shape != NULL)
+        shape->draw();
 
 }
 

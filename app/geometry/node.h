@@ -11,6 +11,7 @@ public:
     Shape * shape;
     Vector3 position;
     Node();
+    virtual ~Node();
     QVector<Node*> children;
     QVector<Spline*> splines;
     bool drawing;

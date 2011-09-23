@@ -14,8 +14,12 @@ public:
 protected:
     int displayList;
     QVector<vertex> vertices;
+    QVector<vertex> lineVertices;
     QVector<vertex> & getVertices() {
         return vertices;
+    }
+    QVector<vertex> & getLineVertices() {
+        return lineVertices;
     }
 signals:
 

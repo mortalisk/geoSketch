@@ -1,5 +1,6 @@
 #include "box.h"
 #include <morten3d/Vector3.h>
+#include <GL/glew.h>
 
 Box::Box(float width, float heigth, float depth) :
     Shape(), width(width),heigth(heigth),depth(depth)
@@ -81,6 +82,25 @@ Box::Box(float width, float heigth, float depth) :
     vertices.push_back(H);
     vertices.push_back(G);
     vertices.push_back(F);
+
+    // lines
+    lineVertices.push_back(A);
+    lineVertices.push_back(B);
+    lineVertices.push_back(C);
+    lineVertices.push_back(D);
+    lineVertices.push_back(A);
+    lineVertices.push_back(E);
+    lineVertices.push_back(F);
+    lineVertices.push_back(G);
+    lineVertices.push_back(H);
+    lineVertices.push_back(E);
+    lineVertices.push_back(A);
+    lineVertices.push_back(D);
+    lineVertices.push_back(H);
+    lineVertices.push_back(G);
+    lineVertices.push_back(C);
+    lineVertices.push_back(B);
+    lineVertices.push_back(F);
 }
 
 float Box::getDepth() {

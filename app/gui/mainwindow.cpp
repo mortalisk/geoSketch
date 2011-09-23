@@ -15,7 +15,6 @@ MainWindow::MainWindow(QWidget *parent) :
     QHBoxLayout * menuLayout = new QHBoxLayout();
     centralWidget()->setLayout(mainLayout);
 
-
     QPushButton * makeSplineButton = new QPushButton("Make horizon");
     menuLayout->addWidget(makeSplineButton);
     mainLayout->addLayout(menuLayout);
