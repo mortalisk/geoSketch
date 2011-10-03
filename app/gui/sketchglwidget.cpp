@@ -156,7 +156,8 @@ bool MyGLWidget::isMousePressed(int button) {
 }
 
 void MyGLWidget::addPoint(QMouseEvent *e) {
-    //scene.addPoint();
+    Vector3 dir = findMouseDirection(e);
+    scene.addPoint(scene.camera.position, dir);
 }
 
 void MyGLWidget::mouseMoveEvent(QMouseEvent *e) {
@@ -168,6 +169,19 @@ void MyGLWidget::mouseMoveEvent(QMouseEvent *e) {
         scene.camera.goRight(-movex/100.0);
     }
 
+    Vector3 dir = findMouseDirection(e);
+    this->scene.showCursor(scene.camera.position,dir);
+
+
+    if (isMousePressed(Qt::LeftButton)) {
+       addPoint(e);
+    }
+
+    previousMouseX = e->x();
+    previousMouseY = e->y();
+}
+
+Vector3 MyGLWidget::findMouseDirection(QMouseEvent *e) {
     // cursor move
     float a = scene.camera.fov/2.0f;
     float h = height()/2.0f;
@@ -178,16 +192,7 @@ void MyGLWidget::mouseMoveEvent(QMouseEvent *e) {
     float r = e->x() - w;
     Vector3 up = scene.camera.up.normalize()*u;
     Vector3 right = forw.cross(scene.camera.up).normalize()*r;
-    Vector3 dir = scene.camera.position + forw + up + right;
-    this->scene.showCursor(scene.camera.position,dir);
-
-
-    if (isMousePressed(Qt::LeftButton)) {
-       scene.addPoint(scene.camera.position,dir);
-    }
-
-    previousMouseX = e->x();
-    previousMouseY = e->y();
+    return scene.camera.position + forw + up + right;
 }
 
 void MyGLWidget::resizeGL(int w, int h) {

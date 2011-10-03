@@ -10,8 +10,10 @@ class Spline
 
 public:
     QVector<Vector3> points;
+    bool isSuggestion;
     void addPoint(Vector3& point) {
         points.append(point);
+        isSuggestion = false;
     }
 
     void changeLastPoint(Vector3 pos) {

@@ -12,7 +12,7 @@ public:
     virtual void drawLines();
     virtual void drawShape();
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
-protected:
+
     int displayList;
     Vector3 color;
     QVector<triangle> triangles;

@@ -153,12 +153,23 @@ BoxNode::BoxNode()
 
     Surface * back = new Surface(vertices, lineVertices, c);
 
-    surfaces.push_back(new Node(front));
-    surfaces.push_back(new Node(back));
-    surfaces.push_back(new Node(top));
-    surfaces.push_back(new Node(bottom));
-    surfaces.push_back(new Node(left));
-    surfaces.push_back(new Node(right));
+    frontNode = new SideNode(front);
+    backNode = new SideNode(back);
+    topNode = new SideNode(top);
+    bottomNode = new SideNode(bottom);
+    leftNode = new SideNode(left);
+    rightNode = new SideNode(right);
+
+    frontNode->setOpposite(backNode);
+    leftNode->setOpposite(rightNode);
+    topNode->setOpposite(bottomNode);
+
+    surfaces.push_back(frontNode);
+    surfaces.push_back(backNode);
+    surfaces.push_back(topNode);
+    surfaces.push_back(bottomNode);
+    surfaces.push_back(leftNode);
+    surfaces.push_back(rightNode);
 
 }
 
@@ -200,9 +211,9 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 
     float candidateDistance = FLT_MAX;
     Vector3 candidatePoint;
-    Node * candidate = NULL;
+    SideNode * candidate = NULL;
 
-    foreach (Node * s, surfaces) {
+    foreach (SideNode * s, surfaces) {
         QVector<Vector3> points = s->intersectionPoints(from, direction);
         if (points.size() >0 ) {
                 float dist = (points[0]-from).lenght();
@@ -217,12 +228,25 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 
     if (candidate) {
         candidate->spline.addPoint(candidatePoint);
+
         activeSurface = candidate;
     }
 }
 
 void BoxNode::stopDrawing() {
-    activeSurface = NULL;
+    if (activeSurface) {
+
+        if (activeSurface != topNode && activeSurface != bottomNode) {
+            activeSurface->opposite->spline.points.clear();
+            foreach (Vector3 var, activeSurface->spline.points) {
+                activeSurface->opposite->projectPoint(var);
+            }
+        }else {
+            // TODO: clear suggestions and disable suggestions for this surface
+        }
+
+     activeSurface = NULL;
+    }
 }
 
 void BoxNode::draw() {

@@ -54,10 +54,11 @@ void Node::drawChildren() {
 }
 
 void Node::drawSpline() {
-    if (spline.points.size() >= 4) {
-        for (int i= 0; i<spline.points.size()-2; ++i) {
+    if (spline.points.size() >= 1) {
+        for (int i= 0; i<spline.points.size()-1; ++i) {
 
             glLineWidth(2.0f);
+
             glBegin(GL_LINES);
             glColor3f(0,0,0);
             float t = 0.0f;

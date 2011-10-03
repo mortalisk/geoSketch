@@ -46,6 +46,7 @@ public:
 
     void wheelEvent(QWheelEvent *e);
 
+    Vector3 findMouseDirection(QMouseEvent *e);
 
     void resizeGL(int w, int h);
 

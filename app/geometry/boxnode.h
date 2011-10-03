@@ -4,16 +4,17 @@
 #include "box.h"
 #include "node.h"
 #include "surface.h"
+#include "sidenode.h"
 
 class BoxNode : public Node
 {
 public:
     BoxNode();
     float width, depth, heigth;
-    Node * front,  * back,  * left,  * right,  * top,  * bottom;
+    SideNode * frontNode,  * backNode,  * leftNode,  * rightNode,  * topNode,  * bottomNode;
     //QVector<Surface*> surfaces;
-    QVector<Node*> surfaces;
-    Node * activeSurface;
+    QVector<SideNode*> surfaces;
+    SideNode * activeSurface;
     float getWidth();
     float getHeight();
     float getDepth();
