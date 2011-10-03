@@ -105,6 +105,7 @@ void Node::drawSelf() {
         shape->drawLines();
         shape->drawShape();
     }
+    glPopMatrix();
 
 }
 
