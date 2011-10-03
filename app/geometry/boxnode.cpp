@@ -7,6 +7,7 @@
 
 BoxNode::BoxNode()
 {
+    activeSurface = NULL;
     width = 10;
     depth = 10;
     heigth = 10;
@@ -55,7 +56,7 @@ BoxNode::BoxNode()
     lineVertices.push_back(D);
     lineVertices.push_back(A);
 
-    front = new Surface(vertices, lineVertices, c);
+    Surface * front = new Surface(vertices, lineVertices, c);
 
     vertices.clear();
     lineVertices.clear();
@@ -74,7 +75,7 @@ BoxNode::BoxNode()
     lineVertices.push_back(C);
     lineVertices.push_back(B);
 
-    right = new Surface(vertices, lineVertices, c);
+    Surface * right = new Surface(vertices, lineVertices, c);
 
     vertices.clear();
     lineVertices.clear();
@@ -93,7 +94,7 @@ BoxNode::BoxNode()
     lineVertices.push_back(D);
     lineVertices.push_back(A);
 
-    left = new Surface(vertices, lineVertices, c);
+    Surface * left = new Surface(vertices, lineVertices, c);
 
     vertices.clear();
     lineVertices.clear();
@@ -112,7 +113,7 @@ BoxNode::BoxNode()
     lineVertices.push_back(E);
     lineVertices.push_back(A);
 
-    bottom = new Surface(vertices, lineVertices, c);
+    Surface * bottom = new Surface(vertices, lineVertices, c);
 
     vertices.clear();
     lineVertices.clear();
@@ -131,7 +132,7 @@ BoxNode::BoxNode()
     lineVertices.push_back(H);
     lineVertices.push_back(D);
 
-    top = new Surface(vertices, lineVertices, c);
+    Surface * top = new Surface(vertices, lineVertices, c);
 
     vertices.clear();
     lineVertices.clear();
@@ -150,14 +151,14 @@ BoxNode::BoxNode()
     lineVertices.push_back(E);
     lineVertices.push_back(H);
 
-    back = new Surface(vertices, lineVertices, c);
+    Surface * back = new Surface(vertices, lineVertices, c);
 
-    surfaces.push_back(front);
-    surfaces.push_back(back);
-    surfaces.push_back(top);
-    surfaces.push_back(bottom);
-    surfaces.push_back(left);
-    surfaces.push_back(right);
+    surfaces.push_back(new Node(front));
+    surfaces.push_back(new Node(back));
+    surfaces.push_back(new Node(top));
+    surfaces.push_back(new Node(bottom));
+    surfaces.push_back(new Node(left));
+    surfaces.push_back(new Node(right));
 
 }
 
@@ -175,7 +176,7 @@ float BoxNode::getHeight() {
 
 float BoxNode::intersectionPoint(Vector3 from, Vector3 direction) {
     float dist = FLT_MAX;
-    foreach (Surface * s, surfaces) {
+    foreach (Node * s, surfaces) {
         QVector<Vector3> points = s->intersectionPoints(from, direction);
         if (points.size() >0) {
             Vector3& p = points[0];
@@ -195,17 +196,33 @@ QVector<Vector3> BoxNode::intersectionPoints(Vector3 from, Vector3 direction) {
     return p;
 }
 
-void BoxNode::addPoint(Vector3& pos) {
-    std::cout << "BoxNode: going to add point" << std::endl;
-    if (splines.size() == 0) {
-        addSpline();
+void BoxNode::addPoint(Vector3 from, Vector3 direction) {
+
+    float candidateDistance = FLT_MAX;
+    Vector3 candidatePoint;
+    Node * candidate = NULL;
+
+    foreach (Node * s, surfaces) {
+        QVector<Vector3> points = s->intersectionPoints(from, direction);
+        if (points.size() >0 ) {
+                float dist = (points[0]-from).lenght();
+                if ((activeSurface == NULL || s == activeSurface) && dist < candidateDistance) {
+                    candidateDistance = dist;
+                    candidatePoint = points[0];
+                    candidate=s;
+               }
+
+        }
     }
 
-    Spline* spline = splines[splines.size()-1];
+    if (candidate) {
+        candidate->spline.addPoint(candidatePoint);
+        activeSurface = candidate;
+    }
+}
 
-
-    spline->addPoint(pos);
-
+void BoxNode::stopDrawing() {
+    activeSurface = NULL;
 }
 
 void BoxNode::draw() {
@@ -221,11 +238,12 @@ void BoxNode::drawSelf() {
     Node::drawSelf();
     glTranslatef(position.x(), position.y(), position.z());
 
-    foreach(Surface * s, surfaces) {
-        s->drawLines();
+    foreach(Node * s, surfaces) {
+        s->drawSpline();
+        s->shape->drawLines();
     }
-    foreach(Surface * s, surfaces) {
-        s->drawShape();
+    foreach(Node * s, surfaces) {
+        s->shape->drawShape();
     }
 
 }

@@ -156,7 +156,7 @@ bool MyGLWidget::isMousePressed(int button) {
 }
 
 void MyGLWidget::addPoint(QMouseEvent *e) {
-    scene.addPoint();
+    //scene.addPoint();
 }
 
 void MyGLWidget::mouseMoveEvent(QMouseEvent *e) {
@@ -183,7 +183,7 @@ void MyGLWidget::mouseMoveEvent(QMouseEvent *e) {
 
 
     if (isMousePressed(Qt::LeftButton)) {
-       addPoint(e);
+       scene.addPoint(scene.camera.position,dir);
     }
 
     previousMouseX = e->x();

@@ -11,15 +11,16 @@ public:
     Shape * shape;
     Vector3 position;
     Node();
+    Node(Shape * shape);
     virtual ~Node();
     QVector<Node*> children;
-    QVector<Spline*> splines;
+    Spline spline;
     bool drawing;
 
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 
     /** adds a point to currend spline */
-    virtual void addPoint(Vector3& pos);
+    virtual void addPoint(Vector3 from, Vector3 direction);
     /** stops drawing on current spline */
     virtual void stopDrawing();
 
@@ -29,9 +30,9 @@ public:
     void drawChildren();
 
     virtual void makeLayer();
+    void drawSpline();
 
 protected:
-    void addSpline();
 
 };
 

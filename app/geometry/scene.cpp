@@ -47,9 +47,9 @@ void Scene::showCursor(Vector3& from, Vector3& direction) {
                  "direction: " << direction << std::endl;
 }
 
-void Scene::addPoint() {
+void Scene::addPoint(Vector3& from, Vector3& direction) {
     if (onSurface) {
-        activeNode->addPoint(cursor->position);
+        activeNode->addPoint(from, direction);
     }
 }
 

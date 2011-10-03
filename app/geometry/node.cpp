@@ -7,52 +7,32 @@ Node::Node()
     shape = NULL;
 }
 
-Node::~Node()
-{
-    foreach(Spline* s , splines) {
-        delete s;
-    }
+Node::Node(Shape *shape) {
+    this->shape = shape;
 }
 
-void Node::addPoint(Vector3& pos) {
-    std::cout << "Node: going to add new point" << std::endl;
-    int activeSpline = splines.size();
-    if (activeSpline < 1) {
-        addSpline();
-    } else {
-        activeSpline--;
-    }
-    Spline* spline = splines[activeSpline];
+Node::~Node()
+{
+}
 
-    if (spline->length() > 0 && (spline->lastPoint() - pos).lenght() < 0.5) {
-        spline->changeLastPoint(pos);
+void Node::addPoint(Vector3 from, Vector3 direction) {
+
+    QVector<Vector3> points = intersectionPoints(from, direction);
+    Vector3 & pos = points[0];
+    if (spline.length() > 0 && (spline.lastPoint() - pos).lenght() < 0.5) {
+        spline.changeLastPoint(pos);
         return;
+    }else {
+        spline.addPoint(pos);
     }
-
-    spline->addPoint(pos);
 
 }
 
 void Node::stopDrawing() {
-    if (splines.size() > 0) {
-        Spline* spline = splines[splines.size()-1];
-        Vector3 & first = spline->points[0];
-        Vector3 & last = spline->points[spline->length()-1];
-    }
 
 }
 
 void Node::makeLayer() {
-
-    Node * layerNode = new Node();
-    QVector4D color(1.0,1.0,0.5,1.0);
-    layerNode->shape = new Surface(splines, color);
-    children.append(layerNode);
-    splines.clear();
-}
-
-void Node::addSpline() {
-    splines.append(new Spline());
 }
 
 QVector<Vector3> Node::intersectionPoints(Vector3 from,Vector3 direction) {
@@ -73,28 +53,33 @@ void Node::drawChildren() {
     }
 }
 
-void Node::drawSelf() {
+void Node::drawSpline() {
+    if (spline.points.size() >= 4) {
+        for (int i= 0; i<spline.points.size()-2; ++i) {
 
-    foreach (Spline* spline, splines) {
-        if (spline->points.size() >= 4) {
-            for (int i= 1; i<spline->points.size()-2; ++i) {
-
-                glLineWidth(2.0f);
-                glBegin(GL_LINES);
-                glColor3f(0,0,0);
-                float t = 0.0f;
-                do  {
-                    Vector3 a = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
-                    t+=0.1f;
-                    Vector3 b = spline->katmullRom(t,spline->points[i-1],spline->points[i],spline->points[i+1],spline->points[i+2]);
-                    glVertex3f(a.x(),a.y(),a.z());
-                    glVertex3f(b.x(),b.y(),b.z());
-                } while (t < 0.99f);
-
-                glEnd();
-            }
+            glLineWidth(2.0f);
+            glBegin(GL_LINES);
+            glColor3f(0,0,0);
+            float t = 0.0f;
+            glVertex3d(spline.points[i].x(), spline.points[i].y(), spline.points[i].z());
+            glVertex3d(spline.points[i+1].x(), spline.points[i+1].y(), spline.points[i+1].z());
+            /*do  {
+                Vector3 a = spline.katmullRom(t,spline.points[i-1],spline.points[i],spline.points[i+1],spline.points[i+2]);
+                t+=0.1f;
+                Vector3 b = spline.katmullRom(t,spline.points[i-1],spline.points[i],spline.points[i+1],spline.points[i+2]);
+                glVertex3f(a.x(),a.y(),a.z());
+                glVertex3f(b.x(),b.y(),b.z());
+            } while (t < 0.99f);
+            */
+            glEnd();
         }
     }
+}
+
+void Node::drawSelf() {
+
+
+
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

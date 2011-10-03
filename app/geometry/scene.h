@@ -30,7 +30,7 @@ public:
     Scene();
 
     void showCursor(Vector3& point, Vector3& dir);
-    void addPoint();
+    void addPoint(Vector3& from, Vector3& direction);
     void makeLayer();
 
     void add(Node* node);
