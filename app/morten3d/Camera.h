@@ -12,7 +12,6 @@
 #include "Vector3.h"
 #include <iostream>
 #include <vector>
-#include "Splines.h"
 
 class Camera {
 public:
@@ -30,7 +29,6 @@ public:
     Vector3 forward;
     Vector3 up;
     float fov;
-    Splines * spline;
 
     void updateCamera();
 

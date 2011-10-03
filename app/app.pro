@@ -21,7 +21,6 @@ HEADERS += gui/mainwindow.h \
     geometry/scene.h \
     morten3d/Camera.h \
     morten3d/Vector3.h \
-    morten3d/Splines.h \
     geometry/sphere.h \
     geometry/node.h \
     geometry/spline.h \
@@ -38,7 +37,6 @@ SOURCES += main.cpp \
     geometry/scene.cpp \
     morten3d/Camera.cpp \
     morten3d/Vector3.cpp \
-    morten3d/Splines.cpp \
     geometry/sphere.cpp \
     geometry/node.cpp \
     geometry/spline.cpp \

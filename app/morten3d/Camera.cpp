@@ -9,7 +9,7 @@
 #include "Vector3.h"
 
 Camera::Camera() :
-        position(10, 10, 10), forward(-1, -1, -1), up(-1, 1, -1), fov(M_PI_4), spline(NULL) {
+        position(10, 10, 10), forward(-1, -1, -1), up(-1, 1, -1), fov(M_PI_4) {
 	forward = forward.normalize();
 	up = up.normalize();
 	fix();
@@ -26,9 +26,4 @@ Camera::~Camera() {
 }
 
 void Camera::updateCamera() {
-	if (spline != NULL) {
-		up = spline->up;
-		position = spline->position;
-		forward = spline->forward;
-	}
 }
