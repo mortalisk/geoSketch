@@ -11,6 +11,11 @@ void SideNode::setOpposite(SideNode * node) {
     node->opposite = this;
 }
 
+void SideNode::setLeft(SideNode *node) {
+    this->left = node;
+    node->right = this;
+}
+
 static bool similar(float a, float b, float c) {
     return fabs(a-b) < 0.001 && fabs(b-c) < 0.001;
 }

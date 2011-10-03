@@ -12,6 +12,7 @@ public:
     BoxNode();
     float width, depth, heigth;
     SideNode * frontNode,  * backNode,  * leftNode,  * rightNode,  * topNode,  * bottomNode;
+    float topF, bottomF ,rightF ,leftF ,farF , nearF;
     //QVector<Surface*> surfaces;
     QVector<SideNode*> surfaces;
     SideNode * activeSurface;

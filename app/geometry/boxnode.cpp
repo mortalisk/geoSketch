@@ -1,6 +1,7 @@
 #include "boxnode.h"
 
 #include <iostream>
+#include <algorithm>
 #include "GL/glew.h"
 #include "surface.h"
 #include "float.h"
@@ -11,12 +12,12 @@ BoxNode::BoxNode()
     width = 10;
     depth = 10;
     heigth = 10;
-    float topF = heigth/2;
-    float bottomF = -topF;
-    float rightF = width/2;
-    float leftF = -rightF;
-    float farF = depth/2;
-    float nearF = -farF;
+    topF = heigth/2;
+    bottomF = -topF;
+    rightF = width/2;
+    leftF = -rightF;
+    farF = depth/2;
+    nearF = -farF;
 
     /*           H ___________ G
                  /|          /|
@@ -170,6 +171,11 @@ BoxNode::BoxNode()
     leftNode->setOpposite(rightNode);
     topNode->setOpposite(bottomNode);
 
+    frontNode->setLeft(leftNode);
+    leftNode->setLeft(backNode);
+    backNode->setLeft(rightNode);
+    rightNode->setLeft(frontNode);
+
     surfaces.push_back(frontNode);
     surfaces.push_back(backNode);
     surfaces.push_back(topNode);
@@ -241,14 +247,47 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 
 void BoxNode::stopDrawing() {
     if (activeSurface) {
+        QVector<Vector3>& pts = activeSurface->spline.points;
+        int first = 0, last = pts.size()-1;
+        if (activeSurface == frontNode) {
+            if (pts[first].x() > pts[last].x()) {
+                std::reverse(pts.begin(),pts.end());
+            }
+            pts.push_front(Vector3(leftF, pts[first].y(), pts[first].z()));
+            pts.push_back(Vector3(rightF, pts[last].y(), pts[last].z()));
 
-
+        }else if(activeSurface == backNode) {
+            if (pts[first].x() < pts[last].x()) {
+                std::reverse(pts.begin(),pts.end());
+            }
+            pts.push_front(Vector3(rightF, pts[first].y(), pts[first].z()));
+            pts.push_back(Vector3(leftF, pts[last].y(), pts[last].z()));
+        }else if(activeSurface == leftNode) {
+            if (pts[first].z() < pts[last].z()) {
+                std::reverse(pts.begin(),pts.end());
+            }
+            pts.push_front(Vector3(pts[first].x(), pts[first].y(), farF));
+            pts.push_back(Vector3(pts[last].x(), pts[last].y(), nearF));
+        }else if(activeSurface == rightNode) {
+            if (pts[first].z() > pts[last].z()) {
+                std::reverse(pts.begin(),pts.end());
+            }
+            pts.push_front(Vector3(pts[first].x(), pts[first].y(), nearF));
+            pts.push_back(Vector3(pts[last].x(), pts[last].y(), farF));
+        }
 
         if (activeSurface != topNode && activeSurface != bottomNode) {
             activeSurface->opposite->spline.points.clear();
             foreach (Vector3 var, activeSurface->spline.points) {
                 activeSurface->opposite->projectPoint(var);
             }
+
+            Vector3 lastOpposite = activeSurface->opposite->spline.points[activeSurface->opposite->spline.points.size()-1];
+            Vector3 firstOpposite = activeSurface->opposite->spline.points[0];
+            activeSurface->right->spline.addPoint(firstOpposite);
+            activeSurface->right->spline.addPoint(pts[0]);
+            activeSurface->left->spline.addPoint(lastOpposite );
+            activeSurface->left->spline.addPoint(pts[pts.size()-1]);
         }else {
             activeSurface->spline.points.clear();
             // TODO: clear suggestions and disable suggestions for this surface
