@@ -16,7 +16,7 @@ Scene::Scene() {
     cursor->position = Vector3(0,0,0);
     add(cursor);
     boxNode = new BoxNode();
-    camera.setTrackMode(Camera::SPHERE_TRACK, Vector3(boxNode->getWidth()/2,boxNode->getHeight()/2,-boxNode->getDepth()/2), Vector3(10,10,10) );
+    camera.setTrackMode(Camera::SPHERE_TRACK, Vector3(0,0,0), Vector3(10,10,10) );
     activeNode = boxNode;
     add(boxNode);
     void draw();

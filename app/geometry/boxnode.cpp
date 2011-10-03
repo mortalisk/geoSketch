@@ -11,6 +11,12 @@ BoxNode::BoxNode()
     width = 10;
     depth = 10;
     heigth = 10;
+    float topF = heigth/2;
+    float bottomF = -topF;
+    float rightF = width/2;
+    float leftF = -rightF;
+    float farF = depth/2;
+    float nearF = -farF;
 
     /*           H ___________ G
                  /|          /|
@@ -26,15 +32,15 @@ BoxNode::BoxNode()
        (0,0,0)
 
       */
-    Vector3 A (0,0,0);
-    Vector3 B (width,0,0);
-    Vector3 C (width,heigth,0);
-    Vector3 D (0,heigth,0);
+    Vector3 A (leftF,bottomF,nearF);
+    Vector3 B (rightF,bottomF,nearF);
+    Vector3 C (rightF,topF,nearF);
+    Vector3 D (leftF,topF,nearF);
 
-    Vector3 E (0,0,-depth);
-    Vector3 F (width,0,-depth);
-    Vector3 G (width,heigth,-depth);
-    Vector3 H (0,heigth,-depth);
+    Vector3 E (leftF,bottomF,farF);
+    Vector3 F (rightF,bottomF,farF);
+    Vector3 G (rightF,topF,farF);
+    Vector3 H (leftF,topF,farF);
 
     QVector<Vector3> vertices;
     QVector<Vector3> lineVertices;
