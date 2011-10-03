@@ -242,12 +242,15 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 void BoxNode::stopDrawing() {
     if (activeSurface) {
 
+
+
         if (activeSurface != topNode && activeSurface != bottomNode) {
             activeSurface->opposite->spline.points.clear();
             foreach (Vector3 var, activeSurface->spline.points) {
                 activeSurface->opposite->projectPoint(var);
             }
         }else {
+            activeSurface->spline.points.clear();
             // TODO: clear suggestions and disable suggestions for this surface
         }
 
