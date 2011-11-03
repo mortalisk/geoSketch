@@ -15,7 +15,9 @@ public:
     virtual ~Node();
     QVector<Node*> children;
     Spline spline;
+    Spline sketchingSpline;
     bool drawing;
+    bool splineDone;
 
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 
@@ -32,7 +34,11 @@ public:
     virtual void makeLayer();
     void drawSpline();
 
+    void doOversketch();
+
 protected:
+private:
+    int findNearestPointInSpline(Vector3 first);
 
 };
 

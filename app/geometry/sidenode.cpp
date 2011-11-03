@@ -33,3 +33,11 @@ void SideNode::projectPoint(Vector3 & point) {
     }
     spline.isSuggestion = true;
 }
+
+void SideNode::stopDrawing() {
+    if (spline.points.size() == 0) {
+        spline.points += sketchingSpline.points;
+    } else {
+        doOversketch();
+    }
+}

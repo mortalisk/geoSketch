@@ -1,6 +1,7 @@
 #include "node.h"
 #include <GL/glew.h>
 #include "surface.h"
+#include "float.h"
 
 Node::Node() {
 	shape = NULL;
@@ -24,6 +25,47 @@ void Node::addPoint(Vector3 from, Vector3 direction) {
 		spline.addPoint(pos);
 	}
 
+}
+
+int Node::findNearestPointInSpline(Vector3 first) {
+	int nearest = -1;
+	float distance = FLT_MAX;
+	for (int i = 0; i < spline.points.size(); ++i) {
+		Vector3 & point = spline.points[i];
+		float distanceThisFirst = (point - first).lenght();
+		if (distanceThisFirst < distance) {
+			nearest = i;
+			distance = distanceThisFirst;
+		}
+	}
+
+	return nearest;
+}
+
+void Node::doOversketch() {
+	if (sketchingSpline.points.size() < 2)
+		return;
+	Vector3 first = sketchingSpline.points[0];
+	Vector3 last = sketchingSpline.points[sketchingSpline.points.size() - 1];
+
+	int nearestFirst = findNearestPointInSpline(first);
+
+	int nearestLast = findNearestPointInSpline(last);
+
+	if (nearestFirst != 0) {
+		for (int i = nearestFirst; i >= 0; --i) {
+			sketchingSpline.points.push_front(spline.points[i]);
+		}
+	}
+	if (nearestLast < spline.points.size() - 1) {
+		for (int i = nearestLast; i < spline.points.size(); ++i) {
+			sketchingSpline.points.push_back(spline.points[i]);
+		}
+	}
+
+	spline.points.clear();
+	spline.points += sketchingSpline.points;
+	sketchingSpline.points.clear();
 }
 
 void Node::stopDrawing() {

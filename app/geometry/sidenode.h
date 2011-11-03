@@ -14,6 +14,7 @@ public:
     void setOpposite(SideNode * node);
     void setLeft(SideNode * node);
     void projectPoint(Vector3 & point);
+    void stopDrawing();
 };
 
 #endif // SIDENODE_H
