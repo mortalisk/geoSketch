@@ -2,7 +2,7 @@
 #include <math.h>
 #include "arrays.h"
 
-Sphere::Sphere(float radius, float red, float g, float b) {
+Sphere::Sphere(float radius) {
     int antallStykker =16;
     int antallDisker = 8;
 

@@ -62,17 +62,8 @@ void Node::drawSpline() {
 
             glBegin(GL_LINES);
             glColor3f(0,0,0);
-            float t = 0.0f;
             glVertex3d(spline.points[i].x(), spline.points[i].y(), spline.points[i].z());
             glVertex3d(spline.points[i+1].x(), spline.points[i+1].y(), spline.points[i+1].z());
-            /*do  {
-                Vector3 a = spline.katmullRom(t,spline.points[i-1],spline.points[i],spline.points[i+1],spline.points[i+2]);
-                t+=0.1f;
-                Vector3 b = spline.katmullRom(t,spline.points[i-1],spline.points[i],spline.points[i+1],spline.points[i+2]);
-                glVertex3f(a.x(),a.y(),a.z());
-                glVertex3f(b.x(),b.y(),b.z());
-            } while (t < 0.99f);
-            */
             glEnd();
         }
     }

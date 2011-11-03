@@ -8,9 +8,9 @@
 Scene::Scene() {
     snapToGrid = false;
     resolution = 0.05f;
-    sphere = new Sphere(0.05f, 255.0f, 0.0f, 0.0f);
-    cursorSphere = new Sphere(0.05f, 255.0f,0.0f,0.0f);
-    splineSphere = new Sphere(0.05f, 255.0f,0.0f,0.0f);
+    sphere = new Sphere(0.05f);
+    cursorSphere = new Sphere(0.05f);
+    splineSphere = new Sphere(0.05f);
     cursor = new Node();
     cursor->shape = cursorSphere;
     cursor->position = Vector3(0,0,0);
