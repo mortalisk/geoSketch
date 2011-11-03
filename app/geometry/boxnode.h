@@ -23,6 +23,7 @@ public:
     void stopDrawing();
     void draw();
     void drawSelf();
+    void makeLayer();
 
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
     float intersectionPoint(Vector3 from, Vector3 direction);

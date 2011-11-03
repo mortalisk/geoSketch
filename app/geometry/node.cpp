@@ -33,6 +33,7 @@ void Node::stopDrawing() {
 }
 
 void Node::makeLayer() {
+
 }
 
 QVector<Vector3> Node::intersectionPoints(Vector3 from,Vector3 direction) {

@@ -16,6 +16,8 @@ public:
         isSuggestion = false;
     }
 
+    Vector3 getPoint(float at);
+
     void changeLastPoint(Vector3 pos) {
         points[points.size()-1] = pos;
     }

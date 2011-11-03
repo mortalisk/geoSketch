@@ -297,6 +297,47 @@ void BoxNode::stopDrawing() {
     }
 }
 
+void BoxNode::makeLayer() {
+
+
+    QVector<Vector3> triangles;
+    QVector4D c(0.1, 0.3, 0.4, 1.0);
+    for (float i = 0.0;i<=0.9;i+=0.1) {
+        Vector3 p1 = activeSurface->spline.getPoint(i);
+        Vector3 p2 = activeSurface->opposite->spline.getPoint(i);
+        Vector3 p3 = activeSurface->spline.getPoint(i+0.1);
+        Vector3 p4 = activeSurface->opposite->spline.getPoint(i+0.1);
+        triangles.push_back(p1);
+        triangles.push_back(p2);
+        triangles.push_back(p3);
+        triangles.push_back(p3);
+        triangles.push_back(p2);
+        triangles.push_back(p4);
+    }
+    QVector<Vector3> outline;
+
+    for (float i = 0.0;i<=1.0;i+=0.1) {
+        outline.push_back(activeSurface->spline.getPoint(i));
+    }
+    for (float i = 0.0;i<=1.0;i+=0.1) {
+        outline.push_back(activeSurface->right->spline.getPoint(i));
+    }
+    for (float i = 0.0;i<=1.0;i+=0.1) {
+        outline.push_back(activeSurface->opposite->spline.getPoint(i));
+    }
+    for (float i = 0.0;i<=1.0;i+=0.1) {
+        outline.push_back(activeSurface->left->spline.getPoint(i));
+    }
+
+    Surface * s = new Surface(triangles, outline, c);
+    Node * n = new Node(s);
+    children.append(n);
+
+    foreach(SideNode* s, surfaces) {
+        s->spline.points.clear();
+    }
+}
+
 void BoxNode::draw() {
     glDisable(GL_CULL_FACE);
     drawChildren();
