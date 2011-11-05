@@ -10,9 +10,6 @@ private:
     float width, heigth, depth;
 public:
     Box(float width, float heigth, float depth);
-    ~Box() {
-
-    }
     float getWidth();
     float getHeight();
     float getDepth();

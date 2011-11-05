@@ -10,10 +10,15 @@ class BoxNode : public Node
 {
 public:
     BoxNode();
+    ~BoxNode() {
+        foreach(SideNode* p, surfaces) {
+            delete p;
+        }
+    }
+
     float width, depth, heigth;
     SideNode * frontNode,  * backNode,  * leftNode,  * rightNode,  * topNode,  * bottomNode;
     float topF, bottomF ,rightF ,leftF ,farF , nearF;
-    //QVector<Surface*> surfaces;
     QVector<SideNode*> surfaces;
     SideNode * activeSurface;
     float getWidth();
