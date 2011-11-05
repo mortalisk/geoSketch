@@ -12,6 +12,9 @@ Node::Node(Shape *shape) {
 }
 
 Node::~Node() {
+    foreach(Node* n,children) {
+        delete n;
+    }
 }
 
 void Node::addPoint(Vector3 from, Vector3 direction) {

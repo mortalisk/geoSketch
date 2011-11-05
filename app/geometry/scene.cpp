@@ -70,5 +70,7 @@ Scene::~Scene() {
         delete node;
     }
     delete cursor;
+    delete sphere;
+    delete cursorSphere;
 }
 
