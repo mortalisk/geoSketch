@@ -27,12 +27,12 @@ void Node::addPoint(Vector3 from, Vector3 direction) {
 
 }
 
-int Node::findNearestPointInSpline(Vector3 first) {
+int Node::findNearestPointInSpline(Vector3 searchPoint) {
 	int nearest = -1;
 	float distance = FLT_MAX;
 	for (int i = 0; i < spline.points.size(); ++i) {
 		Vector3 & point = spline.points[i];
-		float distanceThisFirst = (point - first).lenght();
+		float distanceThisFirst = (point - searchPoint).lenght();
 		if (distanceThisFirst < distance) {
 			nearest = i;
 			distance = distanceThisFirst;
@@ -45,6 +45,7 @@ int Node::findNearestPointInSpline(Vector3 first) {
 void Node::doOversketch() {
 	if (sketchingSpline.points.size() < 2)
 		return;
+
 	Vector3 first = sketchingSpline.points[0];
 	Vector3 last = sketchingSpline.points[sketchingSpline.points.size() - 1];
 
@@ -92,8 +93,12 @@ void Node::drawChildren() {
 		node->draw();
 	}
 }
+void Node::drawSplines() {
+    drawSpline(sketchingSpline);
+    drawSpline(spline);
+}
 
-void Node::drawSpline() {
+void Node::drawSpline(Spline & spline) {
 	if (spline.points.size() >= 1) {
 		for (int i = 0; i < spline.points.size() - 1; ++i) {
 

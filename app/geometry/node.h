@@ -32,7 +32,11 @@ public:
     void drawChildren();
 
     virtual void makeLayer();
-    void drawSpline();
+
+
+    void drawSplines();
+    void drawSpline(Spline & spline);
+
 
     void doOversketch();
 

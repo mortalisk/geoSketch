@@ -311,7 +311,7 @@ void BoxNode::drawSelf() {
     glTranslatef(position.x(), position.y(), position.z());
 
     foreach(Node * s, surfaces) {
-        s->drawSpline();
+        s->drawSplines();
         s->shape->drawLines();
     }
     foreach(Node * s, surfaces) {

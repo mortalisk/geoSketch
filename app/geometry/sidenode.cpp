@@ -37,6 +37,7 @@ void SideNode::projectPoint(Vector3 & point) {
 void SideNode::stopDrawing() {
     if (spline.points.size() == 0) {
         spline.points += sketchingSpline.points;
+        sketchingSpline.points.clear();
     } else {
         doOversketch();
     }
