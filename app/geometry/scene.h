@@ -22,7 +22,6 @@ public:
     Camera camera;
     Sphere * sphere;
     Sphere * cursorSphere;
-    Sphere * splineSphere;
     BoxNode * boxNode;
     Node * cursor;
     Node * activeNode;
