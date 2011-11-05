@@ -14,6 +14,8 @@ public:
     void setOpposite(SideNode * node);
     void setLeft(SideNode * node);
     void projectPoint(Vector3 & point);
+    void moveSketchingPointsToSpline();
+    void makeSuggestionLines();
 };
 
 #endif // SIDENODE_H

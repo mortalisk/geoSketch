@@ -16,6 +16,15 @@ void SideNode::setLeft(SideNode *node) {
     node->right = this;
 }
 
+void SideNode::moveSketchingPointsToSpline() {
+   spline.points += sketchingSpline.points;
+   sketchingSpline.points.clear();
+}
+
+void SideNode::makeSuggestionLines() {
+
+}
+
 static bool similar(float a, float b, float c) {
     return fabs(a-b) < 0.001 && fabs(b-c) < 0.001;
 }

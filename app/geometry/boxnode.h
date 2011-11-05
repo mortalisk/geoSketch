@@ -29,6 +29,7 @@ public:
     void draw();
     void drawSelf();
     void makeLayer();
+    void makeSuggestionFor(SideNode* side);
 
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
     float intersectionPoint(Vector3 from, Vector3 direction);
