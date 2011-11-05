@@ -246,13 +246,18 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
     }
 }
 
-void BoxNode::stopDrawing() {
+void BoxNode::determineActionOnStoppedDrawing() {
 
 	if (activeSurface) {
 
-		activeSurface->stopDrawing();
+            if (activeSurface->spline.points.size() == 0) {
+                activeSurface->spline.points += activeSurface->sketchingSpline.points;
+                activeSurface->sketchingSpline.points.clear();
+            } else {
+                activeSurface->doOversketch();
+            }
 
-		activeSurface = NULL;
+            activeSurface = NULL;
 	}
 }
 

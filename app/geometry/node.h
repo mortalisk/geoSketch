@@ -24,7 +24,7 @@ public:
     /** adds a point to currend spline */
     virtual void addPoint(Vector3 from, Vector3 direction);
     /** stops drawing on current spline */
-    virtual void stopDrawing();
+    virtual void determineActionOnStoppedDrawing();
 
     virtual void draw();
 

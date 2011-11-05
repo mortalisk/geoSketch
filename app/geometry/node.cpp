@@ -69,7 +69,7 @@ void Node::doOversketch() {
 	sketchingSpline.points.clear();
 }
 
-void Node::stopDrawing() {
+void Node::determineActionOnStoppedDrawing() {
 
 }
 

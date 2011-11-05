@@ -148,7 +148,7 @@ void MyGLWidget::mousePressEvent(QMouseEvent * e) {
 
 void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
     mouse[e->button()] = false;
-    scene.activeNode->stopDrawing();
+    scene.activeNode->determineActionOnStoppedDrawing();
 }
 
 bool MyGLWidget::isMousePressed(int button) {

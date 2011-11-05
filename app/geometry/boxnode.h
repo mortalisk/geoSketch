@@ -20,7 +20,7 @@ public:
     float getHeight();
     float getDepth();
     void addPoint(Vector3 from, Vector3 direction);
-    void stopDrawing();
+    void determineActionOnStoppedDrawing();
     void draw();
     void drawSelf();
     void makeLayer();
