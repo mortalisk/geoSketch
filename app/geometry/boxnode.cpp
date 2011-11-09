@@ -104,6 +104,7 @@ QVector<Vector3> BoxNode::intersectionPoints(Vector3 from, Vector3 direction) {
 
 void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 
+    // we must find the nearest intersection point
     float candidateDistance = FLT_MAX;
     Vector3 candidatePoint;
     SideNode * candidate = NULL;
