@@ -42,130 +42,13 @@ BoxNode::BoxNode()
     Vector3 F (rightF,bottomF,farF);
     Vector3 G (rightF,topF,farF);
     Vector3 H (leftF,topF,farF);
-
-    QVector<Vector3> vertices;
-    QVector<Vector3> lineVertices;
-
-    QVector4D c(1.0, 1.0, 1.0, 0.5);
-
-    //Front
-    vertices.push_back(A);
-    vertices.push_back(B);
-    vertices.push_back(D);
-
-    vertices.push_back(D);
-    vertices.push_back(B);
-    vertices.push_back(C);
-
-    lineVertices.push_back(A);
-    lineVertices.push_back(B);
-    lineVertices.push_back(C);
-    lineVertices.push_back(D);
-    lineVertices.push_back(A);
-
-    Surface * front = new Surface(vertices, lineVertices, c);
-
-    vertices.clear();
-    lineVertices.clear();
-    //Right
-    vertices.push_back(B);
-    vertices.push_back(F);
-    vertices.push_back(C);
-
-    vertices.push_back(C);
-    vertices.push_back(F);
-    vertices.push_back(G);
-
-    lineVertices.push_back(B);
-    lineVertices.push_back(F);
-    lineVertices.push_back(G);
-    lineVertices.push_back(C);
-    lineVertices.push_back(B);
-
-    Surface * right = new Surface(vertices, lineVertices, c);
-
-    vertices.clear();
-    lineVertices.clear();
-    //Left
-    vertices.push_back(E);
-    vertices.push_back(A);
-    vertices.push_back(H);
-
-    vertices.push_back(H);
-    vertices.push_back(A);
-    vertices.push_back(D);
-
-    lineVertices.push_back(A);
-    lineVertices.push_back(E);
-    lineVertices.push_back(H);
-    lineVertices.push_back(D);
-    lineVertices.push_back(A);
-
-    Surface * left = new Surface(vertices, lineVertices, c);
-
-    vertices.clear();
-    lineVertices.clear();
-    //Bottom
-    vertices.push_back(A);
-    vertices.push_back(E);
-    vertices.push_back(F);
-
-    vertices.push_back(A);
-    vertices.push_back(F);
-    vertices.push_back(B);
-
-    lineVertices.push_back(A);
-    lineVertices.push_back(B);
-    lineVertices.push_back(F);
-    lineVertices.push_back(E);
-    lineVertices.push_back(A);
-
-    Surface * bottom = new Surface(vertices, lineVertices, c);
-
-    vertices.clear();
-    lineVertices.clear();
-    //Top
-    vertices.push_back(D);
-    vertices.push_back(G);
-    vertices.push_back(H);
-
-    vertices.push_back(D);
-    vertices.push_back(C);
-    vertices.push_back(G);
-
-    lineVertices.push_back(D);
-    lineVertices.push_back(C);
-    lineVertices.push_back(G);
-    lineVertices.push_back(H);
-    lineVertices.push_back(D);
-
-    Surface * top = new Surface(vertices, lineVertices, c);
-
-    vertices.clear();
-    lineVertices.clear();
-    //Back
-    vertices.push_back(E);
-    vertices.push_back(H);
-    vertices.push_back(F);
-
-    vertices.push_back(H);
-    vertices.push_back(G);
-    vertices.push_back(F);
-
-    lineVertices.push_back(H);
-    lineVertices.push_back(G);
-    lineVertices.push_back(F);
-    lineVertices.push_back(E);
-    lineVertices.push_back(H);
-
-    Surface * back = new Surface(vertices, lineVertices, c);
-
-    frontNode = new SideNode(front);
-    backNode = new SideNode(back);
-    topNode = new SideNode(top);
-    bottomNode = new SideNode(bottom);
-    leftNode = new SideNode(left);
-    rightNode = new SideNode(right);
+    
+    frontNode = new SideNode(A, B, C, D);
+    backNode = new SideNode(F, E, H, G );
+    topNode = new SideNode(D, C, G, H);
+    bottomNode = new SideNode(E, F, B, A);
+    leftNode = new SideNode(E, A, D, H);
+    rightNode = new SideNode(B, F, G, C);
 
     frontNode->setOpposite(backNode);
     leftNode->setOpposite(rightNode);

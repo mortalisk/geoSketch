@@ -9,7 +9,11 @@ public:
     SideNode * opposite;
     SideNode * left;
     SideNode * right;
-    SideNode(Shape * shape);
+    Vector3 lowerLeft;
+    Vector3 upperRigth;
+    Vector3 upperLeft;
+    Vector3 lowerRigth;
+    SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vector3 upperLeft);
 
     void setOpposite(SideNode * node);
     void setLeft(SideNode * node);
