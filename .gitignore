@@ -1,5 +1,7 @@
 geoSketch.pro.user.2.1pre1
 *Makefile*
+*.o
+moc_*
 *.a
 app/geoSketch
 *project
