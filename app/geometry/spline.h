@@ -35,6 +35,11 @@ public:
         return points.size();
     }
 
+    bool isRightToLeft() {
+        if (points.size() == 0) return false;
+        return points[0].cross(points[points.size()-1]).y() > 0;
+    }
+
     Spline();
 };
 
