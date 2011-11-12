@@ -52,20 +52,35 @@ void Node::doOversketch() {
 	Vector3 first = sketchingSpline.points[0];
 	Vector3 last = sketchingSpline.points[sketchingSpline.points.size() - 1];
 
-	int nearestFirst = findNearestPointInSpline(first);
+        int nearestFirst = findNearestPointInSpline(first);
 
-	int nearestLast = findNearestPointInSpline(last);
+        int nearestLast = findNearestPointInSpline(last);
 
-	if (nearestFirst != 0) {
-		for (int i = nearestFirst; i >= 0; --i) {
-			sketchingSpline.points.push_front(spline.points[i]);
-		}
-	}
-	if (nearestLast < spline.points.size() - 1) {
-		for (int i = nearestLast; i < spline.points.size(); ++i) {
-			sketchingSpline.points.push_back(spline.points[i]);
-		}
-	}
+        bool isOpposite = spline.isRightToLeft() != sketchingSpline.isRightToLeft();
+
+        if (isOpposite) {
+            if (nearestLast != 0) {
+                for(int i = nearestLast; i >= 0; --i) {
+                    sketchingSpline.points.push_back(spline.points[i]);
+                }
+            }
+            if (nearestFirst < spline.points.size() - 1) {
+                for (int i = nearestFirst; i < spline.points.size(); ++i) {
+                    sketchingSpline.points.push_front(spline.points[i]);
+                }
+            }
+        }else {
+            if (nearestFirst != 0) {
+                for (int i = nearestFirst; i >= 0; --i) {
+                    sketchingSpline.points.push_front(spline.points[i]);
+                }
+            }
+            if (nearestLast < spline.points.size() - 1) {
+                for (int i = nearestLast; i < spline.points.size(); ++i) {
+                    sketchingSpline.points.push_back(spline.points[i]);
+                }
+            }
+        }
 
 	spline.points.clear();
 	spline.points += sketchingSpline.points;
