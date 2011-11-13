@@ -16,4 +16,4 @@ Dependencies:
 
 Building:
 Standard qmake procedure. qmake then make.
-There are three subfolder projects inside the main project. These are test, common and app. The idea is to keep opengl, and general display stuff inside the app folder, the model and mathmatics inside the common folder, and the unit tests and any other tests inside the test folder.
+All code is in the app folder.
