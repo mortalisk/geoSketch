@@ -15,8 +15,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QHBoxLayout * menuLayout = new QHBoxLayout();
     centralWidget()->setLayout(mainLayout);
 
-    QPushButton * makeSplineButton = new QPushButton("Make horizon");
-    menuLayout->addWidget(makeSplineButton);
+    QPushButton * undoButton = new QPushButton("UNDO");
+    menuLayout->addWidget(undoButton);
     mainLayout->addLayout(menuLayout);
 
 
@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     glFormat->setVersion(3,3);
     MyGLWidget * gl = new MyGLWidget(glFormat);
 
-    QObject::connect(makeSplineButton,SIGNAL(clicked(bool)), gl, SLOT(makeLayer()));
+    QObject::connect(undoButton,SIGNAL(clicked(bool)), gl, SLOT(undo()));
 
     mainLayout->addWidget(gl);
 }

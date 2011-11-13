@@ -8,17 +8,15 @@
 Scene::Scene() {
     snapToGrid = false;
     resolution = 0.05f;
-    sphere = new Sphere(0.05f);
-    cursorSphere = new Sphere(0.05f);
+    sphere = Sphere(0.05f);
+    cursorSphere = Sphere(0.05f);
     cursor = new Node();
-    cursor->shape = cursorSphere;
+    cursor->shape = &cursorSphere;
     cursor->position = Vector3(0,0,0);
-    add(cursor);
     boxNode = new BoxNode();
+    boxNode->addChild(cursor);
     camera.setTrackMode(Camera::SPHERE_TRACK, Vector3(0,0,0), Vector3(10,10,10) );
     activeNode = boxNode;
-    add(boxNode);
-    void draw();
 
 }
 
@@ -40,10 +38,6 @@ void Scene::showCursor(Vector3& from, Vector3& direction) {
         cursor->position = Vector3(pos.x(),pos.y(),pos.z());
         onSurface = false;
     }
-
-    std::cout << "cursor: " << cursor->position << std::endl <<
-                 "from: " << from << std::endl <<
-                 "direction: " << direction << std::endl;
 }
 
 void Scene::addPoint(Vector3& from, Vector3& direction) {
@@ -56,20 +50,11 @@ void Scene::makeLayer() {
     activeNode->makeLayer();
 }
 
-void Scene::add(Node* node) {
-    nodes.append(node);
-}
-
-QVector<Node*>& Scene::getNodes(){
-    return nodes;
+Node* Scene::getRootNode(){
+    return boxNode;
 }
 
 Scene::~Scene() {
-    foreach(Node* node , nodes) {
-        delete node;
-    }
     delete cursor;
-    delete sphere;
-    delete cursorSphere;
 }
 

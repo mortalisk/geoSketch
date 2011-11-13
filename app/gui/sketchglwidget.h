@@ -6,6 +6,7 @@
 #include "geometry/scene.h"
 #include <QKeyEvent>
 #include <QMap>
+#include <QStack>
 #include <iostream>
 
 class MyGLWidget : public QGLWidget
@@ -13,13 +14,14 @@ class MyGLWidget : public QGLWidget
     Q_OBJECT
 
 private:
-    Scene scene;
+    Scene *scene;
     QMap<int,bool> keys;
     QMap<int,bool> mouse;
     int previousMouseX;
     int previousMouseY;
     float aspect;
     float move;
+    QStack<Scene*> stack;
 
 public:
     explicit MyGLWidget(QGLFormat *glf,QWidget *parent = 0);
@@ -52,11 +54,18 @@ public:
 
     void checkInput();
 
+    void pushScene();
+
 signals:
 
 public slots:
     void animate();
     void makeLayer();
+
+    void undo(){
+        scene = stack.pop();
+
+    }
 
 };
 

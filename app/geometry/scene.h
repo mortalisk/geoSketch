@@ -13,28 +13,35 @@
 class Scene
 {
 private:
-    QVector<Node*> nodes;
     float resolution;
     bool snapToGrid;
     bool onSurface;
 
 public:
+
     Camera camera;
-    Sphere * sphere;
-    Sphere * cursorSphere;
+    Sphere sphere;
+    Sphere cursorSphere;
     BoxNode * boxNode;
     Node * cursor;
     Node * activeNode;
-    Spline * drawSpline;
+
     Scene();
 
     void showCursor(Vector3& point, Vector3& dir);
     void addPoint(Vector3& from, Vector3& direction);
     void makeLayer();
 
-    void add(Node* node);
+    Node* getRootNode();
 
-    QVector<Node*>& getNodes();
+    Scene(Scene& scene)
+    {
+        *this=scene;
+        boxNode = boxNode->copy();
+        cursor = new Node(&cursorSphere);
+        boxNode->addChild(cursor);
+        activeNode = boxNode;
+    }
 
     ~Scene();
 

@@ -11,6 +11,7 @@ Node::Node(Shape *shape) {
 	this->shape = shape;
 }
 
+
 Node::~Node() {
     foreach(Node* n,children) {
         delete n;

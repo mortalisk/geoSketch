@@ -7,7 +7,7 @@ class Sphere : public Shape
 {
     float radius;
 public:
-    Sphere(float radius);
+    Sphere(float radius = 1.0f);
 };
 
 #endif // SPHERE_H
