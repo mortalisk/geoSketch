@@ -40,6 +40,7 @@ public:
         boxNode = boxNode->copy();
         cursor = new Node(&cursorSphere);
         boxNode->addChild(cursor);
+
         activeNode = boxNode;
     }
 
