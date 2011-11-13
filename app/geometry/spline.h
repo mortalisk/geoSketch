@@ -37,7 +37,7 @@ public:
 
     bool isRightToLeft() {
         if (points.size() == 0) return false;
-        return points[0].cross(points[points.size()-1]).y() > 0;
+        return points[0].isLeftOf(points[points.size()-1]);
     }
 
     Spline();
