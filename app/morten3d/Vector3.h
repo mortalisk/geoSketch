@@ -129,6 +129,10 @@ public:
 		return multMatrix(m);
 
 	}
+        bool isLeftOf(Vector3& o) {
+            return (this->cross(o)).y() > 0;
+        }
+
 	friend Vector3 operator*(double r, Vector3& v);
 	friend Vector3 operator*(float r, Vector3& v);
 	friend std::ostream & operator<<(std::ostream& os, Vector3& v);

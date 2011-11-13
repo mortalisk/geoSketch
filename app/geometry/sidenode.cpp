@@ -46,7 +46,20 @@ void SideNode::moveSketchingPointsToSpline() {
 }
 
 void SideNode::makeSuggestionLines() {
+    Vector3 first = spline.points[0];
+    Vector3 last = spline.points[spline.points.size()-1];
 
+    if (first.isLeftOf(last)) {
+        Vector3 vectorOne = Vector3(lowerLeft.x(),first.y(),lowerLeft.z());
+        Vector3 vectorTwo = Vector3(lowerRigth.x(),last.y(),lowerRigth.z());
+        spline.points.push_front(vectorOne);
+        spline.points.push_back(vectorTwo);
+    }else {
+        Vector3 vectorOne = Vector3(lowerLeft.x(),last.y(),lowerLeft.z());
+        Vector3 vectorTwo = Vector3(lowerRigth.x(),first.y(),lowerRigth.z());
+        spline.points.push_front(vectorTwo);
+        spline.points.push_back(vectorOne);
+    }
 }
 
 static bool similar(float a, float b, float c) {

@@ -148,59 +148,8 @@ void BoxNode::determineActionOnStoppedDrawing() {
 
 void BoxNode::makeSuggestionFor(SideNode* side) {
 
+    side->makeSuggestionLines();
 
-    Vector3 first = side->spline.points[0];
-    Vector3 last = side->spline.points[side->spline.points.size()-1];
-
-    if(side==frontNode) {
-        if (first.x() < last.x()) {
-            Vector3 vectorOne = Vector3(leftF,first.y(),nearF);
-            Vector3 vectorTwo = Vector3(rightF,last.y(),nearF);
-            side->spline.points.push_front(vectorOne);
-            side->spline.points.push_back(vectorTwo);
-        }else {
-            Vector3 vectorOne = Vector3(leftF,last.y(),nearF);
-            Vector3 vectorTwo = Vector3(rightF,first.y(),nearF);
-            side->spline.points.push_front(vectorTwo);
-            side->spline.points.push_back(vectorOne);
-        }
-    }else if(side == backNode){
-        if (first.x() < last.x()) {
-            Vector3 vectorOne = Vector3(leftF,first.y(),farF);
-            Vector3 vectorTwo = Vector3(rightF,last.y(),farF);
-            side->spline.points.push_front(vectorOne);
-            side->spline.points.push_back(vectorTwo);
-        }else {
-            Vector3 vectorOne = Vector3(leftF,last.y(),farF);
-            Vector3 vectorTwo = Vector3(rightF,first.y(),farF);
-            side->spline.points.push_front(vectorTwo);
-            side->spline.points.push_back(vectorOne);
-        }
-    }else if(side == leftNode){
-            if (first.z() < last.z()) {
-                Vector3 vectorOne = Vector3(leftF,first.y(),farF);
-                Vector3 vectorTwo = Vector3(leftF,last.y(),nearF);
-                side->spline.points.push_front(vectorOne);
-                side->spline.points.push_back(vectorTwo);
-            }else {
-                Vector3 vectorOne = Vector3(leftF,last.y(),farF);
-                Vector3 vectorTwo = Vector3(leftF,first.y(),nearF);
-                side->spline.points.push_front(vectorTwo);
-                side->spline.points.push_back(vectorOne);
-            }
-        }else if(side == rightNode){
-        if (first.z() < last.z()) {
-            Vector3 vectorOne = Vector3(rightF,first.y(),farF);
-            Vector3 vectorTwo = Vector3(rightF,last.y(),nearF);
-            side->spline.points.push_front(vectorOne);
-            side->spline.points.push_back(vectorTwo);
-        }else {
-            Vector3 vectorOne = Vector3(rightF,last.y(),farF);
-            Vector3 vectorTwo = Vector3(rightF,first.y(),nearF);
-            side->spline.points.push_front(vectorTwo);
-            side->spline.points.push_back(vectorOne);
-        }
-    }
 }
 
 void BoxNode::makeLayer() {
