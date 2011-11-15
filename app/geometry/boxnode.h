@@ -10,22 +10,7 @@ class BoxNode : public Node
 {
 public:
     BoxNode();
-    BoxNode(BoxNode& o): Node::Node(o) {
-        frontNode = o.frontNode->copy();
-        backNode = o.backNode->copy();
-        leftNode = o.leftNode->copy();
-        rightNode = o.rightNode->copy();
-        topNode = o.topNode->copy();
-        bottomNode = o.bottomNode->copy();
-
-        surfaces.push_back(frontNode);
-        surfaces.push_back(backNode);
-        surfaces.push_back(leftNode);
-        surfaces.push_back(rightNode);
-        surfaces.push_back(topNode);
-        surfaces.push_back(bottomNode);
-        activeSurface = NULL;
-    }
+    BoxNode(BoxNode& o);
 
     ~BoxNode() {
         foreach(SideNode* p, surfaces) {
