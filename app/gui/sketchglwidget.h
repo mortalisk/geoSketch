@@ -63,8 +63,10 @@ public slots:
     void makeLayer();
 
     void undo(){
-        scene = stack.pop();
-
+        if (stack.size() > 0) {
+            delete scene;
+            scene = stack.pop();
+        }
     }
 
 };
