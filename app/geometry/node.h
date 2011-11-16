@@ -10,6 +10,12 @@ class Node
 public:
     Shape * shape;
     Vector3 position;
+    QVector<Node*> children;
+    Spline spline;
+    Spline sketchingSpline;
+    bool drawing;
+    bool splineDone;
+
     Node();
     Node(Shape * shape);
     Node(Node &other)
@@ -31,11 +37,7 @@ public:
         return node;
     }
 
-    QVector<Node*> children;
-    Spline spline;
-    Spline sketchingSpline;
-    bool drawing;
-    bool splineDone;
+
 
     void addChild(Node* child) {
         children.push_back(child);
@@ -59,12 +61,7 @@ public:
     void drawSplines();
     void drawSpline(Spline & spline);
 
-
     void doOversketch();
-
-protected:
-private:
-    int findNearestPointInSpline(Vector3 first);
 
 };
 

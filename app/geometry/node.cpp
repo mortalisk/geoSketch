@@ -31,21 +31,6 @@ void Node::addPoint(Vector3 from, Vector3 direction) {
 
 }
 
-int Node::findNearestPointInSpline(Vector3 searchPoint) {
-	int nearest = -1;
-	float distance = FLT_MAX;
-	for (int i = 0; i < spline.points.size(); ++i) {
-		Vector3 & point = spline.points[i];
-		float distanceThisFirst = (point - searchPoint).lenght();
-		if (distanceThisFirst < distance) {
-			nearest = i;
-			distance = distanceThisFirst;
-		}
-	}
-
-	return nearest;
-}
-
 void Node::doOversketch() {
 	if (sketchingSpline.points.size() < 2)
 		return;
@@ -53,9 +38,9 @@ void Node::doOversketch() {
 	Vector3 first = sketchingSpline.points[0];
 	Vector3 last = sketchingSpline.points[sketchingSpline.points.size() - 1];
 
-        int nearestFirst = findNearestPointInSpline(first);
+        int nearestFirst = spline.findNearestPoint(first);
 
-        int nearestLast = findNearestPointInSpline(last);
+        int nearestLast = spline.findNearestPoint(last);
 
         bool isOpposite = spline.isRightToLeft() != sketchingSpline.isRightToLeft();
 

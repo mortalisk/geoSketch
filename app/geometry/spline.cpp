@@ -1,7 +1,23 @@
 #include "spline.h"
+#include "float.h"
 
 Spline::Spline()
 {
+}
+
+int Spline::findNearestPoint(Vector3 searchPoint) {
+        int nearest = -1;
+        float distance = FLT_MAX;
+        for (int i = 0; i < points.size(); ++i) {
+                Vector3 & point = points[i];
+                float distanceThisFirst = (point - searchPoint).lenght();
+                if (distanceThisFirst < distance) {
+                        nearest = i;
+                        distance = distanceThisFirst;
+                }
+        }
+
+        return nearest;
 }
 
 Vector3 Spline::getPoint(float at) {

@@ -40,6 +40,9 @@ public:
         return points[0].isLeftOf(points[points.size()-1]);
     }
 
+
+    int findNearestPoint(Vector3 first);
+
     Spline();
 };
 
