@@ -18,6 +18,8 @@ public:
         }
     }
 
+    void setUpSurfaces();
+
     float width, depth, heigth;
     SideNode * frontNode,  * backNode,  * leftNode,  * rightNode,  * topNode,  * bottomNode;
     float topF, bottomF ,rightF ,leftF ,farF , nearF;

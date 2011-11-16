@@ -50,21 +50,7 @@ BoxNode::BoxNode()
     leftNode = new SideNode(E, A, D, H);
     rightNode = new SideNode(B, F, G, C);
 
-    frontNode->setOpposite(backNode);
-    leftNode->setOpposite(rightNode);
-    topNode->setOpposite(bottomNode);
-
-    frontNode->setLeft(leftNode);
-    leftNode->setLeft(backNode);
-    backNode->setLeft(rightNode);
-    rightNode->setLeft(frontNode);
-
-    surfaces.push_back(frontNode);
-    surfaces.push_back(backNode);
-    surfaces.push_back(topNode);
-    surfaces.push_back(bottomNode);
-    surfaces.push_back(leftNode);
-    surfaces.push_back(rightNode);
+    setUpSurfaces();
 
 }
 
@@ -76,13 +62,28 @@ BoxNode::BoxNode(BoxNode& o): Node::Node(o) {
     topNode = o.topNode->copy();
     bottomNode = o.bottomNode->copy();
 
+    setUpSurfaces();
+
+    activeSurface = NULL;
+}
+
+void BoxNode::setUpSurfaces() {
+    frontNode->setOpposite(backNode);
+    leftNode->setOpposite(rightNode);
+    topNode->setOpposite(bottomNode);
+
+    frontNode->setLeft(leftNode);
+    leftNode->setLeft(backNode);
+    backNode->setLeft(rightNode);
+    rightNode->setLeft(frontNode);
+
     surfaces.push_back(frontNode);
     surfaces.push_back(backNode);
     surfaces.push_back(leftNode);
     surfaces.push_back(rightNode);
     surfaces.push_back(topNode);
     surfaces.push_back(bottomNode);
-    activeSurface = NULL;
+
 }
 
 float BoxNode::getDepth() {
