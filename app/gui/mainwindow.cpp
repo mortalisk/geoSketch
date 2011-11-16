@@ -5,6 +5,7 @@
 #include <QGLWidget>
 #include <QPushButton>
 #include "sketchglwidget.h"
+#include <QToolBar>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,13 +13,13 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     QVBoxLayout * mainLayout = new QVBoxLayout();
-    QHBoxLayout * menuLayout = new QHBoxLayout();
+    QToolBar * toolBar = new QToolBar();
     centralWidget()->setLayout(mainLayout);
 
-    QPushButton * undoButton = new QPushButton("UNDO");
-    menuLayout->addWidget(undoButton);
-    mainLayout->addLayout(menuLayout);
 
+    QPushButton * undoButton = new QPushButton("UNDO");
+    toolBar->addWidget(undoButton);
+    mainLayout->addWidget(toolBar);
 
     glFormat = new QGLFormat;
     glFormat->setProfile(QGLFormat::CompatibilityProfile);//CoreProfile);
