@@ -10,7 +10,7 @@ Scene::Scene() {
     resolution = 0.05f;
     sphere = Sphere(0.05f);
     cursorSphere = Sphere(0.05f);
-    cursor = new Node();
+    cursor = new Node("cursor");
     cursor->shape = &cursorSphere;
     cursor->position = Vector3(0,0,0);
     boxNode = new BoxNode();

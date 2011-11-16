@@ -6,7 +6,7 @@
 #include "surface.h"
 #include "float.h"
 
-BoxNode::BoxNode()
+BoxNode::BoxNode() : Node::Node("boxnode")
 {
     activeSurface = NULL;
     width = 10;
@@ -202,7 +202,7 @@ void BoxNode::makeLayer() {
     }
 
     Surface * s = new Surface(triangles, outline, c);
-    Node * n = new Node(s);
+    Node * n = new Node(s, "a layer");
     children.append(n);
 
     foreach(SideNode* s, surfaces) {

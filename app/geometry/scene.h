@@ -38,7 +38,7 @@ public:
     {
         *this=scene;
         boxNode = boxNode->copy();
-        cursor = new Node(&cursorSphere);
+        cursor = new Node(&cursorSphere, "cursor");
         boxNode->addChild(cursor);
 
         activeNode = boxNode;

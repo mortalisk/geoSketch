@@ -3,12 +3,14 @@
 #include "surface.h"
 #include "float.h"
 
-Node::Node() {
+Node::Node(QString name) {
 	shape = NULL;
+        this->name = name;
 }
 
-Node::Node(Shape *shape) {
+Node::Node(Shape *shape, QString name) {
 	this->shape = shape;
+        this->name = name;
 }
 
 
