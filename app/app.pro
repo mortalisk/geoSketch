@@ -26,7 +26,6 @@ HEADERS += gui/mainwindow.h \
     geometry/spline.h \
     geometry/surface.h \
     geometry/boxnode.h \
-    geometry/generalnode.h \
     geometry/sidenode.h
 
 SOURCES += main.cpp \
@@ -43,5 +42,4 @@ SOURCES += main.cpp \
     geometry/spline.cpp \
     geometry/surface.cpp \
     geometry/boxnode.cpp \
-    geometry/generalnode.cpp \
     geometry/sidenode.cpp
