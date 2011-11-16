@@ -165,7 +165,6 @@ void BoxNode::determineActionOnStoppedDrawing() {
 
 void BoxNode::makeSuggestionFor(SideNode* side) {
 
-    side->makeSuggestionLines();
 
 }
 
