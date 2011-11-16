@@ -136,8 +136,9 @@ void MyGLWidget::mousePressEvent(QMouseEvent * e) {
     previousMouseY = e->y();
     if (isMousePressed(Qt::LeftButton)) {
         std::cout << "pushing scene to stack" << std::endl;
-        addPoint(e);
+
         pushScene();
+        addPoint(e);
     }
 }
 
