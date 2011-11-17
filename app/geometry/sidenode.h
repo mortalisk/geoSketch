@@ -49,10 +49,7 @@ public:
     void setOpposite(SideNode * node);
     void setLeft(SideNode * node);
     void makeSuggestionLines();
-    SideNode * copy() {
-        SideNode * node = new SideNode(*this);
-        return node;
-    }
+
 };
 
 #endif // SIDENODE_H

@@ -55,6 +55,6 @@ Node* Scene::getRootNode(){
 }
 
 Scene::~Scene() {
-    delete cursor;
+    delete boxNode;
 }
 
