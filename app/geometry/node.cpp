@@ -75,6 +75,8 @@ bool Node::isPointNearerSide(Vector3& point, int indexInSpline) {
 void Node::determineActionOnStoppedDrawing() {
     correctSketchingDirection();
 
+    doOversketch();
+
 }
 
 void Node::correctSketchingDirection() {
@@ -86,7 +88,7 @@ void Node::correctSketchingDirection() {
     }
 }
 
-void Node::makeLayer() {
+Node * Node::makeLayer() {
 
 }
 
@@ -139,6 +141,7 @@ void Node::drawSelf() {
 		shape->drawLines();
 		shape->drawShape();
 	}
+        drawSplines();
 	glPopMatrix();
 
 }

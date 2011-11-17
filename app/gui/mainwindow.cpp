@@ -19,6 +19,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QPushButton * undoButton = new QPushButton("UNDO");
     toolBar->addWidget(undoButton);
+    QPushButton * layerButton = new QPushButton("Make Layer");
+    toolBar->addWidget(layerButton);
+    QPushButton * newLayerButton = new QPushButton("New Layer");
+    toolBar->addWidget(newLayerButton);
+
     mainLayout->addWidget(toolBar);
 
     glFormat = new QGLFormat;
@@ -27,6 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
     MyGLWidget * gl = new MyGLWidget(glFormat);
 
     QObject::connect(undoButton,SIGNAL(clicked(bool)), gl, SLOT(undo()));
+    QObject::connect(layerButton,SIGNAL(clicked(bool)), gl, SLOT(makeLayer()));
+    QObject::connect(newLayerButton,SIGNAL(clicked(bool)), gl, SLOT(newLayer()));
 
     mainLayout->addWidget(gl);
 }

@@ -3,6 +3,7 @@
 
 #include <QVector>
 #include "morten3d/Vector3.h"
+#include <algorithm>
 class node;
 
 class Spline

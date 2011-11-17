@@ -21,6 +21,11 @@ int Spline::findNearestPoint(Vector3 searchPoint) {
 }
 
 Vector3 Spline::getPoint(float at) {
+    if (at > 1.0) {
+        at = 1.0;
+    }else if (at < 0.0) {
+        at = 0.0;
+    }
 
     float length = 0.0;
     for (int i = 0; i < points.size()-1; i++) {
@@ -34,7 +39,7 @@ Vector3 Spline::getPoint(float at) {
             float backtrack = pos/length - at;
 
             r = points[i] + (points[i+1] - (points[i]*(1-backtrack)));
-
+            return r;
 
         }
     }

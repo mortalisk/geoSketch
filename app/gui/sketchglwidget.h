@@ -61,6 +61,9 @@ signals:
 public slots:
     void animate();
     void makeLayer();
+    void newLayer() {
+        scene->activeNode = scene->boxNode;
+    }
 
     void undo(){
         if (stack.size() > 0) {

@@ -44,6 +44,12 @@ public:
         }
     }
 
+    void ensureLeftToRigth() {
+        if (!spline.isLeftToRight()) {
+            std::reverse(spline.points.begin(),spline.points.end());
+        }
+    }
+
     void setOpposite(SideNode * node);
     void setLeft(SideNode * node);
     void makeSuggestionLines();

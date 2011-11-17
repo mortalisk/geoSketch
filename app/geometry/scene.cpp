@@ -47,7 +47,7 @@ void Scene::addPoint(Vector3& from, Vector3& direction) {
 }
 
 void Scene::makeLayer() {
-    activeNode->makeLayer();
+    activeNode = activeNode->makeLayer();
 }
 
 Node* Scene::getRootNode(){

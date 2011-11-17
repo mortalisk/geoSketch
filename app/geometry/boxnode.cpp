@@ -188,40 +188,59 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
     side->left->addInterpolatedSuggestion(rightOpposite.y(), left.y());
     side->right->addInterpolatedSuggestion(right.y(), leftOpposite.y());
 
+    frontNode->ensureLeftToRigth();
+    rightNode->ensureLeftToRigth();
+    backNode->ensureLeftToRigth();
+    leftNode->ensureLeftToRigth();
+
     side->spline.isSuggestion = false;
 
 }
 
-void BoxNode::makeLayer() {
+Node* BoxNode::makeLayer() {
 
 
     QVector<Vector3> triangles;
     QVector4D c(0.1, 0.3, 0.4, 1.0);
-    for (float i = 0.0;i<=0.9;i+=0.1) {
-        Vector3 p1 = activeSurface->spline.getPoint(i);
-        Vector3 p2 = activeSurface->opposite->spline.getPoint(i);
-        Vector3 p3 = activeSurface->spline.getPoint(i+0.1);
-        Vector3 p4 = activeSurface->opposite->spline.getPoint(i+0.1);
-        triangles.push_back(p1);
-        triangles.push_back(p2);
-        triangles.push_back(p3);
-        triangles.push_back(p3);
-        triangles.push_back(p2);
-        triangles.push_back(p4);
+    QVector<Vector3> previousRow;
+    for (double zi = 0.0;zi<1.01;zi+=0.1) {
+        QVector<Vector3> row;
+        for (double xi = 0.0;xi<1.01;xi+=0.1) {
+            Vector3 front = frontNode->spline.getPoint(xi);
+            Vector3 back = backNode->spline.getPoint(1.0-xi);
+            Vector3 frontBack = front*(1.0-zi)+back*zi;
+            Vector3 point = frontBack;
+            row.push_back(point);
+        }
+        if (previousRow.size() == row.size()) {
+            for (int i = 0; i < previousRow.size()-1; ++i) {
+                Vector3 & a = previousRow[i];
+                Vector3 & b = previousRow[i+1];
+                Vector3 & c = row[i];
+                Vector3 & d = row[i+1];
+                triangles.push_back(a);
+                triangles.push_back(b);
+                triangles.push_back(c);
+                triangles.push_back(b);
+                triangles.push_back(d);
+                triangles.push_back(c);
+            }
+        }
+        previousRow = row;
     }
     QVector<Vector3> outline;
 
-    for (float i = 0.0;i<=1.0;i+=0.1) {
-        outline.push_back(activeSurface->spline.getPoint(i));
+    for (double i = 0.0;i<=1.01;i+=0.1) {
+        outline.push_back(frontNode->spline.getPoint(i));
     }
-    for (float i = 0.0;i<=1.0;i+=0.1) {
-        outline.push_back(activeSurface->right->spline.getPoint(i));
+    for (double i = 0.0;i<=1.01;i+=0.1) {
+        outline.push_back(rightNode->spline.getPoint(i));
     }
-    for (float i = 0.0;i<=1.0;i+=0.1) {
-        outline.push_back(activeSurface->opposite->spline.getPoint(i));
+    for (double i = 0.0;i<=1.01;i+=0.1) {
+        outline.push_back(backNode->spline.getPoint(i));
     }
-    for (float i = 0.0;i<=1.0;i+=0.1) {
-        outline.push_back(activeSurface->left->spline.getPoint(i));
+    for (double i = 0.0;i<=1.01;i+=0.1) {
+        outline.push_back(leftNode->spline.getPoint(i));
     }
 
     Surface * s = new Surface(triangles, outline, c);
@@ -231,6 +250,8 @@ void BoxNode::makeLayer() {
     foreach(SideNode* s, surfaces) {
         s->spline.points.clear();
     }
+
+    return n;
 }
 
 void BoxNode::draw() {

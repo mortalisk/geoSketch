@@ -62,7 +62,7 @@ public:
     virtual void drawSelf();
     void drawChildren();
 
-    virtual void makeLayer();
+    virtual Node * makeLayer();
 
 
     void drawSplines();

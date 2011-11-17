@@ -32,7 +32,7 @@ public:
     void determineActionOnStoppedDrawing();
     void draw();
     void drawSelf();
-    void makeLayer();
+    Node * makeLayer();
     void makeSuggestionFor(SideNode* side);
 
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
