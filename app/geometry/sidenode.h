@@ -18,10 +18,36 @@ public:
 
     }
 
+    bool isPointNearerSide(Vector3 &point, int indexInSpline) {
+        Vector3 leftSide(lowerLeft.x(), point.y(), lowerLeft.z());
+        Vector3 rightSide(lowerRigth.x(), point.y(), lowerRigth.z());
+        Vector3& inSpline = spline.points[indexInSpline];
+
+        float distLeft = (leftSide-point).lenght();
+        float distRight = (rightSide-point).lenght();
+        float distSpline = (inSpline-point).lenght();
+        return distLeft < distSpline || distRight < distSpline;
+    }
+
+    void addInterpolatedSuggestion(float yLeft, float yRight) {
+        if(spline.isSuggestion) {
+            spline.points.clear();
+        }
+        if (spline.points.size() == 0) {
+            Vector3 pointA(lowerLeft.x(), yLeft, lowerLeft.z());
+            Vector3 pointB(lowerRigth.x(), yRight, lowerRigth.z());
+            spline.addPoint(pointA);
+            for (float i = 0.1; i<0.99; i+=0.1) {
+                Vector3 add = pointA*i + pointB*(1-i);
+                spline.addPoint(add);
+            }
+            spline.addPoint(pointB);
+            spline.isSuggestion = true;
+        }
+    }
+
     void setOpposite(SideNode * node);
     void setLeft(SideNode * node);
-    void projectPoint(Vector3 & point);
-    void moveSketchingPointsToSpline();
     void makeSuggestionLines();
     SideNode * copy() {
         SideNode * node = new SideNode(*this);

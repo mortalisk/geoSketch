@@ -151,14 +151,17 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 void BoxNode::determineActionOnStoppedDrawing() {
 
 	if (activeSurface) {
+            activeSurface->correctSketchingDirection();
 
             if (activeSurface->spline.points.size() == 0) {
                 activeSurface->moveSketchingPointsToSpline();
-                activeSurface->makeSuggestionLines();
-                makeSuggestionFor(activeSurface);
             } else {
                 activeSurface->doOversketch();
             }
+
+            activeSurface->makeSuggestionLines();
+
+            makeSuggestionFor(activeSurface);
 
             activeSurface = NULL;
 	}
@@ -166,6 +169,26 @@ void BoxNode::determineActionOnStoppedDrawing() {
 
 void BoxNode::makeSuggestionFor(SideNode* side) {
 
+
+    if (side->opposite->spline.isSuggestion) {
+        side->opposite->spline.points.clear();
+
+        // project points from this side to opposite
+        Vector3 direction = side->opposite->lowerRigth - side->lowerLeft;
+        side->opposite->projectPoints(direction, side->spline.points);
+
+        side->opposite->spline.isSuggestion = true;
+    }
+
+    Vector3 left = side->spline.getLeftPoint();
+    Vector3 right = side->spline.getRightPoint();
+    Vector3 leftOpposite = side->opposite->spline.getLeftPoint();
+    Vector3 rightOpposite = side->opposite->spline.getRightPoint();
+
+    side->left->addInterpolatedSuggestion(rightOpposite.y(), left.y());
+    side->right->addInterpolatedSuggestion(right.y(), leftOpposite.y());
+
+    side->spline.isSuggestion = false;
 
 }
 

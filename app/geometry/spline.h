@@ -35,11 +35,24 @@ public:
         return points.size();
     }
 
-    bool isRightToLeft() {
+    bool isLeftToRight() {
         if (points.size() == 0) return false;
         return points[0].isLeftOf(points[points.size()-1]);
     }
 
+    Vector3 getLeftPoint() {
+        if (isLeftToRight())
+            return points[0];
+        else
+            return points[points.size()-1];
+    }
+
+    Vector3 getRightPoint() {
+        if (isLeftToRight())
+            return points[points.size()-1];
+        else
+            return points[0];
+    }
 
     int findNearestPoint(Vector3 first);
 

@@ -2,6 +2,7 @@
 #include <GL/glew.h>
 #include "surface.h"
 #include "float.h"
+#include <algorithm>
 
 Node::Node(QString name) {
 	shape = NULL;
@@ -22,61 +23,67 @@ Node::~Node() {
 
 void Node::addPoint(Vector3 from, Vector3 direction) {
 
-	QVector<Vector3> points = intersectionPoints(from, direction);
-	Vector3 & pos = points[0];
-	if (spline.length() > 0 && (spline.lastPoint() - pos).lenght() < 0.5) {
-		spline.changeLastPoint(pos);
-		return;
-	} else {
-		spline.addPoint(pos);
-	}
+        QVector<Vector3> points = intersectionPoints(from, direction);
+        sketchingSpline.addPoint(points[0]);
 
+}
+
+void Node::moveSketchingPointsToSpline() {
+   spline.points.clear();
+   spline.points += sketchingSpline.points;
+   sketchingSpline.points.clear();
 }
 
 void Node::doOversketch() {
-	if (sketchingSpline.points.size() < 2)
-		return;
+    if (sketchingSpline.points.size() < 2) {
+        sketchingSpline.points.clear();
+        return;
+    }
+    Vector3 first = sketchingSpline.points[0];
+    int nearestFirst = spline.findNearestPoint(first);
+    Vector3 last = sketchingSpline.points[sketchingSpline.points.size() - 1];
+    int nearestLast = spline.findNearestPoint(last);
 
-	Vector3 first = sketchingSpline.points[0];
-	Vector3 last = sketchingSpline.points[sketchingSpline.points.size() - 1];
+    oversketchSide(first, nearestFirst, true);
+    oversketchSide(last, nearestLast, false);
 
-        int nearestFirst = spline.findNearestPoint(first);
+    moveSketchingPointsToSpline();
+}
 
-        int nearestLast = spline.findNearestPoint(last);
+void Node::oversketchSide(Vector3& pointInSketch, int nearest, bool first) {
 
-        bool isOpposite = spline.isRightToLeft() != sketchingSpline.isRightToLeft();
+    if (isPointNearerSide(pointInSketch, nearest)) return;
 
-        if (isOpposite) {
-            if (nearestLast != 0) {
-                for(int i = nearestLast; i >= 0; --i) {
-                    sketchingSpline.points.push_back(spline.points[i]);
-                }
-            }
-            if (nearestFirst < spline.points.size() - 1) {
-                for (int i = nearestFirst; i < spline.points.size(); ++i) {
-                    sketchingSpline.points.push_front(spline.points[i]);
-                }
+    if (nearest != 0) {
+        if (first) {
+            for (int i = nearest; i >= 0; --i) {
+                sketchingSpline.points.push_front(spline.points[i]);
             }
         }else {
-            if (nearestFirst != 0) {
-                for (int i = nearestFirst; i >= 0; --i) {
-                    sketchingSpline.points.push_front(spline.points[i]);
-                }
-            }
-            if (nearestLast < spline.points.size() - 1) {
-                for (int i = nearestLast; i < spline.points.size(); ++i) {
-                    sketchingSpline.points.push_back(spline.points[i]);
-                }
+            for (int i = nearest; i < spline.points.size()-1; ++i) {
+
+                sketchingSpline.points.push_back(spline.points[i]);
             }
         }
+    }
+}
 
-	spline.points.clear();
-	spline.points += sketchingSpline.points;
-	sketchingSpline.points.clear();
+bool Node::isPointNearerSide(Vector3& point, int indexInSpline) {
+    return false;
 }
 
 void Node::determineActionOnStoppedDrawing() {
+    correctSketchingDirection();
 
+}
+
+void Node::correctSketchingDirection() {
+
+    bool isOpposite = spline.isLeftToRight() != sketchingSpline.isLeftToRight();
+
+    if (isOpposite) {
+        std::reverse(sketchingSpline.points.begin(), sketchingSpline.points.end());
+    }
 }
 
 void Node::makeLayer() {

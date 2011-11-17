@@ -17,6 +17,15 @@ public:
     bool splineDone;
     QString name;
 
+    void projectPoints(Vector3 direction,QVector<Vector3>& points) {
+
+        foreach(const Vector3& point, points) {
+            QVector<Vector3> intPoints = shape->intersectionPoints(point, direction);
+            if (intPoints.size() > 0)
+                spline.addPoint(intPoints[0]);
+        }
+    }
+
     Node(QString name);
     Node(Shape * shape, QString name);
     Node(Node &other)
@@ -63,7 +72,14 @@ public:
     void drawSplines();
     void drawSpline(Spline & spline);
 
+
+    void correctSketchingDirection();
+
     void doOversketch();
+    void oversketchSide(Vector3& pointInSketch, int nearest, bool first);
+    virtual bool isPointNearerSide(Vector3& point, int indexInSpline);
+
+    void moveSketchingPointsToSpline();
 
 };
 

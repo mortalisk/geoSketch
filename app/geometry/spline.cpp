@@ -1,7 +1,7 @@
 #include "spline.h"
 #include "float.h"
 
-Spline::Spline()
+Spline::Spline() : isSuggestion(true)
 {
 }
 
