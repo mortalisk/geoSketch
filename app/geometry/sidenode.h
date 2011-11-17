@@ -36,12 +36,10 @@ public:
         if (spline.points.size() == 0) {
             Vector3 pointA(lowerLeft.x(), yLeft, lowerLeft.z());
             Vector3 pointB(lowerRigth.x(), yRight, lowerRigth.z());
-            spline.addPoint(pointA);
-            for (float i = 0.1; i<0.99; i+=0.1) {
-                Vector3 add = pointA*i + pointB*(1-i);
+            for (float i = 0.0; i<1.01; i+=0.1) {
+                Vector3 add = (pointA*i) + (pointB*(1.0-i));
                 spline.addPoint(add);
             }
-            spline.addPoint(pointB);
             spline.isSuggestion = true;
         }
     }
