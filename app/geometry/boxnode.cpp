@@ -55,12 +55,12 @@ BoxNode::BoxNode() : Node::Node("boxnode")
 }
 
 BoxNode::BoxNode(BoxNode& o): Node::Node(o) {
-    frontNode = o.frontNode->copy();
-    backNode = o.backNode->copy();
-    leftNode = o.leftNode->copy();
-    rightNode = o.rightNode->copy();
-    topNode = o.topNode->copy();
-    bottomNode = o.bottomNode->copy();
+    frontNode = new SideNode(*o.frontNode);
+    backNode = new SideNode(*o.backNode);
+    leftNode = new SideNode(*o.leftNode);
+    rightNode = new SideNode(*o.rightNode);
+    topNode = new SideNode(*o.topNode);
+    bottomNode = new SideNode(*o.bottomNode);
 
     setUpSurfaces();
 
