@@ -203,13 +203,28 @@ Node* BoxNode::makeLayer() {
     QVector<Vector3> triangles;
     QVector4D c(0.1, 0.3, 0.4, 1.0);
     QVector<Vector3> previousRow;
-    for (double zi = 0.0;zi<1.01;zi+=0.1) {
+
+    Vector3 frontLeft = leftNode->spline.getPoint(1.0);
+    Vector3 frontRight = rightNode->spline.getPoint(0.0);
+    Vector3 backLeft = leftNode->spline.getPoint(0.0);
+    Vector3 backRight = rightNode->spline.getPoint(1.0);
+
+    for (double zi = 0.0;zi<=1.01;zi+=0.1) {
         QVector<Vector3> row;
-        for (double xi = 0.0;xi<1.01;xi+=0.1) {
+        Vector3 rowLeft = frontLeft*(1.0-zi) + backLeft *(zi);
+        Vector3 rowRigth = frontRight*(1.0-zi) + backRight * (zi);
+
+        Vector3 left = leftNode->spline.getPoint(1.0-zi);
+        Vector3 right = rightNode->spline.getPoint(zi);
+        for (double xi = 0.0;xi<=1.01;xi+=0.1) {
+            Vector3 colInt = rowLeft * (1.0-xi) + rowRigth * xi;
             Vector3 front = frontNode->spline.getPoint(xi);
             Vector3 back = backNode->spline.getPoint(1.0-xi);
             Vector3 frontBack = front*(1.0-zi)+back*zi;
-            Vector3 point = frontBack;
+            Vector3 diff = frontBack - colInt;
+
+            Vector3 leftRight = left*(1.0-xi) + right*xi;
+            Vector3 point = leftRight + diff;
             row.push_back(point);
         }
         if (previousRow.size() == row.size()) {
