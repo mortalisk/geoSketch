@@ -17,4 +17,6 @@ app-build-desktop
 *.tex~
 *.bbl
 *.blg
+*~
+.ctagsdb
 
