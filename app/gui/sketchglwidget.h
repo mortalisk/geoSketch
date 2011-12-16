@@ -57,8 +57,10 @@ public:
     void pushScene();
 
 signals:
+    void sceneChanged(Scene * s);
 
 public slots:
+    void setLayer(int);
     void animate();
     void makeLayer();
     void newLayer() {
@@ -69,6 +71,7 @@ public slots:
         if (stack.size() > 0) {
             delete scene;
             scene = stack.pop();
+            emit sceneChanged(scene);
         }
     }
 

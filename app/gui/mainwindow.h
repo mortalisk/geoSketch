@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QGLWidget>
+#include <QComboBox>
+#include "scene.h"
 
 namespace Ui {
     class MainWindow;
@@ -19,6 +21,9 @@ public:
 private:
     Ui::MainWindow *ui;
     QGLFormat * glFormat;
+    QComboBox * layerChooser;
+private slots:
+    void updateLayerChooser(Scene * s);
 };
 
 #endif // MAINWINDOW_H

@@ -262,7 +262,7 @@ Node* BoxNode::makeLayer() {
     }
 
     Surface * s = new Surface(triangles, outline, c);
-    Node * n = new Node(s, "a layer");
+    Node * n = new Node(s, "Layer");
     children.append(n);
 
     foreach(SideNode* s, surfaces) {

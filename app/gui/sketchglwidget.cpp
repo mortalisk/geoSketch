@@ -79,6 +79,7 @@ void MyGLWidget::paintGL() {
               scene->camera.up.z());
 
     scene->getRootNode()->draw();
+    scene->cursor->draw();
 
 }
 
@@ -150,6 +151,7 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
 
 void MyGLWidget::pushScene() {
     stack.push(new Scene(*scene));
+    emit sceneChanged(scene);
 }
 
 bool MyGLWidget::isMousePressed(int button) {
@@ -205,10 +207,16 @@ void MyGLWidget::wheelEvent(QWheelEvent *e) {
 }
 
 void MyGLWidget::makeLayer() {
+    pushScene();
     scene->makeLayer();
+    emit sceneChanged(scene);
 }
 
 void MyGLWidget::animate() {
         updateGL();
+}
+
+void MyGLWidget::setLayer(int i) {
+    scene->activeNode = scene->boxNode->children[i];
 }
 
