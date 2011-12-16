@@ -61,6 +61,9 @@ BoxNode::BoxNode(BoxNode& o): Node::Node(o) {
     rightNode = new SideNode(*o.rightNode);
     topNode = new SideNode(*o.topNode);
     bottomNode = new SideNode(*o.bottomNode);
+    foreach(Node * child, o.children) {
+        children.append(child->copy());
+    }
 
     setUpSurfaces();
 
