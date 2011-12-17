@@ -17,14 +17,7 @@ public:
     bool splineDone;
     QString name;
 
-    void projectPoints(Vector3 direction,QVector<Vector3>& points) {
 
-        foreach(const Vector3& point, points) {
-            QVector<Vector3> intPoints = shape->intersectionPoints(point, direction);
-            if (intPoints.size() > 0)
-                spline.addPoint(intPoints[0]);
-        }
-    }
 
     Node(QString name);
     Node(Shape * shape, QString name);

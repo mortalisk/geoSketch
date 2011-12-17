@@ -18,6 +18,13 @@ public:
 
     }
 
+    void projectPoints(Vector3 diff,QVector<Vector3>& points) {
+
+        foreach(const Vector3& point, points) {
+                spline.addPoint(point+diff);
+        }
+    }
+
     bool isPointNearerSide(Vector3 &point, int indexInSpline) {
         Vector3 leftSide(lowerLeft.x(), point.y(), lowerLeft.z());
         Vector3 rightSide(lowerRigth.x(), point.y(), lowerRigth.z());
