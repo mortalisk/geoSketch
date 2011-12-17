@@ -59,7 +59,7 @@ public:
 
 
     void drawSplines();
-    void drawSpline(Spline & spline);
+    void drawSpline(Spline & spline, float r);
 
 
     void correctSketchingDirection();

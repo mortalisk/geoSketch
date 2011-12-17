@@ -109,18 +109,23 @@ void Node::drawChildren() {
 	}
 }
 void Node::drawSplines() {
-    drawSpline(sketchingSpline);
-    drawSpline(spline);
+    drawSpline(sketchingSpline, 1);
+    drawSpline(spline, 0);
 }
 
-void Node::drawSpline(Spline & spline) {
+void Node::drawSpline(Spline & spline, float r) {
 	if (spline.points.size() >= 1) {
 		for (int i = 0; i < spline.points.size() - 1; ++i) {
 
 			glLineWidth(2.0f);
+                        glPointSize(3.0f);
+                        glBegin(GL_POINT);
 
+                        glColor3f(1-r, 0, 0);
+                        glVertex3f(spline.points[i].x(),spline.points[i].y(),spline.points[i].z());
+                        glEnd();
 			glBegin(GL_LINES);
-			glColor3f(0, 0, 0);
+                        glColor3f(r, 0, 0);
 			glVertex3d(spline.points[i].x(), spline.points[i].y(),
 					spline.points[i].z());
 			glVertex3d(spline.points[i + 1].x(), spline.points[i + 1].y(),
