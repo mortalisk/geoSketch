@@ -43,12 +43,16 @@ public:
         if (spline.points.size() == 0) {
             Vector3 pointA(lowerLeft.x(), yLeft, lowerLeft.z());
             Vector3 pointB(lowerRigth.x(), yRight, lowerRigth.z());
-            for (float i = 0.0; i<1.01; i+=0.1) {
-                Vector3 add = (pointA*i) + (pointB*(1.0-i));
+            for (float i = 0.0; i<1.01; i+=0.05) {
+                Vector3 add = interpolate(pointA, pointB, i);
                 spline.addPoint(add);
             }
             spline.isSuggestion = true;
         }
+    }
+
+    Vector3 interpolate(Vector3 pointA, Vector3 pointB, float t) {
+        return (pointA*t) + (pointB*(1.0-t));
     }
 
     void ensureLeftToRigth() {

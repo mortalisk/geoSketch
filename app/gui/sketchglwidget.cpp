@@ -78,9 +78,8 @@ void MyGLWidget::paintGL() {
               scene->camera.up.y(),
               scene->camera.up.z());
 
-    scene->getRootNode()->draw();
     scene->cursor->draw();
-
+    scene->getRootNode()->draw();
 }
 
 void MyGLWidget::initializeGL() {

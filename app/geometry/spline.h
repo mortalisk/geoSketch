@@ -12,7 +12,7 @@ class Spline
 public:
     QVector<Vector3> points;
     bool isSuggestion;
-    void addPoint(Vector3& point) {
+    void addPoint(Vector3 point) {
         points.append(point);
         isSuggestion = false;
     }
