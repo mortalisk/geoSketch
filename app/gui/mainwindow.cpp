@@ -7,6 +7,7 @@
 #include "sketchglwidget.h"
 #include <QToolBar>
 #include <QComboBox>
+#include <QCheckBox>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -27,18 +28,22 @@ MainWindow::MainWindow(QWidget *parent) :
     layerChooser = new QComboBox();
     toolBar->addWidget(layerChooser);
 
+    QPushButton * toggleVisibility = new QPushButton("Visibility");
+    toolBar->addWidget(toggleVisibility);
+
     mainLayout->addWidget(toolBar);
 
     glFormat = new QGLFormat;
     glFormat->setProfile(QGLFormat::CompatibilityProfile);//CoreProfile);
     glFormat->setVersion(3,3);
-    MyGLWidget * gl = new MyGLWidget(glFormat);
+    gl = new MyGLWidget(glFormat);
 
     QObject::connect(undoButton,SIGNAL(clicked(bool)), gl, SLOT(undo()));
     QObject::connect(layerButton,SIGNAL(clicked(bool)), gl, SLOT(makeLayer()));
     QObject::connect(newLayerButton,SIGNAL(clicked(bool)), gl, SLOT(newLayer()));
     QObject::connect(gl,SIGNAL(sceneChanged(Scene *)), this, SLOT(updateLayerChooser(Scene *)));
     QObject::connect(layerChooser,SIGNAL(activated(int)), gl, SLOT(setLayer(int)));
+    QObject::connect(toggleVisibility,SIGNAL(clicked(bool)), this, SLOT(toggleVisibility()));
 
     mainLayout->addWidget(gl);
 }
@@ -57,6 +62,10 @@ void MainWindow::updateLayerChooser(Scene * s) {
         layerChooser->insertItem(i, surf->name + index);
         i++;
     }
+}
+
+void MainWindow::toggleVisibility() {
+    gl->toggleVisibility(layerChooser->currentIndex());
 }
 
 MainWindow::~MainWindow()

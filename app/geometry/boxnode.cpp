@@ -201,7 +201,8 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
 }
 
 Node* BoxNode::makeLayer() {
-
+    if (frontNode->spline.points.size() < 1)
+        return this;
 
     QVector<Vector3> triangles;
     QVector4D c(0.1, 0.3, 0.4, 1.0);
@@ -274,7 +275,13 @@ Node* BoxNode::makeLayer() {
 
 void BoxNode::draw() {
     glDisable(GL_CULL_FACE);
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
     drawChildren();
+    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
+
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     drawSelf();

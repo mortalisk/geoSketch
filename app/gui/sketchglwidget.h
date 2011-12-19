@@ -56,6 +56,8 @@ public:
 
     void pushScene();
 
+    void toggleVisibility(int i);
+
 signals:
     void sceneChanged(Scene * s);
 

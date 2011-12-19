@@ -5,6 +5,7 @@
 #include <QGLWidget>
 #include <QComboBox>
 #include "scene.h"
+#include "sketchglwidget.h"
 
 namespace Ui {
     class MainWindow;
@@ -22,8 +23,10 @@ private:
     Ui::MainWindow *ui;
     QGLFormat * glFormat;
     QComboBox * layerChooser;
+    MyGLWidget * gl;
 private slots:
     void updateLayerChooser(Scene * s);
+    void toggleVisibility();
 };
 
 #endif // MAINWINDOW_H

@@ -219,3 +219,7 @@ void MyGLWidget::setLayer(int i) {
     scene->activeNode = scene->boxNode->children[i];
 }
 
+void MyGLWidget::toggleVisibility(int i) {
+    scene->boxNode->children[i]->visible = !scene->boxNode->children[i]->visible;
+}
+

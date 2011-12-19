@@ -15,6 +15,7 @@ public:
     Spline sketchingSpline;
     bool drawing;
     bool splineDone;
+    bool visible;
     QString name;
 
 
@@ -24,7 +25,7 @@ public:
     Node(Node &other)
         : shape(other.shape),position(other.position),
         spline(other.spline),sketchingSpline(other.sketchingSpline),
-        drawing(other.drawing),splineDone(other.splineDone)
+        drawing(other.drawing),splineDone(other.splineDone),visible(other.visible)
     {
         name = "copy of: " + other.name;
         foreach(Node* child, children) {

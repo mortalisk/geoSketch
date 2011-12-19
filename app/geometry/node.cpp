@@ -7,11 +7,13 @@
 Node::Node(QString name) {
 	shape = NULL;
         this->name = name;
+        visible = true;
 }
 
 Node::Node(Shape *shape, QString name) {
 	this->shape = shape;
         this->name = name;
+        visible = true;
 }
 
 
@@ -152,9 +154,10 @@ void Node::drawSelf() {
 }
 
 void Node::draw() {
-
+    if (visible) {
 	drawChildren();
 
 	drawSelf();
+    }
 
 }
