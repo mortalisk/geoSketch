@@ -9,12 +9,12 @@ class Shape
 {
 public:
     Shape();
+    ~Shape();
     virtual void drawLines();
-    virtual void drawShape();
+    virtual void drawShape(QVector4D ambient, QVector4D diffuse);
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 
     int displayList;
-    Vector3 color;
     QVector<triangle> triangles;
     QVector<vertex> lineVertices;
     QVector<triangle> & getTriangles() {

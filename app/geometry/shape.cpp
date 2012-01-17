@@ -8,36 +8,36 @@ Shape::Shape() : displayList(-1)
 {
 }
 
+Shape::~Shape() {
+}
+
 void Shape::drawLines() {
     glLineWidth(2.0);
-    glColor3b(0,0,0);
+    float c[] = {0.0,0.0,0.0,0.0};
+    glMaterialfv(GL_FRONT,GL_AMBIENT_AND_DIFFUSE,c);
     glEnableClientState(GL_VERTEX_ARRAY);
-    //glEnableClientState(GL_COLOR_ARRAY);
     if (getLineVertices().size() > 0) {
         glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getLineVertices()[0]);
-        //glColorPointer(4,GL_FLOAT,sizeof(vertex),&getLineVertices()[0].r);
         glDrawArrays(GL_LINE_STRIP,0,getLineVertices().size());
     }
-
-    glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-void Shape::drawShape() {
-
+void Shape::drawShape(QVector4D ambient, QVector4D diffuse) {
+    float c[] = {diffuse.x(), diffuse.y(), diffuse.z(), diffuse.w() };
+    glMaterialfv(GL_FRONT,GL_DIFFUSE,c);
+    float a[] = {ambient.x(), ambient.y(), ambient.z(), ambient.w() };
+    glMaterialfv(GL_FRONT,GL_AMBIENT,a);
 
     glEnableClientState(GL_VERTEX_ARRAY);
-    glEnableClientState(GL_COLOR_ARRAY);
 
     glEnableClientState(GL_NORMAL_ARRAY);
     if (getTriangles().size() > 0) {
         glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getTriangles()[0]);
-        glColorPointer(4,GL_FLOAT,sizeof(vertex),&getTriangles()[0].p1.r);
         glNormalPointer(GL_FLOAT,sizeof(vertex),&getTriangles()[0].p1.n1);
         glDrawArrays(GL_TRIANGLES,0,getTriangles().size()*3);
     }
     glDisableClientState(GL_NORMAL_ARRAY);
-    glDisableClientState(GL_COLOR_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
 
 }

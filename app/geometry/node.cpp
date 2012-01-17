@@ -8,12 +8,32 @@ Node::Node(QString name) {
 	shape = NULL;
         this->name = name;
         visible = true;
+
+        diffuse.setX(0.5);
+        diffuse.setY(0.5);
+        diffuse.setZ(0.5);
+        diffuse.setW(1.0);
+
+        ambient.setX(0.5);
+        ambient.setY(0.5);
+        ambient.setZ(0.5);
+        ambient.setW(1.0);
 }
 
 Node::Node(Shape *shape, QString name) {
 	this->shape = shape;
         this->name = name;
         visible = true;
+
+        diffuse.setX(0.5);
+        diffuse.setY(0.5);
+        diffuse.setZ(0.5);
+        diffuse.setW(1.0);
+
+        ambient.setX(0.5);
+        ambient.setY(0.5);
+        ambient.setZ(0.5);
+        ambient.setW(1.0);
 }
 
 
@@ -139,14 +159,16 @@ void Node::drawSpline(Spline & spline, float r) {
 
 void Node::drawSelf() {
 
+
+
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	glPushMatrix();
 	glTranslatef(position.x(), position.y(), position.z());
 
 	if (shape != NULL) {
-		shape->drawLines();
-		shape->drawShape();
+                shape->drawLines();
+                shape->drawShape(ambient, diffuse);
 	}
         drawSplines();
 	glPopMatrix();

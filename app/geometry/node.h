@@ -18,14 +18,15 @@ public:
     bool visible;
     QString name;
 
-
+    QVector4D diffuse;
+    QVector4D ambient;
 
     Node(QString name);
     Node(Shape * shape, QString name);
     Node(Node &other)
         : shape(other.shape),position(other.position),
         spline(other.spline),sketchingSpline(other.sketchingSpline),
-        drawing(other.drawing),splineDone(other.splineDone),visible(other.visible)
+        drawing(other.drawing),splineDone(other.splineDone),visible(other.visible), diffuse(other.diffuse), ambient(other.ambient)
     {
         name = "copy of: " + other.name;
         foreach(Node* child, children) {

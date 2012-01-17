@@ -262,7 +262,7 @@ Node* BoxNode::makeLayer() {
         outline.push_back(leftNode->spline.getPoint(i));
     }
 
-    Surface * s = new Surface(triangles, outline, c);
+    Surface * s = new Surface(triangles, outline);
     Node * n = new Node(s, "Layer");
     children.append(n);
 
@@ -276,12 +276,10 @@ Node* BoxNode::makeLayer() {
 void BoxNode::draw() {
     glDisable(GL_CULL_FACE);
 
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-    drawChildren();
-    glDisable(GL_LIGHTING);
-    glDisable(GL_LIGHT0);
 
+    drawChildren();
+
+    glColor4f(0.5,0.5,0.5,1.0);
     glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     drawSelf();
@@ -289,15 +287,21 @@ void BoxNode::draw() {
 }
 
 void BoxNode::drawSelf() {
-    Node::drawSelf();
+    //Node::drawSelf();
     glTranslatef(position.x(), position.y(), position.z());
 
+    glDisable(GL_LIGHTING);
+    glDisable(GL_LIGHT0);
     foreach(Node * s, surfaces) {
         s->drawSplines();
         s->shape->drawLines();
     }
     foreach(Node * s, surfaces) {
-        s->shape->drawShape();
+        glColor4f(0.5,0.5,0.5,0.5);
+        s->shape->drawShape(ambient, diffuse);
     }
+
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 
 }

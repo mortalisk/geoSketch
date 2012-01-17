@@ -26,7 +26,7 @@ SideNode::SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vect
     lineVertices.push_back(upperLeft);
     lineVertices.push_back(lowerLeft);
 
-    shape = new Surface(vertices, lineVertices, c);  
+    shape = new Surface(vertices, lineVertices);
   
 }
 

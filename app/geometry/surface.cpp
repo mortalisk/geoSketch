@@ -2,9 +2,9 @@
 
 
 
-Surface::Surface(QVector<Vector3> & triangleses, QVector<Vector3> & outline, QVector4D & color) {
+Surface::Surface(QVector<Vector3> & triangleses, QVector<Vector3> & outline) {
     for (int i = 0; i<triangleses.size(); i+=3) {
-        triangles.append(triangle(triangleses[i],triangleses[i+1],triangleses[i+2], color));
+        triangles.append(triangle(triangleses[i],triangleses[i+1],triangleses[i+2]));
     }
 
     for (int i = 0; i<outline.size(); ++i) {
