@@ -213,14 +213,14 @@ Node* BoxNode::makeLayer() {
     Vector3 backLeft = leftNode->spline.getPoint(0.0);
     Vector3 backRight = rightNode->spline.getPoint(1.0);
 
-    for (double zi = 0.0;zi<=1.01;zi+=0.1) {
+    for (double zi = 0.0;zi<=1.01;zi+=0.02) {
         QVector<Vector3> row;
         Vector3 rowLeft = frontLeft*(1.0-zi) + backLeft *(zi);
         Vector3 rowRigth = frontRight*(1.0-zi) + backRight * (zi);
 
         Vector3 left = leftNode->spline.getPoint(1.0-zi);
         Vector3 right = rightNode->spline.getPoint(zi);
-        for (double xi = 0.0;xi<=1.01;xi+=0.1) {
+        for (double xi = 0.0;xi<=1.01;xi+=0.02) {
             Vector3 colInt = rowLeft * (1.0-xi) + rowRigth * xi;
             Vector3 front = frontNode->spline.getPoint(xi);
             Vector3 back = backNode->spline.getPoint(1.0-xi);
@@ -249,16 +249,16 @@ Node* BoxNode::makeLayer() {
     }
     QVector<Vector3> outline;
 
-    for (double i = 0.0;i<=1.01;i+=0.1) {
+    for (double i = 0.0;i<=1.01;i+=0.02) {
         outline.push_back(frontNode->spline.getPoint(i));
     }
-    for (double i = 0.0;i<=1.01;i+=0.1) {
+    for (double i = 0.0;i<=1.01;i+=0.02) {
         outline.push_back(rightNode->spline.getPoint(i));
     }
-    for (double i = 0.0;i<=1.01;i+=0.1) {
+    for (double i = 0.0;i<=1.01;i+=0.02) {
         outline.push_back(backNode->spline.getPoint(i));
     }
-    for (double i = 0.0;i<=1.01;i+=0.1) {
+    for (double i = 0.0;i<=1.01;i+=0.02) {
         outline.push_back(leftNode->spline.getPoint(i));
     }
 
@@ -268,6 +268,7 @@ Node* BoxNode::makeLayer() {
 
     foreach(SideNode* s, surfaces) {
         s->spline.points.clear();
+        s->spline.isSuggestion = true;
     }
 
     return n;

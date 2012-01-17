@@ -44,15 +44,23 @@ public:
     Vector3 getLeftPoint() {
         if (isLeftToRight())
             return points[0];
-        else
+        else if(points.size()>0)
             return points[points.size()-1];
+        else {
+            std::cout << "getLeftPoint called, but there are no points" << std::endl;
+            return Vector3();
+        }
     }
 
     Vector3 getRightPoint() {
         if (isLeftToRight())
             return points[points.size()-1];
-        else
+        else if (points.size() > 0)
             return points[0];
+        else {
+            std::cout << "getLeftPoint called, but there are no points" << std::endl;
+            return Vector3();
+        }
     }
 
     int findNearestPoint(Vector3 first);

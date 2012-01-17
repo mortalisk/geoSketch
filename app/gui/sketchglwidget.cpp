@@ -107,6 +107,7 @@ void MyGLWidget::initializeGL() {
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glEnable(GL_NORMALIZE);
 
 }
 
@@ -224,5 +225,14 @@ void MyGLWidget::setLayer(int i) {
 
 void MyGLWidget::toggleVisibility(int i) {
     scene->boxNode->children[i]->visible = !scene->boxNode->children[i]->visible;
+}
+
+void MyGLWidget::setColor(int i, QColor c) {
+    QVector4D& color = scene->boxNode->children[i]->diffuse;
+    color.setX(c.red()/255.0);
+    color.setY(c.green()/255.0);
+    color.setZ(c.blue()/255.0);
+    color.setW(c.alpha()/255.0);
+    scene->boxNode->children[i]->diffuse = color;
 }
 

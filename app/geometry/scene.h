@@ -39,7 +39,7 @@ public:
         *this=scene;
         boxNode = boxNode->copy();
         cursor = new Node(&cursorSphere, "cursor");
-
+        cursor->ambient = scene.cursor->ambient;
         activeNode = boxNode;
     }
 

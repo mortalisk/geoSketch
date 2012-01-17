@@ -13,6 +13,7 @@ Scene::Scene() {
     cursor = new Node("cursor");
     cursor->shape = &cursorSphere;
     cursor->position = Vector3(0,0,0);
+    cursor->ambient = QVector4D(1.0, 0.0, 0.0, 1.0);
     boxNode = new BoxNode();
     camera.setTrackMode(Camera::SPHERE_TRACK, Vector3(0,0,0), Vector3(10,10,10) );
     activeNode = boxNode;

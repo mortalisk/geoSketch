@@ -28,7 +28,7 @@ public:
         spline(other.spline),sketchingSpline(other.sketchingSpline),
         drawing(other.drawing),splineDone(other.splineDone),visible(other.visible), diffuse(other.diffuse), ambient(other.ambient)
     {
-        name = "copy of: " + other.name;
+        name = other.name;
         foreach(Node* child, children) {
             children.push_back(child->copy());
         }

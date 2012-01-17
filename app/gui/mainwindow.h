@@ -27,6 +27,7 @@ private:
 private slots:
     void updateLayerChooser(Scene * s);
     void toggleVisibility();
+    void setColor();
 };
 
 #endif // MAINWINDOW_H

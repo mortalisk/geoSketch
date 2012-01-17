@@ -58,6 +58,8 @@ public:
 
     void toggleVisibility(int i);
 
+    void setColor(int i, QColor c);
+
 signals:
     void sceneChanged(Scene * s);
 

@@ -8,6 +8,7 @@
 #include <QToolBar>
 #include <QComboBox>
 #include <QCheckBox>
+#include <QColorDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QPushButton * toggleVisibility = new QPushButton("Visibility");
     toolBar->addWidget(toggleVisibility);
+    QPushButton * colorButton = new QPushButton("Color");
+    toolBar->addWidget(colorButton);
 
     mainLayout->addWidget(toolBar);
 
@@ -44,12 +47,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(gl,SIGNAL(sceneChanged(Scene *)), this, SLOT(updateLayerChooser(Scene *)));
     QObject::connect(layerChooser,SIGNAL(activated(int)), gl, SLOT(setLayer(int)));
     QObject::connect(toggleVisibility,SIGNAL(clicked(bool)), this, SLOT(toggleVisibility()));
+    QObject::connect(colorButton,SIGNAL(clicked(bool)), this, SLOT(setColor()));
 
     mainLayout->addWidget(gl);
 }
 
 void MainWindow::updateLayerChooser(Scene * s) {
-    int i = 1;
+    int i = 0;
     std::cout << "update layers: " << s->boxNode->children.size() << std::endl;
     layerChooser->clear();
     QString index;
@@ -62,10 +66,17 @@ void MainWindow::updateLayerChooser(Scene * s) {
         layerChooser->insertItem(i, surf->name + index);
         i++;
     }
+    layerChooser->setCurrentIndex(selected);
 }
 
 void MainWindow::toggleVisibility() {
     gl->toggleVisibility(layerChooser->currentIndex());
+}
+
+void MainWindow::setColor() {
+    QColor c = QColorDialog::getColor();
+    gl->setColor(layerChooser->currentIndex(),c);
+
 }
 
 MainWindow::~MainWindow()
