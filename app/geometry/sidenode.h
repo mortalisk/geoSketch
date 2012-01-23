@@ -37,10 +37,10 @@ public:
     }
 
     void addInterpolatedSuggestion(float yLeft, float yRight) {
+        ensureLeftToRigth();
         if(spline.isSuggestion) {
             spline.points.clear();
-        }
-        if (spline.points.size() == 0) {
+
             Vector3 pointA(lowerLeft.x(), yLeft, lowerLeft.z());
             Vector3 pointB(lowerRigth.x(), yRight, lowerRigth.z());
             for (float i = 0.0; i<1.01; i+=0.05) {
@@ -48,6 +48,25 @@ public:
                 spline.addPoint(add);
             }
             spline.isSuggestion = true;
+        }else {
+            Vector3 first = spline.points[0];
+            Vector3 last = spline.points[spline.points.size()-1];
+            float length = 0.0;
+            for (int i = 1; i< spline.points.size();++i) {
+                length += (spline.points[i-1]-spline.points[i]).lenght();
+            }
+            float along = 0.0;
+            Vector3 previous = first;
+            for (int i = 0; i <spline.points.size(); ++i) {
+                along += (previous-spline.points[i]).lenght();
+                previous = spline.points[i];
+                float w = along/length;
+                float targetY = yLeft*(1.0-w) + yRight*w;
+                float lineY = first.y()*(1.0-w)+last.y()*w;
+                float diff = spline.points[i].y() - lineY;
+                float newY = targetY + diff;
+                spline.points[i] = Vector3(spline.points[i].x(), newY, spline.points[i].z());
+            }
         }
     }
 
