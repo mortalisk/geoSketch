@@ -45,13 +45,30 @@ void SideNode::makeSuggestionLines() {
     ensureLeftToRigth();
     Vector3 first = spline.points[0];
     Vector3 last = spline.points[spline.points.size()-1];
+    Vector3 left(lowerLeft.x(),first.y(),lowerLeft.z());
+    Vector3 right(lowerRigth.x(),last.y(),lowerRigth.z());
 
-    for (float i = 0.1; i< 1.01; i+=0.1) {
-        spline.points.push_front(interpolate(Vector3(lowerLeft.x(),first.y(),lowerLeft.z()), first, i));
-
+    float rdist = (right-last).lenght();
+    float ldist = (left-first).lenght();
+    float dist = (left-right).lenght();
+    float totalPoints = 20.0;
+    if (ldist > 0.001) {
+        float lPoints = totalPoints*ldist/dist;
+        float lInc = ldist/lPoints;
+        for (float i = lInc; i< lPoints+lInc; i+=lInc) {
+            if (i > lPoints) i= lPoints;
+            spline.points.push_front(interpolate(left, first, i/lPoints));
+            if (i == lPoints) break;
+        }
     }
-    for (float i = 0.1; i< 1.01; i+=0.1) {
-        spline.points.push_back(interpolate(Vector3(lowerRigth.x(),last.y(),lowerRigth.z()), last,i));
+    if (rdist > 0.001) {
+        float rPoints = totalPoints*rdist/dist;
+        float rInc = rdist/rPoints;
+        for (float i = rInc; i< rPoints+rInc; i+=rInc) {
+            if (i > rPoints) i= rPoints;
+            spline.points.push_back(interpolate(right, last,i/rPoints));
+            if (i == rPoints) break;
+        }
     }
 
 }
