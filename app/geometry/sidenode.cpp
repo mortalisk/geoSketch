@@ -41,20 +41,19 @@ void SideNode::setLeft(SideNode *node) {
 }
 
 void SideNode::makeSuggestionLines() {
+
+    ensureLeftToRigth();
     Vector3 first = spline.points[0];
     Vector3 last = spline.points[spline.points.size()-1];
 
-    if (first.isLeftOf(last)) {
-        for (float i = 0.1; i< 1.01; i+=0.1) {
-            spline.points.push_front(interpolate(Vector3(lowerLeft.x(),first.y(),lowerLeft.z()), first, i));
-            spline.points.push_back(interpolate(Vector3(lowerRigth.x(),last.y(),lowerRigth.z()), last,i));
-        }
-    }else {
-        for (float i = 0.1; i< 1.01; i+=0.1) {
-            spline.points.push_front(interpolate(Vector3(lowerRigth.x(),first.y(),lowerRigth.z()), first, i));
-            spline.points.push_back(interpolate(Vector3(lowerLeft.x(),last.y(),lowerLeft.z()), last, i));
-        }
+    for (float i = 0.1; i< 1.01; i+=0.1) {
+        spline.points.push_front(interpolate(Vector3(lowerLeft.x(),first.y(),lowerLeft.z()), first, i));
+
     }
+    for (float i = 0.1; i< 1.01; i+=0.1) {
+        spline.points.push_back(interpolate(Vector3(lowerRigth.x(),last.y(),lowerRigth.z()), last,i));
+    }
+
 }
 
 static bool similar(float a, float b, float c) {
