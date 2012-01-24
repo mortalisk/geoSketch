@@ -13,7 +13,7 @@ Shape::~Shape() {
 
 void Shape::drawLines() {
     glLineWidth(2.0);
-    float c[] = {0.0,0.0,0.0,0.0};
+    float c[] = {0.0,0.0,0.0,1.0};
     glMaterialfv(GL_FRONT,GL_AMBIENT_AND_DIFFUSE,c);
     glEnableClientState(GL_VERTEX_ARRAY);
     if (getLineVertices().size() > 0) {
