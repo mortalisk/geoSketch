@@ -1,7 +1,7 @@
 #include "surfacenode.h"
 #include "surface.h"
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left) : Node(name), front(front), right(right), back(back), left(left)
+SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : Node(name), front(front), right(right), back(back), left(left), below(below)
 {
     constructLayer();
 }
@@ -12,8 +12,9 @@ void SurfaceNode::constructLayer() {
     QVector4D c(0.1, 0.3, 0.4, 1.0);
     QVector<Vector3> previousRow;
 
-    Vector3 frontLeft = left.getPoint(1.0);
+
     Vector3 frontRight = right.getPoint(0.0);
+    Vector3 frontLeft = left.getPoint(1.0);
     Vector3 backLeft = left.getPoint(0.0);
     Vector3 backRight = right.getPoint(1.0);
 
@@ -64,6 +65,61 @@ void SurfaceNode::constructLayer() {
     }
     for (double i = 0.0;i<=1.01;i+=0.02) {
         outline.push_back(left.getPoint(i));
+    }
+
+    if (below) {
+        for(float i = 0.0; i < 1.0; i+= 0.02) {
+            Vector3 a = below->front.getPoint(i);
+            Vector3 b = below->front.getPoint(i+0.02);
+
+            Vector3 c = front.getPoint(i);
+            Vector3 d = front.getPoint(i+0.02);
+            triangles.push_back(a);
+            triangles.push_back(b);
+            triangles.push_back(c);
+            triangles.push_back(c);
+            triangles.push_back(b);
+            triangles.push_back(d);
+        }
+        for(float i = 0.0; i < 1.0; i+= 0.02) {
+            Vector3 a = below->right.getPoint(i);
+            Vector3 b = below->right.getPoint(i+0.02);
+
+            Vector3 c = right.getPoint(i);
+            Vector3 d = right.getPoint(i+0.02);
+            triangles.push_back(a);
+            triangles.push_back(b);
+            triangles.push_back(c);
+            triangles.push_back(c);
+            triangles.push_back(b);
+            triangles.push_back(d);
+        }
+        for(float i = 0.0; i < 1.0; i+= 0.02) {
+            Vector3 a = below->back.getPoint(i);
+            Vector3 b = below->back.getPoint(i+0.02);
+
+            Vector3 c = back.getPoint(i);
+            Vector3 d = back.getPoint(i+0.02);
+            triangles.push_back(a);
+            triangles.push_back(b);
+            triangles.push_back(c);
+            triangles.push_back(c);
+            triangles.push_back(b);
+            triangles.push_back(d);
+        }
+        for(float i = 0.0; i < 1.0; i+= 0.02) {
+            Vector3 a = below->left.getPoint(i);
+            Vector3 b = below->left.getPoint(i+0.02);
+
+            Vector3 c = left.getPoint(i);
+            Vector3 d = left.getPoint(i+0.02);
+            triangles.push_back(a);
+            triangles.push_back(b);
+            triangles.push_back(c);
+            triangles.push_back(c);
+            triangles.push_back(b);
+            triangles.push_back(d);
+        }
     }
 
     shape = new Surface(triangles, outline);

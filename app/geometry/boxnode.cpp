@@ -206,7 +206,25 @@ Node* BoxNode::makeLayer() {
     if (frontNode->spline.points.size() < 1)
         return this;
 
-    SurfaceNode * n = new SurfaceNode( "Layer", frontNode->spline, rightNode->spline, backNode->spline, leftNode->spline);
+    SurfaceNode * below = NULL;
+    if(children.size() > 0) {
+        below = (SurfaceNode*)children[children.size()-1];
+    }else {
+        Spline front;
+        Spline right;
+        Spline back;
+        Spline left;
+        front.addPoint(frontNode->lowerLeft);
+        front.addPoint(frontNode->lowerRigth);
+        right.addPoint(rightNode->lowerLeft);
+        right.addPoint(rightNode->lowerRigth);
+        back.addPoint(backNode->lowerLeft);
+        back.addPoint(backNode->lowerRigth);
+        left.addPoint(leftNode->lowerLeft);
+        left.addPoint(leftNode->lowerRigth);
+        below = new SurfaceNode("Bottom", front, right, back, left, NULL);
+    }
+    SurfaceNode * n = new SurfaceNode( "Layer", frontNode->spline, rightNode->spline, backNode->spline, leftNode->spline, below);
     children.append(n);
 
     foreach(SideNode* s, surfaces) {
