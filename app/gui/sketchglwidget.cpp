@@ -97,9 +97,8 @@ void MyGLWidget::initializeGL() {
     glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
 
     GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};  /* diffuse light. */
-    GLfloat light_ambient[] = {0.5, 0.5, 0.5, 1.0};  /* ambient light. */
+    GLfloat light_ambient[] = {0.2, 0.2, 0.2, 1.0};  /* ambient light. */
     GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. */
-
 
     glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
     glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -159,6 +158,21 @@ void MyGLWidget::pushScene() {
     emit sceneChanged(scene);
 }
 
+void MyGLWidget::undo(){
+    Camera c = scene->camera;
+    if (stack.size() > 1) {
+        delete scene;
+        scene = stack.pop();
+        delete scene;
+        scene = stack.pop();
+    }
+    pushScene();
+
+    scene->camera = c;
+
+    emit sceneChanged(scene);
+}
+
 bool MyGLWidget::isMousePressed(int button) {
     return mouse[button];
 }
@@ -212,8 +226,8 @@ void MyGLWidget::wheelEvent(QWheelEvent *e) {
 }
 
 void MyGLWidget::makeLayer() {
-    pushScene();
     scene->makeLayer();
+    pushScene();
     emit sceneChanged(scene);
 }
 

@@ -27,6 +27,7 @@ void SurfaceNode::constructLayer() {
     Vector3 backLeft = left.getPoint(0.0);
     Vector3 backRight = right.getPoint(1.0);
 
+    QVector < QVector < Vector3 > > rows;
     for (double zi = 0.0;zi<=1.01;zi+=0.02) {
         QVector<Vector3> row;
         Vector3 rowLeft = frontLeft*(1.0-zi) + backLeft *(zi);
@@ -45,22 +46,73 @@ void SurfaceNode::constructLayer() {
             Vector3 point = leftRight + diff;
             row.push_back(point);
         }
-        if (previousRow.size() == row.size()) {
-            for (int i = 0; i < previousRow.size()-1; ++i) {
-                Vector3 & a = previousRow[i];
-                Vector3 & b = previousRow[i+1];
-                Vector3 & c = row[i];
-                Vector3 & d = row[i+1];
-                triangles.push_back(a);
-                triangles.push_back(b);
-                triangles.push_back(c);
-                triangles.push_back(b);
-                triangles.push_back(d);
-                triangles.push_back(c);
-            }
-        }
-        previousRow = row;
+        rows.push_back(row);
     }
+
+    //compute normals
+    QVector < QVector < Vector3 > > normalRows;
+    for (int i = 0; i< rows.size(); ++i) {
+        QVector<Vector3> row;
+        for (int j = 0; j < rows[i].size(); ++j) {
+            Vector3 a,b,c,d;
+            if (i == 0) {
+                a = Vector3(rows[i+1][j] - rows[i][j]);
+                a = -a;
+            }else {
+                a = Vector3(rows[i-1][j] - rows[i][j]);
+            }
+            if (i == rows.size()-1) {
+                b = Vector3(rows[i-1][j] - rows[i][j]);
+                b = -b;
+            }else {
+                b = Vector3(rows[i+1][j] - rows[i][j]);
+            }
+            if (j == 0) {
+                c = Vector3(rows[i][j+1] - rows[i][j]);
+                c = -c;
+            }else {
+                c = Vector3(rows[i][j-1] - rows[i][j]);
+            }
+            if (j == rows[i].size()-1) {
+                d = Vector3(rows[i][j-1] - rows[i][j]);
+                d = -d;
+            }else {
+                d = Vector3(rows[i][j+1] - rows[i][j]);
+            }
+            Vector3 n = (a.cross(d) + d.cross(b) + b.cross(c) + c.cross(a)).normalize();
+            row.push_back( n);
+        }
+        normalRows.push_back(row);
+    }
+
+    QVector<Vector3> normals;
+    //create triangles
+    for (int i = 1; i< rows.size(); ++i) {
+        for (int j = 1; j < rows[i].size(); ++j) {
+            Vector3 & a = rows[i-1][j-1];
+            Vector3 & na = normalRows[i-1][j-1];
+            Vector3 & b = rows[i-1][j];
+            Vector3 & nb = normalRows[i-1][j];
+            Vector3 & c = rows[i][j-1];
+            Vector3 & nc = normalRows[i][j-1];
+            Vector3 & d = rows[i][j];
+            Vector3 & nd = normalRows[i][j];
+            triangles.push_back(a);
+            triangles.push_back(b);
+            triangles.push_back(c);
+            triangles.push_back(b);
+            triangles.push_back(d);
+            triangles.push_back(c);
+            normals.push_back(na);
+            normals.push_back(nb);
+            normals.push_back(nc);
+            normals.push_back(nb);
+            normals.push_back(nd);
+            normals.push_back(nc);
+
+        }
+    }
+
     QVector<Vector3> outline;
 
     for (double i = 0.0;i<=1.01;i+=0.02) {
@@ -83,6 +135,13 @@ void SurfaceNode::constructLayer() {
 
             Vector3 c = front.getPoint(i);
             Vector3 d = front.getPoint(i+0.02);
+            Vector3 normal = (b-a).cross(c-a).normalize();
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
             triangles.push_back(a);
             triangles.push_back(b);
             triangles.push_back(c);
@@ -96,6 +155,13 @@ void SurfaceNode::constructLayer() {
 
             Vector3 c = right.getPoint(i);
             Vector3 d = right.getPoint(i+0.02);
+            Vector3 normal = (b-a).cross(c-a).normalize();
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
             triangles.push_back(a);
             triangles.push_back(b);
             triangles.push_back(c);
@@ -109,6 +175,13 @@ void SurfaceNode::constructLayer() {
 
             Vector3 c = back.getPoint(i);
             Vector3 d = back.getPoint(i+0.02);
+            Vector3 normal = (b-a).cross(c-a).normalize();
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
             triangles.push_back(a);
             triangles.push_back(b);
             triangles.push_back(c);
@@ -122,6 +195,13 @@ void SurfaceNode::constructLayer() {
 
             Vector3 c = left.getPoint(i);
             Vector3 d = left.getPoint(i+0.02);
+            Vector3 normal = (b-a).cross(c-a).normalize();
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
+            normals.push_back(normal);
             triangles.push_back(a);
             triangles.push_back(b);
             triangles.push_back(c);
@@ -131,5 +211,5 @@ void SurfaceNode::constructLayer() {
         }
     }
     hasContructedLayer = true;
-    shape = new Surface(triangles, outline);
+    shape = new Surface(triangles, normals, outline);
 }

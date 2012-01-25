@@ -71,25 +71,7 @@ public slots:
         scene->activeNode = scene->boxNode;
     }
 
-    void undo(){
-        if (stack.size() > 1) {
-            Camera c = scene->camera;
-            delete scene;
-            scene = stack.pop();
-            scene->camera = c;
-
-            emit sceneChanged(scene);
-        }else {
-
-            Camera c = scene->camera;
-            delete scene;
-            scene = stack.pop();
-            scene->camera = c;
-            pushScene();
-
-            emit sceneChanged(scene);
-        }
-    }
+    void undo();
 
 };
 

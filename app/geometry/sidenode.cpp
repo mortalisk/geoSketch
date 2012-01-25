@@ -7,8 +7,10 @@ SideNode::SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vect
 {
     
     QVector<Vector3> vertices;
+    QVector<Vector3> normals;
+
     QVector<Vector3> lineVertices;
-    
+    Vector3 normal = (lowerRigth - lowerLeft).cross((upperRigth-lowerLeft)).normalize();
     QVector4D c(1.0, 1.0, 1.0, 0.5);
 
     //Front
@@ -20,13 +22,20 @@ SideNode::SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vect
     vertices.push_back(lowerRigth);
     vertices.push_back(upperRigth);
 
+    normals.push_back(normal);
+    normals.push_back(normal);
+    normals.push_back(normal);
+    normals.push_back(normal);
+    normals.push_back(normal);
+    normals.push_back(normal);
+
     lineVertices.push_back(lowerLeft);
     lineVertices.push_back(lowerRigth);
     lineVertices.push_back(upperRigth);
     lineVertices.push_back(upperLeft);
     lineVertices.push_back(lowerLeft);
 
-    shape = new Surface(vertices, lineVertices);
+    shape = new Surface(vertices,normals, lineVertices);
   
 }
 
