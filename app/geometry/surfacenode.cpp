@@ -1,12 +1,21 @@
 #include "surfacenode.h"
 #include "surface.h"
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : Node(name), front(front), right(right), back(back), left(left), below(below)
+SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : Node(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false)
 {
-    constructLayer();
+    //constructLayer();
+}
+
+SurfaceNode::SurfaceNode(SurfaceNode &other): Node(other) ,front(other.front), right(other.right), back(other.back), left(other.left), below(other.below), hasContructedLayer(false){
+
+}
+
+Node* SurfaceNode::copy() {
+    return new SurfaceNode(*this);
 }
 
 void SurfaceNode::constructLayer() {
+    if (hasContructedLayer) return;
 
     QVector<Vector3> triangles;
     QVector4D c(0.1, 0.3, 0.4, 1.0);
@@ -121,6 +130,6 @@ void SurfaceNode::constructLayer() {
             triangles.push_back(d);
         }
     }
-
+    hasContructedLayer = true;
     shape = new Surface(triangles, outline);
 }

@@ -56,6 +56,9 @@ public:
 
     virtual void drawSelf();
     void drawChildren();
+    virtual void prepareForDrawing() {
+
+    }
 
     virtual Node * makeLayer();
 

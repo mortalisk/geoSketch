@@ -97,7 +97,7 @@ void MyGLWidget::initializeGL() {
     glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
 
     GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};  /* diffuse light. */
-    GLfloat light_ambient[] = {0.9, 0.9, 0.9, 1.0};  /* ambient light. */
+    GLfloat light_ambient[] = {0.5, 0.5, 0.5, 1.0};  /* ambient light. */
     GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. */
 
 
@@ -139,9 +139,6 @@ void MyGLWidget::mousePressEvent(QMouseEvent * e) {
     previousMouseX = e->x();
     previousMouseY = e->y();
     if (isMousePressed(Qt::LeftButton)) {
-        std::cout << "pushing scene to stack" << std::endl;
-
-        pushScene();
         addPoint(e);
     }
 }
@@ -150,6 +147,11 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
     mouse[e->button()] = false;
     scene->activeNode->determineActionOnStoppedDrawing();
 
+    if (e->button() == Qt::LeftButton) {
+        std::cout << "pushing scene to stack" << std::endl;
+
+        pushScene();
+    }
 }
 
 void MyGLWidget::pushScene() {
@@ -233,6 +235,6 @@ void MyGLWidget::setColor(int i, QColor c) {
     color.setY(c.green()/255.0);
     color.setZ(c.blue()/255.0);
     color.setW(c.alpha()/255.0);
-    scene->boxNode->children[i]->diffuse = color;
+    scene->boxNode->children[i]->ambient = color;
 }
 

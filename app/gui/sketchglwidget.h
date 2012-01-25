@@ -72,9 +72,21 @@ public slots:
     }
 
     void undo(){
-        if (stack.size() > 0) {
+        if (stack.size() > 1) {
+            Camera c = scene->camera;
             delete scene;
             scene = stack.pop();
+            scene->camera = c;
+
+            emit sceneChanged(scene);
+        }else {
+
+            Camera c = scene->camera;
+            delete scene;
+            scene = stack.pop();
+            scene->camera = c;
+            pushScene();
+
             emit sceneChanged(scene);
         }
     }

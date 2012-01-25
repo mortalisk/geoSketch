@@ -143,7 +143,8 @@ void Node::drawSpline(Spline & spline, float r) {
                         glPointSize(3.0f);
                         glBegin(GL_POINT);
 
-                        glColor3f(1-r, 0, 0);
+                        float c[4] = {0.0,0.0,0.0,1.0};
+                        glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, c);
                         glVertex3f(spline.points[i].x(),spline.points[i].y(),spline.points[i].z());
                         glEnd();
 			glBegin(GL_LINES);
@@ -176,6 +177,7 @@ void Node::drawSelf() {
 }
 
 void Node::draw() {
+    prepareForDrawing();
     if (visible) {
 	drawChildren();
 

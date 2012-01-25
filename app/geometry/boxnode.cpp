@@ -153,7 +153,12 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 }
 
 void BoxNode::determineActionOnStoppedDrawing() {
-
+        if (activeSurface == topNode||activeSurface == bottomNode){
+            activeSurface->spline.points.clear();
+            activeSurface->sketchingSpline.points.clear();
+            activeSurface = NULL;
+            return;
+        }
 	if (activeSurface) {
             activeSurface->correctSketchingDirection();
 
@@ -174,7 +179,7 @@ void BoxNode::determineActionOnStoppedDrawing() {
 void BoxNode::makeSuggestionFor(SideNode* side) {
 
 
-    if (side->opposite->spline.isSuggestion) {
+    if (side->opposite->spline.isSuggestion && side->left->spline.isSuggestion && side->right->spline.isSuggestion) {
         side->opposite->spline.points.clear();
 
         // project points from this side to opposite
@@ -203,7 +208,8 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
 
 Node* BoxNode::makeLayer() {
 
-    if (frontNode->spline.points.size() < 1)
+    if (frontNode->spline.points.size() < 1||rightNode->spline.points.size() <1
+            ||backNode->spline.points.size() <1||leftNode->spline.points.size() <1)
         return this;
 
     SurfaceNode * below = NULL;
