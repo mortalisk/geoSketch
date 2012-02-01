@@ -262,7 +262,7 @@ void BoxNode::drawSelf() {
     glDisable(GL_LIGHT0);
     foreach(Node * s, surfaces) {
         s->drawSplines();
-        s->shape->drawLines();
+        s->shape->drawLines(false);
     }
     foreach(Node * s, surfaces) {
         glColor4f(0.5,0.5,0.5,0.5);

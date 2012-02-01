@@ -11,14 +11,22 @@ Shape::Shape() : displayList(-1)
 Shape::~Shape() {
 }
 
-void Shape::drawLines() {
+void Shape::drawLines(bool stipple) {
     glLineWidth(2.0);
     float c[] = {0.0,0.0,0.0,1.0};
     glMaterialfv(GL_FRONT,GL_AMBIENT_AND_DIFFUSE,c);
-    glEnableClientState(GL_VERTEX_ARRAY);
+
+    if (stipple) {
+        glLineStipple(1, 0xAAAA);
+        glEnable(GL_LINE_STIPPLE);
+    }
+    glEnableClientState(GL_VERTEX_ARRAY);    
     if (getLineVertices().size() > 0) {
         glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getLineVertices()[0]);
         glDrawArrays(GL_LINE_STRIP,0,getLineVertices().size());
+    }
+    if (stipple) {
+        glDisable(GL_LINE_STIPPLE);
     }
     glDisableClientState(GL_VERTEX_ARRAY);
 }

@@ -10,7 +10,7 @@ class Shape
 public:
     Shape();
     ~Shape();
-    virtual void drawLines();
+    virtual void drawLines(bool stipple);
     virtual void drawShape(QVector4D ambient, QVector4D diffuse);
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 

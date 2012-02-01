@@ -168,8 +168,10 @@ void Node::drawSelf() {
 	glTranslatef(position.x(), position.y(), position.z());
 
 	if (shape != NULL) {
-                shape->drawLines();
-                shape->drawShape(ambient, diffuse);
+                shape->drawLines(!visible);
+                if (visible) {
+                    shape->drawShape(ambient, diffuse);
+                }
 	}
         drawSplines();
 	glPopMatrix();
@@ -178,10 +180,9 @@ void Node::drawSelf() {
 
 void Node::draw() {
     prepareForDrawing();
-    if (visible) {
-	drawChildren();
+    drawChildren();
 
-	drawSelf();
-    }
+    drawSelf();
+
 
 }
