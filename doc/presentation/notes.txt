@@ -1,54 +1,55 @@
 ===Into===
-Hi and welcome to this presentation
+Hei og velkommen
 
 ===Bio===
 -Navn
--Studie
--Deltid
--GeoIllustrator
+-Masterstudent på.. vis, institutt for inf
+-Deltid. ferdig
+-GeoIllustrator, prosjekt ass. m.
 
-===Purpose===
+===Formål===
 -Presentere
 	 prosjekt og status
-
--Feedback
-	 anbefalinger
+-tilbakemelding/anbefalinger
 	 interessant?
-	 features
-
+	 forslag til funksjoner/teknikker
 -Use case
-
 -Samarbeid
 
+===The project===
+lage verktøy
+
 ===Scenario===
--Lufte et par
+-Beskrive et par
 	gir mening?
--Utforsker
+-en geolog Utforske
 	område av interesse
-	ide
+	ide om nåtid/fortid
+	kommunisere v. illust.
 -Utdanningsformål
-	trenger illustrasjoner
 	forelesning
 	paper/bok
+	trenger illustrasjoner
 
 ===Inspiration===
 various 
-	illustration
+	bøker
 	paper
 fokus på denne
 	eksempel på
 	simple to start with
 
 
-===Goal===
-R&D
-Teknikker
+===Idea===
+å utforske og utvikle
+Teknikker 3D illustrasjon
 Model
 	look at
 	rotate
+	enkelt og raskt
 mock-up
-	imagined
-	not current or real
+	tenkt
+	ikke det vi har
 
 ===Show Video===
 Sketch based
@@ -64,16 +65,17 @@ elver/åskammer
 	pull
 	carve
 
- => Deposits
+ => Avleiringer
+	inspirasjon => ved vannlinjen, spesifisere linjen
+	automatisk vokser; input eller terrengbasert
+	omvendt; terreng endres etter avleiring
 
-
-When we now have a river, we want to make it easy to create deposits. By looking at our inspirational picture, it seems that such deposits are created where a river meets the ocean. We therefore imagine a feature where you can specify the sea level like here, and then have a deposit grow automatically from there. The size could be based on the amount and type of land that is being displaced by the river, or you could specify it manually. Another thought we had was to modify the terrain according to how much deposits you want.
-
-Another feature we plan is the ability to create partial layers. That is, laers that do not cover the entire cube, but instead are limited by other layers. This can be done by several methods, for example by drawing intersecting layers, like on this picture, and then removing from the one side of the intersection. It could also be done by drawing directly on the surface where the intersection would be.
+partial layers
+	limited by other layers
+	intersect or draw directly
 
 ===Discussion===
-
-===Thank you===
 That concludes the presentation. I wrote some talking points here, but feel free to discuss anything you want.
+===Thank you===
 
 
