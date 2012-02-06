@@ -5,7 +5,7 @@ Hei og velkommen
 -Navn
 -Masterstudent på.. vis, institutt for inf
 -Deltid. ferdig
--GeoIllustrator, prosjekt ass. m.
+-GeoIllustrator, assosiert m.
 
 ===Formål===
 -Presentere
@@ -17,7 +17,7 @@ Hei og velkommen
 -Samarbeid
 
 ===The project===
-lage verktøy
+lage verktøy for rask skissering
 
 ===Scenario===
 -Beskrive et par
@@ -32,12 +32,12 @@ lage verktøy
 	trenger illustrasjoner
 
 ===Inspiration===
-various 
+forskjellige 
 	bøker
 	paper
 fokus på denne
 	eksempel på
-	simple to start with
+	enkel å starte med
 
 
 ===Idea===
@@ -75,7 +75,9 @@ partial layers
 	intersect or draw directly
 
 ===Discussion===
-That concludes the presentation. I wrote some talking points here, but feel free to discuss anything you want.
+Da er presentasjonen ferdig. 
+Diskusjon
+Jeg skrev ned noen mulige diskusjonstema her, men snakk gjerne om hva.
 ===Thank you===
 
 
