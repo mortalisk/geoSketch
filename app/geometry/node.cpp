@@ -160,11 +160,6 @@ void Node::drawSpline(Spline & spline, float r) {
 
 void Node::drawSelf() {
 
-
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glPushMatrix();
 	glTranslatef(position.x(), position.y(), position.z());
 
 	if (shape != NULL) {
@@ -174,15 +169,21 @@ void Node::drawSelf() {
                 }
 	}
         drawSplines();
-	glPopMatrix();
 
 }
 
 void Node::draw() {
+
+
+    glPushMatrix();
+
     prepareForDrawing();
     drawChildren();
 
     drawSelf();
+
+
+    glPopMatrix();
 
 
 }

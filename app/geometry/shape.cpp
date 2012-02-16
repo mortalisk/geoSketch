@@ -34,6 +34,9 @@ void Shape::drawLines(bool stipple) {
 void Shape::drawShape(QVector4D ambient, QVector4D diffuse) {
     float c[] = {diffuse.x(), diffuse.y(), diffuse.z(), diffuse.w() };
     glMaterialfv(GL_FRONT,GL_DIFFUSE,c);
+
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 64.0f );
+    glMaterialfv(GL_FRONT, GL_SPECULAR, c);
     float a[] = {ambient.x(), ambient.y(), ambient.z(), ambient.w() };
     glMaterialfv(GL_FRONT,GL_AMBIENT,a);
 

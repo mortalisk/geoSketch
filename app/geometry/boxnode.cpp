@@ -242,6 +242,8 @@ Node* BoxNode::makeLayer() {
 }
 
 void BoxNode::draw() {
+
+    glPushMatrix();
     glDisable(GL_CULL_FACE);
 
 
@@ -252,6 +254,8 @@ void BoxNode::draw() {
     glCullFace(GL_FRONT);
     drawSelf();
     glDisable(GL_CULL_FACE);
+
+    glPopMatrix();
 }
 
 void BoxNode::drawSelf() {

@@ -4,10 +4,20 @@
 #include <iostream>
 #include <QTimer>
 #include "geometry/node.h"
+#include <QVector>
 
 MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
         QGLWidget(*glf,parent), move(0.01f)
 {
+
+
+    light_diffuse = QVector4D(0.33, 0.33, 0.33, 1.0);
+    light_ambient = QVector4D(0.2, 0.2, 0.2, 1.0);  /* light. */
+    light_specular = QVector4D(1.0,1.0,1.0, 1.0);
+    light_position1 = QVector4D(0.0, 1.0, 1.0, 0.0);  /* Infinite light location. */
+    light_position2 = QVector4D(1.0, 1.0, -1.0, 0.0);
+    light_position3 = QVector4D(-1.0, 1.0, -1.0, 0.0);
+
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
     setCursor( QCursor( Qt::BlankCursor ) );
@@ -68,6 +78,10 @@ void MyGLWidget::paintGL() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(scene->camera.fov*180/M_PI, aspect, 0.1, 1000);
+
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     gluLookAt(scene->camera.position.x(),
               scene->camera.position.y(),
               scene->camera.position.z(),
@@ -78,8 +92,35 @@ void MyGLWidget::paintGL() {
               scene->camera.up.y(),
               scene->camera.up.z());
 
-    scene->cursor->draw();
+    float lightDiffuse[4] = {light_diffuse.x(), light_diffuse.y(), light_diffuse.z(), light_diffuse.w()};  /* diffuse light. */
+    float lightAmbient[4] = {light_ambient.x(), light_ambient.y(), light_ambient.z(), light_ambient.w()};  /* ambient light. */
+    float lightSpecular[4] = {light_specular.x(), light_specular.y(), light_specular.z(), light_specular.w()};  /* ambient light. */
+    float lightPosition1[4] = {light_position1.x(), light_position1.y(), light_position1.z(), light_position1.w()}; /* Infinite light location. */
+    float lightPosition2[4] = {light_position2.x(), light_position2.y(), light_position2.z(), light_position2.w()}; /* Infinite light location. */
+    float lightPosition3[4] = {light_position3.x(), light_position3.y(), light_position3.z(), light_position3.w()}; /* Infinite light location. */
+
+
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
+    glLightfv(GL_LIGHT0, GL_POSITION, lightPosition1);
+
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, lightDiffuse);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, lightAmbient);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, lightSpecular);
+    glLightfv(GL_LIGHT1, GL_POSITION, lightPosition2);
+
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, lightDiffuse);
+    glLightfv(GL_LIGHT2, GL_AMBIENT, lightAmbient);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, lightSpecular);
+    glLightfv(GL_LIGHT2, GL_POSITION, lightPosition3);
+
+    //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
+
     scene->getRootNode()->draw();
+    scene->cursor->draw();
+
+    std::cout << "cursor: " << scene->cursor->position << std::endl;
 }
 
 void MyGLWidget::initializeGL() {
@@ -94,18 +135,15 @@ void MyGLWidget::initializeGL() {
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glEnable(GL_DEPTH_TEST);
-    glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
+    //glColorMaterial ( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE ) ;
 
-    GLfloat light_diffuse[] = {1.0, 1.0, 1.0, 1.0};  /* diffuse light. */
-    GLfloat light_ambient[] = {0.2, 0.2, 0.2, 1.0};  /* ambient light. */
-    GLfloat light_position[] = {1.0, 1.0, 1.0, 0.0};  /* Infinite light location. */
 
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-    glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_LIGHT2);
     glEnable(GL_NORMALIZE);
 
 }

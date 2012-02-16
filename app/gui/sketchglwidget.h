@@ -23,6 +23,14 @@ private:
     float move;
     QStack<Scene*> stack;
 
+
+    QVector4D light_diffuse;
+    QVector4D light_ambient;
+    QVector4D light_specular;
+    QVector4D light_position1;
+    QVector4D light_position2;
+    QVector4D light_position3;
+
 public:
     explicit MyGLWidget(QGLFormat *glf,QWidget *parent = 0);
     void paintGL();

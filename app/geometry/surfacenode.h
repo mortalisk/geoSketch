@@ -15,9 +15,11 @@ public:
     void constructLayer();
     virtual Node* copy();
 
-    virtual void prepareForDrawing() {
-        constructLayer();
-    }
+    void drawWall();
+
+    void drawSelf();
+
+    virtual void prepareForDrawing();
 };
 
 #endif // SURFACENODE_H

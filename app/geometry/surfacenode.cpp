@@ -1,5 +1,6 @@
 #include "surfacenode.h"
 #include "surface.h"
+#include <GL/glew.h>
 
 SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : Node(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false)
 {
@@ -12,6 +13,68 @@ SurfaceNode::SurfaceNode(SurfaceNode &other): Node(other) ,front(other.front), r
 
 Node* SurfaceNode::copy() {
     return new SurfaceNode(*this);
+}
+
+void SurfaceNode::drawWall() {
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glBegin(GL_TRIANGLE_STRIP);
+    for (int i = 0 ; i < spline.points.size(); ++i) {
+        Vector3 & current = spline.points[i];
+        Vector3 previous, next;
+        if (i == 0) {
+            previous = current;
+        }else {
+            previous = spline.points[i-1];
+        }
+        if (i == spline.points.size() -1) {
+            next = current;
+        }else {
+            next = spline.points[i+1];
+        }
+        Vector3 up(0, 1, 0);
+        Vector3 normal = (next-previous).cross(up).normalize();
+        glNormal3f(normal.x(),normal.y(),normal.z());
+        glVertex3d(current.x(),current.y(),current.z());
+        glVertex3d(current.x(),current.y()+5,current.z());
+
+
+    }
+    for (int i = spline.points.size()-1 ; i >=0; --i) {
+        Vector3 & current = spline.points[i];
+        Vector3 previous, next;
+        if (i == 0) {
+            next = current;
+        }else {
+            next = spline.points[i-1];
+        }
+        if (i == spline.points.size() -1) {
+            previous = current;
+        }else {
+            previous = spline.points[i+1];
+        }
+        Vector3 up(0, 1, 0);
+        Vector3 normal = (next-previous).cross(up).normalize();
+        glNormal3f(normal.x(),normal.y(),normal.z());
+        glVertex3d(current.x(),current.y(),current.z());
+        glVertex3d(current.x(),current.y()+5,current.z());
+
+
+    }
+    glEnd();
+    glDisable(GL_CULL_FACE);
+}
+
+void SurfaceNode::drawSelf() {
+
+    if (spline.points.size() > 1) {
+        drawWall();
+    }
+    Node::drawSelf();
+}
+
+void SurfaceNode::prepareForDrawing()  {
+    constructLayer();
 }
 
 void SurfaceNode::constructLayer() {
