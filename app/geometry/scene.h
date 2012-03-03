@@ -5,7 +5,7 @@
 #include "geometry/box.h"
 #include "morten3d/Camera.h"
 #include "arrays.h"
-#include "node.h"
+#include "generalnode.h"
 #include "sphere.h"
 #include "spline.h"
 #include "boxnode.h"
@@ -23,8 +23,8 @@ public:
     Sphere sphere;
     Sphere cursorSphere;
     BoxNode * boxNode;
-    Node * cursor;
-    Node * activeNode;
+    BaseNode * cursor;
+    BaseNode * activeNode;
 
     Scene();
 
@@ -32,13 +32,13 @@ public:
     void addPoint(Vector3& from, Vector3& direction);
     void makeLayer();
 
-    Node* getRootNode();
+    BaseNode* getRootNode();
 
     Scene(Scene& scene)
     {
         *this=scene;
         boxNode = boxNode->copy();
-        cursor = new Node(&cursorSphere, "cursor");
+        cursor = new GeneralNode(&cursorSphere, "cursor");
         cursor->ambient = scene.cursor->ambient;
         activeNode = boxNode;
     }

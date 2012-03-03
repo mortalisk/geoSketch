@@ -3,7 +3,7 @@
 #include "geometry/arrays.h"
 #include <iostream>
 #include <QTimer>
-#include "geometry/node.h"
+#include "geometry/basenode.h"
 #include <QVector>
 
 MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :

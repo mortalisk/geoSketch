@@ -1,8 +1,8 @@
 #ifndef SURFACENODE_H
 #define SURFACENODE_H
-#include "node.h"
+#include "basenode.h"
 #include "spline.h"
-class SurfaceNode : public Node
+class SurfaceNode : public BaseNode
 {
     Spline front, right, back, left;
     SurfaceNode* below;
@@ -13,13 +13,17 @@ public:
     SurfaceNode(QString name, Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below = NULL);
     SurfaceNode(SurfaceNode& other);
     void constructLayer();
-    virtual Node* copy();
+    virtual BaseNode* copy();
 
     void drawWall();
 
     void drawSelf();
 
     virtual void prepareForDrawing();
+
+    virtual void determineActionOnStoppedDrawing();
+
+    void makeRidgeNode();
 };
 
 #endif // SURFACENODE_H

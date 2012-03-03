@@ -2,11 +2,11 @@
 #define BOXNODE_H
 
 #include "box.h"
-#include "node.h"
+#include "basenode.h"
 #include "surface.h"
 #include "sidenode.h"
 
-class BoxNode : public Node
+class BoxNode : public BaseNode
 {
 public:
     BoxNode();
@@ -32,7 +32,7 @@ public:
     void determineActionOnStoppedDrawing();
     void draw();
     void drawSelf();
-    Node * makeLayer();
+    BaseNode * makeLayer();
     void makeSuggestionFor(SideNode* side);
 
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);

@@ -1,9 +1,9 @@
 #include "sidenode.h"
-#include "node.h"
+#include "basenode.h"
 #include "surface.h"
 
 SideNode::SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vector3 upperLeft) 
-    : Node::Node("sideNode"), lowerLeft(lowerLeft), lowerRigth(lowerRigth), upperRigth(upperRigth), upperLeft(upperLeft)
+    : BaseNode::BaseNode("sideNode"), lowerLeft(lowerLeft), lowerRigth(lowerRigth), upperRigth(upperRigth), upperLeft(upperLeft)
 {
     
     QVector<Vector3> vertices;

@@ -22,12 +22,14 @@ HEADERS += gui/mainwindow.h \
     morten3d/Camera.h \
     morten3d/Vector3.h \
     geometry/sphere.h \
-    geometry/node.h \
     geometry/spline.h \
     geometry/surface.h \
     geometry/boxnode.h \
     geometry/sidenode.h \
-    geometry/surfacenode.h
+    geometry/surfacenode.h \
+    geometry/ridgenode.h \
+    geometry/basenode.h \
+    geometry/generalnode.h
 
 SOURCES += main.cpp \
     gui/mainwindow.cpp \
@@ -39,9 +41,11 @@ SOURCES += main.cpp \
     morten3d/Camera.cpp \
     morten3d/Vector3.cpp \
     geometry/sphere.cpp \
-    geometry/node.cpp \
     geometry/spline.cpp \
     geometry/surface.cpp \
     geometry/boxnode.cpp \
     geometry/sidenode.cpp \
-    geometry/surfacenode.cpp
+    geometry/surfacenode.cpp \
+    geometry/ridgenode.cpp \
+    geometry/generalnode.cpp \
+    geometry/basenode.cpp

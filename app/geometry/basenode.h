@@ -5,12 +5,12 @@
 #include "shape.h"
 #include "spline.h"
 
-class Node
+class BaseNode
 {
 public:
     Shape * shape;
     Vector3 position;
-    QVector<Node*> children;
+    QVector<BaseNode*> children;
     Spline spline;
     Spline sketchingSpline;
     bool drawing;
@@ -18,30 +18,29 @@ public:
     bool visible;
     QString name;
 
+    BaseNode * parent;
+
     QVector4D diffuse;
     QVector4D ambient;
 
-    Node(QString name);
-    Node(Shape * shape, QString name);
-    Node(Node &other)
+    BaseNode(QString name);
+    BaseNode(Shape * shape, QString name);
+    BaseNode(BaseNode &other)
         : shape(other.shape),position(other.position),
         spline(other.spline),sketchingSpline(other.sketchingSpline),
         drawing(other.drawing),splineDone(other.splineDone),visible(other.visible), diffuse(other.diffuse), ambient(other.ambient)
     {
         name = other.name;
-        foreach(Node* child, children) {
-            children.push_back(child->copy());
+        foreach(BaseNode* child, other.children) {
+            BaseNode * c = child->copy();
+            c->parent = this;
+            children.push_back(c);
         }
     }
-    virtual ~Node();
-    virtual Node* copy() {
-        Node * node = new Node(*this);
-        return node;
-    }
+    virtual ~BaseNode();
+    virtual BaseNode* copy() = 0;
 
-
-
-    void addChild(Node* child) {
+    void addChild(BaseNode* child) {
         children.push_back(child);
     }
 
@@ -60,7 +59,7 @@ public:
 
     }
 
-    virtual Node * makeLayer();
+    virtual BaseNode * makeLayer();
 
 
     void drawSplines();

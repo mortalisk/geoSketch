@@ -1,10 +1,10 @@
-#include "node.h"
+#include "basenode.h"
 #include <GL/glew.h>
 #include "surface.h"
 #include "float.h"
 #include <algorithm>
 
-Node::Node(QString name) {
+BaseNode::BaseNode(QString name) {
 	shape = NULL;
         this->name = name;
         visible = true;
@@ -20,7 +20,7 @@ Node::Node(QString name) {
         ambient.setW(1.0);
 }
 
-Node::Node(Shape *shape, QString name) {
+BaseNode::BaseNode(Shape *shape, QString name) {
 	this->shape = shape;
         this->name = name;
         visible = true;
@@ -37,26 +37,26 @@ Node::Node(Shape *shape, QString name) {
 }
 
 
-Node::~Node() {
-    foreach(Node* n,children) {
+BaseNode::~BaseNode() {
+    foreach(BaseNode* n,children) {
         delete n;
     }
 }
 
-void Node::addPoint(Vector3 from, Vector3 direction) {
+void BaseNode::addPoint(Vector3 from, Vector3 direction) {
 
         QVector<Vector3> points = intersectionPoints(from, direction);
         sketchingSpline.addPoint(points[0]);
 
 }
 
-void Node::moveSketchingPointsToSpline() {
+void BaseNode::moveSketchingPointsToSpline() {
    spline.points.clear();
    spline.points += sketchingSpline.points;
    sketchingSpline.points.clear();
 }
 
-void Node::doOversketch() {
+void BaseNode::doOversketch() {
     if (sketchingSpline.points.size() < 2) {
         sketchingSpline.points.clear();
         return;
@@ -72,7 +72,7 @@ void Node::doOversketch() {
     moveSketchingPointsToSpline();
 }
 
-void Node::oversketchSide(Vector3& pointInSketch, int nearest, bool first) {
+void BaseNode::oversketchSide(Vector3& pointInSketch, int nearest, bool first) {
 
     if (isPointNearerSide(pointInSketch, nearest)) return;
 
@@ -90,18 +90,18 @@ void Node::oversketchSide(Vector3& pointInSketch, int nearest, bool first) {
     }
 }
 
-bool Node::isPointNearerSide(Vector3& point, int indexInSpline) {
+bool BaseNode::isPointNearerSide(Vector3& point, int indexInSpline) {
     return false;
 }
 
-void Node::determineActionOnStoppedDrawing() {
+void BaseNode::determineActionOnStoppedDrawing() {
     correctSketchingDirection();
 
     doOversketch();
 
 }
 
-void Node::correctSketchingDirection() {
+void BaseNode::correctSketchingDirection() {
 
     bool isOpposite = spline.isLeftToRight() != sketchingSpline.isLeftToRight();
 
@@ -110,11 +110,11 @@ void Node::correctSketchingDirection() {
     }
 }
 
-Node * Node::makeLayer() {
+BaseNode * BaseNode::makeLayer() {
 
 }
 
-QVector<Vector3> Node::intersectionPoints(Vector3 from, Vector3 direction) {
+QVector<Vector3> BaseNode::intersectionPoints(Vector3 from, Vector3 direction) {
 	from = from - position;
 	direction = direction - position;
 	if (shape != NULL) {
@@ -125,17 +125,17 @@ QVector<Vector3> Node::intersectionPoints(Vector3 from, Vector3 direction) {
 	}
 }
 
-void Node::drawChildren() {
-	foreach(Node* node, children) {
+void BaseNode::drawChildren() {
+        foreach(BaseNode* node, children) {
 		node->draw();
 	}
 }
-void Node::drawSplines() {
+void BaseNode::drawSplines() {
     drawSpline(sketchingSpline, 1);
     drawSpline(spline, 0);
 }
 
-void Node::drawSpline(Spline & spline, float r) {
+void BaseNode::drawSpline(Spline & spline, float r) {
 	if (spline.points.size() >= 1) {
 		for (int i = 0; i < spline.points.size() - 1; ++i) {
 
@@ -158,7 +158,7 @@ void Node::drawSpline(Spline & spline, float r) {
 	}
 }
 
-void Node::drawSelf() {
+void BaseNode::drawSelf() {
 
 	glTranslatef(position.x(), position.y(), position.z());
 
@@ -172,7 +172,7 @@ void Node::drawSelf() {
 
 }
 
-void Node::draw() {
+void BaseNode::draw() {
 
 
     glPushMatrix();

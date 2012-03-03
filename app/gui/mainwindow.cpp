@@ -58,7 +58,7 @@ void MainWindow::updateLayerChooser(Scene * s) {
     layerChooser->clear();
     QString index;
     int selected = 0;
-    foreach(Node *surf, s->boxNode->children) {
+    foreach(BaseNode *surf, s->boxNode->children) {
         if (surf == s->activeNode) {
             selected = i;
         }

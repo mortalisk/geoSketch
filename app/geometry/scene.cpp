@@ -10,8 +10,7 @@ Scene::Scene() {
     resolution = 0.05f;
     sphere = Sphere(0.05f);
     cursorSphere = Sphere(0.05f);
-    cursor = new Node("cursor");
-    cursor->shape = &cursorSphere;
+    cursor = new GeneralNode(&cursorSphere,"cursor");
     cursor->position = Vector3(0,0,0);
     cursor->ambient = QVector4D(1.0, 0.0, 0.0, 1.0);
     boxNode = new BoxNode();
@@ -50,7 +49,7 @@ void Scene::makeLayer() {
     activeNode = boxNode->makeLayer();
 }
 
-Node* Scene::getRootNode(){
+BaseNode* Scene::getRootNode(){
     return boxNode;
 }
 

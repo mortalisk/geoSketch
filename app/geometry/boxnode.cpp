@@ -7,7 +7,7 @@
 #include "float.h"
 #include "surfacenode.h"
 
-BoxNode::BoxNode() : Node::Node("boxnode")
+BoxNode::BoxNode() : BaseNode::BaseNode("boxnode")
 {
     activeSurface = NULL;
     width = 10;
@@ -55,16 +55,13 @@ BoxNode::BoxNode() : Node::Node("boxnode")
 
 }
 
-BoxNode::BoxNode(BoxNode& o): Node::Node(o) {
+BoxNode::BoxNode(BoxNode& o): BaseNode::BaseNode(o) {
     frontNode = new SideNode(*o.frontNode);
     backNode = new SideNode(*o.backNode);
     leftNode = new SideNode(*o.leftNode);
     rightNode = new SideNode(*o.rightNode);
     topNode = new SideNode(*o.topNode);
     bottomNode = new SideNode(*o.bottomNode);
-    foreach(Node * child, o.children) {
-        children.append(child->copy());
-    }
 
     setUpSurfaces();
 
@@ -104,7 +101,7 @@ float BoxNode::getHeight() {
 
 float BoxNode::intersectionPoint(Vector3 from, Vector3 direction) {
     float dist = FLT_MAX;
-    foreach (Node * s, surfaces) {
+    foreach (BaseNode * s, surfaces) {
         QVector<Vector3> points = s->intersectionPoints(from, direction);
         if (points.size() >0) {
             Vector3& p = points[0];
@@ -206,7 +203,7 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
 
 }
 
-Node* BoxNode::makeLayer() {
+BaseNode* BoxNode::makeLayer() {
 
     if (frontNode->spline.points.size() < 1||rightNode->spline.points.size() <1
             ||backNode->spline.points.size() <1||leftNode->spline.points.size() <1)
@@ -264,11 +261,11 @@ void BoxNode::drawSelf() {
 
     glDisable(GL_LIGHTING);
     glDisable(GL_LIGHT0);
-    foreach(Node * s, surfaces) {
+    foreach(BaseNode * s, surfaces) {
         s->drawSplines();
         s->shape->drawLines(false);
     }
-    foreach(Node * s, surfaces) {
+    foreach(BaseNode * s, surfaces) {
         glColor4f(0.5,0.5,0.5,0.5);
         s->shape->drawShape(ambient, diffuse);
     }

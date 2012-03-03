@@ -1,9 +1,9 @@
 #ifndef SIDENODE_H
 #define SIDENODE_H
 #include "shape.h"
-#include "node.h"
+#include "basenode.h"
 
-class SideNode : public Node
+class SideNode : public BaseNode
 {
 public:
     SideNode * opposite;
@@ -14,8 +14,12 @@ public:
     Vector3 upperRigth;
     Vector3 upperLeft;
     SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vector3 upperLeft);
-    SideNode(SideNode& o) :Node::Node(o), lowerLeft(o.lowerLeft), lowerRigth(o.lowerRigth), upperRigth(o.upperRigth), upperLeft(o.upperLeft) {
+    SideNode(SideNode& o) :BaseNode::BaseNode(o), lowerLeft(o.lowerLeft), lowerRigth(o.lowerRigth), upperRigth(o.upperRigth), upperLeft(o.upperLeft) {
 
+    }
+
+    BaseNode * copy() {
+        return new SideNode(*this);
     }
 
     void projectPoints(Vector3 diff,QVector<Vector3>& points) {
