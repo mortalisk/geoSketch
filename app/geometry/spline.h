@@ -4,9 +4,10 @@
 #include <QVector>
 #include "morten3d/Vector3.h"
 #include <algorithm>
+#include "shape.h"
 class node;
 
-class Spline
+class Spline : public Shape
 {
 
 public:

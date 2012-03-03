@@ -29,7 +29,8 @@ HEADERS += gui/mainwindow.h \
     geometry/surfacenode.h \
     geometry/ridgenode.h \
     geometry/basenode.h \
-    geometry/generalnode.h
+    geometry/generalnode.h \
+    geometry/isurfacefeature.h
 
 SOURCES += main.cpp \
     gui/mainwindow.cpp \
@@ -48,4 +49,5 @@ SOURCES += main.cpp \
     geometry/surfacenode.cpp \
     geometry/ridgenode.cpp \
     geometry/generalnode.cpp \
-    geometry/basenode.cpp
+    geometry/basenode.cpp \
+    geometry/isurfacefeature.cpp

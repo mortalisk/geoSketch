@@ -115,7 +115,7 @@ void MyGLWidget::paintGL() {
     glLightfv(GL_LIGHT2, GL_SPECULAR, lightSpecular);
     glLightfv(GL_LIGHT2, GL_POSITION, lightPosition3);
 
-    //glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
+    glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, 1.0f);
 
     scene->getRootNode()->draw();
     scene->cursor->draw();

@@ -15,10 +15,6 @@ public:
     void constructLayer();
     virtual BaseNode* copy();
 
-    void drawWall();
-
-    void drawSelf();
-
     virtual void prepareForDrawing();
 
     virtual void determineActionOnStoppedDrawing();

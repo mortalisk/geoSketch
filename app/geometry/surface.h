@@ -10,7 +10,7 @@ class Surface : public Shape
 {
 public:
     /** takes a list of vertices that reprecent trinagles of surfaces, and one normal for each vertice*/
-    Surface(QVector<Vector3> & triangles, QVector<Vector3> & normals, QVector<Vector3> & outline);
+    Surface(QVector<Vector3> & triangles, QVector<Vector3> & normals, QVector<Vector3> & outline,bool strip = false);
 };
 
 #endif // SURFACE_H
