@@ -119,8 +119,6 @@ void MyGLWidget::paintGL() {
 
     scene->getRootNode()->draw();
     scene->cursor->draw();
-
-    std::cout << "cursor: " << scene->cursor->position << std::endl;
 }
 
 void MyGLWidget::initializeGL() {

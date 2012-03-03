@@ -16,38 +16,30 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     QVBoxLayout * mainLayout = new QVBoxLayout();
-    QToolBar * toolBar = new QToolBar();
+    QToolBar * toolBar = findChild<QToolBar*>("toolBar");
     centralWidget()->setLayout(mainLayout);
 
+    QAction * undoButton = findChild<QAction*>("actionUndo");
+    QAction * layerButton = findChild<QAction*>("actionMakeLayer");
+    QAction * newLayerButton = findChild<QAction*>("actionNewLayer");
+    QAction * toggleVisibility = findChild<QAction*>("actionVisibility");
+    QAction * colorButton = findChild<QAction*>("actionColor");
 
-    QPushButton * undoButton = new QPushButton("UNDO");
-    toolBar->addWidget(undoButton);
-    QPushButton * layerButton = new QPushButton("Make Layer");
-    toolBar->addWidget(layerButton);
-    QPushButton * newLayerButton = new QPushButton("New Layer");
-    toolBar->addWidget(newLayerButton);
     layerChooser = new QComboBox();
     toolBar->addWidget(layerChooser);
-
-    QPushButton * toggleVisibility = new QPushButton("Visibility");
-    toolBar->addWidget(toggleVisibility);
-    QPushButton * colorButton = new QPushButton("Color");
-    toolBar->addWidget(colorButton);
-
-    mainLayout->addWidget(toolBar);
 
     glFormat = new QGLFormat;
     glFormat->setProfile(QGLFormat::CompatibilityProfile);//CoreProfile);
     glFormat->setVersion(3,3);
     gl = new MyGLWidget(glFormat);
 
-    QObject::connect(undoButton,SIGNAL(clicked(bool)), gl, SLOT(undo()));
-    QObject::connect(layerButton,SIGNAL(clicked(bool)), gl, SLOT(makeLayer()));
-    QObject::connect(newLayerButton,SIGNAL(clicked(bool)), gl, SLOT(newLayer()));
+    QObject::connect(undoButton,SIGNAL(activated()), gl, SLOT(undo()));
+    QObject::connect(layerButton,SIGNAL(activated()), gl, SLOT(makeLayer()));
+    QObject::connect(newLayerButton,SIGNAL(activated()), gl, SLOT(newLayer()));
     QObject::connect(gl,SIGNAL(sceneChanged(Scene *)), this, SLOT(updateLayerChooser(Scene *)));
     QObject::connect(layerChooser,SIGNAL(activated(int)), gl, SLOT(setLayer(int)));
-    QObject::connect(toggleVisibility,SIGNAL(clicked(bool)), this, SLOT(toggleVisibility()));
-    QObject::connect(colorButton,SIGNAL(clicked(bool)), this, SLOT(setColor()));
+    QObject::connect(toggleVisibility,SIGNAL(activated()), this, SLOT(toggleVisibility()));
+    QObject::connect(colorButton,SIGNAL(activated()), this, SLOT(setColor()));
 
     mainLayout->addWidget(gl);
 }
