@@ -45,6 +45,17 @@ void Scene::addPoint(Vector3& from, Vector3& direction) {
     }
 }
 
+void Scene::selectActiveNode(Vector3 &from, Vector3 &direction) {
+
+    Vector3 point;
+    activeNode->setActive(false);
+    activeNode = boxNode->findIntersectingNode(from, direction, point);
+    if (activeNode == NULL)
+        activeNode = boxNode;
+    activeNode->setActive(true);
+
+}
+
 void Scene::makeLayer() {
     activeNode = boxNode->makeLayer();
 }

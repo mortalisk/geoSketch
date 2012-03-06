@@ -20,7 +20,7 @@ MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
 
     setFocusPolicy(Qt::StrongFocus);
     setMouseTracking(true);
-    setCursor( QCursor( Qt::BlankCursor ) );
+    setCursor( QCursor( Qt::CrossCursor ) );
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(animate()));
     timer->start(25);
@@ -170,7 +170,7 @@ bool MyGLWidget::isKeyPressed(int key) {
 void MyGLWidget::mousePressEvent(QMouseEvent * e) {
     mouse[e->button()] = true;
 
-
+    mouseMoved = false;
     previousMouseX = e->x();
     previousMouseY = e->y();
     if (isMousePressed(Qt::LeftButton)) {
@@ -180,7 +180,13 @@ void MyGLWidget::mousePressEvent(QMouseEvent * e) {
 
 void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
     mouse[e->button()] = false;
+
+
     scene->activeNode->determineActionOnStoppedDrawing();
+    if (!mouseMoved && e->button() == Qt::RightButton) {
+        Vector3 dir = findMouseDirection(e);
+        scene->selectActiveNode(scene->camera.position, dir);
+    }
 
     if (e->button() == Qt::LeftButton) {
         std::cout << "pushing scene to stack" << std::endl;
@@ -228,7 +234,7 @@ void MyGLWidget::mouseMoveEvent(QMouseEvent *e) {
 
     Vector3 dir = findMouseDirection(e);
     this->scene->showCursor(scene->camera.position,dir);
-
+    mouseMoved = true;
 
     if (isMousePressed(Qt::LeftButton)) {
        addPoint(e);

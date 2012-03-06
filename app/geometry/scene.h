@@ -30,6 +30,7 @@ public:
 
     void showCursor(Vector3& point, Vector3& dir);
     void addPoint(Vector3& from, Vector3& direction);
+    void selectActiveNode(Vector3& from, Vector3& direction);
     void makeLayer();
 
     BaseNode* getRootNode();

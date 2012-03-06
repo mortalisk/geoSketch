@@ -2,6 +2,7 @@
 #define SURFACENODE_H
 #include "basenode.h"
 #include "spline.h"
+#include "isurfacefeature.h"
 class SurfaceNode : public BaseNode
 {
     Spline front, right, back, left;
@@ -10,6 +11,7 @@ class SurfaceNode : public BaseNode
     // in stead of when copying which made interaction laggy
     bool hasContructedLayer;
 public:
+    void invalidate();
     SurfaceNode(QString name, Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below = NULL);
     SurfaceNode(SurfaceNode& other);
     void constructLayer();
@@ -20,6 +22,8 @@ public:
     virtual void determineActionOnStoppedDrawing();
 
     void makeRidgeNode();
+
+    void drawChildren();
 };
 
 #endif // SURFACENODE_H

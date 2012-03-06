@@ -18,6 +18,7 @@ BaseNode::BaseNode(QString name) {
         ambient.setY(0.5);
         ambient.setZ(0.5);
         ambient.setW(1.0);
+        proxy = NULL;
 }
 
 BaseNode::BaseNode(Shape *shape, QString name) {
@@ -34,6 +35,8 @@ BaseNode::BaseNode(Shape *shape, QString name) {
         ambient.setY(0.5);
         ambient.setZ(0.5);
         ambient.setW(1.0);
+
+        proxy = NULL;
 }
 
 
@@ -44,10 +47,41 @@ BaseNode::~BaseNode() {
 }
 
 void BaseNode::addPoint(Vector3 from, Vector3 direction) {
-
+//    if (proxy) {
+//        proxy->addPoint(from,direction);
+//    }
+//    else {
         QVector<Vector3> points = intersectionPoints(from, direction);
-        sketchingSpline.addPoint(points[0]);
+        if (points.size() > 0) {
+            sketchingSpline.addPoint(points[0]);
+        }
+//    }
 
+}
+
+BaseNode * BaseNode::findIntersectingNode(Vector3 &from, Vector3 &direction, Vector3& point ) {
+    BaseNode * found = NULL;
+    float distance = FLT_MAX;
+    foreach(BaseNode* child , children) {
+        Vector3 p;
+        BaseNode * foundLast = child->findIntersectingNode(from, direction,p);
+        float distLast = (p - from).lenght();
+        if (foundLast != NULL && distLast < distance) {
+            found = foundLast;
+            distance = distLast;
+        }
+    }
+    if (found == NULL) {
+        QVector<Vector3> points = intersectionPoints(from, direction);
+        if (points.size() > 0) {
+            point = points[0];
+            return this;
+        } else {
+            return NULL;
+        }
+    } else {
+        return found;
+    }
 }
 
 void BaseNode::moveSketchingPointsToSpline() {
@@ -165,7 +199,11 @@ void BaseNode::drawSelf() {
 	if (shape != NULL) {
                 shape->drawLines(!visible);
                 if (visible) {
-                    shape->drawShape(ambient, diffuse);
+                    QVector4D color = diffuse;
+                    if (active) {
+                        color = QVector4D(1.0,0.0,0.0,1.0);
+                    }
+                    shape->drawShape(ambient, color);
                 }
 	}
         drawSplines();

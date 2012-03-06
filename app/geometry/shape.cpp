@@ -34,10 +34,10 @@ void Shape::drawLines(bool stipple) {
 void Shape::drawShape(QVector4D ambient, QVector4D diffuse) {
     float c[] = {diffuse.x(), diffuse.y(), diffuse.z(), diffuse.w() };
     glMaterialfv(GL_FRONT,GL_DIFFUSE,c);
-
-    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 64.0f );
-    glMaterialfv(GL_FRONT, GL_SPECULAR, c);
-    float a[] = {ambient.x(), ambient.y(), ambient.z(), ambient.w() };
+    float spec[] = {diffuse.x()+0.5, diffuse.y()+0.5, diffuse.z()+0.5, diffuse.w()};
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 128.0f );
+    glMaterialfv(GL_FRONT, GL_SPECULAR, spec);
+    float a[] = {diffuse.x()/3, diffuse.y()/3, diffuse.z()/3, ambient.w() };
     glMaterialfv(GL_FRONT,GL_AMBIENT,a);
 
     glEnableClientState(GL_VERTEX_ARRAY);

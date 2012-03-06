@@ -5,7 +5,7 @@
 
 class SurfaceNode;
 
-class RidgeNode : public BaseNode, ISurfaceFeature
+class RidgeNode : public BaseNode, public ISurfaceFeature
 {
 public:
     RidgeNode(RidgeNode& o) : BaseNode(o) {}
@@ -18,7 +18,13 @@ public:
     void makeWall();
 
     virtual void repositionOnSurface(SurfaceNode &surfacenode);
-    virtual void doTransformSurface(SurfaceNode &surfacenode);
+    virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows);
+
+    QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
+
+    void drawSelf();
+
+    void determineActionOnStoppedDrawing();
 
 
 private:

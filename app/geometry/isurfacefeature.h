@@ -1,11 +1,13 @@
 #ifndef ISURFACEFEATURE_H
 #define ISURFACEFEATURE_H
-#include "surfacenode.h"
+#include <QVector>
+#include "Vector3.h"
+class SurfaceNode;
 class ISurfaceFeature
 {
 public:
     ISurfaceFeature();
-    virtual void doTransformSurface(SurfaceNode & surfacenode) = 0;
+    virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows) = 0;
     virtual void repositionOnSurface(SurfaceNode & surfacenode) = 0;
 };
 

@@ -19,6 +19,7 @@ private:
     QMap<int,bool> mouse;
     int previousMouseX;
     int previousMouseY;
+    bool mouseMoved;
     float aspect;
     float move;
     QStack<Scene*> stack;

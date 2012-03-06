@@ -19,6 +19,13 @@ void SurfaceNode::prepareForDrawing()  {
     constructLayer();
 }
 
+void SurfaceNode::invalidate() {
+    hasContructedLayer = false;
+    if (shape != NULL)
+        delete shape;
+    shape = NULL;
+}
+
 void SurfaceNode::constructLayer() {
     if (hasContructedLayer) return;
 
@@ -52,6 +59,12 @@ void SurfaceNode::constructLayer() {
             row.push_back(point);
         }
         rows.push_back(row);
+    }
+
+    foreach (BaseNode * child , children) {
+        ISurfaceFeature * feature = dynamic_cast<ISurfaceFeature *>(child);
+        if (feature != NULL)
+            feature->doTransformSurface(rows);
     }
 
     //compute normals
@@ -227,6 +240,8 @@ void SurfaceNode::determineActionOnStoppedDrawing() {
 
 void SurfaceNode::makeRidgeNode() {
 
+    if (spline.points.size() < 2)
+        return;
     RidgeNode * ridge = new RidgeNode(spline);
     ridge->parent = this;
     children.append(ridge);
@@ -234,6 +249,17 @@ void SurfaceNode::makeRidgeNode() {
     spline.points.clear();
 
     ridge->makeWall();
+    proxy = ridge;
+
+    hasContructedLayer = false;
+    delete shape;
+    shape = NULL;
 
 
+}
+
+void SurfaceNode::drawChildren() {
+//    if (active) {
+        BaseNode::drawChildren();
+//    }
 }

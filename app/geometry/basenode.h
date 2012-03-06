@@ -7,6 +7,8 @@
 
 class BaseNode
 {
+protected:
+    bool active;
 public:
     Shape * shape;
     Vector3 position;
@@ -20,6 +22,8 @@ public:
 
     BaseNode * parent;
 
+    BaseNode * proxy;
+
     QVector4D diffuse;
     QVector4D ambient;
 
@@ -28,7 +32,7 @@ public:
     BaseNode(BaseNode &other)
         : shape(other.shape),position(other.position),
         spline(other.spline),sketchingSpline(other.sketchingSpline),
-        drawing(other.drawing),splineDone(other.splineDone),visible(other.visible), diffuse(other.diffuse), ambient(other.ambient)
+          drawing(other.drawing),splineDone(other.splineDone),visible(other.visible), diffuse(other.diffuse), ambient(other.ambient),proxy(NULL)
     {
         name = other.name;
         foreach(BaseNode* child, other.children) {
@@ -44,6 +48,21 @@ public:
         children.push_back(child);
     }
 
+    bool isActive() {
+        return active;
+    }
+
+    void setActive(bool a) {
+        if (a == false) {
+            foreach(BaseNode * child, children) {
+                child->setActive(a);
+            }
+        }
+        active = a;
+    }
+
+    BaseNode * findIntersectingNode(Vector3& from, Vector3& direction, Vector3& point);
+
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 
     /** adds a point to currend spline */
@@ -54,7 +73,7 @@ public:
     virtual void draw();
 
     virtual void drawSelf();
-    void drawChildren();
+    virtual void drawChildren();
     virtual void prepareForDrawing() {
 
     }
