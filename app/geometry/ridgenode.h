@@ -7,8 +7,11 @@ class SurfaceNode;
 
 class RidgeNode : public BaseNode, public ISurfaceFeature
 {
+private:
+    Spline baseSpline;
+    Spline crossSpline;
 public:
-    RidgeNode(RidgeNode& o) : BaseNode(o) {}
+    RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), crossSpline(o.crossSpline) {}
     RidgeNode(Spline& spline);
 
     virtual BaseNode * copy() {
@@ -27,8 +30,7 @@ public:
     void determineActionOnStoppedDrawing();
 
 
-private:
-    Spline baseSpline;
+
 };
 
 #endif // RIDGENODE_H

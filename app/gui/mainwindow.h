@@ -6,6 +6,7 @@
 #include <QComboBox>
 #include "scene.h"
 #include "sketchglwidget.h"
+#include "sketchpad.h"
 
 namespace Ui {
     class MainWindow;

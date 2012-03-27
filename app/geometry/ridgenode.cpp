@@ -40,7 +40,7 @@ void RidgeNode::determineActionOnStoppedDrawing() {
 }
 
 void RidgeNode::makeWall() {
-
+    this->diffuse = QVector4D(0.5,0.3,0.3,0.5);
     QVector<Vector3> triangles;
     QVector<Vector3> normals;
 
@@ -98,6 +98,8 @@ void RidgeNode::makeWall() {
 
 
 void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows) {
+    if (baseSpline.points.size() < 2 || spline.points.size() < 2) return;
+
     QVector<Vector3> pointsOnRidge;
     QVector<float> heightsOfRidge;
     for (float i=0.0; i < 1.01; i+=0.01) {

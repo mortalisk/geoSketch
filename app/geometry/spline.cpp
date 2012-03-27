@@ -20,6 +20,21 @@ int Spline::findNearestPoint(Vector3 searchPoint) {
         return nearest;
 }
 
+void Spline::smooth() {
+    if (this->points.size()<1) return;
+    QVector<Vector3> newPoints;
+    for (float p = 0; p <1.001;p+=0.01) {
+        QVector<Vector3> points = this->points;
+        for (int i = 1; i< points.size(); ++i) {
+            for (int j = 0;j <points.size()-i;++j) {
+                points[j] = points[j]*(1-p) + points[j+1]*p;
+            }
+        }
+        newPoints.push_back(points[0]);
+    }
+    this->points = newPoints;
+}
+
 Vector3 Spline::getPoint(float at) {
     if (at > 1.0) {
         at = 1.0;

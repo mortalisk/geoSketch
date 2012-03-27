@@ -182,13 +182,14 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
     mouse[e->button()] = false;
 
 
-    scene->activeNode->determineActionOnStoppedDrawing();
+
     if (!mouseMoved && e->button() == Qt::RightButton) {
         Vector3 dir = findMouseDirection(e);
         scene->selectActiveNode(scene->camera.position, dir);
     }
 
-    if (e->button() == Qt::LeftButton) {
+    if (mouseMoved && e->button() == Qt::LeftButton) {
+        scene->activeNode->determineActionOnStoppedDrawing();
         std::cout << "pushing scene to stack" << std::endl;
 
         pushScene();

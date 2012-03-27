@@ -18,6 +18,7 @@ public:
         isSuggestion = false;
     }
 
+    void smooth();
     Vector3 getPoint(float at);
 
     void changeLastPoint(Vector3 pos) {

@@ -10,6 +10,8 @@ class SurfaceNode : public BaseNode
     // this vairable enables contruction of triangles before drawing
     // in stead of when copying which made interaction laggy
     bool hasContructedLayer;
+
+    void makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>& normals, QVector<Vector3>& triangles);
 public:
     void invalidate();
     SurfaceNode(QString name, Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below = NULL);
@@ -24,6 +26,8 @@ public:
     void makeRidgeNode();
 
     void drawChildren();
+
+    QVector<Vector3> triangulatePolygon(QVector<Vector3> vertices);
 };
 
 #endif // SURFACENODE_H

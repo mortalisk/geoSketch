@@ -9,6 +9,7 @@
 #include <QComboBox>
 #include <QCheckBox>
 #include <QColorDialog>
+#include <QDockWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,6 +41,21 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(layerChooser,SIGNAL(activated(int)), gl, SLOT(setLayer(int)));
     QObject::connect(toggleVisibility,SIGNAL(activated()), this, SLOT(toggleVisibility()));
     QObject::connect(colorButton,SIGNAL(activated()), this, SLOT(setColor()));
+
+    QDockWidget * sketchDock = new QDockWidget();
+    SketchPad * sketchPadSlice = new SketchPad();
+    SketchPad * sketchPadProfile = new SketchPad();
+    QLayout * sketchLayout = new QVBoxLayout();
+    QWidget * sketchWidget = new QWidget();
+    sketchWidget->setMinimumWidth(200);
+    sketchWidget->setLayout(sketchLayout);
+    sketchDock->setWidget(sketchWidget);
+
+    sketchLayout->addWidget(sketchPadSlice);
+    sketchLayout->addWidget(sketchPadProfile);
+    sketchLayout->addWidget(new QPushButton("hei"));
+
+    this->addDockWidget(Qt::RightDockWidgetArea, sketchDock);
 
     mainLayout->addWidget(gl);
 }

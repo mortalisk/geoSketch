@@ -136,12 +136,14 @@ void BaseNode::determineActionOnStoppedDrawing() {
 }
 
 void BaseNode::correctSketchingDirection() {
-
     bool isOpposite = spline.isLeftToRight() != sketchingSpline.isLeftToRight();
 
     if (isOpposite) {
         std::reverse(sketchingSpline.points.begin(), sketchingSpline.points.end());
     }
+
+
+    sketchingSpline.smooth();
 }
 
 BaseNode * BaseNode::makeLayer() {
@@ -201,7 +203,7 @@ void BaseNode::drawSelf() {
                 if (visible) {
                     QVector4D color = diffuse;
                     if (active) {
-                        color = QVector4D(1.0,0.0,0.0,1.0);
+                        color = QVector4D(1.0,0.0,0.0,color.w());
                     }
                     shape->drawShape(ambient, color);
                 }
@@ -216,9 +218,11 @@ void BaseNode::draw() {
     glPushMatrix();
 
     prepareForDrawing();
-    drawChildren();
 
     drawSelf();
+    drawChildren();
+
+
 
 
     glPopMatrix();

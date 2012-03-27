@@ -1,6 +1,7 @@
 #include "surfacenode.h"
 #include "surface.h"
 #include "ridgenode.h"
+#include "util.h"
 
 SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false)
 {
@@ -24,6 +25,50 @@ void SurfaceNode::invalidate() {
     if (shape != NULL)
         delete shape;
     shape = NULL;
+}
+
+void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>& normals, QVector<Vector3>& triangles) {
+
+    QVector<Vector3> front1, front2;
+    for(float i = 0.0; i < 1.0; i+= 0.02) {
+        Vector3 a = belowSpline.getPoint(i);
+        Vector3 b = belowSpline.getPoint(i+0.02);
+
+        Vector3 c = spline.getPoint(i);
+        Vector3 d = spline.getPoint(i+0.02);
+
+        front1.push_back(a);
+        front2.push_back(c);
+
+    }
+    for (int i = front2.size()-1; i>= 0; --i) {
+        front1.push_back(front2[i]);
+    }
+
+    front2.clear();
+    Axis axis = X;
+    bool similarZ = similar(front1[0].z(),front1[front1.size()-1].z(),front1[2].z());
+    if (similarZ) {
+        axis = Z;
+    }
+
+    triangulate(front1,front2, axis);
+
+
+    for (int i = 0; i < front2.size(); i+=3) {
+        Vector3 a = front2[i];
+        Vector3 b = front2[i+1];
+        Vector3 c = front2[i+2];
+        Vector3 normal = (b-a).cross(c-a).normalize();
+
+        normals.push_back(normal);
+        normals.push_back(normal);
+        normals.push_back(normal);
+        triangles.push_back(a);
+        triangles.push_back(b);
+        triangles.push_back(c);
+    }
+
 }
 
 void SurfaceNode::constructLayer() {
@@ -147,89 +192,19 @@ void SurfaceNode::constructLayer() {
     }
 
     if (below) {
-        for(float i = 0.0; i < 1.0; i+= 0.02) {
-            Vector3 a = below->front.getPoint(i);
-            Vector3 b = below->front.getPoint(i+0.02);
-
-            Vector3 c = front.getPoint(i);
-            Vector3 d = front.getPoint(i+0.02);
-            Vector3 normal = (b-a).cross(c-a).normalize();
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            triangles.push_back(a);
-            triangles.push_back(b);
-            triangles.push_back(c);
-            triangles.push_back(c);
-            triangles.push_back(b);
-            triangles.push_back(d);
-        }
-        for(float i = 0.0; i < 1.0; i+= 0.02) {
-            Vector3 a = below->right.getPoint(i);
-            Vector3 b = below->right.getPoint(i+0.02);
-
-            Vector3 c = right.getPoint(i);
-            Vector3 d = right.getPoint(i+0.02);
-            Vector3 normal = (b-a).cross(c-a).normalize();
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            triangles.push_back(a);
-            triangles.push_back(b);
-            triangles.push_back(c);
-            triangles.push_back(c);
-            triangles.push_back(b);
-            triangles.push_back(d);
-        }
-        for(float i = 0.0; i < 1.0; i+= 0.02) {
-            Vector3 a = below->back.getPoint(i);
-            Vector3 b = below->back.getPoint(i+0.02);
-
-            Vector3 c = back.getPoint(i);
-            Vector3 d = back.getPoint(i+0.02);
-            Vector3 normal = (b-a).cross(c-a).normalize();
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            triangles.push_back(a);
-            triangles.push_back(b);
-            triangles.push_back(c);
-            triangles.push_back(c);
-            triangles.push_back(b);
-            triangles.push_back(d);
-        }
-        for(float i = 0.0; i < 1.0; i+= 0.02) {
-            Vector3 a = below->left.getPoint(i);
-            Vector3 b = below->left.getPoint(i+0.02);
-
-            Vector3 c = left.getPoint(i);
-            Vector3 d = left.getPoint(i+0.02);
-            Vector3 normal = (b-a).cross(c-a).normalize();
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            normals.push_back(normal);
-            triangles.push_back(a);
-            triangles.push_back(b);
-            triangles.push_back(c);
-            triangles.push_back(c);
-            triangles.push_back(b);
-            triangles.push_back(d);
-        }
+        makeSide(below->front, front, normals, triangles);
+        makeSide(below->left, left, normals, triangles);
+        makeSide(below->back, back, normals, triangles);
+        makeSide(below->right, right, normals, triangles);
     }
+
+
     hasContructedLayer = true;
     shape = new Surface(triangles, normals, outline);
+}
+
+QVector<Vector3> SurfaceNode::triangulatePolygon(QVector<Vector3> vertices) {
+
 }
 
 void SurfaceNode::determineActionOnStoppedDrawing() {
