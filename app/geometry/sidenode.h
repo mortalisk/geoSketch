@@ -22,7 +22,7 @@ public:
         return new SideNode(*this);
     }
 
-    void projectPoints(Vector3 diff,QVector<Vector3>& points) {
+    void projectPoints(Vector3 diff,const QVector<Vector3>& points) {
 
         foreach(const Vector3& point, points) {
                 spline.addPoint(point+diff);
@@ -32,7 +32,7 @@ public:
     bool isPointNearerSide(Vector3 &point, int indexInSpline) {
         Vector3 leftSide(lowerLeft.x(), point.y(), lowerLeft.z());
         Vector3 rightSide(lowerRigth.x(), point.y(), lowerRigth.z());
-        Vector3& inSpline = spline.points[indexInSpline];
+        const Vector3& inSpline = spline.getPoints()[indexInSpline];
 
         float distLeft = (leftSide-point).lenght();
         float distRight = (rightSide-point).lenght();
@@ -43,7 +43,7 @@ public:
     void addInterpolatedSuggestion(float yLeft, float yRight) {
         ensureLeftToRigth();
         if(spline.isSuggestion) {
-            spline.points.clear();
+            spline.clear();
 
             Vector3 pointA(lowerLeft.x(), yLeft, lowerLeft.z());
             Vector3 pointB(lowerRigth.x(), yRight, lowerRigth.z());
@@ -53,23 +53,24 @@ public:
             }
             spline.isSuggestion = true;
         }else {
-            Vector3 first = spline.points[0];
-            Vector3 last = spline.points[spline.points.size()-1];
+            const QVector<Vector3> & points = spline.getPoints();
+            const Vector3& first = points[0];
+            Vector3 last = points[points.size()-1];
             float length = 0.0;
-            for (int i = 1; i< spline.points.size();++i) {
-                length += (spline.points[i-1]-spline.points[i]).lenght();
+            for (int i = 1; i< points.size();++i) {
+                length += (points[i-1]-points[i]).lenght();
             }
             float along = 0.0;
             Vector3 previous = first;
-            for (int i = 0; i <spline.points.size(); ++i) {
-                along += (previous-spline.points[i]).lenght();
-                previous = spline.points[i];
+            for (int i = 0; i <points.size(); ++i) {
+                along += (previous-points[i]).lenght();
+                previous = points[i];
                 float w = along/length;
                 float targetY = yLeft*(1.0-w) + yRight*w;
                 float lineY = first.y()*(1.0-w)+last.y()*w;
-                float diff = spline.points[i].y() - lineY;
+                float diff = points[i].y() - lineY;
                 float newY = targetY + diff;
-                spline.points[i] = Vector3(spline.points[i].x(), newY, spline.points[i].z());
+                spline.setPoint(i, Vector3(points[i].x(), newY, points[i].z()));
             }
         }
     }
@@ -80,7 +81,7 @@ public:
 
     void ensureLeftToRigth() {
         if (!spline.isLeftToRight()) {
-            std::reverse(spline.points.begin(),spline.points.end());
+            spline.reverse();
         }
     }
 

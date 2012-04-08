@@ -55,7 +55,7 @@ MainWindow::MainWindow(QWidget *parent) :
     sketchLayout->addWidget(sketchPadProfile);
     sketchLayout->addWidget(new QPushButton("hei"));
 
-    this->addDockWidget(Qt::RightDockWidgetArea, sketchDock);
+    //this->addDockWidget(Qt::RightDockWidgetArea, sketchDock);
 
     mainLayout->addWidget(gl);
 }

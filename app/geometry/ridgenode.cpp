@@ -2,14 +2,16 @@
 #include "surfacenode.h"
 #include "surface.h"
 
-RidgeNode::RidgeNode(Spline& spline) : BaseNode("rigde")
+RidgeNode::RidgeNode(QVector<QPointF> uv, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uv)
 {
-    this->spline.points += spline.points;
-    this->baseSpline.points += spline.points;
-    for(int i = 0;i< spline.points.size(); ++i) {
-        float distanceFromMiddle = fabs(i-spline.points.size()/2.0)/spline.points.size();
-        Vector3 & point = this->spline.points[i];
-        point = Vector3(point.x(), point.y()+0.5-distanceFromMiddle, point.z());
+    for (int i = 0; i<uv.size(); ++i) {
+        Vector3 point = parent->getPointFromUv(uv[i]);
+        baseSpline.addPoint(point);
+
+        float distanceFromMiddle = fabs(i-uv.size()/2.0)/uv.size();
+        heights.push_back(0.5-distanceFromMiddle);
+        spline.addPoint(Vector3(point.x(), point.y() + 0.5-distanceFromMiddle, point.z()));
+
     }
 }
 
@@ -46,18 +48,18 @@ void RidgeNode::makeWall() {
 
     Spline& spline = baseSpline;
 
-    for (int i = 0 ; i < spline.points.size(); ++i) {
-        Vector3 & current = spline.points[i];
+    for (int i = 0 ; i < spline.getPoints().size(); ++i) {
+        const Vector3 & current = spline.getPoints()[i];
         Vector3 previous, next;
         if (i == 0) {
             previous = current;
         }else {
-            previous = spline.points[i-1];
+            previous = spline.getPoints()[i-1];
         }
-        if (i == spline.points.size() -1) {
+        if (i == spline.getPoints().size() -1) {
             next = current;
         }else {
-            next = spline.points[i+1];
+            next = spline.getPoints()[i+1];
         }
         Vector3 up(0, 5, 0);
         Vector3 normal = (next-previous).cross(up).normalize();
@@ -97,8 +99,14 @@ void RidgeNode::makeWall() {
 }
 
 
-void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows) {
-    if (baseSpline.points.size() < 2 || spline.points.size() < 2) return;
+void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution) {
+    if (baseSpline.getPoints().size() < 2 || spline.getPoints().size() < 2) return;
+
+//    float uvLength = 0.0;
+//    for (int i = 0; i< uv.size();++i) {
+//        float heigth = heights[i];
+//        rows
+//    }
 
     QVector<Vector3> pointsOnRidge;
     QVector<float> heightsOfRidge;

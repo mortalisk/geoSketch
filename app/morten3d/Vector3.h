@@ -65,7 +65,7 @@ public:
 
 	Vector3 operator-() const {
 		return Vector3(-xvalue, -yvalue, -zvalue);
-	}
+        }
 
 	Vector3 operator*(double v) const {
 		return Vector3(xvalue * v, yvalue * v, zvalue * v);

@@ -151,15 +151,15 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 
 void BoxNode::determineActionOnStoppedDrawing() {
         if (activeSurface == topNode||activeSurface == bottomNode){
-            activeSurface->spline.points.clear();
-            activeSurface->sketchingSpline.points.clear();
+            activeSurface->spline.clear();
+            activeSurface->sketchingSpline.clear();
             activeSurface = NULL;
             return;
         }
 	if (activeSurface) {
             activeSurface->correctSketchingDirection();
 
-            if (activeSurface->spline.points.size() == 0) {
+            if (activeSurface->spline.getPoints().size() == 0) {
                 activeSurface->moveSketchingPointsToSpline();
             } else {
                 activeSurface->doOversketch();
@@ -177,11 +177,11 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
 
 
     if (side->opposite->spline.isSuggestion && side->left->spline.isSuggestion && side->right->spline.isSuggestion) {
-        side->opposite->spline.points.clear();
+        side->opposite->spline.clear();
 
         // project points from this side to opposite
         Vector3 direction = side->opposite->lowerRigth - side->lowerLeft;
-        side->opposite->projectPoints(direction, side->spline.points);
+        side->opposite->projectPoints(direction, side->spline.getPoints());
 
         side->opposite->spline.isSuggestion = true;
     }
@@ -205,8 +205,8 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
 
 BaseNode* BoxNode::makeLayer() {
 
-    if (frontNode->spline.points.size() < 1||rightNode->spline.points.size() <1
-            ||backNode->spline.points.size() <1||leftNode->spline.points.size() <1)
+    if (frontNode->spline.getPoints().size() < 1||rightNode->spline.getPoints().size() <1
+            ||backNode->spline.getPoints().size() <1||leftNode->spline.getPoints().size() <1)
         return this;
 
     SurfaceNode * below = NULL;
@@ -231,7 +231,7 @@ BaseNode* BoxNode::makeLayer() {
     children.append(n);
 
     foreach(SideNode* s, surfaces) {
-        s->spline.points.clear();
+        s->spline.clear();
         s->spline.isSuggestion = true;
     }
 

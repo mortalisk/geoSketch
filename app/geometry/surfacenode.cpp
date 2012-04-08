@@ -3,12 +3,12 @@
 #include "ridgenode.h"
 #include "util.h"
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false)
+SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false),resolution(0.02)
 {
     //constructLayer();
 }
 
-SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) ,front(other.front), right(other.right), back(other.back), left(other.left), below(other.below), hasContructedLayer(false){
+SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) ,front(other.front), right(other.right), back(other.back), left(other.left), below(other.below), hasContructedLayer(false), resolution(other.resolution){
 
 }
 
@@ -84,15 +84,16 @@ void SurfaceNode::constructLayer() {
     Vector3 backLeft = left.getPoint(0.0);
     Vector3 backRight = right.getPoint(1.0);
 
-    QVector < QVector < Vector3 > > rows;
-    for (double zi = 0.0;zi<=1.01;zi+=0.02) {
+    rows.clear();
+
+    for (double zi = 0.0;zi<=1.01;zi+=resolution) {
         QVector<Vector3> row;
         Vector3 rowLeft = frontLeft*(1.0-zi) + backLeft *(zi);
         Vector3 rowRigth = frontRight*(1.0-zi) + backRight * (zi);
 
         Vector3 leftp = left.getPoint(1.0-zi);
         Vector3 rightp = right.getPoint(zi);
-        for (double xi = 0.0;xi<=1.01;xi+=0.02) {
+        for (double xi = 0.0;xi<=1.01;xi+=resolution) {
             Vector3 colInt = rowLeft * (1.0-xi) + rowRigth * xi;
             Vector3 frontp = front.getPoint(xi);
             Vector3 backp = back.getPoint(1.0-xi);
@@ -109,7 +110,7 @@ void SurfaceNode::constructLayer() {
     foreach (BaseNode * child , children) {
         ISurfaceFeature * feature = dynamic_cast<ISurfaceFeature *>(child);
         if (feature != NULL)
-            feature->doTransformSurface(rows);
+            feature->doTransformSurface(rows, resolution);
     }
 
     //compute normals
@@ -203,10 +204,6 @@ void SurfaceNode::constructLayer() {
     shape = new Surface(triangles, normals, outline);
 }
 
-QVector<Vector3> SurfaceNode::triangulatePolygon(QVector<Vector3> vertices) {
-
-}
-
 void SurfaceNode::determineActionOnStoppedDrawing() {
     BaseNode::determineActionOnStoppedDrawing();
 
@@ -215,13 +212,14 @@ void SurfaceNode::determineActionOnStoppedDrawing() {
 
 void SurfaceNode::makeRidgeNode() {
 
-    if (spline.points.size() < 2)
+    if (spline.getPoints().size() < 2)
         return;
-    RidgeNode * ridge = new RidgeNode(spline);
+    RidgeNode * ridge = new RidgeNode(uvCoordinateSpline, this);
     ridge->parent = this;
     children.append(ridge);
 
-    spline.points.clear();
+    spline.clear();
+    sketchingSpline.clear();
 
     ridge->makeWall();
     proxy = ridge;
@@ -231,6 +229,138 @@ void SurfaceNode::makeRidgeNode() {
     shape = NULL;
 
 
+}
+
+int intersect(Vector3& p, Vector3& dir, Vector3& v0, Vector3& v1, Vector3& v2, Vector3* I, float* sp, float* tp) {
+    // hentet fra http://softsurfer.com/Archive/algorithm_0105/algorithm_0105.htm#intersect_RayTriangle%28%29
+
+    Vector3    u, v, n;             // triangle vectors
+    Vector3    w0, w;          // ray vectors
+    float      r, a, b;             // params to calc ray-plane intersect
+
+    // get triangle edge vectors and plane normal
+    u = v1 - v0;
+    v = v2 - v0;
+    n = u.cross(v);             // cross product
+    if (n.x() == 0 && n.y()== 0 && n.z() == 0)            // triangle is degenerate
+        return -1;               // do not deal with this case
+
+    //dir = R.P1 - R.P0;             // ray direction vector
+    w0 = p - v0;
+    a = -(n * w0);
+    b = n * dir;
+    if (fabs(b) < 0.01) {     // ray is parallel to triangle plane
+        if (a == 0)                // ray lies in triangle plane
+            return 2;
+        else return 0;             // ray disjoint from plane
+    }
+
+    // get intersect point of ray with triangle plane
+    r = a / b;
+    if (r < 0.0)                   // ray goes away from triangle
+        return 0;                  // => no intersect
+    // for a segment, also test if (r > 1.0) => no intersect
+
+    *I = p + r *dir;           // intersect point of ray and plane
+
+    // is I inside T?
+    float    uu, uv, vv, wu, wv, D;
+    uu = u*u;
+    uv = u*v;
+    vv = v*v;
+    w = *I - v0;
+    wu = w*u;
+    wv = w*v;
+    D = uv * uv - uu * vv;
+
+    // get and test parametric coords
+    float s, t;
+    s = (uv * wv - vv * wu) / D;
+    *sp = s;
+    if (s < 0.0 || s > 1.0)        // I is outside T
+        return 0;
+    t = (uv * wu - uu * wv) / D;
+    *tp = t;
+    if (t < 0.0 || (s + t) > 1.0)  // I is outside T
+        return 0;
+
+    return 1;                      // I is in T
+}
+
+void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
+    QVector<Vector3> cand;
+    QVector<QPointF> uvCand;
+    for (int i = 0; i < rows.size()-1; ++i) {
+        for (int j = 0; j < rows[0].size()-1; j++) {
+            Vector3& a = rows[i][j];
+            Vector3& b = rows[i][j+1];
+            Vector3& c = rows[i+1][j];
+            Vector3& d = rows[i+1][j+1];
+
+            Vector3 result;
+            int r;
+            float s,t;
+            r = intersect(from, direction, a, b, c,&result, &s, &t);
+            if (r==1) {
+                cand.push_back(result);
+                s*=resolution;
+                t*=resolution;
+                uvCand.push_back(QPointF(j*resolution+s, i*resolution+t));
+            }
+
+            r = intersect(from, direction, d, c, b,&result, &s, &t);
+            if (r==1) {
+                cand.push_back(result);
+                s = 1.0-s;
+                t = 1.0-t;
+                s*=resolution;
+                t*=resolution;
+                uvCand.push_back(QPointF(j*resolution+s, i*resolution+t));
+            }
+
+        }
+    }
+    float nearestDist = 10000000;
+    int nearest = -1;
+    for (int i = 0; i< cand.size(); ++i) {
+        float dist = (cand[i]-from).lenght();
+        if (dist < nearestDist) {
+            nearest = i;
+            nearestDist = dist;
+        }
+    }
+
+    if (nearest != -1) {
+        sketchingSpline.addPoint(cand[nearest]);
+        uvCoordinateSpline.push_back(uvCand[nearest]);
+    }
+}
+
+Vector3 SurfaceNode::getPointFromUv(QPointF uv) {
+    Vector3 frontRight = right.getPoint(0.0);
+    Vector3 frontLeft = left.getPoint(1.0);
+    Vector3 backLeft = left.getPoint(0.0);
+    Vector3 backRight = right.getPoint(1.0);
+
+    float xi = uv.x();
+    float zi = uv.y();
+
+
+    Vector3 rowLeft = frontLeft*(1.0-zi) + backLeft *(zi);
+    Vector3 rowRigth = frontRight*(1.0-zi) + backRight * (zi);
+
+    Vector3 leftp = left.getPoint(1.0-zi);
+    Vector3 rightp = right.getPoint(zi);
+
+    Vector3 colInt = rowLeft * (1.0-xi) + rowRigth * xi;
+    Vector3 frontp = front.getPoint(xi);
+    Vector3 backp = back.getPoint(1.0-xi);
+    Vector3 frontBack = frontp*(1.0-zi)+backp*zi;
+    Vector3 diff = frontBack - colInt;
+
+    Vector3 leftRight = leftp*(1.0-xi) + rightp*xi;
+    Vector3 point = leftRight + diff;
+    return point;
 }
 
 void SurfaceNode::drawChildren() {

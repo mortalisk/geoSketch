@@ -5,17 +5,49 @@
 #include "morten3d/Vector3.h"
 #include <algorithm>
 #include "shape.h"
+#include <QMap>
 class node;
 
 class Spline : public Shape
 {
 
-public:
     QVector<Vector3> points;
+public:
     bool isSuggestion;
+    QMap<float, Vector3> pointsCache;
     void addPoint(Vector3 point) {
         points.append(point);
         isSuggestion = false;
+        pointsCache.clear();
+    }
+
+    void addPointFront(Vector3 point) {
+        points.push_front(point);
+        isSuggestion = false;
+        pointsCache.clear();
+    }
+
+    void addAll(const QVector<Vector3> & a) {
+        points += a;
+    }
+
+    const QVector<Vector3>& getPoints() {
+        return points;
+    }
+
+    void setPoint(int i, Vector3 value) {
+        points[i] = value;
+        pointsCache.clear();
+    }
+
+    void reverse() {
+        std::reverse(points.begin(),points.end());
+        pointsCache.clear();
+    }
+
+    void clear() {
+        points.clear();
+        pointsCache.clear();
     }
 
     void smooth();
@@ -23,6 +55,7 @@ public:
 
     void changeLastPoint(Vector3 pos) {
         points[points.size()-1] = pos;
+        pointsCache.clear();
     }
 
     Vector3 lastPoint() {

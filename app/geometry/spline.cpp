@@ -33,6 +33,7 @@ void Spline::smooth() {
         newPoints.push_back(points[0]);
     }
     this->points = newPoints;
+    pointsCache.clear();
 }
 
 Vector3 Spline::getPoint(float at) {
@@ -40,6 +41,9 @@ Vector3 Spline::getPoint(float at) {
         at = 1.0;
     }else if (at < 0.0) {
         at = 0.0;
+    }
+    if (pointsCache.contains(at)) {
+        return pointsCache[at];
     }
 
     float length = 0.0;
@@ -59,6 +63,7 @@ Vector3 Spline::getPoint(float at) {
             return r;
         }
     }
+    pointsCache.insert(at,r);
     return r;
 
 }

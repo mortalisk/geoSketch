@@ -85,19 +85,19 @@ BaseNode * BaseNode::findIntersectingNode(Vector3 &from, Vector3 &direction, Vec
 }
 
 void BaseNode::moveSketchingPointsToSpline() {
-   spline.points.clear();
-   spline.points += sketchingSpline.points;
-   sketchingSpline.points.clear();
+   spline.clear();
+   spline.addAll(sketchingSpline.getPoints());
+   sketchingSpline.clear();
 }
 
 void BaseNode::doOversketch() {
-    if (sketchingSpline.points.size() < 2) {
-        sketchingSpline.points.clear();
+    if (sketchingSpline.getPoints().size() < 2) {
+        sketchingSpline.clear();
         return;
     }
-    Vector3 first = sketchingSpline.points[0];
+    Vector3 first = sketchingSpline.getPoints()[0];
     int nearestFirst = spline.findNearestPoint(first);
-    Vector3 last = sketchingSpline.points[sketchingSpline.points.size() - 1];
+    Vector3 last = sketchingSpline.getPoints()[sketchingSpline.getPoints().size() - 1];
     int nearestLast = spline.findNearestPoint(last);
 
     oversketchSide(first, nearestFirst, true);
@@ -113,12 +113,12 @@ void BaseNode::oversketchSide(Vector3& pointInSketch, int nearest, bool first) {
     if (nearest != 0) {
         if (first) {
             for (int i = nearest; i >= 0; --i) {
-                sketchingSpline.points.push_front(spline.points[i]);
+                sketchingSpline.addPointFront(spline.getPoints()[i]);
             }
         }else {
-            for (int i = nearest; i < spline.points.size()-1; ++i) {
+            for (int i = nearest; i < spline.getPoints().size()-1; ++i) {
 
-                sketchingSpline.points.push_back(spline.points[i]);
+                sketchingSpline.addPoint(spline.getPoints()[i]);
             }
         }
     }
@@ -139,7 +139,7 @@ void BaseNode::correctSketchingDirection() {
     bool isOpposite = spline.isLeftToRight() != sketchingSpline.isLeftToRight();
 
     if (isOpposite) {
-        std::reverse(sketchingSpline.points.begin(), sketchingSpline.points.end());
+        sketchingSpline.reverse();
     }
 
 
@@ -172,8 +172,8 @@ void BaseNode::drawSplines() {
 }
 
 void BaseNode::drawSpline(Spline & spline, float r) {
-	if (spline.points.size() >= 1) {
-		for (int i = 0; i < spline.points.size() - 1; ++i) {
+        if (spline.getPoints().size() >= 1) {
+                for (int i = 0; i < spline.getPoints().size() - 1; ++i) {
 
 			glLineWidth(2.0f);
                         glPointSize(3.0f);
@@ -181,14 +181,14 @@ void BaseNode::drawSpline(Spline & spline, float r) {
 
                         float c[4] = {0.0,0.0,0.0,1.0};
                         glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, c);
-                        glVertex3f(spline.points[i].x(),spline.points[i].y(),spline.points[i].z());
+                        glVertex3f(spline.getPoints()[i].x(),spline.getPoints()[i].y(),spline.getPoints()[i].z());
                         glEnd();
 			glBegin(GL_LINES);
                         glColor3f(r, 0, 0);
-			glVertex3d(spline.points[i].x(), spline.points[i].y(),
-					spline.points[i].z());
-			glVertex3d(spline.points[i + 1].x(), spline.points[i + 1].y(),
-					spline.points[i + 1].z());
+                        glVertex3d(spline.getPoints()[i].x(), spline.getPoints()[i].y(),
+                                        spline.getPoints()[i].z());
+                        glVertex3d(spline.getPoints()[i + 1].x(), spline.getPoints()[i + 1].y(),
+                                        spline.getPoints()[i + 1].z());
 			glEnd();
 		}
 	}

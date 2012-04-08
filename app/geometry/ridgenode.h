@@ -10,9 +10,12 @@ class RidgeNode : public BaseNode, public ISurfaceFeature
 private:
     Spline baseSpline;
     Spline crossSpline;
+    QVector<QPointF> uv;
+    QVector<float> heights;
+    SurfaceNode* surfaceNode;
 public:
-    RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), crossSpline(o.crossSpline) {}
-    RidgeNode(Spline& spline);
+    RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), crossSpline(o.crossSpline), uv(o.uv) {}
+    RidgeNode(QVector<QPointF> uv, SurfaceNode* parent);
 
     virtual BaseNode * copy() {
         return new RidgeNode(*this);
@@ -21,7 +24,7 @@ public:
     void makeWall();
 
     virtual void repositionOnSurface(SurfaceNode &surfacenode);
-    virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows);
+    virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution);
 
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
 

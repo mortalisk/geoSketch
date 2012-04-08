@@ -52,8 +52,9 @@ void SideNode::setLeft(SideNode *node) {
 void SideNode::makeSuggestionLines() {
 
     ensureLeftToRigth();
-    Vector3 first = spline.points[0];
-    Vector3 last = spline.points[spline.points.size()-1];
+    const QVector<Vector3> & points = spline.getPoints();
+    Vector3 first = points[0];
+    Vector3 last = points[points.size()-1];
     Vector3 left(lowerLeft.x(),first.y(),lowerLeft.z());
     Vector3 right(lowerRigth.x(),last.y(),lowerRigth.z());
 
@@ -66,7 +67,7 @@ void SideNode::makeSuggestionLines() {
         float lInc = ldist/lPoints;
         for (float i = lInc; i< lPoints+lInc; i+=lInc) {
             if (i > lPoints) i= lPoints;
-            spline.points.push_front(interpolate(left, first, i/lPoints));
+            spline.addPointFront(interpolate(left, first, i/lPoints));
             if (i == lPoints) break;
         }
     }
@@ -75,7 +76,7 @@ void SideNode::makeSuggestionLines() {
         float rInc = rdist/rPoints;
         for (float i = rInc; i< rPoints+rInc; i+=rInc) {
             if (i > rPoints) i= rPoints;
-            spline.points.push_back(interpolate(right, last,i/rPoints));
+            spline.addPoint(interpolate(right, last,i/rPoints));
             if (i == rPoints) break;
         }
     }

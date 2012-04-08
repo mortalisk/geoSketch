@@ -175,4 +175,6 @@ bool similar(float a, float b, float c) {
     return similar(a,b) && similar(b,c);
 }
 
+
+
 #endif // UTIL_H
