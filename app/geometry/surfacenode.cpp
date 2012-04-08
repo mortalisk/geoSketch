@@ -289,7 +289,7 @@ int intersect(Vector3& p, Vector3& dir, Vector3& v0, Vector3& v1, Vector3& v2, V
 
 void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
     QVector<Vector3> cand;
-    QVector<QPointF> uvCand;
+    QVector<QVector2D> uvCand;
     for (int i = 0; i < rows.size()-1; ++i) {
         for (int j = 0; j < rows[0].size()-1; j++) {
             Vector3& a = rows[i][j];
@@ -305,7 +305,7 @@ void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
                 cand.push_back(result);
                 s*=resolution;
                 t*=resolution;
-                uvCand.push_back(QPointF(j*resolution+s, i*resolution+t));
+                uvCand.push_back(QVector2D(j*resolution+s, i*resolution+t));
             }
 
             r = intersect(from, direction, d, c, b,&result, &s, &t);
@@ -315,7 +315,7 @@ void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
                 t = 1.0-t;
                 s*=resolution;
                 t*=resolution;
-                uvCand.push_back(QPointF(j*resolution+s, i*resolution+t));
+                uvCand.push_back(QVector2D(j*resolution+s, i*resolution+t));
             }
 
         }
@@ -336,7 +336,7 @@ void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
     }
 }
 
-Vector3 SurfaceNode::getPointFromUv(QPointF uv) {
+Vector3 SurfaceNode::getPointFromUv(QVector2D uv) {
     Vector3 frontRight = right.getPoint(0.0);
     Vector3 frontLeft = left.getPoint(1.0);
     Vector3 backLeft = left.getPoint(0.0);

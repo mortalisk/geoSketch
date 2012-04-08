@@ -1,8 +1,9 @@
 #include "ridgenode.h"
 #include "surfacenode.h"
 #include "surface.h"
+#include <QVector2D>
 
-RidgeNode::RidgeNode(QVector<QPointF> uv, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uv)
+RidgeNode::RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uv)
 {
     for (int i = 0; i<uv.size(); ++i) {
         Vector3 point = parent->getPointFromUv(uv[i]);
@@ -102,44 +103,9 @@ void RidgeNode::makeWall() {
 void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution) {
     if (baseSpline.getPoints().size() < 2 || spline.getPoints().size() < 2) return;
 
-//    float uvLength = 0.0;
-//    for (int i = 0; i< uv.size();++i) {
-//        float heigth = heights[i];
-//        rows
-//    }
-
-    QVector<Vector3> pointsOnRidge;
-    QVector<float> heightsOfRidge;
-    for (float i=0.0; i < 1.01; i+=0.01) {
-        Vector3 basePoint = baseSpline.getPoint(i);
-        Vector3 topPoint = spline.getPoint(i);
-        float height = fabs(topPoint.y()-basePoint.y());
-        pointsOnRidge.push_back(topPoint);
-        heightsOfRidge.push_back(height);
-    }
-
-    for(int j = 0 ;j <rows.size();++j) {
-        for (int k = 0; k< rows[0].size();++k) {
-            Vector3 & point = rows[j][k];
-            Vector3 nearestTop;
-            float distance = 999999999;
-            float height = 0;
-            for(int l = 0; l< pointsOnRidge.size();++l) {
-                Vector3& pointOnRidge = pointsOnRidge[l];
-                Vector3 onLevel(pointOnRidge.x(),point.y(), pointOnRidge.z());
-                float localDist = (onLevel - point).lenght();
-                if (localDist < distance) {
-                    nearestTop = pointOnRidge;
-                    distance = localDist;
-                    height = heightsOfRidge[l];
-                }
-            }
-            float radiusOfInfluence = height;
-            if (distance <= radiusOfInfluence) {
-                float multiplicator = (radiusOfInfluence-distance)/radiusOfInfluence;
-                point = Vector3(point.x(), point.y()+height*multiplicator, point.z());
-            }
-        }
+    for (int i = 1; i< uv.size();++i) {
+        float heigthPrev = heights[i-1];
+        float heigth = heights[i];
     }
 }
 

@@ -12,7 +12,7 @@ class SurfaceNode : public BaseNode
     bool hasContructedLayer;
     float resolution;
 
-    QVector<QPointF> uvCoordinateSpline;
+    QVector<QVector2D> uvCoordinateSpline;
     QVector < QVector < Vector3 > > rows;
     void makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>& normals, QVector<Vector3>& triangles);
 public:
@@ -22,7 +22,7 @@ public:
     void constructLayer();
     virtual BaseNode* copy();
 
-    Vector3 getPointFromUv(QPointF uv);
+    Vector3 getPointFromUv(QVector2D uv);
 
     virtual void prepareForDrawing();
 

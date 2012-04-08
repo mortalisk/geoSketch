@@ -10,12 +10,12 @@ class RidgeNode : public BaseNode, public ISurfaceFeature
 private:
     Spline baseSpline;
     Spline crossSpline;
-    QVector<QPointF> uv;
+    QVector<QVector2D> uv;
     QVector<float> heights;
     SurfaceNode* surfaceNode;
 public:
     RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), crossSpline(o.crossSpline), uv(o.uv) {}
-    RidgeNode(QVector<QPointF> uv, SurfaceNode* parent);
+    RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent);
 
     virtual BaseNode * copy() {
         return new RidgeNode(*this);
