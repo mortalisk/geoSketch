@@ -53,4 +53,5 @@ SOURCES += main.cpp \
     geometry/generalnode.cpp \
     geometry/basenode.cpp \
     geometry/isurfacefeature.cpp \
-    gui/sketchpad.cpp
+    gui/sketchpad.cpp \
+    geometry/util.cpp

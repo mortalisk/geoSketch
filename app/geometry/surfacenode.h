@@ -11,9 +11,11 @@ class SurfaceNode : public BaseNode
     // in stead of when copying which made interaction laggy
     bool hasContructedLayer;
     float resolution;
+    int skip;
 
     QVector<QVector2D> uvCoordinateSpline;
     QVector < QVector < Vector3 > > rows;
+    QVector < QVector < Vector3 > > intersectRows;
     void makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>& normals, QVector<Vector3>& triangles);
 public:
     void invalidate();
@@ -33,6 +35,8 @@ public:
     void drawChildren();
 
     void addPoint(Vector3 from, Vector3 direction);
+
+    virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 };
 
 #endif // SURFACENODE_H

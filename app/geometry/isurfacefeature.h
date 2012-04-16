@@ -7,7 +7,7 @@ class ISurfaceFeature
 {
 public:
     ISurfaceFeature();
-    virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution) = 0;
+    virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size) = 0;
     virtual void repositionOnSurface(SurfaceNode & surfacenode) = 0;
 };
 

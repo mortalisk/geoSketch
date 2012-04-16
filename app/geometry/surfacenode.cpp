@@ -3,12 +3,12 @@
 #include "ridgenode.h"
 #include "util.h"
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false),resolution(0.02)
+SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false),resolution(400), skip(4)
 {
     //constructLayer();
 }
 
-SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) ,front(other.front), right(other.right), back(other.back), left(other.left), below(other.below), hasContructedLayer(false), resolution(other.resolution){
+SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) ,front(other.front), right(other.right), back(other.back), left(other.left), below(other.below), hasContructedLayer(false), resolution(other.resolution), skip(other.skip){
 
 }
 
@@ -85,32 +85,43 @@ void SurfaceNode::constructLayer() {
     Vector3 backRight = right.getPoint(1.0);
 
     rows.clear();
+    intersectRows.clear();
 
-    for (double zi = 0.0;zi<=1.01;zi+=resolution) {
+    for (int zi = 0;zi<resolution;++zi) {
         QVector<Vector3> row;
-        Vector3 rowLeft = frontLeft*(1.0-zi) + backLeft *(zi);
-        Vector3 rowRigth = frontRight*(1.0-zi) + backRight * (zi);
+        float zif = zi/resolution;
+        Vector3 rowLeft = frontLeft*(1.0-zif) + backLeft *(zif);
+        Vector3 rowRigth = frontRight*(1.0-zif) + backRight * (zif);
 
-        Vector3 leftp = left.getPoint(1.0-zi);
-        Vector3 rightp = right.getPoint(zi);
-        for (double xi = 0.0;xi<=1.01;xi+=resolution) {
-            Vector3 colInt = rowLeft * (1.0-xi) + rowRigth * xi;
-            Vector3 frontp = front.getPoint(xi);
-            Vector3 backp = back.getPoint(1.0-xi);
-            Vector3 frontBack = frontp*(1.0-zi)+backp*zi;
+        Vector3 leftp = left.getPoint(1.0-zif);
+        Vector3 rightp = right.getPoint(zif);
+        for (int xi = 0;xi<resolution;xi++) {
+            float xif = xi/resolution;
+            Vector3 colInt = rowLeft * (1.0-xif) + rowRigth * xif;
+            Vector3 frontp = front.getPoint(xif);
+            Vector3 backp = back.getPoint(1.0-xif);
+            Vector3 frontBack = frontp*(1.0-zif)+backp*zif;
             Vector3 diff = frontBack - colInt;
 
-            Vector3 leftRight = leftp*(1.0-xi) + rightp*xi;
+            Vector3 leftRight = leftp*(1.0-xif) + rightp*xif;
             Vector3 point = leftRight + diff;
             row.push_back(point);
         }
         rows.push_back(row);
     }
 
+//    for (int z = 0; z<resolution; z+=10) {
+//        QVector<Vector3> row;
+//        for (int x = 0; x < resolution; z+=10) {
+//            row.push_back(rows[z][x]);
+//        }
+//        intersectRows.push_back(row);
+//    }
+
     foreach (BaseNode * child , children) {
         ISurfaceFeature * feature = dynamic_cast<ISurfaceFeature *>(child);
         if (feature != NULL)
-            feature->doTransformSurface(rows, resolution);
+            feature->doTransformSurface(rows, resolution, 10);
     }
 
     //compute normals
@@ -220,6 +231,7 @@ void SurfaceNode::makeRidgeNode() {
 
     spline.clear();
     sketchingSpline.clear();
+    uvCoordinateSpline.clear();
 
     ridge->makeWall();
     proxy = ridge;
@@ -287,15 +299,57 @@ int intersect(Vector3& p, Vector3& dir, Vector3& v0, Vector3& v1, Vector3& v2, V
     return 1;                      // I is in T
 }
 
+QVector<Vector3> SurfaceNode::intersectionPoints(Vector3 from,Vector3 direction) {
+    QVector<Vector3> cand;
+    for (int i = 0; i < rows.size()-skip; i+=skip) {
+        for (int j = 0; j < rows[0].size()-skip; j+=skip) {
+            Vector3& a = rows[i][j];
+            Vector3& b = rows[i][j+skip];
+            Vector3& c = rows[i+skip][j];
+            Vector3& d = rows[i+skip][j+skip];
+
+            Vector3 result;
+            int r;
+            float s,t;
+            r = intersect(from, direction, a, b, c,&result, &s, &t);
+            if (r==1) {
+                cand.push_back(result);
+            }
+
+            r = intersect(from, direction, d, c, b,&result, &s, &t);
+            if (r==1) {
+                cand.push_back(result);
+            }
+
+        }
+    }
+    float nearestDist = 10000000;
+    int nearest = -1;
+    for (int i = 0; i< cand.size(); ++i) {
+        float dist = (cand[i]-from).lenght();
+        if (dist < nearestDist) {
+            nearest = i;
+            nearestDist = dist;
+        }
+    }
+    if (cand.size() >1) {
+        Vector3 tmp = cand[0];
+        cand[0] = cand[nearest];
+        cand[nearest] = tmp;
+    }
+    return cand;
+}
+
 void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
     QVector<Vector3> cand;
     QVector<QVector2D> uvCand;
-    for (int i = 0; i < rows.size()-1; ++i) {
-        for (int j = 0; j < rows[0].size()-1; j++) {
+    float resolution = 1.0/this->resolution;
+    for (int i = 0; i < rows.size()-skip; i+=skip) {
+        for (int j = 0; j < rows[0].size()-skip; j+=skip) {
             Vector3& a = rows[i][j];
-            Vector3& b = rows[i][j+1];
-            Vector3& c = rows[i+1][j];
-            Vector3& d = rows[i+1][j+1];
+            Vector3& b = rows[i][j+skip];
+            Vector3& c = rows[i+skip][j];
+            Vector3& d = rows[i+skip][j+skip];
 
             Vector3 result;
             int r;
@@ -305,7 +359,7 @@ void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
                 cand.push_back(result);
                 s*=resolution;
                 t*=resolution;
-                uvCand.push_back(QVector2D(j*resolution+s, i*resolution+t));
+                uvCand.push_back(QVector2D(j*resolution+s*skip, i*resolution+t*skip));
             }
 
             r = intersect(from, direction, d, c, b,&result, &s, &t);
@@ -315,7 +369,7 @@ void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
                 t = 1.0-t;
                 s*=resolution;
                 t*=resolution;
-                uvCand.push_back(QVector2D(j*resolution+s, i*resolution+t));
+                uvCand.push_back(QVector2D(j*resolution+s*skip, i*resolution+t*skip));
             }
 
         }
