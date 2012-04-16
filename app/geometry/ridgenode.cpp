@@ -189,6 +189,11 @@ QVector2D linesIntersection(QVector2D& p1, QVector2D& p2, QVector2D& p3, QVector
     return ret;
 }
 
+inline float clamp(float x, float a, float b)
+{
+    return x < a ? a : (x > b ? b : x);
+}
+
 void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size) {
     if (baseSpline.getPoints().size() < 2 || spline.getPoints().size() < 2) return;
 
@@ -222,9 +227,9 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                     float dist = (point-intersect).length();
                     if (dist <= influence) {
                         float weigth = 1.0 - dist/influence;
-                        heigth = heigth * weigth;
-                        if (heigths[z][x] < heigth)
-                            heigths[z][x] = heigth;
+                        float newheigth = clamp(heigth * weigth, 0, heigth-gridsize*size);
+                        if (heigths[z][x] < newheigth)
+                            heigths[z][x] = newheigth;
                     }
 
                 } else {
@@ -232,18 +237,18 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                     float influence1 = h1 * worldToGrid;
                     if (l1 <= influence1) {
                         float weigth = 1.0 - l1/influence1;
-                        h1 = h1 * weigth;
-                        if (heigths[z][x] < h1)
-                            heigths[z][x] = h1;
+                        float newheigth = clamp(h1 * weigth, 0, h1-gridsize*size);
+                        if (heigths[z][x] < newheigth)
+                            heigths[z][x] = newheigth;
                         continue;
                     }
                     float l2 = (point - p2).length();
                     float influence2 = h2 * worldToGrid;
                     if (l2 <= influence2) {
                         float weigth = 1.0 - l2/influence2;
-                        h2 = h2 * weigth;
-                        if (heigths[z][x] < h1)
-                            heigths[z][x] = h2;
+                        float newheigth = clamp(h2 * weigth, 0, h2-gridsize*size);
+                        if (heigths[z][x] < newheigth)
+                            heigths[z][x] = newheigth;
                         continue;
                     }
                 }
