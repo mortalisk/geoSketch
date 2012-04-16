@@ -16,6 +16,7 @@ private:
     float resolution;
     bool snapToGrid;
     bool onSurface;
+    int editLayerNo;
 
 public:
 
@@ -32,6 +33,7 @@ public:
     void addPoint(Vector3& from, Vector3& direction);
     void selectActiveNode(Vector3& from, Vector3& direction);
     void makeLayer();
+    void editLayer();
 
     BaseNode* getRootNode();
 

@@ -5,7 +5,6 @@
 #include "isurfacefeature.h"
 class SurfaceNode : public BaseNode
 {
-    Spline front, right, back, left;
     SurfaceNode* below;
     // this vairable enables contruction of triangles before drawing
     // in stead of when copying which made interaction laggy
@@ -18,6 +17,8 @@ class SurfaceNode : public BaseNode
     QVector < QVector < Vector3 > > intersectRows;
     void makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>& normals, QVector<Vector3>& triangles);
 public:
+
+    Spline front, right, back, left;
     void invalidate();
     SurfaceNode(QString name, Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below = NULL);
     SurfaceNode(SurfaceNode& other);

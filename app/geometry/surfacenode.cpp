@@ -120,8 +120,10 @@ void SurfaceNode::constructLayer() {
 
     foreach (BaseNode * child , children) {
         ISurfaceFeature * feature = dynamic_cast<ISurfaceFeature *>(child);
-        if (feature != NULL)
+        if (feature != NULL) {
             feature->doTransformSurface(rows, resolution, 10);
+            feature->repositionOnSurface(*this);
+        }
     }
 
     //compute normals

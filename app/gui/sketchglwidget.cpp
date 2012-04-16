@@ -295,3 +295,8 @@ void MyGLWidget::setColor(int i, QColor c) {
     scene->boxNode->children[i]->ambient = color;
 }
 
+void MyGLWidget::editLayer() {
+    scene->editLayer();
+    pushScene();
+}
+

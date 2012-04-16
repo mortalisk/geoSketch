@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction * newLayerButton = findChild<QAction*>("actionNewLayer");
     QAction * toggleVisibility = findChild<QAction*>("actionVisibility");
     QAction * colorButton = findChild<QAction*>("actionColor");
+    QAction * editLayer = findChild<QAction*>("actionEditLayer");
 
     layerChooser = new QComboBox();
     toolBar->addWidget(layerChooser);
@@ -41,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(layerChooser,SIGNAL(activated(int)), gl, SLOT(setLayer(int)));
     QObject::connect(toggleVisibility,SIGNAL(activated()), this, SLOT(toggleVisibility()));
     QObject::connect(colorButton,SIGNAL(activated()), this, SLOT(setColor()));
+    QObject::connect(editLayer,SIGNAL(activated()), this, SLOT(editLayer()));
 
     QDockWidget * sketchDock = new QDockWidget();
     SketchPad * sketchPadSlice = new SketchPad();
@@ -85,6 +87,10 @@ void MainWindow::setColor() {
     QColor c = QColorDialog::getColor();
     gl->setColor(layerChooser->currentIndex(),c);
 
+}
+
+void MainWindow::editLayer() {
+    gl->editLayer();
 }
 
 MainWindow::~MainWindow()

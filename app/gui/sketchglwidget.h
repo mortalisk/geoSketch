@@ -69,6 +69,8 @@ public:
 
     void setColor(int i, QColor c);
 
+    void editLayer();
+
 signals:
     void sceneChanged(Scene * s);
 

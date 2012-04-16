@@ -7,14 +7,10 @@
 RidgeNode::RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uv)
 {
     for (int i = 0; i<uv.size(); ++i) {
-        Vector3 point = parent->getPointFromUv(uv[i]);
-        baseSpline.addPoint(point);
-
         float distanceFromMiddle = fabs(i-uv.size()/2.0)/uv.size();
         heights.push_back(0.5-distanceFromMiddle);
-        spline.addPoint(Vector3(point.x(), point.y() + heights[i], point.z()));
-
     }
+    repositionOnSurface(*parent);
 }
 
 QVector<Vector3> RidgeNode::intersectionPoints(Vector3 from, Vector3 direction) {
@@ -269,7 +265,14 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
 
 
 void RidgeNode::repositionOnSurface(SurfaceNode &surfacenode) {
+    baseSpline.clear();
+    spline.clear();
+    for (int i = 0; i<uv.size(); ++i) {
+        Vector3 point = surfacenode.getPointFromUv(uv[i]);
+        baseSpline.addPoint(point);
+        spline.addPoint(Vector3(point.x(), point.y() + heights[i], point.z()));
 
+    }
 }
 
 void RidgeNode::drawSelf() {
