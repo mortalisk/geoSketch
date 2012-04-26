@@ -1,20 +1,19 @@
 #include "util.h"
-#include "ridgenode.h"
+#include "rivernode.h"
 #include "surfacenode.h"
 #include "surface.h"
 #include <QVector2D>
 
-RidgeNode::RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uv)
+RiverNode::RiverNode(QVector<QVector2D> uv, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uv)
 {
-    smooth();
-    for (int i = 0; i<this->uv.size(); ++i) {
-        float distanceFromMiddle = fabs(i-this->uv.size()/2.0)/this->uv.size();
+    for (int i = 0; i<uv.size(); ++i) {
+        float distanceFromMiddle = fabs(i-uv.size()/2.0)/uv.size();
         heights.push_back(0.5-distanceFromMiddle);
     }
     repositionOnSurface(*parent);
 }
 
-QVector<Vector3> RidgeNode::intersectionPoints(Vector3 from, Vector3 direction) {
+QVector<Vector3> RiverNode::intersectionPoints(Vector3 from, Vector3 direction) {
     if (active) {
         return BaseNode::intersectionPoints(from, direction);
     }else {
@@ -33,14 +32,14 @@ QVector<Vector3> RidgeNode::intersectionPoints(Vector3 from, Vector3 direction) 
     }
 }
 
-void RidgeNode::determineActionOnStoppedDrawing() {
+void RiverNode::determineActionOnStoppedDrawing() {
     BaseNode::determineActionOnStoppedDrawing();
     SurfaceNode * surfaceParent = dynamic_cast<SurfaceNode *>(parent);
     surfaceParent->invalidate();
 
 }
 
-void RidgeNode::makeWall() {
+void RiverNode::makeWall() {
     this->diffuse = QVector4D(0.5,0.3,0.3,0.5);
     QVector<Vector3> triangles;
     QVector<Vector3> normals;
@@ -97,116 +96,8 @@ void RidgeNode::makeWall() {
     shape = s;
 }
 
-float sideOfLine(QVector2D A, QVector2D B, QVector2D P) {
-    return (B.x() - A.x()) * (P.y() - A.y()) - (B.y() - A.y()) * (P.x() - A.x());
-}
 
-bool inside(QVector2D A, QVector2D B, QVector2D C, QVector2D P, float* u, float*v) {
-    // Compute vectors
-    QVector2D v0 = C - A;
-    QVector2D v1 = B - A;
-    QVector2D v2 = P - A;
-
-    // Compute dot products
-    float dot00 = QVector2D::dotProduct(v0, v0);
-    float dot01 = QVector2D::dotProduct(v0, v1);
-    float dot02 = QVector2D::dotProduct(v0, v2);
-    float dot11 = QVector2D::dotProduct(v1, v1);
-    float dot12 = QVector2D::dotProduct(v1, v2);
-
-    // Compute barycentric coordinates
-    float invDenom = 1 / (dot00 * dot11 - dot01 * dot01);
-    *u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-    *v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-
-    // Check if point is in triangle
-    return (*u >= 0) && (*v >= 0) && (*u + *v < 1);
-}
-
-bool inside(QVector2D A,QVector2D B,QVector2D C,QVector2D D, QVector2D point) {
-    return (sideOfLine(A, B, point) >= 0) &&
-           (sideOfLine(B, C, point) >= 0) &&
-           (sideOfLine(C, D, point) >= 0) &&
-           (sideOfLine(D, A, point) >= 0);
-//    float u,v,w;
-//    barycent(A,B,C,point,&u,&v,&w);
-//    if (u>=0.0&&u<=1.0&&v>=0.0&&v<=1.0&&w>=0.0&&w<=1.0) {
-//        return true;
-//    }
-//    barycent(A,C,D,point,&u,&v,&w);
-//    if (u>=0.0&&u<=1.0&&v>=0.0&&v<=1.0&&w>=0.0&&w<=1.0) {
-//        return true;
-//    }
-//    return false;
-}
-
-float lowest(float a, float b, float c, float d) {
-    if (b < a)
-        a = b;
-    if (c < a)
-        a = c;
-    if (d < a)
-        a = d;
-    return a;
-}
-
-float highest(float a, float b, float c, float d) {
-    if (b > a)
-        a = b;
-    if (c > a)
-        a = c;
-    if (d > a)
-        a = d;
-    return a;
-}
-
-QVector2D linesIntersection(QVector2D& p1, QVector2D& p2, QVector2D& p3, QVector2D& p4) {
-    // Store the values for fast access and easy
-    // equations-to-code conversion
-    float x1 = p1.x(), x2 = p2.x(), x3 = p3.x(), x4 = p4.x();
-    float y1 = p1.y(), y2 = p2.y(), y3 = p3.y(), y4 = p4.y();
-
-    float d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
-    // If d is zero, there is no intersection
-    //if (d == 0) return NULL;
-
-    // Get the x and y
-    float pre = (x1*y2 - y1*x2), post = (x3*y4 - y3*x4);
-    float x = ( pre * (x3 - x4) - (x1 - x2) * post ) / d;
-    float y = ( pre * (y3 - y4) - (y1 - y2) * post ) / d;
-
-    // Check if the x and y coordinates are within both lines
-//    if ( x < min(x1, x2) || x > max(x1, x2) ||
-//    x < min(x3, x4) || x > max(x3, x4) ) return NULL;
-//    if ( y < min(y1, y2) || y > max(y1, y2) ||
-//    y < min(y3, y4) || y > max(y3, y4) ) return NULL;
-
-    // Return the point of intersection
-    QVector2D ret(x,y);
-    return ret;
-}
-
-inline float clamp(float x, float a, float b)
-{
-    return x < a ? a : (x > b ? b : x);
-}
-
-void RidgeNode::smooth() {
-    if (uv.size()<1) return;
-    QVector<QVector2D> newPoints;
-    for (float p = 0; p <1.001;p+=0.01) {
-        QVector<QVector2D> points = uv;
-        for (int i = 1; i< points.size(); ++i) {
-            for (int j = 0;j <points.size()-i;++j) {
-                points[j] = points[j]*(1-p) + points[j+1]*p;
-            }
-        }
-        newPoints.push_back(points[0]);
-    }
-    this->uv= newPoints;
-}
-
-void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size) {
+void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size) {
     if (baseSpline.getPoints().size() < 2 || spline.getPoints().size() < 2) return;
 
     float gridsize = 1.0/resolution;
@@ -280,7 +171,7 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
 }
 
 
-void RidgeNode::repositionOnSurface(SurfaceNode &surfacenode) {
+void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
     baseSpline.clear();
     spline.clear();
     for (int i = 0; i<uv.size(); ++i) {
@@ -289,9 +180,14 @@ void RidgeNode::repositionOnSurface(SurfaceNode &surfacenode) {
         spline.addPoint(Vector3(point.x(), point.y() + heights[i], point.z()));
 
     }
+    if (shape != NULL) {
+        delete shape;
+        shape = NULL;
+        makeWall();
+    }
 }
 
-void RidgeNode::drawSelf() {
+void RiverNode::drawSelf() {
     if (active)
         BaseNode::drawSelf();
     else

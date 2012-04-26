@@ -8,7 +8,7 @@
 #include <QMap>
 class node;
 
-class Spline : public Shape
+class Spline
 {
 
     QVector<Vector3> points;

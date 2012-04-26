@@ -2,7 +2,6 @@
 #define SCENE_H
 #include <QVector>
 #include "geometry/shape.h"
-#include "geometry/box.h"
 #include "morten3d/Camera.h"
 #include "arrays.h"
 #include "generalnode.h"

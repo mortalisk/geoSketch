@@ -15,7 +15,6 @@ FORMS += gui/mainwindow.ui
 # Input
 HEADERS += gui/mainwindow.h \
     gui/sketchglwidget.h \
-    geometry/box.h \
     geometry/shape.h \
     geometry/arrays.h \
     geometry/scene.h \
@@ -37,7 +36,6 @@ HEADERS += gui/mainwindow.h \
 SOURCES += main.cpp \
     gui/mainwindow.cpp \
     gui/sketchglwidget.cpp \
-    geometry/box.cpp \
     geometry/shape.cpp\
     geometry/arrays.cpp \
     geometry/scene.cpp \

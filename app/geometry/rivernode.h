@@ -1,11 +1,11 @@
-#ifndef RIDGENODE_H
-#define RIDGENODE_H
+#ifndef RiverNode_H
+#define RiverNode_H
 #include "basenode.h"
 #include "isurfacefeature.h"
 
 class SurfaceNode;
 
-class RidgeNode : public BaseNode, public ISurfaceFeature
+class RiverNode : public BaseNode, public ISurfaceFeature
 {
 private:
     Spline baseSpline;
@@ -14,14 +14,12 @@ private:
     QVector<float> heights;
     SurfaceNode* surfaceNode;
 public:
-    RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), crossSpline(o.crossSpline), uv(o.uv) {}
-    RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent);
+    RiverNode(RiverNode& o) : BaseNode(o), baseSpline(o.baseSpline), crossSpline(o.crossSpline), uv(o.uv) {}
+    RiverNode(QVector<QVector2D> uv, SurfaceNode* parent);
 
     virtual BaseNode * copy() {
-        return new RidgeNode(*this);
+        return new RiverNode(*this);
     }
-
-    void smooth();
 
     void makeWall();
 
@@ -38,4 +36,4 @@ public:
 
 };
 
-#endif // RIDGENODE_H
+#endif // RiverNode_H

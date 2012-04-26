@@ -2,7 +2,6 @@
 #define SKETCHGLWIDGET_H
 
 #include <QGLWidget>
-#include "geometry/box.h"
 #include "geometry/scene.h"
 #include <QKeyEvent>
 #include <QMap>

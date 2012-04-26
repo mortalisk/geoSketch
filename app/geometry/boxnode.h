@@ -1,7 +1,6 @@
 #ifndef BOXNODE_H
 #define BOXNODE_H
 
-#include "box.h"
 #include "basenode.h"
 #include "surface.h"
 #include "sidenode.h"

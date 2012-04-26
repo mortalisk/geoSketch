@@ -21,9 +21,9 @@ void Shape::drawLines(bool stipple) {
         glEnable(GL_LINE_STIPPLE);
     }
     glEnableClientState(GL_VERTEX_ARRAY);    
-    if (getLineVertices().size() > 0) {
-        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getLineVertices()[0]);
-        glDrawArrays(GL_LINE_STRIP,0,getLineVertices().size());
+    if (lineVertices.size() > 0) {
+        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&lineVertices[0]);
+        glDrawArrays(GL_LINE_STRIP,0,lineVertices.size());
     }
     if (stipple) {
         glDisable(GL_LINE_STIPPLE);
@@ -43,10 +43,10 @@ void Shape::drawShape(QVector4D ambient, QVector4D diffuse) {
     glEnableClientState(GL_VERTEX_ARRAY);
 
     glEnableClientState(GL_NORMAL_ARRAY);
-    if (getTriangles().size() > 0) {
-        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&getTriangles()[0]);
-        glNormalPointer(GL_FLOAT,sizeof(vertex),&getTriangles()[0].p1.n1);
-        glDrawArrays(GL_TRIANGLES,0,getTriangles().size()*3);
+    if (triangles.size() > 0) {
+        glVertexPointer(3,GL_FLOAT,sizeof(vertex),&triangles[0]);
+        glNormalPointer(GL_FLOAT,sizeof(vertex),&triangles[0].p1.n1);
+        glDrawArrays(GL_TRIANGLES,0,triangles.size()*3);
     }
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
@@ -56,7 +56,7 @@ void Shape::drawShape(QVector4D ambient, QVector4D diffuse) {
 QVector<Vector3> Shape::intersectionPoints(Vector3 p,Vector3 dir){
     QVector<Vector3> points;
 
-    QVector<triangle> & triangles = getTriangles();
+    QVector<triangle> & triangles = this->triangles;
 
     int nearest = -1;
     float distance = FLT_MAX;
