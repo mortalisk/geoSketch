@@ -31,7 +31,8 @@ HEADERS += gui/mainwindow.h \
     geometry/generalnode.h \
     geometry/isurfacefeature.h \
     geometry/util.h \
-    gui/sketchpad.h
+    gui/sketchpad.h \
+    geometry/rivernode.h
 
 SOURCES += main.cpp \
     gui/mainwindow.cpp \
@@ -52,4 +53,5 @@ SOURCES += main.cpp \
     geometry/basenode.cpp \
     geometry/isurfacefeature.cpp \
     gui/sketchpad.cpp \
-    geometry/util.cpp
+    geometry/util.cpp \
+    geometry/rivernode.cpp

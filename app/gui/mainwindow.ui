@@ -35,6 +35,8 @@
    <addaction name="actionEditLayer"/>
    <addaction name="actionVisibility"/>
    <addaction name="actionColor"/>
+   <addaction name="actionMakeRiver"/>
+   <addaction name="actionMakeRidge"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -128,6 +130,16 @@
   <action name="actionEditLayer">
    <property name="text">
     <string>Edit Layer</string>
+   </property>
+  </action>
+  <action name="actionMakeRiver">
+   <property name="text">
+    <string>MakeRiver</string>
+   </property>
+  </action>
+  <action name="actionMakeRidge">
+   <property name="text">
+    <string>MakeRidge</string>
    </property>
   </action>
  </widget>

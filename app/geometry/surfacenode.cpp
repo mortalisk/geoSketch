@@ -1,4 +1,4 @@
-#include "surfacenode.h"
+ #include "surfacenode.h"
 #include "surface.h"
 #include "ridgenode.h"
 #include "util.h"
@@ -220,7 +220,29 @@ void SurfaceNode::constructLayer() {
 void SurfaceNode::determineActionOnStoppedDrawing() {
     BaseNode::determineActionOnStoppedDrawing();
 
-    makeRidgeNode();
+    //makeRidgeNode();
+}
+
+void SurfaceNode::makeRiverNode() {
+
+    if (spline.getPoints().size() < 2)
+        return;
+    RidgeNode * ridge = new RidgeNode(uvCoordinateSpline, this);
+    ridge->parent = this;
+    children.append(ridge);
+
+    spline.clear();
+    sketchingSpline.clear();
+    uvCoordinateSpline.clear();
+
+    ridge->makeWall();
+    proxy = ridge;
+
+    hasContructedLayer = false;
+    delete shape;
+    shape = NULL;
+
+
 }
 
 void SurfaceNode::makeRidgeNode() {

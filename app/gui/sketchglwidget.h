@@ -68,7 +68,7 @@ public:
 
     void setColor(int i, QColor c);
 
-    void editLayer();
+
 
 signals:
     void sceneChanged(Scene * s);
@@ -80,7 +80,9 @@ public slots:
     void newLayer() {
         scene->activeNode = scene->boxNode;
     }
-
+    void makeRiver();
+    void makeRidge();
+    void editLayer();
     void undo();
 
 };

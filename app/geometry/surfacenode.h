@@ -31,6 +31,8 @@ public:
 
     virtual void determineActionOnStoppedDrawing();
 
+    void makeRiverNode();
+
     void makeRidgeNode();
 
     void drawChildren();

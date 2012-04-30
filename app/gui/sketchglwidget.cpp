@@ -1,4 +1,5 @@
 #include <GL/glew.h>
+#include "surfacenode.h"
 #include "sketchglwidget.h"
 #include "geometry/arrays.h"
 #include <iostream>
@@ -298,5 +299,21 @@ void MyGLWidget::setColor(int i, QColor c) {
 void MyGLWidget::editLayer() {
     scene->editLayer();
     pushScene();
+}
+
+
+
+void MyGLWidget::makeRiver() {
+    SurfaceNode* sn = dynamic_cast<SurfaceNode*>(scene->activeNode);
+    if (sn != NULL) {
+        sn->makeRiverNode();
+    }
+}
+
+void MyGLWidget::makeRidge() {
+    SurfaceNode* sn = dynamic_cast<SurfaceNode*>(scene->activeNode);
+    if (sn != NULL) {
+        sn->makeRidgeNode();
+    }
 }
 
