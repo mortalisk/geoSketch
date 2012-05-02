@@ -1,10 +1,11 @@
+#define _USE_MATH_DEFINES
 #include "sphere.h"
 #include <math.h>
 #include "arrays.h"
 
 Sphere::Sphere(float radius) {
-    int antallStykker =16;
-    int antallDisker = 8;
+    const int antallStykker =16;
+    const int antallDisker = 8;
 
     Vector3 top (0,radius,0);
     Vector3 punkter[antallDisker][antallStykker];

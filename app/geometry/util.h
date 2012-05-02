@@ -69,4 +69,9 @@ inline float clamp(float x, float a, float b)
     return x < a ? a : (x > b ? b : x);
 }
 
+inline double round( double d )
+{
+    return floor( d + 0.5 );
+}
+
 #endif // UTIL_H

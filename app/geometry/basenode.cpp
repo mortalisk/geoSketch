@@ -147,7 +147,7 @@ void BaseNode::correctSketchingDirection() {
 }
 
 BaseNode * BaseNode::makeLayer() {
-
+    return NULL;
 }
 
 QVector<Vector3> BaseNode::intersectionPoints(Vector3 from, Vector3 direction) {

@@ -14,7 +14,7 @@ public:
     Vector3 upperRigth;
     Vector3 upperLeft;
     SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vector3 upperLeft);
-    SideNode(SideNode& o) :BaseNode::BaseNode(o), lowerLeft(o.lowerLeft), lowerRigth(o.lowerRigth), upperRigth(o.upperRigth), upperLeft(o.upperLeft) {
+    SideNode(SideNode& o) :BaseNode(o), lowerLeft(o.lowerLeft), lowerRigth(o.lowerRigth), upperRigth(o.upperRigth), upperLeft(o.upperLeft) {
 
     }
 

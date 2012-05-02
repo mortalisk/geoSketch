@@ -1,8 +1,11 @@
+
+#define _USE_MATH_DEFINES
 #include "scene.h"
+#include "util.h"
 #include <QVector>
 #include <iostream>
 #include "geometry/sphere.h"
-#include "math.h"
+#include <math.h>
 #include "surface.h"
 #include "surfacenode.h"
 

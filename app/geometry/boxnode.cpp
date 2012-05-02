@@ -7,7 +7,7 @@
 #include "float.h"
 #include "surfacenode.h"
 
-BoxNode::BoxNode() : BaseNode::BaseNode("boxnode")
+BoxNode::BoxNode() :BaseNode("boxnode")
 {
     activeSurface = NULL;
     width = 10;
@@ -55,7 +55,7 @@ BoxNode::BoxNode() : BaseNode::BaseNode("boxnode")
 
 }
 
-BoxNode::BoxNode(BoxNode& o): BaseNode::BaseNode(o) {
+BoxNode::BoxNode(BoxNode& o): BaseNode(o) {
     frontNode = new SideNode(*o.frontNode);
     backNode = new SideNode(*o.backNode);
     leftNode = new SideNode(*o.leftNode);

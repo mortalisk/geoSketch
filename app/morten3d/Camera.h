@@ -7,11 +7,13 @@
 
 #ifndef CAMERA_H_
 #define CAMERA_H_
-
-#define PI2 (M_PI * 2)
+#define _USE_MATH_DEFINES
+#include <math.h>
 #include "Vector3.h"
 #include <iostream>
 #include <vector>
+
+#define PI2 (M_PI * 2)
 
 class Camera {
 public:
