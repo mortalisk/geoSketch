@@ -74,4 +74,11 @@ inline double round( double d )
     return floor( d + 0.5 );
 }
 
+bool lineSegmentIntersection(
+double Ax, double Ay,
+double Bx, double By,
+double Cx, double Cy,
+double Dx, double Dy,
+double *X, double *Y);
+
 #endif // UTIL_H

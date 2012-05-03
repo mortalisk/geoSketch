@@ -187,10 +187,32 @@ void RiverNode::smooth() {
     this->uv= newPoints;
 }
 
+void RiverNode::removeLoops(QVector<QVector2D>& sp) {
+    for (int i = 0; i <sp.size()-1; ++i) {
+        QVector2D& A = sp[i];
+        QVector2D& B = sp[i+1];
+        for (int j = i+1; j <sp.size()-1; ++j) {
+            QVector2D& C = sp[j];
+            QVector2D& D = sp[j+1];
+            double X,Y;
+
+            if (lineSegmentIntersection(A.x(),A.y(),B.x(), B.y(), C.x(), C.y(), D.x(), D.y(), &X, &Y)){
+                for (int p = i+1; p <=j;++p) {
+                    sp[p].setX(X);
+                    sp[p].setY(Y);
+                }
+            }
+        }
+    }
+}
+
 
 void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
     rightSpline.clear();
     spline.clear();
+
+    QVector<QVector2D> rigthPoints;
+    QVector<QVector2D> leftPoints;
 
     QVector2D prev = uv[0] - (uv[1]-uv[0]);
     for (int i = 0; i<uv.size(); ++i) {
@@ -207,12 +229,24 @@ void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
         QVector2D normal = normal1+normal2;
         normal.normalize();
         normal *= 0.1;
-        Vector3 pointr = surfacenode.getPointFromUv(uv[i]+(normal*rigths[i]));
-        Vector3 pointl = surfacenode.getPointFromUv(uv[i]-(normal*lefts[i]));
-        rightSpline.addPoint(pointr);
-        spline.addPoint(pointl);
+        QVector2D pointr = uv[i]+(normal*rigths[i]);
+        QVector2D pointl = uv[i]-(normal*lefts[i]);
+        rigthPoints.push_back(pointr);
+        leftPoints.push_back(pointl);
         prev = uv[i];
     }
+
+    removeLoops(rigthPoints);
+    removeLoops(leftPoints);
+
+    for (int i= 0; i< rigthPoints.size(); ++i) {
+        rightSpline.addPoint(surfacenode.getPointFromUv(rigthPoints[i]));
+    }
+
+    for (int i= 0; i< leftPoints.size(); ++i) {
+        spline.addPoint(surfacenode.getPointFromUv(leftPoints[i]));
+    }
+
     if (shape != NULL) {
         delete shape;
         shape = NULL;
@@ -221,8 +255,14 @@ void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
 }
 
 void RiverNode::drawSelf() {
-    if (active)
+    //if (active)
         BaseNode::drawSelf();
-    else
-        drawSplines();
+   // else
+       // drawSplines();
+}
+
+void RiverNode::drawSplines() {
+    float r = active?1:0;
+    drawSpline(spline,r);
+    drawSpline(rightSpline,r);
 }

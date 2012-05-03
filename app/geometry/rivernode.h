@@ -32,10 +32,11 @@ public:
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
 
     void drawSelf();
+    void drawSplines();
 
     void determineActionOnStoppedDrawing();
 
-
+    void removeLoops(QVector<QVector2D>& sp);
 
 };
 

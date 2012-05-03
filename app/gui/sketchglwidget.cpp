@@ -266,7 +266,7 @@ void MyGLWidget::resizeGL(int w, int h) {
 }
 
 void MyGLWidget::wheelEvent(QWheelEvent *e) {
-    scene->camera.goForward(-e->delta()/40.0f);
+    scene->camera.goForward(-e->delta()/100.0f);
 }
 
 void MyGLWidget::makeLayer() {

@@ -81,7 +81,7 @@ public:
     virtual BaseNode * makeLayer();
 
 
-    void drawSplines();
+    virtual void drawSplines();
     void drawSpline(Spline & spline, float r);
 
 
