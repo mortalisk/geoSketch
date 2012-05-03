@@ -208,7 +208,7 @@ void BaseNode::drawSelf() {
                     shape->drawShape(ambient, color);
                 }
 	}
-        drawSplines();
+
 
 }
 
@@ -220,6 +220,7 @@ void BaseNode::draw() {
     prepareForDrawing();
 
     drawSelf();
+    drawSplines();
     drawChildren();
 
 

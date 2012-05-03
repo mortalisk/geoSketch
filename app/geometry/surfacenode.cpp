@@ -1,6 +1,7 @@
  #include "surfacenode.h"
 #include "surface.h"
 #include "ridgenode.h"
+#include "rivernode.h"
 #include "util.h"
 
 SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false),resolution(200), skip(2)
@@ -227,7 +228,7 @@ void SurfaceNode::makeRiverNode() {
 
     if (spline.getPoints().size() < 2)
         return;
-    RidgeNode * ridge = new RidgeNode(uvCoordinateSpline, this);
+    RiverNode * ridge = new RiverNode(uvCoordinateSpline, this);
     ridge->parent = this;
     children.append(ridge);
 
@@ -235,7 +236,7 @@ void SurfaceNode::makeRiverNode() {
     sketchingSpline.clear();
     uvCoordinateSpline.clear();
 
-    ridge->makeWall();
+    ridge->makeWater();
     proxy = ridge;
 
     hasContructedLayer = false;

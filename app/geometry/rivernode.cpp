@@ -6,9 +6,11 @@
 
 RiverNode::RiverNode(QVector<QVector2D> uv, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uv)
 {
-    for (int i = 0; i<uv.size(); ++i) {
-        float distanceFromMiddle = fabs(i-uv.size()/2.0)/uv.size();
-        heights.push_back(0.5-distanceFromMiddle);
+    smooth();
+    for (int i = 0; i<this->uv.size(); ++i) {
+        float distanceFromMiddle = fabs(i-this->uv.size()/2.0)/this->uv.size();
+        lefts.push_back(0.5-distanceFromMiddle);
+        rigths.push_back(0.5-distanceFromMiddle);
     }
     repositionOnSurface(*parent);
 }
@@ -39,12 +41,12 @@ void RiverNode::determineActionOnStoppedDrawing() {
 
 }
 
-void RiverNode::makeWall() {
+void RiverNode::makeWater() {
     this->diffuse = QVector4D(0.5,0.3,0.3,0.5);
     QVector<Vector3> triangles;
     QVector<Vector3> normals;
 
-    Spline& spline = baseSpline;
+    Spline& spline = this->spline;
 
     for (int i = 0 ; i < spline.getPoints().size(); ++i) {
         const Vector3 & current = spline.getPoints()[i];
@@ -59,10 +61,10 @@ void RiverNode::makeWall() {
         }else {
             next = spline.getPoints()[i+1];
         }
-        Vector3 up(0, 5, 0);
-        Vector3 normal = (next-previous).cross(up).normalize();
+        Vector3 left = rightSpline.getPoints()[i]-current;
+        Vector3 normal = (next-previous).cross(left).normalize();
         triangles.push_back(current);
-        triangles.push_back(current+up);
+        triangles.push_back(current+left);
         normals.push_back(normal);
         normals.push_back(normal);
 
@@ -98,7 +100,7 @@ void RiverNode::makeWall() {
 
 
 void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size) {
-    if (baseSpline.getPoints().size() < 2 || spline.getPoints().size() < 2) return;
+    if (rightSpline.getPoints().size() < 2 || spline.getPoints().size() < 2) return;
 
     float gridsize = 1.0/resolution;
     float worldToGrid = resolution/size;
@@ -112,8 +114,8 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
             for (int i = 0; i< uv.size()-1;++i) {
                 QVector2D p1 = uv[i]/gridsize;
                 QVector2D p2 = uv[i+1]/gridsize;
-                float h1 = this->heights[i];
-                float h2 = this->heights[i+1];
+                float h1 = this->lefts[i];
+                float h2 = this->lefts[i+1];
                 QVector2D normal(p2.y()-p1.y(), -(p2.x()-p1.x()));
                 QVector2D point2 = point +normal;
 
@@ -130,8 +132,8 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                     float dist = (point-intersect).length();
                     if (dist <= influence) {
                         float weigth = 1.0 - dist/influence;
-                        float newheigth = clamp(heigth * weigth, 0, heigth-gridsize*size);
-                        if (heigths[z][x] < newheigth)
+                        float newheigth = -clamp(heigth * weigth, 0, heigth-gridsize*size);
+                        if (heigths[z][x] > newheigth)
                             heigths[z][x] = newheigth;
                     }
 
@@ -140,8 +142,8 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                     float influence1 = h1 * worldToGrid;
                     if (l1 <= influence1) {
                         float weigth = 1.0 - l1/influence1;
-                        float newheigth = clamp(h1 * weigth, 0, h1-gridsize*size);
-                        if (heigths[z][x] < newheigth)
+                        float newheigth = -clamp(h1 * weigth, 0, h1-gridsize*size);
+                        if (heigths[z][x] > newheigth)
                             heigths[z][x] = newheigth;
                         continue;
                     }
@@ -149,8 +151,8 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                     float influence2 = h2 * worldToGrid;
                     if (l2 <= influence2) {
                         float weigth = 1.0 - l2/influence2;
-                        float newheigth = clamp(h2 * weigth, 0, h2-gridsize*size);
-                        if (heigths[z][x] < newheigth)
+                        float newheigth = -clamp(h2 * weigth, 0, h2-gridsize*size);
+                        if (heigths[z][x] > newheigth)
                             heigths[z][x] = newheigth;
                         continue;
                     }
@@ -170,20 +172,51 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
 
 }
 
+void RiverNode::smooth() {
+    if (uv.size()<1) return;
+    QVector<QVector2D> newPoints;
+    for (float p = 0; p <1.001;p+=0.01) {
+        QVector<QVector2D> points = uv;
+        for (int i = 1; i< points.size(); ++i) {
+            for (int j = 0;j <points.size()-i;++j) {
+                points[j] = points[j]*(1-p) + points[j+1]*p;
+            }
+        }
+        newPoints.push_back(points[0]);
+    }
+    this->uv= newPoints;
+}
+
 
 void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
-    baseSpline.clear();
+    rightSpline.clear();
     spline.clear();
-    for (int i = 0; i<uv.size(); ++i) {
-        Vector3 point = surfacenode.getPointFromUv(uv[i]);
-        baseSpline.addPoint(point);
-        spline.addPoint(Vector3(point.x(), point.y() + heights[i], point.z()));
 
+    QVector2D prev = uv[0] - (uv[1]-uv[0]);
+    for (int i = 0; i<uv.size(); ++i) {
+        QVector2D next;
+        if (i == uv.size()-1) {
+            next = uv[i] + (uv[i]-uv[i-1]);
+        }else {
+            next = uv[i+1];
+        }
+        QVector2D normal1 = uv[i]- prev;
+        normal1 = QVector2D(normal1.y(), -normal1.x());
+        QVector2D normal2 = next- uv[i];
+        normal2 = QVector2D(normal2.y(), -normal2.x());
+        QVector2D normal = normal1+normal2;
+        normal.normalize();
+        normal *= 0.1;
+        Vector3 pointr = surfacenode.getPointFromUv(uv[i]+(normal*rigths[i]));
+        Vector3 pointl = surfacenode.getPointFromUv(uv[i]-(normal*lefts[i]));
+        rightSpline.addPoint(pointr);
+        spline.addPoint(pointl);
+        prev = uv[i];
     }
     if (shape != NULL) {
         delete shape;
         shape = NULL;
-        makeWall();
+        makeWater();
     }
 }
 

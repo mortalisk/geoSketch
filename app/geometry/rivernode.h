@@ -8,20 +8,23 @@ class SurfaceNode;
 class RiverNode : public BaseNode, public ISurfaceFeature
 {
 private:
-    Spline baseSpline;
+    Spline rightSpline;
     Spline crossSpline;
     QVector<QVector2D> uv;
-    QVector<float> heights;
+    QVector<float> lefts;
+    QVector<float> rigths;
     SurfaceNode* surfaceNode;
 public:
-    RiverNode(RiverNode& o) : BaseNode(o), baseSpline(o.baseSpline), crossSpline(o.crossSpline), uv(o.uv) {}
+    RiverNode(RiverNode& o) : BaseNode(o), rightSpline(o.rightSpline), crossSpline(o.crossSpline), uv(o.uv) {}
     RiverNode(QVector<QVector2D> uv, SurfaceNode* parent);
 
     virtual BaseNode * copy() {
         return new RiverNode(*this);
     }
 
-    void makeWall();
+    void smooth();
+
+    void makeWater();
 
     virtual void repositionOnSurface(SurfaceNode &surfacenode);
     virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size);
