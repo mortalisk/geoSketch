@@ -9,7 +9,7 @@ SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& ba
     //constructLayer();
 }
 
-SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) ,front(other.front), right(other.right), back(other.back), left(other.left), below(other.below), hasContructedLayer(false), resolution(other.resolution), skip(other.skip){
+SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) ,front(other.front), right(other.right), back(other.back), left(other.left), below(other.below), hasContructedLayer(false), resolution(other.resolution), skip(other.skip), uvCoordinateSpline(other.uvCoordinateSpline){
 
 }
 
