@@ -29,31 +29,72 @@ void SurfaceNode::invalidate() {
 }
 
 void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>& normals, QVector<Vector3>& triangles) {
-
-    QVector<Vector3> front1, front2;
-    for(float i = 0.0; i < 1.0; i+= 0.02) {
-        Vector3 a = belowSpline.getPoint(i);
-        Vector3 b = belowSpline.getPoint(i+0.02);
-
-        Vector3 c = spline.getPoint(i);
-        Vector3 d = spline.getPoint(i+0.02);
-
-        front1.push_back(a);
-        front2.push_back(c);
-
-    }
-    for (int i = front2.size()-1; i>= 0; --i) {
-        front1.push_back(front2[i]);
-    }
-
-    front2.clear();
+    Vector3 splinep1 = spline.getPoints()[0];
+    Vector3 splinep2 = spline.getPoints()[2];
+    Vector3 belowp = belowSpline.getPoints()[0];
     Axis axis = X;
-    bool similarZ = similar(front1[0].z(),front1[front1.size()-1].z(),front1[2].z());
+    bool similarZ = similar(splinep1.z(),belowp.z(),splinep2.z());
     if (similarZ) {
         axis = Z;
     }
 
-    triangulate(front1,front2, axis);
+    QVector<Vector3> front1, front2, outline;
+    for(float i = 0.0; i <= 1.001; i+= 0.02) {
+
+
+        Vector3 a = spline.getPoint(i);
+        Vector3 b = belowSpline.getPoint(i);
+
+
+        front1.push_back(a);
+        front2.push_back(b);
+
+    }
+
+    bool add = splinep1.y()>belowp.y();
+    int indexInBelowOfIntersection = -1;
+    for (int i = 0; i <front1.size()-1; ++i) {
+        Vector3& a =front1[i];
+        Vector3& b =front1[i+1];
+        if (add) {
+            outline.push_back(a);
+        }
+
+        for (int j = 0; j <front2.size()-1; ++j) {
+            Vector3& c =front2[j];
+            Vector3& d =front2[j+1];
+
+            double x,y;
+            if (axis == X && lineSegmentIntersection(a.z(),a.y(), b.z(), b.y(), c.z(), c.y(), d.z(), d.y(), &x, &y)) {
+                outline.push_back(Vector3(a.x(),y,x));
+                add = !add;
+                indexInBelowOfIntersection = j;
+            }else if (axis == Z && lineSegmentIntersection(a.x(),a.y(), b.x(), b.y(), c.x(), c.y(), d.x(), d.y(), &x, &y)) {
+                outline.push_back(Vector3(x,y,a.z()));
+                add = !add;
+                indexInBelowOfIntersection = j;
+            }
+
+        }
+    }
+    if (add) {
+        outline.push_back(front1[front1.size()-1]);
+    }
+
+    if (add) {
+        for (int i = front2.size()-1; i> indexInBelowOfIntersection; --i) {
+            outline.push_back(front2[i]);
+        }
+    }else {
+        for (int i = indexInBelowOfIntersection; i>= 0; --i) {
+            outline.push_back(front2[i]);
+        }
+    }
+
+    front2.clear();
+
+
+    triangulate(outline,front2, axis);
 
 
     for (int i = 0; i < front2.size(); i+=3) {
@@ -90,14 +131,14 @@ void SurfaceNode::constructLayer() {
 
     for (int zi = 0;zi<resolution;++zi) {
         QVector<Vector3> row;
-        float zif = zi/resolution;
+        float zif = zi/(float)resolution;
         Vector3 rowLeft = frontLeft*(1.0-zif) + backLeft *(zif);
         Vector3 rowRigth = frontRight*(1.0-zif) + backRight * (zif);
 
         Vector3 leftp = left.getPoint(1.0-zif);
         Vector3 rightp = right.getPoint(zif);
         for (int xi = 0;xi<resolution;xi++) {
-            float xif = xi/resolution;
+            float xif = xi/(float)resolution;
             Vector3 colInt = rowLeft * (1.0-xif) + rowRigth * xif;
             Vector3 frontp = front.getPoint(xif);
             Vector3 backp = back.getPoint(1.0-xif);
@@ -368,7 +409,7 @@ QVector<Vector3> SurfaceNode::intersectionPoints(Vector3 from,Vector3 direction)
 void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
     QVector<Vector3> cand;
     QVector<QVector2D> uvCand;
-    float resolution = 1.0/this->resolution;
+    float resolution = 1.0/(float)this->resolution;
     for (int i = 0; i < rows.size()-skip; i+=skip) {
         for (int j = 0; j < rows[0].size()-skip; j+=skip) {
             Vector3& a = rows[i][j];

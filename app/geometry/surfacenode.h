@@ -9,7 +9,7 @@ class SurfaceNode : public BaseNode
     // this vairable enables contruction of triangles before drawing
     // in stead of when copying which made interaction laggy
     bool hasContructedLayer;
-    float resolution;
+    int resolution;
     int skip;
 
     QVector<QVector2D> uvCoordinateSpline;
