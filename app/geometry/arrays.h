@@ -5,21 +5,17 @@
 
 struct vertex {
 
-    vertex(float x = 0, float y = 0, float z = 0, float n1 = 0, float n2 = 0, float n3 = 0) : x(x), y(y), z(z), n1(n1), n2(n2), n3(n3) {
+    vertex(float x = 0, float y = 0, float z = 0, float n1 = 0, float n2 = 0, float n3 = 0, float s=0, float t=0) : x(x), y(y), z(z), n1(n1), n2(n2), n3(n3), s(s), t(t) {
 
     }
 
-    vertex(Vector3 & v, Vector3 & n) {
-        x = v.x();
-        y = v.y();
-        z = v.z();
-        n1 = n.x();
-        n2 = n.y();
-        n3 = n.z();
+    vertex(const Vector3 & v, const Vector3 & n, float s=0, float t=0) : x(v.x()) , y(v.y()), z(v.z()), n1(n.x()), n2(n.y()), n3(n.z()), s(s), t(t)  {
+
     }
 
     float x,y,z;
     float n1, n2, n3;
+    float s, t;
 };
 
 struct triangle {

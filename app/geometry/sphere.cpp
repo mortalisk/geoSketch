@@ -28,18 +28,27 @@ Sphere::Sphere(float radius) {
 
     // overste
     for(int s = 0; s<antallStykker; s++) {
-        this->triangles.push_back(triangle(punkter[1][s],top,punkter[1][(s+1)%antallStykker],punkter[1][s],top,punkter[1][(s+1)%antallStykker]));
+        this->triangles.push_back(vertex(punkter[1][s],punkter[1][s]));
+        this->triangles.push_back(vertex(top,top));
+        this->triangles.push_back(vertex(punkter[1][(s+1)%antallStykker],punkter[1][(s+1)%antallStykker]));
     }
     // diskene
     for (int d = 2; d<antallDisker; d++) {
         for(int s = 0; s<antallStykker; s++) {
-            this->triangles.push_back(triangle(punkter[d-1][s],punkter[d-1][(s+1)%antallStykker],punkter[d][s],punkter[d-1][s],punkter[d-1][(s+1)%antallStykker],punkter[d][s]));
-            this->triangles.push_back(triangle(punkter[d-1][(s+1)%antallStykker],punkter[d][(s+1)%antallStykker],punkter[d][s],punkter[d-1][(s+1)%antallStykker],punkter[d][(s+1)%antallStykker],punkter[d][s]));
+            this->triangles.push_back(vertex(punkter[d-1][s],punkter[d-1][s]));
+            this->triangles.push_back(vertex(punkter[d-1][(s+1)%antallStykker],punkter[d-1][(s+1)%antallStykker]));
+            this->triangles.push_back(vertex(punkter[d][s],punkter[d][s]));
+
+            this->triangles.push_back(vertex(punkter[d-1][(s+1)%antallStykker],punkter[d-1][(s+1)%antallStykker]));
+            this->triangles.push_back(vertex(punkter[d][(s+1)%antallStykker],punkter[d][(s+1)%antallStykker]));
+            this->triangles.push_back(vertex(punkter[d][s],punkter[d][s]));
         }
     }
     // nederste
     for(int s = 0; s<antallStykker; s++) {
-        this->triangles.push_back(triangle(punkter[antallDisker-1][(s+1)%antallStykker],bunn,punkter[antallDisker-1][s],punkter[antallDisker-1][(s+1)%antallStykker],bunn,punkter[antallDisker-1][s]));
+        this->triangles.push_back(vertex(punkter[antallDisker-1][(s+1)%antallStykker],punkter[antallDisker-1][(s+1)%antallStykker]));
+        this->triangles.push_back(vertex(bunn,bunn));
+        this->triangles.push_back(vertex(punkter[antallDisker-1][s],punkter[antallDisker-1][s]));
     }
 
 }

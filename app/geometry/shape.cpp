@@ -45,8 +45,11 @@ void Shape::drawShape(QVector4D ambient, QVector4D diffuse) {
     glEnableClientState(GL_NORMAL_ARRAY);
     if (triangles.size() > 0) {
         glVertexPointer(3,GL_FLOAT,sizeof(vertex),&triangles[0]);
-        glNormalPointer(GL_FLOAT,sizeof(vertex),&triangles[0].p1.n1);
-        glDrawArrays(GL_TRIANGLES,0,triangles.size()*3);
+        glNormalPointer(GL_FLOAT,sizeof(vertex),&triangles[0].n1);
+        if(!strip)
+            glDrawArrays(GL_TRIANGLES,0,triangles.size());
+        else
+            glDrawArrays(GL_TRIANGLE_STRIP,0,triangles.size());
     }
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_VERTEX_ARRAY);
@@ -56,17 +59,18 @@ void Shape::drawShape(QVector4D ambient, QVector4D diffuse) {
 QVector<Vector3> Shape::intersectionPoints(Vector3 p,Vector3 dir){
     QVector<Vector3> points;
 
-    QVector<triangle> & triangles = this->triangles;
+    QVector<vertex> & triangles = this->triangles;
 
     int nearest = -1;
     float distance = FLT_MAX;
     int pointn = 0;
-    for(int i=0; i<triangles.size(); i++) {
+    int inc = strip?1:3;
+    for(int i=0; i<triangles.size()-3; i+=inc) {
         // hentet fra http://softsurfer.com/Archive/algorithm_0105/algorithm_0105.htm#intersect_RayTriangle%28%29
 
-        Vector3 v0(triangles[i].p1.x,triangles[i].p1.y,triangles[i].p1.z);
-        Vector3 v1(triangles[i].p2.x,triangles[i].p2.y,triangles[i].p2.z);
-        Vector3 v2(triangles[i].p3.x,triangles[i].p3.y,triangles[i].p3.z);
+        Vector3 v0(triangles[i].x,triangles[i].y,triangles[i].z);
+        Vector3 v1(triangles[i+1].x,triangles[i+1].y,triangles[i+1].z);
+        Vector3 v2(triangles[i+2].x,triangles[i+2].y,triangles[i+2].z);
 
         Vector3    u, v, n;             // triangle vectors
         Vector3    w0, w;          // ray vectors

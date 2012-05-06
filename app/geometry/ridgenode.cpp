@@ -34,7 +34,7 @@ QVector<Vector3> RidgeNode::intersectionPoints(Vector3 from, Vector3 direction) 
 }
 
 void RidgeNode::determineActionOnStoppedDrawing() {
-    BaseNode::determineActionOnStoppedDrawing();
+    //BaseNode::determineActionOnStoppedDrawing();
     SurfaceNode * surfaceParent = dynamic_cast<SurfaceNode *>(parent);
     surfaceParent->invalidate();
 
@@ -42,10 +42,10 @@ void RidgeNode::determineActionOnStoppedDrawing() {
 
 void RidgeNode::makeWall() {
     this->diffuse = QVector4D(0.5,0.3,0.3,0.5);
-    QVector<Vector3> triangles;
-    QVector<Vector3> normals;
+    QVector<vertex> triangles;
 
     Spline& spline = baseSpline;
+    float size = spline.getPoints().size();
 
     for (int i = 0 ; i < spline.getPoints().size(); ++i) {
         const Vector3 & current = spline.getPoints()[i];
@@ -62,10 +62,10 @@ void RidgeNode::makeWall() {
         }
         Vector3 up(0, 5, 0);
         Vector3 normal = (next-previous).cross(up).normalize();
-        triangles.push_back(current);
-        triangles.push_back(current+up);
-        normals.push_back(normal);
-        normals.push_back(normal);
+        Vector3 top = current+up;
+        float u = i/size;
+        triangles.push_back(vertex(current.x(), current.y(), current.z(), normal.x(), normal.y(), normal.z(), u, 0));
+        triangles.push_back(vertex(top.x(), top.y(), top.z(), top.x(), top.y(), top.z(), u, 1));
 
 
     }/*
@@ -93,7 +93,7 @@ void RidgeNode::makeWall() {
 
     }*/
     QVector<Vector3> noOutline;
-    Surface* s = new Surface(triangles,normals, noOutline,true);
+    Surface* s = new Surface(triangles,noOutline,true);
     shape = s;
 }
 

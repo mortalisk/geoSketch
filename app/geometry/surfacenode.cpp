@@ -28,7 +28,7 @@ void SurfaceNode::invalidate() {
     shape = NULL;
 }
 
-void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>& normals, QVector<Vector3>& triangles) {
+void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles) {
     Vector3 splinep1 = spline.getPoints()[0];
     Vector3 splinep2 = spline.getPoints()[2];
     Vector3 belowp = belowSpline.getPoints()[0];
@@ -103,12 +103,9 @@ void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>&
         Vector3 c = front2[i+2];
         Vector3 normal = (b-a).cross(c-a).normalize();
 
-        normals.push_back(normal);
-        normals.push_back(normal);
-        normals.push_back(normal);
-        triangles.push_back(a);
-        triangles.push_back(b);
-        triangles.push_back(c);
+        triangles.push_back(vertex(a,normal));
+        triangles.push_back(vertex(b,normal));
+        triangles.push_back(vertex(c,normal));
     }
 
 }
@@ -116,7 +113,7 @@ void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>&
 void SurfaceNode::constructLayer() {
     if (hasContructedLayer) return;
 
-    QVector<Vector3> triangles;
+    QVector<vertex> triangles;
     QVector4D c(0.1, 0.3, 0.4, 1.0);
     QVector<Vector3> previousRow;
 
@@ -216,18 +213,12 @@ void SurfaceNode::constructLayer() {
             Vector3 & nc = normalRows[i][j-1];
             Vector3 & d = rows[i][j];
             Vector3 & nd = normalRows[i][j];
-            triangles.push_back(a);
-            triangles.push_back(b);
-            triangles.push_back(c);
-            triangles.push_back(b);
-            triangles.push_back(d);
-            triangles.push_back(c);
-            normals.push_back(na);
-            normals.push_back(nb);
-            normals.push_back(nc);
-            normals.push_back(nb);
-            normals.push_back(nd);
-            normals.push_back(nc);
+            triangles.push_back(vertex(a,na));
+            triangles.push_back(vertex(b,nb));
+            triangles.push_back(vertex(c,nc));
+            triangles.push_back(vertex(b,nb));
+            triangles.push_back(vertex(d,nd));
+            triangles.push_back(vertex(c,nc));
 
         }
     }
@@ -248,15 +239,15 @@ void SurfaceNode::constructLayer() {
     }
 
     if (below) {
-        makeSide(below->front, front, normals, triangles);
-        makeSide(below->left, left, normals, triangles);
-        makeSide(below->back, back, normals, triangles);
-        makeSide(below->right, right, normals, triangles);
+        makeSide(below->front, front, triangles);
+        makeSide(below->left, left, triangles);
+        makeSide(below->back, back, triangles);
+        makeSide(below->right, right, triangles);
     }
 
 
     hasContructedLayer = true;
-    shape = new Surface(triangles, normals, outline);
+    shape = new Surface(triangles, outline);
 }
 
 void SurfaceNode::determineActionOnStoppedDrawing() {

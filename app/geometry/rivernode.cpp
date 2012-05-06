@@ -43,8 +43,7 @@ void RiverNode::determineActionOnStoppedDrawing() {
 
 void RiverNode::makeWater() {
     this->diffuse = QVector4D(0.5,0.3,0.3,0.5);
-    QVector<Vector3> triangles;
-    QVector<Vector3> normals;
+    QVector<vertex> triangles;
 
     Spline& spline = this->spline;
 
@@ -63,10 +62,9 @@ void RiverNode::makeWater() {
         }
         Vector3 left = rightSpline.getPoints()[i]-current;
         Vector3 normal = (next-previous).cross(left).normalize();
-        triangles.push_back(current);
-        triangles.push_back(current+left);
-        normals.push_back(normal);
-        normals.push_back(normal);
+        Vector3 otherSide = current+left;
+        triangles.push_back(vertex(current,normal));
+        triangles.push_back(vertex(otherSide,normal));
 
 
     }/*
@@ -94,7 +92,7 @@ void RiverNode::makeWater() {
 
     }*/
     QVector<Vector3> noOutline;
-    Surface* s = new Surface(triangles,normals, noOutline,true);
+    Surface* s = new Surface(triangles, noOutline,true);
     shape = s;
 }
 

@@ -9,8 +9,9 @@ class Shape
 {
 protected:
     int displayList;
-    QVector<triangle> triangles;
+    QVector<vertex> triangles;
     QVector<vertex> lineVertices;
+    bool strip;
 public:
     Shape();
     ~Shape();

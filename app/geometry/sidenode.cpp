@@ -6,28 +6,20 @@ SideNode::SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vect
     : BaseNode("sideNode"), lowerLeft(lowerLeft), lowerRigth(lowerRigth), upperRigth(upperRigth), upperLeft(upperLeft)
 {
     
-    QVector<Vector3> vertices;
-    QVector<Vector3> normals;
+    QVector<vertex> vertices;
 
     QVector<Vector3> lineVertices;
     Vector3 normal = (lowerRigth - lowerLeft).cross((upperRigth-lowerLeft)).normalize();
     QVector4D c(1.0, 1.0, 1.0, 0.5);
 
     //Front
-    vertices.push_back(lowerLeft);
-    vertices.push_back(lowerRigth);
-    vertices.push_back(upperLeft);
+    vertices.push_back(vertex(lowerLeft,normal));
+    vertices.push_back(vertex(lowerRigth,normal));
+    vertices.push_back(vertex(upperLeft,normal));
 
-    vertices.push_back(upperLeft);
-    vertices.push_back(lowerRigth);
-    vertices.push_back(upperRigth);
-
-    normals.push_back(normal);
-    normals.push_back(normal);
-    normals.push_back(normal);
-    normals.push_back(normal);
-    normals.push_back(normal);
-    normals.push_back(normal);
+    vertices.push_back(vertex(upperLeft,normal));
+    vertices.push_back(vertex(lowerRigth,normal));
+    vertices.push_back(vertex(upperRigth,normal));
 
     lineVertices.push_back(lowerLeft);
     lineVertices.push_back(lowerRigth);
@@ -35,7 +27,7 @@ SideNode::SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vect
     lineVertices.push_back(upperLeft);
     lineVertices.push_back(lowerLeft);
 
-    shape = new Surface(vertices,normals, lineVertices);
+    shape = new Surface(vertices, lineVertices);
   
 }
 

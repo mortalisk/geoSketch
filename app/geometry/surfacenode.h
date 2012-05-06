@@ -15,7 +15,7 @@ class SurfaceNode : public BaseNode
     QVector<QVector2D> uvCoordinateSpline;
     QVector < QVector < Vector3 > > rows;
     QVector < QVector < Vector3 > > intersectRows;
-    void makeSide(Spline& belowSpline, Spline& spline,QVector<Vector3>& normals, QVector<Vector3>& triangles);
+    void makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles);
 public:
 
     Spline front, right, back, left;
