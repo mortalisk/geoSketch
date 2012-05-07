@@ -12,23 +12,33 @@ class Spline
 {
 
     QVector<Vector3> points;
+
 public:
+     int drawFrom, drawUntil;
     bool isSuggestion;
     QMap<float, Vector3> pointsCache;
     void addPoint(Vector3 point) {
         points.append(point);
         isSuggestion = false;
         pointsCache.clear();
+        resetDrawPoints();
     }
 
     void addPointFront(Vector3 point) {
         points.push_front(point);
         isSuggestion = false;
         pointsCache.clear();
+        resetDrawPoints();
+    }
+
+    void resetDrawPoints() {
+        drawFrom = 0;
+        drawUntil = points.size();
     }
 
     void addAll(const QVector<Vector3> & a) {
         points += a;
+        resetDrawPoints();
     }
 
     const QVector<Vector3>& getPoints() {
@@ -38,6 +48,7 @@ public:
     void setPoint(int i, Vector3 value) {
         points[i] = value;
         pointsCache.clear();
+        resetDrawPoints();
     }
 
     void reverse() {
@@ -48,6 +59,7 @@ public:
     void clear() {
         points.clear();
         pointsCache.clear();
+        resetDrawPoints();
     }
 
     void smooth();

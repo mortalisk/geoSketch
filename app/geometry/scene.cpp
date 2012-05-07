@@ -92,6 +92,17 @@ void Scene::editLayer() {
         node->invalidate();
         node->visible = true;
         editLayerNo = -1;
+
+        foreach(SideNode* s, boxNode->surfaces) {
+            s->spline.clear();
+            s->spline.isSuggestion = true;
+        }
+        foreach(BaseNode* s, boxNode->children) {
+            SurfaceNode * node2 = dynamic_cast<SurfaceNode*>(s);
+            if (node2 && node2->below == node) {
+                node2->invalidate();
+            }
+        }
     }
 }
 

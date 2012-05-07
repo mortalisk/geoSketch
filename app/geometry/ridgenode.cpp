@@ -41,16 +41,13 @@ void RidgeNode::addPoint(Vector3 from, Vector3 direction) {
         sketchingSpline.addPoint(points[0]);
         uvSketch.push_back(QVector2D(s,t));
     }
-
-    int p = heights.size()*s;
-    heights[p] = t;
 }
 
 void RidgeNode::determineActionOnStoppedDrawing() {
     //BaseNode::determineActionOnStoppedDrawing();
     sketchingSpline.clear();
     smooth(uvSketch);
-    if (uvSketch[0].x() < uvSketch[uvSketch.size()-1].x()) {
+    if (uvSketch[0].x() > uvSketch[uvSketch.size()-1].x()) {
         std::reverse(uvSketch.begin(), uvSketch.end());
     }
     for (int i= 0;i<uvSketch.size()-1;++i) {

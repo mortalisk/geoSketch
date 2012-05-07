@@ -28,7 +28,7 @@ void SurfaceNode::invalidate() {
     shape = NULL;
 }
 
-void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles) {
+void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) {
     Vector3 splinep1 = spline.getPoints()[0];
     Vector3 splinep2 = spline.getPoints()[2];
     Vector3 belowp = belowSpline.getPoints()[0];
@@ -53,6 +53,7 @@ void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>&
 
     bool add = splinep1.y()>belowp.y();
     int indexInBelowOfIntersection = -1;
+
     for (int i = 0; i <front1.size()-1; ++i) {
         Vector3& a =front1[i];
         Vector3& b =front1[i+1];
@@ -108,6 +109,10 @@ void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>&
         triangles.push_back(vertex(c,normal));
     }
 
+    for (double i = 0.0;i<=1.01;i+=0.02) {
+        boxoutline.push_back(spline.getPoint(i));
+    }
+
 }
 
 void SurfaceNode::constructLayer() {
@@ -126,7 +131,7 @@ void SurfaceNode::constructLayer() {
     rows.clear();
     intersectRows.clear();
 
-    for (int zi = 0;zi<resolution;++zi) {
+    for (int zi = 0;zi<=resolution;++zi) {
         QVector<Vector3> row;
         float zif = zi/(float)resolution;
         Vector3 rowLeft = frontLeft*(1.0-zif) + backLeft *(zif);
@@ -134,7 +139,7 @@ void SurfaceNode::constructLayer() {
 
         Vector3 leftp = left.getPoint(1.0-zif);
         Vector3 rightp = right.getPoint(zif);
-        for (int xi = 0;xi<resolution;xi++) {
+        for (int xi = 0;xi<=resolution;xi++) {
             float xif = xi/(float)resolution;
             Vector3 colInt = rowLeft * (1.0-xif) + rowRigth * xif;
             Vector3 frontp = front.getPoint(xif);
@@ -160,8 +165,8 @@ void SurfaceNode::constructLayer() {
     foreach (BaseNode * child , children) {
         ISurfaceFeature * feature = dynamic_cast<ISurfaceFeature *>(child);
         if (feature != NULL) {
-            feature->doTransformSurface(rows, resolution, 10);
             feature->repositionOnSurface(*this);
+            feature->doTransformSurface(rows, resolution, 10);
         }
     }
 
@@ -225,24 +230,11 @@ void SurfaceNode::constructLayer() {
 
     QVector<Vector3> outline;
 
-    for (double i = 0.0;i<=1.01;i+=0.02) {
-        outline.push_back(front.getPoint(i));
-    }
-    for (double i = 0.0;i<=1.01;i+=0.02) {
-        outline.push_back(right.getPoint(i));
-    }
-    for (double i = 0.0;i<=1.01;i+=0.02) {
-        outline.push_back(back.getPoint(i));
-    }
-    for (double i = 0.0;i<=1.01;i+=0.02) {
-        outline.push_back(left.getPoint(i));
-    }
-
     if (below) {
-        makeSide(below->front, front, triangles);
-        makeSide(below->left, left, triangles);
-        makeSide(below->back, back, triangles);
-        makeSide(below->right, right, triangles);
+        makeSide(below->front, front, triangles, outline);
+        makeSide(below->right, right, triangles, outline);
+        makeSide(below->back, back, triangles, outline);
+        makeSide(below->left, left, triangles, outline);
     }
 
 
@@ -448,29 +440,47 @@ void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
 }
 
 Vector3 SurfaceNode::getPointFromUv(QVector2D uv) {
-    Vector3 frontRight = right.getPoint(0.0);
-    Vector3 frontLeft = left.getPoint(1.0);
-    Vector3 backLeft = left.getPoint(0.0);
-    Vector3 backRight = right.getPoint(1.0);
+//    Vector3 frontRight = right.getPoint(0.0);
+//    Vector3 frontLeft = left.getPoint(1.0);
+//    Vector3 backLeft = left.getPoint(0.0);
+//    Vector3 backRight = right.getPoint(1.0);
 
-    float xi = uv.x();
-    float zi = uv.y();
+//    float xi = uv.x();
+//    float zi = uv.y();
 
 
-    Vector3 rowLeft = frontLeft*(1.0-zi) + backLeft *(zi);
-    Vector3 rowRigth = frontRight*(1.0-zi) + backRight * (zi);
+//    Vector3 rowLeft = frontLeft*(1.0-zi) + backLeft *(zi);
+//    Vector3 rowRigth = frontRight*(1.0-zi) + backRight * (zi);
 
-    Vector3 leftp = left.getPoint(1.0-zi);
-    Vector3 rightp = right.getPoint(zi);
+//    Vector3 leftp = left.getPoint(1.0-zi);
+//    Vector3 rightp = right.getPoint(zi);
 
-    Vector3 colInt = rowLeft * (1.0-xi) + rowRigth * xi;
-    Vector3 frontp = front.getPoint(xi);
-    Vector3 backp = back.getPoint(1.0-xi);
-    Vector3 frontBack = frontp*(1.0-zi)+backp*zi;
-    Vector3 diff = frontBack - colInt;
+//    Vector3 colInt = rowLeft * (1.0-xi) + rowRigth * xi;
+//    Vector3 frontp = front.getPoint(xi);
+//    Vector3 backp = back.getPoint(1.0-xi);
+//    Vector3 frontBack = frontp*(1.0-zi)+backp*zi;
+//    Vector3 diff = frontBack - colInt;
 
-    Vector3 leftRight = leftp*(1.0-xi) + rightp*xi;
-    Vector3 point = leftRight + diff;
+//    Vector3 leftRight = leftp*(1.0-xi) + rightp*xi;
+//    Vector3 point = leftRight + diff;
+    float x = uv.x()*(resolution-1);
+    float z = uv.y()*(resolution-1);
+    int xi = floor(x);
+    int zi = floor(z);
+    float u = (x - xi);
+    float v = (z - zi);
+    int nextx = u > 0.0001? 1: 0;
+    int nextz = v > 0.0001? 1: 0;
+    Vector3& a = rows[zi][xi];
+    Vector3& b = rows[zi][xi+nextx];
+    Vector3& c = rows[zi+nextz][xi];
+    Vector3& d = rows[zi+nextz][xi+nextx];
+
+    Vector3 ab = a*(1-u) + b*u;
+    Vector3 cd = c*(1-u) + d*u;
+
+    Vector3 point = ab * (1-v) + cd * v;
+
     return point;
 }
 

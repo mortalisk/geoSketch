@@ -204,7 +204,7 @@ void BaseNode::drawSelf() {
                 if (visible) {
                     QVector4D color = diffuse;
                     if (active) {
-                        color = QVector4D(1.0,0.0,0.0,color.w());
+                        color = QVector4D(color.x()+0.3,color.y(),color.z(),color.w());
                     }
                     shape->drawShape(ambient, color);
                 }
