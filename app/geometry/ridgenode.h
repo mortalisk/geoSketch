@@ -13,6 +13,7 @@ private:
     QVector<QVector2D> uv;
     QVector<float> heights;
     SurfaceNode* surfaceNode;
+    QVector<QVector2D> uvSketch;
 public:
     RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), crossSpline(o.crossSpline), uv(o.uv) {}
     RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent);
@@ -21,7 +22,7 @@ public:
         return new RidgeNode(*this);
     }
 
-    void smooth();
+    void smooth(QVector<QVector2D>& uv);
 
     void makeWall();
 

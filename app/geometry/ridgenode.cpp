@@ -6,7 +6,7 @@
 
 RidgeNode::RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uv)
 {
-    smooth();
+    smooth(this->uv);
     for (int i = 0; i<this->uv.size(); ++i) {
         float distanceFromMiddle = fabs(i-this->uv.size()/2.0)/this->uv.size();
         heights.push_back(0.5-distanceFromMiddle);
@@ -36,7 +36,11 @@ QVector<Vector3> RidgeNode::intersectionPoints(Vector3 from, Vector3 direction) 
 void RidgeNode::addPoint(Vector3 from, Vector3 direction) {
     float s,t;
 
-    shape->intersectionPoints(from, direction, s, t);
+    QVector<Vector3> points = shape->intersectionPoints(from, direction, s, t);
+    if (points.size() > 0) {
+        sketchingSpline.addPoint(points[0]);
+        uvSketch.push_back(QVector2D(s,t));
+    }
 
     int p = heights.size()*s;
     heights[p] = t;
@@ -44,6 +48,30 @@ void RidgeNode::addPoint(Vector3 from, Vector3 direction) {
 
 void RidgeNode::determineActionOnStoppedDrawing() {
     //BaseNode::determineActionOnStoppedDrawing();
+    sketchingSpline.clear();
+    smooth(uvSketch);
+    if (uvSketch[0].x() < uvSketch[uvSketch.size()-1].x()) {
+        std::reverse(uvSketch.begin(), uvSketch.end());
+    }
+    for (int i= 0;i<uvSketch.size()-1;++i) {
+        QVector2D p1 = uvSketch[i];
+        QVector2D p2 = uvSketch[i+1];
+
+        int begin = p1.x()*heights.size();
+        int end = p2.x()*heights.size();
+
+        for (int j = begin; j <=end; ++j) {
+            if (j <heights.size()) {
+                float t = j - begin;
+                float nHeight = p1.y() * (1-t) + p2.y()*t;
+                heights[j] = nHeight;
+
+            }
+        }
+
+    }
+    uvSketch.clear();
+
     SurfaceNode * surfaceParent = dynamic_cast<SurfaceNode *>(parent);
     surfaceParent->invalidate();
 
@@ -74,7 +102,7 @@ void RidgeNode::makeWall() {
         Vector3 top = current+up;
         float u = i/size;
         triangles.push_back(vertex(current.x(), current.y(), current.z(), normal.x(), normal.y(), normal.z(), u, 0));
-        triangles.push_back(vertex(top.x(), top.y(), top.z(), top.x(), top.y(), top.z(), u, 1));
+        triangles.push_back(vertex(top.x(), top.y(), top.z(), top.x(), top.y(), top.z(), u, 5));
 
 
     }/*
@@ -106,7 +134,7 @@ void RidgeNode::makeWall() {
     shape = s;
 }
 
-void RidgeNode::smooth() {
+void RidgeNode::smooth(QVector<QVector2D>& uv) {
     if (uv.size()<1) return;
     QVector<QVector2D> newPoints;
     for (float p = 0; p <1.001;p+=0.01) {
@@ -118,7 +146,7 @@ void RidgeNode::smooth() {
         }
         newPoints.push_back(points[0]);
     }
-    this->uv= newPoints;
+    uv= newPoints;
 }
 
 void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size) {

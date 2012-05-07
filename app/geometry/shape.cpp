@@ -65,7 +65,7 @@ QVector<Vector3> Shape::intersectionPoints(Vector3 p,Vector3 dir, float& rs, flo
     float distance = FLT_MAX;
     int pointn = 0;
     int inc = strip?1:3;
-    for(int i=0; i<triangles.size()-3; i+=inc) {
+    for(int i=0; i<triangles.size()-2; i+=inc) {
         // hentet fra http://softsurfer.com/Archive/algorithm_0105/algorithm_0105.htm#intersect_RayTriangle%28%29
 
         Vector3 v0(triangles[i].x,triangles[i].y,triangles[i].z);
@@ -133,8 +133,8 @@ QVector<Vector3> Shape::intersectionPoints(Vector3 p,Vector3 dir, float& rs, flo
             float t1 = triangles[i].t;
             float t2 = triangles[i+1].t;
             float t3 = triangles[i+2].t;
-            rs = s1 * (1-s) + s2*s + s1*(1-t) + s3*t;
-            rt = t1 * (1-s) + t2*s + t1*(1-t) + t3*t;
+            rs = s1 + (s2-s1)*s + (s3-s1)*t;
+            rt = t1 + (t2-t1)*s + (t3-t1)*t;
         }
 
     }
