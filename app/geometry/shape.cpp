@@ -56,7 +56,7 @@ void Shape::drawShape(QVector4D ambient, QVector4D diffuse) {
 
 }
 
-QVector<Vector3> Shape::intersectionPoints(Vector3 p,Vector3 dir){
+QVector<Vector3> Shape::intersectionPoints(Vector3 p,Vector3 dir, float& rs, float& rt){
     QVector<Vector3> points;
 
     QVector<vertex> & triangles = this->triangles;
@@ -127,6 +127,14 @@ QVector<Vector3> Shape::intersectionPoints(Vector3 p,Vector3 dir){
             nearest = pointn;
             distance = r;
             pointn++;
+            float s1 = triangles[i].s;
+            float s2 = triangles[i+1].s;
+            float s3 = triangles[i+2].s;
+            float t1 = triangles[i].t;
+            float t2 = triangles[i+1].t;
+            float t3 = triangles[i+2].t;
+            rs = s1 * (1-s) + s2*s + s1*(1-t) + s3*t;
+            rt = t1 * (1-s) + t2*s + t1*(1-t) + t3*t;
         }
 
     }

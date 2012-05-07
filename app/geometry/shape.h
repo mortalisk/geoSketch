@@ -17,7 +17,7 @@ public:
     ~Shape();
     void drawLines(bool stipple);
     void drawShape(QVector4D ambient, QVector4D diffuse);
-    QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
+    QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction,float &s, float &t);
 
 };
 

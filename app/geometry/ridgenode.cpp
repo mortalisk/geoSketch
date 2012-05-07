@@ -33,6 +33,15 @@ QVector<Vector3> RidgeNode::intersectionPoints(Vector3 from, Vector3 direction) 
     }
 }
 
+void RidgeNode::addPoint(Vector3 from, Vector3 direction) {
+    float s,t;
+
+    shape->intersectionPoints(from, direction, s, t);
+
+    int p = heights.size()*s;
+    heights[p] = t;
+}
+
 void RidgeNode::determineActionOnStoppedDrawing() {
     //BaseNode::determineActionOnStoppedDrawing();
     SurfaceNode * surfaceParent = dynamic_cast<SurfaceNode *>(parent);

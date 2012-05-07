@@ -25,6 +25,8 @@ public:
 
     void makeWall();
 
+    void addPoint(Vector3 from, Vector3 direction);
+
     virtual void repositionOnSurface(SurfaceNode &surfacenode);
     virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size);
 

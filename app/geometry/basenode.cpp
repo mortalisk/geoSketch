@@ -153,8 +153,9 @@ BaseNode * BaseNode::makeLayer() {
 QVector<Vector3> BaseNode::intersectionPoints(Vector3 from, Vector3 direction) {
 	from = from - position;
 	direction = direction - position;
+    float s, t;
 	if (shape != NULL) {
-		return shape->intersectionPoints(from, direction);
+        return shape->intersectionPoints(from, direction,s,t);
 	} else {
 		QVector<Vector3> empty;
 		return empty;
