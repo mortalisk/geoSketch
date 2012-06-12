@@ -10,9 +10,16 @@ class RiverNode : public BaseNode, public ISurfaceFeature
 private:
     Spline rightSpline;
     Spline crossSpline;
+
+    // the original sketched line
     QVector<QVector2D> uv;
-    QVector<float> lefts;
-    QVector<float> rigths;
+
+    //the two river banks
+    QVector<QVector2D> lefts;
+    QVector<QVector2D> rigths;
+
+QVector<QVector2D> uvSketch;
+
     SurfaceNode* surfaceNode;
 public:
     RiverNode(RiverNode& o) : BaseNode(o), rightSpline(o.rightSpline), crossSpline(o.crossSpline), uv(o.uv) {}
@@ -22,9 +29,11 @@ public:
         return new RiverNode(*this);
     }
 
-    void smooth();
+    void smooth(QVector<QVector2D> &);
 
     void makeWater();
+
+    void doOversketch();
 
     virtual void repositionOnSurface(SurfaceNode &surfacenode);
     virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size);
@@ -37,6 +46,8 @@ public:
     void determineActionOnStoppedDrawing();
 
     void removeLoops(QVector<QVector2D>& sp);
+
+    void addPoint(Vector3 from, Vector3 direction);
 
 };
 

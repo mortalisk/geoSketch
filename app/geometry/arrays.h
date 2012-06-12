@@ -9,7 +9,7 @@ struct vertex {
 
     }
 
-    vertex(const Vector3 & v, const Vector3 & n, float s=0, float t=0) : x(v.x()) , y(v.y()), z(v.z()), n1(n.x()), n2(n.y()), n3(n.z()), s(s), t(t)  {
+    vertex(const Vector3 & v, const Vector3 & n, float s=-1, float t=-1) : x(v.x()) , y(v.y()), z(v.z()), n1(n.x()), n2(n.y()), n3(n.z()), s(s), t(t)  {
 
     }
 

@@ -171,38 +171,52 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                 QVector2D a = intersect-p1;
                 QVector2D b = p2-p1;
                 float where = a.length()/b.length();
-                if (((a.x() > 0 && b.x() > 0 )||(a.x() <= 0 && b.x() <= 0)) && where <= 1.0) {
+                if (((a.x() > 0 && b.x() > 0 )||(a.x() <= 0 && b.x() <= 0))) {
 
-                    float heigth = h1*(1-where) + h2 *where;
-                    //heigth*=20;
-                    float influence = heigth*worldToGrid;
-                    float dist = (point-intersect).length();
-                    if (dist <= influence) {
-                        float weigth = 1.0 - dist/influence;
-                        float newheigth = clamp(heigth * weigth, 0, heigth-gridsize*size);
-                        if (heigths[z][x] < newheigth)
-                            heigths[z][x] = newheigth;
+                    if (where <= 1.0) {
+                        float heigth = h1*(1-where) + h2 *where;
+                        //heigth*=20;
+                        float influence = heigth*worldToGrid;
+                        float dist = (point-intersect).length();
+                        if (dist <= influence) {
+                            float weigth = 1.0 - dist/influence;
+                            float newheigth = clamp(heigth * weigth, 0, heigth-gridsize*size);
+                            if (heigths[z][x] < newheigth)
+                                heigths[z][x] = newheigth;
+                        }
+                    }else if (i < uv.size()-2) {
+                        QVector2D p3 = uv[i+2]/gridsize;
+                        float h3 = this->heights[i+2];
+                        QVector2D normal2(p3.y()-p2.y(), -(p3.x()-p2.x()));
+                        QVector2D point3 = point +normal2;
+
+                        QVector2D intersect2 = linesIntersection(p2,p3, point, point3);
+
+                        QVector2D a2 = intersect2-p2;
+                        QVector2D b2 = p2-p3;
+                        //float where2 = a2.length()/b2.length();
+                        if (((a2.x() >= 0 && b2.x() >= 0 )||(a2.x() <= 0 && b2.x() <= 0))) {
+
+                            float l1 = (point - p2).length();
+                            float influence1 = h2 * worldToGrid;
+                            if (l1 <= influence1) {
+                                float weigth = 1.0 - l1/influence1;
+                                float newheigth = clamp(h2 * weigth, 0, h2-gridsize*size);
+                                if (heigths[z][x] < newheigth)
+                                    heigths[z][x] = newheigth;
+                                continue;
+                            }
+//                            float l2 = (point - p2).length();
+//                            float influence2 = h2 * worldToGrid;
+//                            if (l2 <= influence2) {
+//                                float weigth = 1.0 - l2/influence2;
+//                                float newheigth = clamp(h2 * weigth, 0, h2-gridsize*size);
+//                                if (heigths[z][x] < newheigth)
+//                                    heigths[z][x] = newheigth;
+//                                continue;
+//                            }
                     }
 
-                } else {
-                    float l1 = (point - p1).length();
-                    float influence1 = h1 * worldToGrid;
-                    if (l1 <= influence1) {
-                        float weigth = 1.0 - l1/influence1;
-                        float newheigth = clamp(h1 * weigth, 0, h1-gridsize*size);
-                        if (heigths[z][x] < newheigth)
-                            heigths[z][x] = newheigth;
-                        continue;
-                    }
-                    float l2 = (point - p2).length();
-                    float influence2 = h2 * worldToGrid;
-                    if (l2 <= influence2) {
-                        float weigth = 1.0 - l2/influence2;
-                        float newheigth = clamp(h2 * weigth, 0, h2-gridsize*size);
-                        if (heigths[z][x] < newheigth)
-                            heigths[z][x] = newheigth;
-                        continue;
-                    }
                 }
 
 
@@ -210,9 +224,11 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
             }
         }
     }
+    }
     for (int z = 0; z<rows.size(); ++z) {
         for (int x = 0; x<rows[0].size();++x) {
-            rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y()+heigths[z][x],rows[z][x].z());
+            if (heigths[z][x] >= rows[z][x].y())
+                rows[z][x] = Vector3(rows[z][x].x(),heigths[z][x],rows[z][x].z());
         }
     }
 

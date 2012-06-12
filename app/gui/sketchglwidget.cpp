@@ -14,7 +14,7 @@ MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
 
     light_diffuse = QVector4D(0.33, 0.33, 0.33, 1.0);
     light_ambient = QVector4D(0.2, 0.2, 0.2, 1.0);  /* light. */
-    light_specular = QVector4D(1.0,1.0,1.0, 1.0);
+    light_specular = QVector4D(0.0,0.0,0.0, 1.0);
     light_position1 = QVector4D(0.0, 1.0, 1.0, 0.0);  /* Infinite light location. */
     light_position2 = QVector4D(1.0, 1.0, -1.0, 0.0);
     light_position3 = QVector4D(-1.0, 1.0, -1.0, 0.0);
