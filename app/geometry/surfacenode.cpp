@@ -1,4 +1,5 @@
- #include "surfacenode.h"
+#include <GL/glew.h>
+#include "surfacenode.h"
 #include "surface.h"
 #include "ridgenode.h"
 #include "rivernode.h"
@@ -502,6 +503,33 @@ Vector3 SurfaceNode::getPointFromUv(QVector2D uv) {
 
 void SurfaceNode::drawChildren() {
 //    if (active) {
-        BaseNode::drawChildren();
+        //BaseNode::drawChildren();
 //    }
+    foreach(BaseNode * b, children) {
+        RiverNode * r = dynamic_cast<RiverNode*>(b);
+        if (r == NULL) {
+            b->draw();
+        }
+    }
+
+    glEnable(GL_STENCIL_TEST);
+    glStencilMask(0xFF);
+    glClear (GL_STENCIL_BUFFER_BIT);
+    glStencilFunc(GL_GREATER, 0x1, 0xFF);
+    glStencilOp(GL_INCR, GL_INCR, GL_INCR);
+    foreach(BaseNode * b, children) {
+        RiverNode * r = dynamic_cast<RiverNode*>(b);
+        if (r != NULL) {
+            r->drawSelf();
+        }
+    }
+    foreach(BaseNode * b, children) {
+        RiverNode * r = dynamic_cast<RiverNode*>(b);
+        if (r != NULL) {
+            r->drawSplines();
+        }
+    }
+    glDisable(GL_STENCIL_TEST);
+
+
 }

@@ -173,7 +173,7 @@ void RiverNode::doOversketch() {
 }
 
 void RiverNode::makeWater() {
-    this->diffuse = QVector4D(0.0,0.0,0.8,0.5);
+    this->diffuse = QVector4D(0.0,0.0,0.8,1.0);
     QVector<vertex> triangles;
 
     Spline& spline = this->spline;
