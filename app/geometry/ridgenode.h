@@ -9,15 +9,14 @@ class RidgeNode : public BaseNode, public ISurfaceFeature
 {
 private:
     Spline baseSpline;
-    Spline crossSpline;
     QVector<QVector2D> uv;
     QVector<float> heights;
     SurfaceNode* surfaceNode;
     QVector<QVector2D> uvSketch;
 public:
-    RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), crossSpline(o.crossSpline), uv(o.uv) {}
+    RidgeNode() {}
+    RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), uv(o.uv) {}
     RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent);
-
     virtual BaseNode * copy() {
         return new RidgeNode(*this);
     }
@@ -36,6 +35,14 @@ public:
     void drawSelf();
 
     void determineActionOnStoppedDrawing();
+
+    void addSubclassJson(QVariantMap &map);
+
+    void fromJsonSubclass(QVariantMap map);
+
+    QString getTypeId() {
+        return QString("RidgeNode");
+    }
 
 
 

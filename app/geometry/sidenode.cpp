@@ -6,6 +6,11 @@ SideNode::SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vect
     : BaseNode("sideNode"), lowerLeft(lowerLeft), lowerRigth(lowerRigth), upperRigth(upperRigth), upperLeft(upperLeft)
 {
     
+    init();
+  
+}
+
+void SideNode::init() {
     QVector<vertex> vertices;
 
     QVector<Vector3> lineVertices;
@@ -28,7 +33,6 @@ SideNode::SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vect
     lineVertices.push_back(lowerLeft);
 
     shape = new Surface(vertices, lineVertices);
-  
 }
 
 void SideNode::setOpposite(SideNode * node) {
@@ -77,4 +81,19 @@ void SideNode::makeSuggestionLines() {
 
 static bool similar(float a, float b, float c) {
     return fabs(a-b) < 0.001 && fabs(b-c) < 0.001;
+}
+
+void SideNode::addSubclassJson(QVariantMap &map) {
+    map["lowerLeft"] = lowerLeft.toJson();
+    map["lowerRigth"] = lowerRigth.toJson();
+    map["upperLeft"] = upperLeft.toJson();
+    map["upperRigth"] = upperRigth.toJson();
+}
+
+void SideNode::fromJsonSubclass(QVariantMap map) {
+    lowerLeft.fromJson(map);
+    lowerRigth.fromJson(map);
+    upperLeft.fromJson(map);
+    upperRigth.fromJson(map);
+    init();
 }

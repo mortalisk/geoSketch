@@ -9,6 +9,12 @@
 
 BoxNode::BoxNode() :BaseNode("boxnode")
 {
+
+    init();
+    setUpSurfaces();
+}
+
+void BoxNode::init() {
     activeSurface = NULL;
     width = 10;
     depth = 10;
@@ -43,15 +49,13 @@ BoxNode::BoxNode() :BaseNode("boxnode")
     Vector3 F (rightF,bottomF,farF);
     Vector3 G (rightF,topF,farF);
     Vector3 H (leftF,topF,farF);
-    
+
     frontNode = new SideNode(A, B, C, D);
     backNode = new SideNode(F, E, H, G );
     topNode = new SideNode(D, C, G, H);
     bottomNode = new SideNode(E, F, B, A);
     leftNode = new SideNode(E, A, D, H);
     rightNode = new SideNode(B, F, G, C);
-
-    setUpSurfaces();
 
 }
 
@@ -272,5 +276,49 @@ void BoxNode::drawSelf() {
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
+
+}
+
+void BoxNode::addSubclassJson(QVariantMap &map) {
+    map["width"] = width;
+    map["depth"] = depth;
+    map["heigth"] = heigth;
+    map["frontNode"] = frontNode->toJson();
+    map["backNode"] = backNode->toJson();
+    map["leftNode"] = leftNode->toJson();
+    map["rightNode"] = rightNode->toJson();
+    map["topNode"] = topNode->toJson();
+    map["bottomNode"] = bottomNode->toJson();
+}
+
+void BoxNode::fromJsonSubclass(QVariantMap map) {
+    surfaces.clear();
+
+    width = map["width"].toFloat();
+    depth = map["depth"].toFloat();
+    heigth = map["heigth"].toFloat();
+    init();
+    setUpSurfaces();
+
+
+    Spline front;
+    Spline right;
+    Spline back;
+    Spline left;
+    front.addPoint(frontNode->lowerLeft);
+    front.addPoint(frontNode->lowerRigth);
+    right.addPoint(rightNode->lowerLeft);
+    right.addPoint(rightNode->lowerRigth);
+    back.addPoint(backNode->lowerLeft);
+    back.addPoint(backNode->lowerRigth);
+    left.addPoint(leftNode->lowerLeft);
+    left.addPoint(leftNode->lowerRigth);
+    SurfaceNode * below = new SurfaceNode("Bottom", front, right, back, left, NULL);
+    SurfaceNode* c = (SurfaceNode*) children[0];
+    c->below = below;
+    for(int i=1; i<children.size();++i) {
+        SurfaceNode* child = (SurfaceNode*) children[i];
+        child->below = (SurfaceNode*)children[i-1];
+    }
 
 }

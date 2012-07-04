@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>634</width>
+    <width>739</width>
     <height>470</height>
    </rect>
   </property>
@@ -30,6 +30,8 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionUndo"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionOpen"/>
    <addaction name="actionNewLayer"/>
    <addaction name="actionMakeLayer"/>
    <addaction name="actionEditLayer"/>
@@ -43,7 +45,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>634</width>
+     <width>739</width>
      <height>23</height>
     </rect>
    </property>
@@ -140,6 +142,25 @@
   <action name="actionMakeRidge">
    <property name="text">
     <string>MakeRidge</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>Save</string>
+   </property>
+   <property name="toolTip">
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
  </widget>

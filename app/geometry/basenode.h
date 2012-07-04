@@ -1,9 +1,11 @@
 #ifndef NODE_H
 #define NODE_H
 #include <QVector>
+#include <QVector2D>
 #include "morten3d/Vector3.h"
 #include "shape.h"
 #include "spline.h"
+#include <QVariantMap>
 
 class BaseNode
 {
@@ -20,6 +22,8 @@ public:
     bool visible;
     QString name;
 
+    void init();
+
     BaseNode * parent;
 
     BaseNode * proxy;
@@ -27,6 +31,7 @@ public:
     QVector4D diffuse;
     QVector4D ambient;
 
+    BaseNode() {};
     BaseNode(QString name);
     BaseNode(Shape * shape, QString name);
     BaseNode(BaseNode &other)
@@ -92,6 +97,12 @@ public:
     virtual bool isPointNearerSide(Vector3& point, int indexInSpline);
 
     void moveSketchingPointsToSpline();
+
+    QVariantMap toJson();
+    virtual QString getTypeId() = 0;
+    virtual void addSubclassJson(QVariantMap& map) = 0;
+    void fromJson(QVariantMap map);
+    virtual void fromJsonSubclass(QVariantMap map) = 0;
 
 };
 

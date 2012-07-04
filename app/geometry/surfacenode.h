@@ -20,6 +20,7 @@ public:
     SurfaceNode* below;
     Spline front, right, back, left;
     void invalidate();
+    SurfaceNode() {}
     SurfaceNode(QString name, Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below = NULL);
     SurfaceNode(SurfaceNode& other);
     void constructLayer();
@@ -40,6 +41,14 @@ public:
     void addPoint(Vector3 from, Vector3 direction);
 
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
+
+    void addSubclassJson(QVariantMap &map);
+
+    void fromJsonSubclass(QVariantMap map);
+
+    QString getTypeId() {
+        return QString("SurfaceNode");
+    }
 };
 
 #endif // SURFACENODE_H

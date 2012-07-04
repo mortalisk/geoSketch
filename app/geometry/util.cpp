@@ -2,7 +2,67 @@
 #include "Vector3.h"
 #include <QVector2D>
 
+#include "boxnode.h"
+#include "generalnode.h"
+#include "ridgenode.h"
+#include "rivernode.h"
+#include "sidenode.h"
+#include "surfacenode.h"
+
 static const float EPSILON=0.0000000001f;
+
+BaseNode * create(QString type) {
+    if (type == "BoxNode") {
+        return new BoxNode;
+    } else if (type == "GeneralNode") {
+        return new GeneralNode;
+    } else if (type == "RidgeNode") {
+        return new RidgeNode;
+    } else if (type == "RiverNode") {
+        return new RiverNode;
+    } else if (type == "SideNode") {
+        return new SideNode;
+    } else if (type == "SurfaceNode") {
+        return new SurfaceNode;
+    } else {
+        return NULL;
+    }
+}
+
+QVariantList Vector2DListToVariantList(QVector<QVector2D>& list) {
+    QVariantList r;
+    foreach(const QVector2D& i, list) {
+        QVariantMap p;
+        p["x"] = i.x();
+        p["y"] = i.y();
+        r.append(p);
+    }
+    return r;
+}
+
+QVariantList FloatListToVariantList(QVector<float>& list) {
+    QVariantList r;
+    foreach(float i, list) {
+        r.append((double)i);
+    }
+    return r;
+}
+
+QVector<float> variantToFloatVector(QVariant& variant) {
+    QVector<float> v;
+    foreach(const QVariant& var,variant.toList()) {
+        v.append(var.toFloat());
+    }
+    return v;
+}
+
+QVector<QVector2D> variantToVector2DVector(QVariant& variant) {
+    QVector<QVector2D> v;
+    foreach(const QVariant& var,variant.toList()) {
+        v.append(QVector2D(var.toMap()["x"].toDouble(),var.toMap()["y"].toDouble()));
+    }
+    return v;
+}
 
 float Area(const QVector<Vector3> &contour)
 {

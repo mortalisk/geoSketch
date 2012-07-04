@@ -33,6 +33,8 @@ public:
     void selectActiveNode(Vector3& from, Vector3& direction);
     void makeLayer();
     void editLayer();
+    QVariantMap toJson();
+    static Scene* fromJson(QVariantMap& json);
 
     BaseNode* getRootNode();
 

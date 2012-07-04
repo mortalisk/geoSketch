@@ -17,6 +17,7 @@
 
 #include "math.h"
 #include <iostream>
+#include <QVariantMap>
 
 class Vector3 {
 private:
@@ -132,6 +133,29 @@ public:
         bool isLeftOf(Vector3& o) {
             return (this->cross(o)).y() > 0;
         }
+
+        QVariantMap toJson() {
+            QVariantMap map;
+            map["x"] = xvalue;
+            map["y"] = yvalue;
+            map["z"] = zvalue;
+            return map;
+        }
+
+        void fromJson(QVariantMap json) {
+            xvalue = json["x"].toDouble();
+            yvalue = json["y"].toDouble();
+            zvalue = json["z"].toDouble();
+        }
+
+        static Vector3 newfromJson(QVariantMap json) {
+            Vector3 r;
+            r.xvalue = json["x"].toDouble();
+            r.yvalue = json["y"].toDouble();
+            r.zvalue = json["z"].toDouble();
+            return r;
+        }
+
 
 	friend Vector3 operator*(double r, Vector3& v);
 	friend Vector3 operator*(float r, Vector3& v);

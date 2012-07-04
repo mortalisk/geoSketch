@@ -3,11 +3,13 @@
 #include "scene.h"
 #include "util.h"
 #include <QVector>
+#include <QVariantMap>
 #include <iostream>
 #include "geometry/sphere.h"
 #include <math.h>
 #include "surface.h"
 #include "surfacenode.h"
+#include "json.h"
 
 Scene::Scene() {
     snapToGrid = false;
@@ -109,6 +111,20 @@ void Scene::editLayer() {
 
 BaseNode* Scene::getRootNode(){
     return boxNode;
+}
+
+QVariantMap Scene::toJson() {
+    QVariantMap map;
+    map["resolution"] = resolution;
+    map["boxNode"] = boxNode->toJson();
+    return map;
+}
+
+Scene * Scene::fromJson(QVariantMap &map) {
+    Scene * s = new Scene();
+    s->resolution = map["resolution"].toDouble();
+    s->boxNode->fromJson(map["boxNode"].toMap());
+    return s;
 }
 
 Scene::~Scene() {

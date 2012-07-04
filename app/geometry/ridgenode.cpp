@@ -258,3 +258,18 @@ void RidgeNode::drawSelf() {
     else
         drawSplines();
 }
+
+void RidgeNode::addSubclassJson(QVariantMap &map) {
+    map["baseSpline"] = baseSpline.toJson();
+
+    map["uv"] = Vector2DListToVariantList(uv);
+    map["heights"] = FloatListToVariantList(heights);
+
+}
+
+void RidgeNode::fromJsonSubclass(QVariantMap map) {
+    baseSpline.fromJson(map["baseSpline"].toMap());
+    uv = variantToVector2DVector(map["uv"]);
+    heights = variantToFloatVector(map["heights"]);
+
+}

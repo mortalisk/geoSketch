@@ -6,6 +6,9 @@
 #include <QTimer>
 #include "geometry/basenode.h"
 #include <QVector>
+#include "json.h"
+#include <QDebug>
+#include <QFile>
 
 MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
         QGLWidget(*glf,parent), move(0.01f)
@@ -80,6 +83,11 @@ void MyGLWidget::paintGL() {
     glLoadIdentity();
     gluPerspective(scene->camera.fov*180/M_PI, aspect, 0.1, 1000);
 
+    if(isKeyPressed(Qt::Key_T)) {
+         glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+    } else {
+        glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    }
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -315,5 +323,40 @@ void MyGLWidget::makeRidge() {
     if (sn != NULL) {
         sn->makeRidgeNode();
     }
+}
+
+void MyGLWidget::save() {
+    QVariantMap map = scene->toJson();
+
+    std::cout << "json:" << std::endl;
+
+    bool succes = true;
+    QByteArray bytes = QtJson::Json::serialize(map, succes);
+    if (succes) {
+        std::cout<<bytes.data()<<std::endl;
+    }else {
+        std::cout << "error" << std::endl;
+    }
+
+    QFile file("out.json");
+    file.open(QIODevice::WriteOnly | QIODevice::Text);
+    QTextStream out(&file);
+    out << bytes.data();
+
+}
+
+void MyGLWidget::open() {
+    QFile file("out.json");
+    file.open(QIODevice::ReadOnly | QIODevice::Text);
+    QTextStream in(&file);
+
+    QString content = in.readAll();
+
+    QVariantMap map = QtJson::Json::parse(content).toMap();
+
+    delete scene;
+    scene = Scene::fromJson(map);
+
+
 }
 

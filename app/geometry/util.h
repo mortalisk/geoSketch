@@ -10,7 +10,15 @@
 #include <string.h>
 #include <assert.h>
 
+class BaseNode;
 
+BaseNode * create(QString type);
+
+QVariantList Vector2DListToVariantList(QVector<QVector2D>& list);
+QVector<QVector2D> variantToVector2DVector(QVariant& variant);
+
+QVariantList FloatListToVariantList(QVector<float>& list);
+QVector<float> variantToFloatVector(QVariant& variant);
 
 float Area(const QVector<Vector3> &contour);
 

@@ -3,40 +3,35 @@
 #include "surface.h"
 #include "float.h"
 #include <algorithm>
+#include "util.h"
+#include <QVector2D>
 
 BaseNode::BaseNode(QString name) {
-	shape = NULL;
-        this->name = name;
-        visible = true;
+    init();
+    this->name = name;
+}
 
-        diffuse.setX(0.5);
-        diffuse.setY(0.5);
-        diffuse.setZ(0.5);
-        diffuse.setW(1.0);
+void BaseNode::init() {
+    shape = NULL;
+    visible = true;
 
-        ambient.setX(0.5);
-        ambient.setY(0.5);
-        ambient.setZ(0.5);
-        ambient.setW(1.0);
-        proxy = NULL;
+    diffuse.setX(0.5);
+    diffuse.setY(0.5);
+    diffuse.setZ(0.5);
+    diffuse.setW(1.0);
+
+    ambient.setX(0.5);
+    ambient.setY(0.5);
+    ambient.setZ(0.5);
+    ambient.setW(1.0);
+    proxy = NULL;
+
 }
 
 BaseNode::BaseNode(Shape *shape, QString name) {
-	this->shape = shape;
-        this->name = name;
-        visible = true;
-
-        diffuse.setX(0.5);
-        diffuse.setY(0.5);
-        diffuse.setZ(0.5);
-        diffuse.setW(1.0);
-
-        ambient.setX(0.5);
-        ambient.setY(0.5);
-        ambient.setZ(0.5);
-        ambient.setW(1.0);
-
-        proxy = NULL;
+    init();
+    this->shape = shape;
+    this->name = name;
 }
 
 
@@ -213,6 +208,39 @@ void BaseNode::drawSelf() {
 
 }
 
+QVariantMap BaseNode::toJson() {
+    QVariantMap map;
+    map["name"] = name;
+    map["type"] = getTypeId();
+    map["position"] = position.toJson();
+    QVariantList children;
+    foreach(BaseNode* child,this->children) {
+        QVariantMap c = child->toJson();
+        children.append(c);
+    }
+    map["children"] = children;
+    map["spline"] = spline.toJson();
+
+
+    addSubclassJson(map);
+    return map;
+}
+
+void BaseNode::fromJson(QVariantMap map) {
+    name = map["name"].toString();
+    position.fromJson(map["position"].toMap());
+    foreach(QVariant var, map["children"].toList()) {
+        QVariantMap cmap = var.toMap();
+        QString type = cmap["type"].toString();
+        BaseNode * c = create(type);
+        c->fromJson(cmap);
+        children.append(c);
+        c->parent = this;
+    }
+    init();
+    fromJsonSubclass(map);
+}
+
 void BaseNode::draw() {
 
 
@@ -231,3 +259,5 @@ void BaseNode::draw() {
 
 
 }
+
+

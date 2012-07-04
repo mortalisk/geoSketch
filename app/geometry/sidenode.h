@@ -15,11 +15,19 @@ public:
     Vector3 upperLeft;
     SideNode(Vector3 lowerLeft,Vector3 lowerRigth, Vector3 upperRigth,Vector3 upperLeft);
     SideNode(SideNode& o) :BaseNode(o), lowerLeft(o.lowerLeft), lowerRigth(o.lowerRigth), upperRigth(o.upperRigth), upperLeft(o.upperLeft) {
-
+        init();
     }
+
+    SideNode() {}
+
+    void init();
 
     BaseNode * copy() {
         return new SideNode(*this);
+    }
+
+    QString getTypeId() {
+        return QString("SideNode");
     }
 
     void projectPoints(Vector3 diff,const QVector<Vector3>& points) {
@@ -88,6 +96,9 @@ public:
     void setOpposite(SideNode * node);
     void setLeft(SideNode * node);
     void makeSuggestionLines();
+
+    void addSubclassJson(QVariantMap &map);
+    void fromJsonSubclass(QVariantMap map);
 
 };
 

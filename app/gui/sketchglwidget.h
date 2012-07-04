@@ -84,6 +84,8 @@ public slots:
     void makeRidge();
     void editLayer();
     void undo();
+    void save();
+    void open();
 
 };
 

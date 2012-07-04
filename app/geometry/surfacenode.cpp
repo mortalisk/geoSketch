@@ -184,38 +184,61 @@ void SurfaceNode::constructLayer() {
     for (int i = 0; i< rows.size(); ++i) {
         QVector<Vector3> row;
         for (int j = 0; j < rows[i].size(); ++j) {
-            Vector3 a,b,c,d;
+            Vector3 south,north,west,east, nw, sw, se, ne;
             if (i == 0) {
-                a = Vector3(rows[i+1][j] - rows[i][j]);
-                a = -a;
+                south = Vector3(rows[i][j] - rows[i+1][j]);
             }else {
-                a = Vector3(rows[i-1][j] - rows[i][j]);
+                south = Vector3(rows[i-1][j] - rows[i][j]);
             }
             if (i == rows.size()-1) {
-                b = Vector3(rows[i-1][j] - rows[i][j]);
-                b = -b;
+                north = Vector3(rows[i][j] - rows[i-1][j]);
             }else {
-                b = Vector3(rows[i+1][j] - rows[i][j]);
+                north = Vector3(rows[i+1][j] - rows[i][j]);
             }
             if (j == 0) {
-                c = Vector3(rows[i][j+1] - rows[i][j]);
-                c = -c;
+                west = Vector3(rows[i][j] - rows[i][j+1]);
             }else {
-                c = Vector3(rows[i][j-1] - rows[i][j]);
+                west = Vector3(rows[i][j-1] - rows[i][j]);
             }
             if (j == rows[i].size()-1) {
-                d = Vector3(rows[i][j-1] - rows[i][j]);
-                d = -d;
+                east = Vector3(rows[i][j] - rows[i][j-1]);
             }else {
-                d = Vector3(rows[i][j+1] - rows[i][j]);
+                east = Vector3(rows[i][j+1] - rows[i][j]);
             }
-            Vector3 n = (a.cross(d) + d.cross(b) + b.cross(c) + c.cross(a)).normalize();
+            if (i == 0 || j == 0) {
+                sw = south + west;
+            }else {
+                sw = rows[i-1][j-1] - rows[i][j];
+            }
+            if (i == rows.size()-1 || j == 0) {
+                nw = north + west;
+            }else {
+                nw = rows[i+1][j-1] - rows[i][j];
+            }
+            if (i == 0 || j == rows[i].size()-1) {
+                se = south + east;
+            }else {
+                se = rows[i-1][j+1] - rows[i][j];
+            }
+            if (i == rows.size()-1 || j == rows[i].size()-1) {
+                ne = north + east;
+            }else {
+                ne = rows[i+1][j+1] - rows[i][j];
+            }
+           Vector3 n;
+            if(i%2 != j%2) {
+                 n = (south.cross(east) + east.cross(north) + north.cross(west) + west.cross(south)).normalize();
+            } else {
+                n = (south.cross(se) + se.cross(east) + east.cross(ne) + ne.cross(north) +
+                     north.cross(nw) + nw.cross(west) + west.cross(sw) + sw.cross(south)).normalize();
+            }
+
+
             row.push_back( n);
         }
         normalRows.push_back(row);
     }
 
-    QVector<Vector3> normals;
     //create triangles
     for (int i = 1; i< rows.size(); ++i) {
         for (int j = 1; j < rows[i].size(); ++j) {
@@ -231,12 +254,21 @@ void SurfaceNode::constructLayer() {
             Vector3 & nc = normalRows[i][j-1];
             Vector3 & d = rows[i][j];
             Vector3 & nd = normalRows[i][j];
-            triangles.push_back(vertex(a,na, s0, t0));
-            triangles.push_back(vertex(b,nb, s1, t0));
-            triangles.push_back(vertex(c,nc, s0, t1));
-            triangles.push_back(vertex(b,nb, s1, t0));
-            triangles.push_back(vertex(d,nd, s1, t1));
-            triangles.push_back(vertex(c,nc, s0, t1));
+            if (i%2 == j%2) {
+                triangles.push_back(vertex(a,na, s0, t0));
+                triangles.push_back(vertex(b,nb, s1, t0));
+                triangles.push_back(vertex(c,nc, s0, t1));
+                triangles.push_back(vertex(b,nb, s1, t0));
+                triangles.push_back(vertex(d,nd, s1, t1));
+                triangles.push_back(vertex(c,nc, s0, t1));
+            } else {
+                triangles.push_back(vertex(a,na, s0, t0));
+                triangles.push_back(vertex(b,nb, s1, t0));
+                triangles.push_back(vertex(d,nd, s1, t1));
+                triangles.push_back(vertex(d,nd, s1, t1));
+                triangles.push_back(vertex(c,nc, s0, t1));
+                triangles.push_back(vertex(a,na, s0, t0));
+            }
 
         }
     }
@@ -505,10 +537,11 @@ void SurfaceNode::drawChildren() {
 //    if (active) {
         //BaseNode::drawChildren();
 //    }
+
     foreach(BaseNode * b, children) {
-        RiverNode * r = dynamic_cast<RiverNode*>(b);
-        if (r == NULL) {
-            b->draw();
+        RidgeNode * r = dynamic_cast<RidgeNode*>(b);
+        if (r != NULL) {
+            r->draw();
         }
     }
 
@@ -531,5 +564,26 @@ void SurfaceNode::drawChildren() {
     }
     glDisable(GL_STENCIL_TEST);
 
+
+}
+
+void SurfaceNode::addSubclassJson(QVariantMap &map) {
+
+    map["front"] = front.toJson();
+    map["right"] = right.toJson();
+    map["back"] = back.toJson();
+    map["left"] = left.toJson();
+    map["resolution"] = resolution;
+    map["skip"] = skip;
+
+}
+
+void SurfaceNode::fromJsonSubclass(QVariantMap map) {
+    front.fromJson(map["front"].toMap());
+    right.fromJson(map["right"].toMap());
+    back.fromJson(map["back"].toMap());
+    left.fromJson(map["left"].toMap());
+    resolution = map["resolution"].toInt();
+    skip = map["skip"].toInt();
 
 }

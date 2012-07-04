@@ -22,6 +22,7 @@ QVector<QVector2D> uvSketch;
 
     SurfaceNode* surfaceNode;
 public:
+    RiverNode() {}
     RiverNode(RiverNode& o) : BaseNode(o), rightSpline(o.rightSpline), crossSpline(o.crossSpline), uv(o.uv) {}
     RiverNode(QVector<QVector2D> uv, SurfaceNode* parent);
 
@@ -48,6 +49,14 @@ public:
     void removeLoops(QVector<QVector2D>& sp);
 
     void addPoint(Vector3 from, Vector3 direction);
+
+    void addSubclassJson(QVariantMap &map);
+
+    void fromJsonSubclass(QVariantMap map);
+
+    QString getTypeId() {
+        return QString("RiverNode");
+    }
 
 };
 

@@ -332,8 +332,9 @@ void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
     if (shape != NULL) {
         delete shape;
         shape = NULL;
-        makeWater();
+
     }
+    makeWater();
 }
 
 void RiverNode::drawSelf() {
@@ -348,4 +349,18 @@ void RiverNode::drawSplines() {
     drawSpline(spline,r);
     drawSpline(rightSpline,r);
     drawSpline(sketchingSpline,r);
+}
+
+void RiverNode::addSubclassJson(QVariantMap &map) {
+    QVariantList rightList = Vector2DListToVariantList(rigths);
+    QVariantList leftList = Vector2DListToVariantList(lefts);
+
+    map["rights"] = rightList;
+    map["lefts"] = leftList;
+
+}
+
+void RiverNode::fromJsonSubclass(QVariantMap map) {
+    rigths = variantToVector2DVector(map["rights"]);
+    lefts = variantToVector2DVector(map["lefts"]);
 }

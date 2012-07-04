@@ -22,6 +22,7 @@ HEADERS += gui/mainwindow.h \
     geometry/scene.h \
     morten3d/Camera.h \
     morten3d/Vector3.h \
+    morten3d/json.h \
     geometry/sphere.h \
     geometry/spline.h \
     geometry/surface.h \
@@ -44,6 +45,7 @@ SOURCES += main.cpp \
     geometry/scene.cpp \
     morten3d/Camera.cpp \
     morten3d/Vector3.cpp \
+    morten3d/json.cpp \
     geometry/sphere.cpp \
     geometry/spline.cpp \
     geometry/surface.cpp \

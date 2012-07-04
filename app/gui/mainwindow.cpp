@@ -28,6 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction * editLayer = findChild<QAction*>("actionEditLayer");
     QAction * makeRidge = findChild<QAction*>("actionMakeRidge");
     QAction * makeRiver = findChild<QAction*>("actionMakeRiver");
+    QAction * saveButton = findChild<QAction*>("actionSave");
+    QAction * openButton = findChild<QAction*>("actionOpen");
 
     layerChooser = new QComboBox();
     toolBar->addWidget(layerChooser);
@@ -47,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(editLayer,SIGNAL(activated()), gl, SLOT(editLayer()));
     QObject::connect(makeRidge,SIGNAL(activated()), gl, SLOT(makeRidge()));
     QObject::connect(makeRiver,SIGNAL(activated()), gl, SLOT(makeRiver()));
+    QObject::connect(saveButton,SIGNAL(activated()), gl, SLOT(save()));
+    QObject::connect(openButton,SIGNAL(activated()), gl, SLOT(open()));
 
     QDockWidget * sketchDock = new QDockWidget();
     SketchPad * sketchPadSlice = new SketchPad();

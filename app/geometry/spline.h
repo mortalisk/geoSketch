@@ -112,6 +112,24 @@ public:
 
     int findNearestPoint(Vector3 first);
 
+    QVariantMap toJson() {
+        QVariantMap map;
+        QVariantList pointsList;
+        foreach(Vector3 point, points) {
+            pointsList.append(point.toJson());
+        }
+        map["points"] = pointsList;
+        return map;
+    }
+
+    void fromJson(QVariantMap map) {
+        points.clear();
+        QVariantList list = map["points"].toList();
+        foreach(QVariant v, list) {
+            points.append(Vector3::newfromJson(v.toMap()));
+        }
+    }
+
     Spline();
 };
 

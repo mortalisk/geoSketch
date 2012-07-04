@@ -11,6 +11,8 @@ public:
     BoxNode();
     BoxNode(BoxNode& o);
 
+    void init();
+
     ~BoxNode() {
         foreach(SideNode* p, surfaces) {
             delete p;
@@ -43,6 +45,14 @@ public:
 
         return node;
     }
+
+    QString getTypeId() {
+        return QString("BoxNode");
+    }
+
+    void addSubclassJson(QVariantMap& map);
+
+    void fromJsonSubclass(QVariantMap map);
 };
 
 #endif // BOXNODE_H
