@@ -288,11 +288,13 @@ void MyGLWidget::animate() {
 }
 
 void MyGLWidget::setLayer(int i) {
-    scene->activeNode = scene->boxNode->children[i];
+    if (i >= 0 && i < scene->boxNode->children.size())
+        scene->activeNode = scene->boxNode->children[i];
 }
 
 void MyGLWidget::toggleVisibility(int i) {
-    scene->boxNode->children[i]->visible = !scene->boxNode->children[i]->visible;
+    if (i >= 0 && i < scene->boxNode->children.size())
+        scene->boxNode->children[i]->visible = !scene->boxNode->children[i]->visible;
 }
 
 void MyGLWidget::setColor(int i, QColor c) {
@@ -354,9 +356,9 @@ void MyGLWidget::open() {
 
     QVariantMap map = QtJson::Json::parse(content).toMap();
 
-    delete scene;
-    scene = Scene::fromJson(map);
+    scene->fromJson(map);
 
+    pushScene();
 
 }
 

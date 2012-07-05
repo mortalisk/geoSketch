@@ -11,12 +11,11 @@ private:
     Spline baseSpline;
     QVector<QVector2D> uv;
     QVector<float> heights;
-    SurfaceNode* surfaceNode;
     QVector<QVector2D> uvSketch;
 public:
     RidgeNode() {}
-    RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), uv(o.uv) {}
-    RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent);
+    RidgeNode(RidgeNode& o) : BaseNode(o), baseSpline(o.baseSpline), uv(o.uv), heights(o.heights), uvSketch(o.uvSketch) {}
+    RidgeNode(QVector<QVector2D> uv);
     virtual BaseNode * copy() {
         return new RidgeNode(*this);
     }

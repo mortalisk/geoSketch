@@ -34,7 +34,7 @@ public:
     void makeLayer();
     void editLayer();
     QVariantMap toJson();
-    static Scene* fromJson(QVariantMap& json);
+    void fromJson(QVariantMap& json);
 
     BaseNode* getRootNode();
 

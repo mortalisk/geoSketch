@@ -20,11 +20,10 @@ private:
 
 QVector<QVector2D> uvSketch;
 
-    SurfaceNode* surfaceNode;
 public:
     RiverNode() {}
-    RiverNode(RiverNode& o) : BaseNode(o), rightSpline(o.rightSpline), crossSpline(o.crossSpline), uv(o.uv) {}
-    RiverNode(QVector<QVector2D> uv, SurfaceNode* parent);
+    RiverNode(RiverNode& o) : BaseNode(o), rightSpline(o.rightSpline), crossSpline(o.crossSpline), uv(o.uv), lefts(o.lefts), rigths(o.rigths) {}
+    RiverNode(QVector<QVector2D> uv);
 
     virtual BaseNode * copy() {
         return new RiverNode(*this);

@@ -120,11 +120,12 @@ QVariantMap Scene::toJson() {
     return map;
 }
 
-Scene * Scene::fromJson(QVariantMap &map) {
-    Scene * s = new Scene();
-    s->resolution = map["resolution"].toDouble();
-    s->boxNode->fromJson(map["boxNode"].toMap());
-    return s;
+void Scene::fromJson(QVariantMap &map) {
+    resolution = map["resolution"].toDouble();
+    delete boxNode;
+    boxNode = new BoxNode();
+    boxNode->fromJson(map["boxNode"].toMap());
+    activeNode = boxNode;
 }
 
 Scene::~Scene() {

@@ -4,14 +4,14 @@
 #include "surface.h"
 #include <QVector2D>
 
-RidgeNode::RidgeNode(QVector<QVector2D> uv, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uv)
+RidgeNode::RidgeNode(QVector<QVector2D> uv) : BaseNode("rigde"), uv(uv)
 {
     smooth(this->uv);
     for (int i = 0; i<this->uv.size(); ++i) {
         float distanceFromMiddle = fabs(i-this->uv.size()/2.0)/this->uv.size();
         heights.push_back(0.5-distanceFromMiddle);
     }
-    repositionOnSurface(*parent);
+    //repositionOnSurface(*parent);
 }
 
 QVector<Vector3> RidgeNode::intersectionPoints(Vector3 from, Vector3 direction) {
@@ -271,5 +271,6 @@ void RidgeNode::fromJsonSubclass(QVariantMap map) {
     baseSpline.fromJson(map["baseSpline"].toMap());
     uv = variantToVector2DVector(map["uv"]);
     heights = variantToFloatVector(map["heights"]);
+    //uvSketch = QVector<QVector2D>();
 
 }

@@ -297,7 +297,7 @@ void SurfaceNode::makeRiverNode() {
 
     if (spline.getPoints().size() < 2)
         return;
-    RiverNode * ridge = new RiverNode(uvCoordinateSpline, this);
+    RiverNode * ridge = new RiverNode(uvCoordinateSpline);
     ridge->parent = this;
     children.append(ridge);
 
@@ -319,7 +319,7 @@ void SurfaceNode::makeRidgeNode() {
 
     if (spline.getPoints().size() < 2)
         return;
-    RidgeNode * ridge = new RidgeNode(uvCoordinateSpline, this);
+    RidgeNode * ridge = new RidgeNode(uvCoordinateSpline);
     ridge->parent = this;
     children.append(ridge);
 
@@ -585,5 +585,6 @@ void SurfaceNode::fromJsonSubclass(QVariantMap map) {
     left.fromJson(map["left"].toMap());
     resolution = map["resolution"].toInt();
     skip = map["skip"].toInt();
+    hasContructedLayer = false;
 
 }

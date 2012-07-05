@@ -5,7 +5,7 @@
 #include <float.h>
 #include <QVector2D>
 
-RiverNode::RiverNode(QVector<QVector2D> uvs, SurfaceNode* parent) : BaseNode("rigde"), surfaceNode(parent), uv(uvs)
+RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("rigde"), uv(uvs)
 {
 //    foreach (BaseNode* child ,parent->children) {
 //        RiverNode * river = dynamic_cast<RiverNode *>(child);
@@ -34,7 +34,7 @@ RiverNode::RiverNode(QVector<QVector2D> uvs, SurfaceNode* parent) : BaseNode("ri
         rigths.push_back(uv[i] - normal);
         prev = uv[i];
     }
-    repositionOnSurface(*parent);
+    //repositionOnSurface(*parent);
 }
 
 QVector<Vector3> RiverNode::intersectionPoints(Vector3 from, Vector3 direction) {
