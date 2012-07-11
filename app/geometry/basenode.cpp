@@ -9,16 +9,17 @@
 BaseNode::BaseNode(QString name) {
     init();
     this->name = name;
+    this->diffuse = QVector4D(0.5,0.5,0.5,1.0);
 }
 
 void BaseNode::init() {
     shape = NULL;
     visible = true;
 
-    diffuse.setX(0.5);
-    diffuse.setY(0.5);
-    diffuse.setZ(0.5);
-    diffuse.setW(1.0);
+//    diffuse.setX(0.5);
+//    diffuse.setY(0.5);
+//    diffuse.setZ(0.5);
+//    diffuse.setW(1.0);
 
     ambient.setX(0.5);
     ambient.setY(0.5);
@@ -213,6 +214,10 @@ QVariantMap BaseNode::toJson() {
     map["name"] = name;
     map["type"] = getTypeId();
     map["position"] = position.toJson();
+    map["colorr"] = diffuse.x();
+    map["colorg"] = diffuse.y();
+    map["colorb"] = diffuse.z();
+    map["colora"] = diffuse.w();
     QVariantList children;
     foreach(BaseNode* child,this->children) {
         QVariantMap c = child->toJson();
@@ -229,6 +234,10 @@ QVariantMap BaseNode::toJson() {
 void BaseNode::fromJson(QVariantMap map) {
     name = map["name"].toString();
     position.fromJson(map["position"].toMap());
+    diffuse.setX(map["colorr"].toDouble());
+    diffuse.setY(map["colorg"].toDouble());
+    diffuse.setZ(map["colorb"].toDouble());
+    diffuse.setW(map["colora"].toDouble());
     foreach(QVariant var, map["children"].toList()) {
         QVariantMap cmap = var.toMap();
         QString type = cmap["type"].toString();

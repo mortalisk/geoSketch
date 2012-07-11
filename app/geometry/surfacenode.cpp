@@ -5,7 +5,7 @@
 #include "rivernode.h"
 #include "util.h"
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false),resolution(100), skip(1)
+SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false),resolution(200), skip(4)
 {
     //constructLayer();
 }

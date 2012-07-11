@@ -9,6 +9,7 @@
 #include "json.h"
 #include <QDebug>
 #include <QFile>
+#include <QFileDialog>
 
 MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
         QGLWidget(*glf,parent), move(0.01f)
@@ -340,7 +341,10 @@ void MyGLWidget::save() {
         std::cout << "error" << std::endl;
     }
 
-    QFile file("out.json");
+
+    QString fileName = QFileDialog::getSaveFileName(this,
+         tr("Save Sketch"), "", tr("Geosketch Files (*.json)"));
+    QFile file(fileName);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&file);
     out << bytes.data();
@@ -348,7 +352,10 @@ void MyGLWidget::save() {
 }
 
 void MyGLWidget::open() {
-    QFile file("out.json");
+    QString fileName = QFileDialog::getOpenFileName(this,
+         tr("Open Sketch"), "", tr("Geosketch Files (*.json)"));
+
+    QFile file(fileName);
     file.open(QIODevice::ReadOnly | QIODevice::Text);
     QTextStream in(&file);
 

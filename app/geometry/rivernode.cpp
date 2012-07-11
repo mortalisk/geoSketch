@@ -28,7 +28,7 @@ RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("rigde"), uv(uvs)
 
         float distanceFromMiddle = fabs(i-uv.size()/2.0)/uv.size();
 
-        normal *= 0.03;
+        normal *= 0.01;
 
         lefts.push_back(uv[i] + normal);
         rigths.push_back(uv[i] - normal);
@@ -173,7 +173,7 @@ void RiverNode::doOversketch() {
 }
 
 void RiverNode::makeWater() {
-    this->diffuse = QVector4D(0.0,0.0,0.8,1.0);
+    this->diffuse = QVector4D(0.0,0.0,0.8,0.5);
     QVector<vertex> triangles;
 
     Spline& spline = this->spline;
