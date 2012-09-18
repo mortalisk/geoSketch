@@ -11,7 +11,7 @@
 \maketitle
 
 \begin{abstract}
-An investigation of new techniques for rapid modeling of geological structures and a assessment of their usefulness. A program is developed that uses sketch-based techniques for making quick sketches of geological areas. These models are intended to be used for communication amongst geologists and from geologists to lay persons. The techniques are measured by the speed at wich one can create a model and the resulting models ability to convey the intent of the artist.
+Describe thesis
 \end{abstract}
 
 \newpage
@@ -20,60 +20,124 @@ An investigation of new techniques for rapid modeling of geological structures a
 
 \newpage
 
+% --- OBS, gammel tekst i git commit 53adef7c5ef8730ab96a392efa1a10f1ae289f0b ---
+
 \section{Introduction}
-Sketch based modeling is a way to draw 3D models on a computer. It differs from other methods in that the user inputs 2D sketches in stead of editing polygons. These sketches are then interpreted and a 3D model is created.
 
-When geologists are surveying a new area, they use sketches to communicate with each other. To facilitate this process I propose that a computer assisted sketch based modeling approach would increase productivity and enhance communication. This will be a replacement for doing sketches on paper or in 2D drawing programs. The intent is to enable and augment the illustration of ideas about an area that geologists are exploring in the field or for education. It is not intended to create highly detailed structures that can be used for other scientific purposes such as simulations. 
+(present problem)\\
+	- sketch 2d models\\
+	- need tools for 3d modelling\\
+	- existing 3d tools are advanced\\
+	- need a simple/intuitive way to model\\
+Illustrations are important for geologists and their aspiring students when they are conducting their everyday business. It is normal to make sketched models by hand on either paper or computer. These are used in both professional and educational settings, and facilitate communication. On paper one is of course limited to making 2D models. This can be limiting, since the fenomena of geology are of course 3D. One can sketch 3D fenomena by using perspective drawing techniques, but the model is still confined to the 2D nature of the medium.
 
-\subsection{Modeling}
-Models are part of what makes thinking about reality possible for human beings. A models fitness can be measured against how well it corresponds to the thing or idea it is supposed to model and how useful it is for whatever the purpose of it's creation. For it to have any usefulness at all, the person who uses the model needs to understand in what ways the model actually does correspond to what it models, what it is actually modelling, and in what detail and what the limitations of the particular choise of representation are.
-
-\subsection{Computer modeling}
-Models are objects or concepts that are used to represent other objects or concepts. Humans use models to reason about reality in many different ways.
-
-Computers have great powers of computation. This is often exploited to do analysis and computations on models and/or for creating the model itself. Geometric modelling or computer-aided geometric design is one particular type of computer modeling. This is often used to model geologigal structures.
-
-\subsection{Geologic modeling}
-Geologic modeling og geomodeling is the act of creating models of the subsurface of a piece of the earth.
-
-\subsection{Sketch based modeling}
-Sketch based modeling is an approach to modeling where the input method is based upon insigths from how artists draw on paper. The idea is that it will be more intuitive and quick to both learn and draw with such a method. If the computer is able to interpret from the artists input what his intent is, this gives many opportunities that are not available on paper, such as rotating, undo functionality and further computation to augment the illustrations. At the same time we get the ease of intuitive input methods. This approach tries to give the best of both worlds.
+On the computer it is possible to make 3D models. However, existing tools are often complex, aimed at creating advanced and detailed models, and requires training to understand and use. It would therefore be nice to have a possibility to make quick 3D models for illustrative purposes in a simple and intuitive way.
 
 
-\section{Geologic concepts}
+(present goal)\\
+	- replacement of napkin and pen\\
+	- not accurate/detailed\\
+	- but illustrative of ideas\\
+	- for surveys or education\\
+That is what I am trying to create a foundation for in this project. The goal is to make a replacement for pen and paper 2D models. In other words not for situations where a high degree of accuracy is needed and/or attainable, but rather when the goal is to illustrate ideas and communicate them. I foresee a use for this in initial stages of surveys, in education, for communication and in books about geology.
+
+(solution/approach)\\
+	- the box metaphor
+	- 
+It is in books and papers from the geologic field I have found the most inspiration for this project. One way geological phenomena are often illustrated in such situations is what I call the ``box-model''. Examples of such illustrations can be seen in section \ref{sec:geology}, for example in figure (INSERT REF TO FIGURE). The illustration is drawn inside a box cutout of the area of interest. This gives a good way to illustrate the spatial relation of elements in the model. Such illustrations gave rise to the approach I have choosen. 
+	
+In order to understand the solution it is neccessary to introduce some relevant geologic terminology and background. This introduction can be found in the following section (section \ref{sec:geology}).
+
+\section{Geologic Background}
+\label{sec:geology}
+- introduce gelogic terms
+\subsection{Structured geology}
+\subsection{Sedimentary geology}
+\subsection{Rocks}
+\subsection{Layers}
+\subsection{Faults}
+\subsection{Rivers}
 \subsection{Time}
-\subsection{rocks}
-\subsection{layers}
-\subsection{faults}
-\subsection{rivers}
 
 
-\section{State of the art}
-\subsection{geomodelling}
-\subsection{sketch based modelling}
+\section{State of the Art}
+\subsection{Modeling}
+- fundamental part of reasoning\\
+- isolates relevant info\\
+- usefulness\\
+  -- users understanding of relation to reality\\
+- examples (equation, wood models, etc.)
 
-\section{Solution}
-\subsection{overview}
-\subsection{input}
-\subsection{output}
+\subsection{Geologic Modeling}
+- models subsurface of the earth.\\
+- show examples\\(clay, wood, sand, 2d skethces and drawings, 3d computer models)
+
+\subsection{Computer Modeling}
+- great power to be exploited\\
+- examples (spreadsheet, 3d models, simulations...)\\
+\subsubsection{Rapid Computer Modeling}
+- intuitive/quick (to learn or use)\\
+- replacement for paper\\
+  -- gives extra advantages over paper( rotate, change, collaborate, compute )\\
+- explain different approaches (sketch based, procedural)\\
+- show examples(teddy, z-brush, etc..)\\
+
+
+\section{Basic Concept}
+\subsection{Overview}
+- Give an overview of solution(illustration)\\
+- Visual model of solution
+  -- idea/input/feedback/modification/
+\subsection{Features}
+- relate back to the geologic background\\
+- how they will be achieved\\
+   -- Time\\
+   -- Layers\\
+   -- etc.\\
 
 \section{Methodology}
-\subsection{Input method}
-\subsection{Input interpretation}
+- how the algorithms works
+\subsection{Sketch methods and interpretation}
+- intersection\\
+- points are gathered\\
+- remove noise\\
+- auto-complete
 \subsection{Representation}
+- lines\\
+- surfaces\\
+- rivers\\
+- mountains\\
+- etc.
+\subsection{Geometry synthesis}
+- layers\\
+- mountains\\
+- rivers\\
+- sediments??
 \subsection{Rendering}
+- surfaces\\
+- rivers and overlapping\\
+- mountains
 
 \section{Results and performance}
-\subsection{Produced Illustrations}
+\subsection{Produced Renderings}
+- compare with goal\\
+- Marie might draw her stuff?
 \subsection{Performance of user}
+- learning\\
+- using
 \subsection{Performance of program}
+- rendering speed on different hardware
 
 \section{Evaluation}
-\subsection{Usability}
+ -- (focus on expressiveness) -- \\
+- How well problem was solved\\
+- Where it will be used \\
+- Discussion
 
 \section{Conclusion}
-\subsection{summary}
-\subsection{Further work}
+- Give short summary\\
+- Further work\\
+\\
 
 
 Testing references: Cherlin ~\cite{Cherlin:2005:SMF:1090122.1090145} explores techniques for rapid sketch based 3d modeling.
