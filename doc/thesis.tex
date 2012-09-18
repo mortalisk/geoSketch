@@ -1,6 +1,15 @@
 \documentclass[a4paper,10pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{cite}
+\usepackage{hyperref}
+%\usepackage{cleveref}
+
+%%%%% definition of custom commands %%%%%
+
+% use when you need a ref to a section with hyperlinks like: ``section x, Section Name''
+\newcommand{\secref}[1]{\autoref{#1}, \nameref{#1}}
+
+%%%%% end definition of custom commands %%%%%
 
 %opening
 \title{Rapid Geologic Modeling}
@@ -24,31 +33,39 @@ Describe thesis
 
 \section{Introduction}
 
+
+--refer to each section at one point in introduction--\\
+
 (present problem)\\
-	- sketch 2d models\\
+	- illustrations important
+	- sketch 2d limiting\\
 	- need tools for 3d modelling\\
 	- existing 3d tools are advanced\\
 	- need a simple/intuitive way to model\\
+	
+(present goal)\\
+	- replace paper and pen\\
+	- not accurate/detailed\\
+	- illustrative of ideas\\
+	- for surveys or education\\
+	- 
+	
+(solution/approach)\\
+	- the box metaphor\\\\
+	
+	
 Illustrations are important for geologists and their aspiring students when they are conducting their everyday business. It is normal to make sketched models by hand on either paper or computer. These are used in both professional and educational settings, and facilitate communication. On paper one is of course limited to making 2D models. This can be limiting, since the fenomena of geology are of course 3D. One can sketch 3D fenomena by using perspective drawing techniques, but the model is still confined to the 2D nature of the medium.
 
-On the computer it is possible to make 3D models. However, existing tools are often complex, aimed at creating advanced and detailed models, and requires training to understand and use. It would therefore be nice to have a possibility to make quick 3D models for illustrative purposes in a simple and intuitive way.
+This is the problem I am attempting to solve in this project. On the computer it is of course already possible to make 3D models. However, existing tools are often complex, aimed at creating advanced and detailed models, and usually requires training to understand and use. It would therefore be nice to have a possibility to make quick 3D models for illustrative purposes in a simple and intuitive way. This project has laid another brick in the foundation for the future of such illustrative geological modeling techniques. In the last section of the thesis (\secref{conclusion}), I conclude that this has a large potential for use in education, for communication between geologists and in publications about geology.
 
+The basic concept is to make a replacement for pen and paper 2D sketches. In other words not a solution for situations where a high degree of accuracy is needed and/or attainable, but rather when the goal is to illustrate ideas and communicate them. In \secref{sec:eval} I therefore put the most emphasis on the expressive power the final solution gives the user, and less on accuracy and speed. Resulting illustrations that were produced by users of the implementation can be seen in \secref{sec:results}, along with a performance benchmark on different hardware.
 
-(present goal)\\
-	- replacement of napkin and pen\\
-	- not accurate/detailed\\
-	- but illustrative of ideas\\
-	- for surveys or education\\
-That is what I am trying to create a foundation for in this project. The goal is to make a replacement for pen and paper 2D models. In other words not for situations where a high degree of accuracy is needed and/or attainable, but rather when the goal is to illustrate ideas and communicate them. I foresee a use for this in initial stages of surveys, in education, for communication and in books about geology.
+It is in publications from the geologic field I have found the most inspiration for this project. Artists in such media often use what I choose to call the ``box-model'' to illustrate concepts. Examples of such illustrations can be seen in section \secref{sec:geology}, for example in figure (INSERT REF TO FIGURE). The illustration is drawn inside a box cutout of the area of interest. This gives a good way to illustrate the spatial relation of elements in the model, like layers of different rock and deposits, rivers, ridges, mountains and the landscape they create together. I give an introduction to the relevant geologic background and terminology in \secref{sec:geology}.
 
-(solution/approach)\\
-	- the box metaphor
-	- 
-It is in books and papers from the geologic field I have found the most inspiration for this project. One way geological phenomena are often illustrated in such situations is what I call the ``box-model''. Examples of such illustrations can be seen in section \ref{sec:geology}, for example in figure (INSERT REF TO FIGURE). The illustration is drawn inside a box cutout of the area of interest. This gives a good way to illustrate the spatial relation of elements in the model. Such illustrations gave rise to the approach I have choosen. 
-	
-In order to understand the solution it is neccessary to introduce some relevant geologic terminology and background. This introduction can be found in the following section (section \ref{sec:geology}).
+Illustrations using this ``box-model'' gave rise to the approach I have choosen. The user is initially presented with an empty box, and then procedes by outlining on and in this box the particular features he wants to model. An explanation of the use of this technique and all others I have developed can be found in \secref{sec:concept}, while the algorithmic solutions are discussed in \secref{method}. To put that in context I have included a brief report on the state of the art in the fields of Computer modeling and Geological modeling as they relate to this project, in \secref{sec:star}
 
 \section{Geologic Background}
+After reading this section, you should have gained a basic understanding of the gological concepts that I wish to model in the solution.
 \label{sec:geology}
 - introduce gelogic terms
 \subsection{Structured geology}
@@ -61,6 +78,7 @@ In order to understand the solution it is neccessary to introduce some relevant 
 
 
 \section{State of the Art}
+\label{sec:star}
 \subsection{Modeling}
 - fundamental part of reasoning\\
 - isolates relevant info\\
@@ -84,6 +102,7 @@ In order to understand the solution it is neccessary to introduce some relevant 
 
 
 \section{Basic Concept}
+\label{sec:concept}
 \subsection{Overview}
 - Give an overview of solution(illustration)\\
 - Visual model of solution
