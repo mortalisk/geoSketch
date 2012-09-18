@@ -4,7 +4,15 @@ Originally made by
 
 	Morten Bendiksen - morten.bendiksen<at>gmail.com
 
-This program and its source code is licenced under the GPL. Live free or die!
+Licence for code: 
+Copyright Morten Bendiksen.
+* The GPL version 3 with the following addition:
+* You must give the author notice of any redistribution of modified binaries/code and allow him free access to all future code and distributions based on the code in this project. You must include this notice with any distribution.
+* If you need other licence contact author
+
+Licence for documentation:
+Copyright Morten Bendiksen.
+All rights reserved.
 
 Description:
 A rapid sketching program for geologists. See doc folder for more details.
