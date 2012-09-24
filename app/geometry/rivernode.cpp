@@ -247,10 +247,10 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
         QVector2D b = lefts[i+1]/cellsize;
         QVector2D c = rigths[i]/cellsize;
         QVector2D d = rigths[i+1]/cellsize;
-        float zmin = fmin(fmin(a.y(), b.y()), fmin(c.y(), d.y()));
-        float zmax = fmax(fmax(a.y(), b.y()), fmax(c.y(), d.y()));
-        float xmin = fmin(fmin(a.x(), b.x()), fmin(c.x(), d.x()));
-        float xmax = fmax(fmax(a.x(), b.x()), fmax(c.x(), d.x()));
+        float zmin = std::min(std::min(a.y(), b.y()), std::min(c.y(), d.y()));
+        float zmax = std::max(std::max(a.y(), b.y()), std::max(c.y(), d.y()));
+        float xmin = std::min(std::min(a.x(), b.x()), std::min(c.x(), d.x()));
+        float xmax = std::max(std::max(a.x(), b.x()), std::max(c.x(), d.x()));
         for (int z = 0; z<rows.size(); ++z) {
             for (int x = 0; x<rows[0].size();++x) {
                 QVector2D point(x,z);
