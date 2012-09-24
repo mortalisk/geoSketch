@@ -23,6 +23,8 @@ Scene::Scene() {
     camera.setTrackMode(Camera::SPHERE_TRACK, Vector3(0,0,0), Vector3(10,10,10) );
     activeNode = boxNode;
     editLayerNo = -1;
+    seaLevel = 0.0;
+    seaActive = false;
 }
 
 void Scene::showCursor(Vector3& from, Vector3& direction) {

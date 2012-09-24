@@ -16,6 +16,8 @@ private:
     bool snapToGrid;
     bool onSurface;
     int editLayerNo;
+    float seaLevel;
+    bool seaActive;
 
 public:
 

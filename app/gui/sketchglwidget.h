@@ -86,6 +86,7 @@ public slots:
     void undo();
     void save();
     void open();
+    void seaLevel();
 
 };
 

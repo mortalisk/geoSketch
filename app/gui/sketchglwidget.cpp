@@ -369,3 +369,7 @@ void MyGLWidget::open() {
 
 }
 
+void MyGLWidget::seaLevel() {
+
+}
+

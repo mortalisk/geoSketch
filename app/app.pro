@@ -7,7 +7,7 @@ TARGET = geoSketch
 QT += core gui opengl
 DEPENDPATH += . gui geometry morten3d
 INCLUDEPATH += . gui geometry morten3d include
-#LIBS += -lCGAL
+LIBS += -lGLU
 #QMAKE_CXXFLAGS += -frounding-math
 # -Llib -lGLEW
 
