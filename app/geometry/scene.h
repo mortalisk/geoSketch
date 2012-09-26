@@ -39,6 +39,10 @@ public:
 
     void seaLevel() {
         setSeaLevel = !setSeaLevel;
+        if (activeNode) {
+            activeNode->setActive(false);
+        }
+        activeNode = boxNode;
     }
 
     BaseNode* getRootNode();

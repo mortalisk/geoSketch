@@ -45,9 +45,9 @@ public:
         return points;
     }
 
-    void elevate(float y) {
+    void elevateTo(float y) {
         for(int i=0; i<points.size(); i++) {
-            points[i] = Vector3(points[i].x(), points[i].y()+y, points[i].z());
+            points[i] = Vector3(points[i].x(), y, points[i].z());
         }
     }
 

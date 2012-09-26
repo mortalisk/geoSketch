@@ -31,7 +31,7 @@ void SurfaceNode::invalidate() {
 
 void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) {
     Vector3 splinep1 = spline.getPoints()[0];
-    Vector3 splinep2 = spline.getPoints()[2];
+    Vector3 splinep2 = spline.getPoints()[1];
     Vector3 belowp = belowSpline.getPoints()[0];
     Axis axis = X;
     bool similarZ = similar(splinep1.z(),belowp.z(),splinep2.z());
@@ -287,11 +287,11 @@ void SurfaceNode::constructLayer() {
     shape = new Surface(triangles, outline);
 }
 
-void SurfaceNode::elevate(float y) {
-    front.elevate(y);
-    back.elevate(y);
-    left.elevate(y);
-    right.elevate(y);
+void SurfaceNode::elevateTo(float y) {
+    front.elevateTo(y);
+    back.elevateTo(y);
+    left.elevateTo(y);
+    right.elevateTo(y);
     hasContructedLayer = false;
 }
 

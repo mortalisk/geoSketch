@@ -105,11 +105,15 @@ void BoxNode::makeWaterNode() {
     back.addPoint(backNode->lowerRigth);
     left.addPoint(leftNode->lowerLeft);
     left.addPoint(leftNode->lowerRigth);
+
     bottomDummyNode = new SurfaceNode("BottomDummy", front, right, back, left, NULL);
 
     waterNode = new SurfaceNode(*bottomDummyNode);
-    waterNode->elevate(5);
+    waterNode->elevateTo(5);
     waterNode->below = bottomDummyNode;
+    waterNode->setActive(false);
+    waterNode->visible = false;
+    waterNode->diffuse = QVector4D(0.5,0.5,1.0,0.5);
 
 }
 
@@ -148,6 +152,8 @@ QVector<Vector3> BoxNode::intersectionPoints(Vector3 from, Vector3 direction) {
 }
 
 void BoxNode::setSeaLevel(float y) {
+    waterNode->elevateTo(y);
+    waterNode->visible = true;
 
 }
 
@@ -253,6 +259,9 @@ BaseNode* BoxNode::makeLayer() {
         s->spline.isSuggestion = true;
     }
 
+    waterNode->below = n;
+    waterNode->invalidate();
+
     return n;
 }
 
@@ -263,6 +272,8 @@ void BoxNode::draw() {
 
 
     drawChildren();
+    if (waterNode->visible)
+        waterNode->draw();
 
     glColor4f(0.5,0.5,0.5,1.0);
     glEnable(GL_CULL_FACE);
@@ -287,6 +298,8 @@ void BoxNode::drawSelf() {
         glColor4f(0.5,0.5,0.5,0.5);
         s->shape->drawShape(ambient, diffuse);
     }
+
+
 
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
