@@ -12,6 +12,7 @@ BoxNode::BoxNode() :BaseNode("boxnode")
 
     init();
     setUpSurfaces();
+    makeWaterNode();
 }
 
 void BoxNode::init() {
@@ -91,6 +92,27 @@ void BoxNode::setUpSurfaces() {
 
 }
 
+void BoxNode::makeWaterNode() {
+    Spline front;
+    Spline right;
+    Spline back;
+    Spline left;
+    front.addPoint(frontNode->lowerLeft);
+    front.addPoint(frontNode->lowerRigth);
+    right.addPoint(rightNode->lowerLeft);
+    right.addPoint(rightNode->lowerRigth);
+    back.addPoint(backNode->lowerLeft);
+    back.addPoint(backNode->lowerRigth);
+    left.addPoint(leftNode->lowerLeft);
+    left.addPoint(leftNode->lowerRigth);
+    bottomDummyNode = new SurfaceNode("BottomDummy", front, right, back, left, NULL);
+
+    waterNode = new SurfaceNode(*bottomDummyNode);
+    waterNode->elevate(5);
+    waterNode->below = bottomDummyNode;
+
+}
+
 float BoxNode::getDepth() {
     return depth;
 }
@@ -123,6 +145,10 @@ QVector<Vector3> BoxNode::intersectionPoints(Vector3 from, Vector3 direction) {
         p.append(from + (direction.normalize()*d));
     }
     return p;
+}
+
+void BoxNode::setSeaLevel(float y) {
+
 }
 
 void BoxNode::addPoint(Vector3 from, Vector3 direction) {
@@ -217,19 +243,7 @@ BaseNode* BoxNode::makeLayer() {
     if(children.size() > 0) {
         below = (SurfaceNode*)children[children.size()-1];
     }else {
-        Spline front;
-        Spline right;
-        Spline back;
-        Spline left;
-        front.addPoint(frontNode->lowerLeft);
-        front.addPoint(frontNode->lowerRigth);
-        right.addPoint(rightNode->lowerLeft);
-        right.addPoint(rightNode->lowerRigth);
-        back.addPoint(backNode->lowerLeft);
-        back.addPoint(backNode->lowerRigth);
-        left.addPoint(leftNode->lowerLeft);
-        left.addPoint(leftNode->lowerRigth);
-        below = new SurfaceNode("Bottom", front, right, back, left, NULL);
+       below = bottomDummyNode;
     }
     SurfaceNode * n = new SurfaceNode( "Layer", frontNode->spline, rightNode->spline, backNode->spline, leftNode->spline, below);
     children.append(n);

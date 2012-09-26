@@ -287,6 +287,14 @@ void SurfaceNode::constructLayer() {
     shape = new Surface(triangles, outline);
 }
 
+void SurfaceNode::elevate(float y) {
+    front.elevate(y);
+    back.elevate(y);
+    left.elevate(y);
+    right.elevate(y);
+    hasContructedLayer = false;
+}
+
 void SurfaceNode::determineActionOnStoppedDrawing() {
     BaseNode::determineActionOnStoppedDrawing();
 

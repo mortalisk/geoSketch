@@ -4,6 +4,7 @@
 #include "basenode.h"
 #include "surface.h"
 #include "sidenode.h"
+#include "surfacenode.h"
 
 class BoxNode : public BaseNode
 {
@@ -21,11 +22,15 @@ public:
 
     void setUpSurfaces();
 
+    void makeWaterNode();
+
     float width, depth, heigth;
     SideNode * frontNode,  * backNode,  * leftNode,  * rightNode,  * topNode,  * bottomNode;
     float topF, bottomF ,rightF ,leftF ,farF , nearF;
     QVector<SideNode*> surfaces;
     SideNode * activeSurface;
+    SurfaceNode * bottomDummyNode;
+    SurfaceNode * waterNode;
     float getWidth();
     float getHeight();
     float getDepth();
@@ -35,6 +40,8 @@ public:
     void drawSelf();
     BaseNode * makeLayer();
     void makeSuggestionFor(SideNode* side);
+
+    void setSeaLevel(float y);
 
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
     float intersectionPoint(Vector3 from, Vector3 direction);

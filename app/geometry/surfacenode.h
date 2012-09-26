@@ -46,6 +46,8 @@ public:
 
     void fromJsonSubclass(QVariantMap map);
 
+    void elevate(float y);
+
     QString getTypeId() {
         return QString("SurfaceNode");
     }

@@ -23,8 +23,7 @@ Scene::Scene() {
     camera.setTrackMode(Camera::SPHERE_TRACK, Vector3(0,0,0), Vector3(10,10,10) );
     activeNode = boxNode;
     editLayerNo = -1;
-    seaLevel = 0.0;
-    seaActive = false;
+    setSeaLevel = false;
 }
 
 void Scene::showCursor(Vector3& from, Vector3& direction) {
@@ -48,8 +47,9 @@ void Scene::showCursor(Vector3& from, Vector3& direction) {
 }
 
 void Scene::addPoint(Vector3& from, Vector3& direction) {
-    //if (onSurface) {
-    if(activeNode){
+    if (setSeaLevel) {
+        boxNode->setSeaLevel(cursor->position.y());
+    } else if(activeNode){
         activeNode->addPoint(from, direction);
     }
 }

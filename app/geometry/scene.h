@@ -16,8 +16,7 @@ private:
     bool snapToGrid;
     bool onSurface;
     int editLayerNo;
-    float seaLevel;
-    bool seaActive;
+    bool setSeaLevel;
 
 public:
 
@@ -37,6 +36,10 @@ public:
     void editLayer();
     QVariantMap toJson();
     void fromJson(QVariantMap& json);
+
+    void seaLevel() {
+        setSeaLevel = !setSeaLevel;
+    }
 
     BaseNode* getRootNode();
 

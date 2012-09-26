@@ -370,6 +370,7 @@ void MyGLWidget::open() {
 }
 
 void MyGLWidget::seaLevel() {
+    scene->seaLevel();
 
 }
 
