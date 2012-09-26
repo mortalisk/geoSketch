@@ -199,7 +199,7 @@ bool Process(const QVector<Vector3> &contour, const QVector<Vector3> &contour3d,
 
 
 
-enum Axis { X, Y, Z};
+//enum Axis { X, Y, Z};
 
 bool triangulate(const QVector<Vector3> &contour,QVector<Vector3> &result, Axis axis ) {
     QVector<Vector3> P = contour;

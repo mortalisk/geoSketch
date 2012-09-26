@@ -30,6 +30,7 @@ public:
     QVector<SideNode*> surfaces;
     SideNode * activeSurface;
     SurfaceNode * bottomDummyNode;
+    SurfaceNode * currentBelowNode;
     SurfaceNode * waterNode;
     float getWidth();
     float getHeight();
@@ -40,6 +41,8 @@ public:
     void drawSelf();
     BaseNode * makeLayer();
     void makeSuggestionFor(SideNode* side);
+
+    void updateCurrentBelowNode();
 
     void setSeaLevel(float y);
 

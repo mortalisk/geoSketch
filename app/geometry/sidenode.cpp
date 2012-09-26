@@ -79,9 +79,9 @@ void SideNode::makeSuggestionLines() {
 
 }
 
-static bool similar(float a, float b, float c) {
-    return fabs(a-b) < 0.001 && fabs(b-c) < 0.001;
-}
+//bool similar(float a, float b, float c) {
+//    return fabs(a-b) < 0.001 && fabs(b-c) < 0.001;
+//}
 
 void SideNode::addSubclassJson(QVariantMap &map) {
     map["lowerLeft"] = lowerLeft.toJson();

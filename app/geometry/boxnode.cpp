@@ -107,6 +107,7 @@ void BoxNode::makeWaterNode() {
     left.addPoint(leftNode->lowerRigth);
 
     bottomDummyNode = new SurfaceNode("BottomDummy", front, right, back, left, NULL);
+    currentBelowNode = new SurfaceNode(*bottomDummyNode);
 
     waterNode = new SurfaceNode(*bottomDummyNode);
     waterNode->elevateTo(5);
@@ -245,12 +246,8 @@ BaseNode* BoxNode::makeLayer() {
             ||backNode->spline.getPoints().size() <1||leftNode->spline.getPoints().size() <1)
         return this;
 
-    SurfaceNode * below = NULL;
-    if(children.size() > 0) {
-        below = (SurfaceNode*)children[children.size()-1];
-    }else {
-       below = bottomDummyNode;
-    }
+    SurfaceNode * below = currentBelowNode;
+
     SurfaceNode * n = new SurfaceNode( "Layer", frontNode->spline, rightNode->spline, backNode->spline, leftNode->spline, below);
     children.append(n);
 
@@ -259,10 +256,20 @@ BaseNode* BoxNode::makeLayer() {
         s->spline.isSuggestion = true;
     }
 
+    updateCurrentBelowNode();
+
     waterNode->below = n;
     waterNode->invalidate();
 
     return n;
+}
+
+void BoxNode::updateCurrentBelowNode() {
+    SurfaceNode * top = dynamic_cast<SurfaceNode*>(children[children.size()-1]);
+    currentBelowNode->front.updateForBelowNode(top->front);
+    currentBelowNode->back.updateForBelowNode(top->back);
+    currentBelowNode->left.updateForBelowNode(top->left);
+    currentBelowNode->right.updateForBelowNode(top->right);
 }
 
 void BoxNode::draw() {

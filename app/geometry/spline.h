@@ -6,6 +6,7 @@
 #include <algorithm>
 #include "shape.h"
 #include <QMap>
+#include "util.h"
 class node;
 
 class Spline
@@ -39,6 +40,68 @@ public:
     void addAll(const QVector<Vector3> & a) {
         points += a;
         resetDrawPoints();
+    }
+
+    void updateForBelowNode(Spline & top) {
+        Vector3& splinep1 = points[0];
+        Vector3& splinep2 = points[1];
+        Vector3& belowp = top.points[0];
+        QVector<Vector3> newPoints;
+        Axis axis = X;
+        bool similarZ = similar(splinep1.z(),belowp.z(),splinep2.z());
+        if (similarZ) {
+            axis = Z;
+        }
+        int intersectionIndex = 0;
+        int intersectionIndexTop = 0;
+        for (int i = 0; i< points.size()-1; i++) {
+            for (int j = 0;j <top.points.size()-1; j++) {
+                Vector3& a = points[i];
+                Vector3& b = points[i+1];
+                Vector3& c = top.points[j];
+                Vector3& d = top.points[j+1];
+
+                double x,y;
+                if (axis == X && lineSegmentIntersection(a.z(),a.y(), b.z(), b.y(), c.z(), c.y(), d.z(), d.y(), &x, &y)) {
+                    Vector3 intersect(a.x(),y,x);
+
+                    if (points[i].y() > top.points[j].y()) {
+                        for (int k = intersectionIndexTop; k <= j; k++) {
+                            newPoints.push_back(top.points[k]);
+                        }
+                    }else {
+                        for (int k = intersectionIndex; k <= i; k++) {
+                            newPoints.push_back(points[k]);
+                        }
+                    }
+                    newPoints.push_back(intersect);
+
+
+                    intersectionIndex = i;
+                    intersectionIndexTop = j;
+
+                }else if (axis == Z && lineSegmentIntersection(a.x(),a.y(), b.x(), b.y(), c.x(), c.y(), d.x(), d.y(), &x, &y)) {
+                    Vector3 intersect(x,y,a.z());
+
+                    if (points[i].y() > top.points[j].y()) {
+                        for (int k = intersectionIndexTop; k <= j; k++) {
+                            newPoints.push_back(top.points[k]);
+                        }
+                    }else {
+                        for (int k = intersectionIndex; k <= i; k++) {
+                            newPoints.push_back(points[k]);
+                        }
+                    }
+                    newPoints.push_back(intersect);
+
+
+                    intersectionIndex = i;
+                    intersectionIndexTop = j;
+                }
+
+            }
+        }
+        points = newPoints;
     }
 
     const QVector<Vector3>& getPoints() {
