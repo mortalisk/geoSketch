@@ -29,7 +29,7 @@ void SurfaceNode::invalidate() {
     shape = NULL;
 }
 
-void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) {
+void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) { 
     Vector3 splinep1 = spline.getPoints()[0];
     Vector3 splinep2 = spline.getPoints()[1];
     Vector3 belowp = belowSpline.getPoints()[0];
@@ -39,70 +39,77 @@ void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>&
         axis = Z;
     }
 
-    QVector<Vector3> front1, front2, outline;
-    for(float i = 0.0; i <= 1.001; i+= 0.02) {
+    QVector<QVector<Vector3> > polygons;
+    const QVector<Vector3> & points = spline.getPoints();
+    const QVector<Vector3> & belowPoints = belowSpline.getPoints();
 
+    int previousInterSection = 0;
+    int previousInterSectionBelow = 0;
 
-        Vector3 a = spline.getPoint(i);
-        Vector3 b = belowSpline.getPoint(i);
+    Vector3 previousInterSectionPoint = (points[0] + belowPoints[0])/2;
 
-
-        front1.push_back(a);
-        front2.push_back(b);
-
-    }
-
-    bool add = splinep1.y()>belowp.y();
-    int indexInBelowOfIntersection = -1;
-
-    for (int i = 0; i <front1.size()-1; ++i) {
-        Vector3& a =front1[i];
-        Vector3& b =front1[i+1];
-        if (add) {
-            outline.push_back(a);
-        }
-
-        for (int j = 0; j <front2.size()-1; ++j) {
-            Vector3& c =front2[j];
-            Vector3& d =front2[j+1];
+    // first create all polygons we must triangulate
+    for (int i = 0; i< points.size() -1;i++) {
+        for (int j = 0; j <belowPoints.size()-1; j++) {
+            const Vector3& a = points[i];
+            const Vector3& b = points[i+1];
+            const Vector3& c = belowPoints[j];
+            const Vector3& d = belowPoints[j+1];
 
             double x,y;
+            Vector3 intersection;
+            bool intersected = false;
             if (axis == X && lineSegmentIntersection(a.z(),a.y(), b.z(), b.y(), c.z(), c.y(), d.z(), d.y(), &x, &y)) {
-                outline.push_back(Vector3(a.x(),y,x));
-                add = !add;
-                indexInBelowOfIntersection = j;
+                intersection = Vector3(a.x(),y,x);
+                intersected = true;
+
             }else if (axis == Z && lineSegmentIntersection(a.x(),a.y(), b.x(), b.y(), c.x(), c.y(), d.x(), d.y(), &x, &y)) {
-                outline.push_back(Vector3(x,y,a.z()));
-                add = !add;
-                indexInBelowOfIntersection = j;
+                intersection = Vector3(x,y,a.z());
+                intersected = true;
+            } else if (i == points.size()-2 && j == belowPoints.size()-2) {
+                intersection = (points[i+1] + belowPoints[j+1])/2;
+                intersected = true;
+                i++;
+                j++;
+            }
+
+            if (intersected) {
+                if (points[i].y() > belowPoints[j].y()) {
+
+                    QVector<Vector3> polygon;
+                    polygon.push_back(previousInterSectionPoint);
+                    for (int k = previousInterSection; k <= i; k++) {
+                        polygon.push_back(points[k]);
+                    }
+                    polygon.push_back(intersection);
+                    for (int k = j; k >= previousInterSectionBelow; k--) {
+                        polygon.push_back(belowPoints[k]);
+                    }
+
+                    polygons.push_back(polygon);
+
+                }
+                previousInterSectionPoint = intersection;
+                previousInterSection = i+1;
+                previousInterSectionBelow = j+1;
+
             }
 
         }
     }
-    if (add) {
-        outline.push_back(front1[front1.size()-1]);
+
+    // create triangles
+    QVector<Vector3> res;
+    for(int i = 0; i<polygons.size(); i++) {
+        QVector<Vector3> & polygon = polygons[i];
+        triangulate(polygon, res, axis);
     }
 
-    if (add) {
-        for (int i = front2.size()-1; i> indexInBelowOfIntersection; --i) {
-            outline.push_back(front2[i]);
-        }
-    }else {
-        for (int i = indexInBelowOfIntersection; i>= 0; --i) {
-            outline.push_back(front2[i]);
-        }
-    }
-
-    front2.clear();
-
-
-    triangulate(outline,front2, axis);
-
-
-    for (int i = 0; i < front2.size(); i+=3) {
-        Vector3 a = front2[i];
-        Vector3 b = front2[i+1];
-        Vector3 c = front2[i+2];
+    // convert to vertex
+    for (int i = 0; i < res.size(); i+=3) {
+        Vector3 a = res[i];
+        Vector3 b = res[i+1];
+        Vector3 c = res[i+2];
         Vector3 normal = (b-a).cross(c-a).normalize();
 
         triangles.push_back(vertex(a,normal));
@@ -110,8 +117,9 @@ void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>&
         triangles.push_back(vertex(c,normal));
     }
 
-    for (double i = 0.0;i<=1.01;i+=0.02) {
-        boxoutline.push_back(spline.getPoint(i));
+    // create line
+    for (int i = 0;i<points.size();i++) {
+        boxoutline.push_back(points[i]);
     }
 
 }
