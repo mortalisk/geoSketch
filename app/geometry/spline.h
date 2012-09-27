@@ -42,65 +42,78 @@ public:
         resetDrawPoints();
     }
 
-    void updateForBelowNode(Spline & top) {
+    void updateForBelowNode(Spline & newLayer) {
+        if (!isLeftToRight()) reverse();
+        if (!newLayer.isLeftToRight()) newLayer.reverse();
         Vector3& splinep1 = points[0];
-        Vector3& splinep2 = points[1];
-        Vector3& belowp = top.points[0];
+        Vector3& splinep2 = points[points.size()-1];
+        Vector3& pfromnew = newLayer.points[0];
         QVector<Vector3> newPoints;
         Axis axis = X;
-        bool similarZ = similar(splinep1.z(),belowp.z(),splinep2.z());
+        bool similarZ = similar(splinep1.z(),pfromnew.z(),splinep2.z());
         if (similarZ) {
             axis = Z;
         }
         int intersectionIndex = 0;
         int intersectionIndexTop = 0;
         for (int i = 0; i< points.size()-1; i++) {
-            for (int j = 0;j <top.points.size()-1; j++) {
+            for (int j = 0;j <newLayer.points.size()-1; j++) {
                 Vector3& a = points[i];
                 Vector3& b = points[i+1];
-                Vector3& c = top.points[j];
-                Vector3& d = top.points[j+1];
+                Vector3& c = newLayer.points[j];
+                Vector3& d = newLayer.points[j+1];
 
                 double x,y;
                 if (axis == X && lineSegmentIntersection(a.z(),a.y(), b.z(), b.y(), c.z(), c.y(), d.z(), d.y(), &x, &y)) {
                     Vector3 intersect(a.x(),y,x);
 
-                    if (points[i].y() > top.points[j].y()) {
-                        for (int k = intersectionIndexTop; k <= j; k++) {
-                            newPoints.push_back(top.points[k]);
-                        }
-                    }else {
+                    if (points[i].y() > newLayer.points[j].y()) {
                         for (int k = intersectionIndex; k <= i; k++) {
                             newPoints.push_back(points[k]);
+                        }
+                    }else {
+                        for (int k = intersectionIndexTop; k <= j; k++) {
+                            newPoints.push_back(newLayer.points[k]);
                         }
                     }
                     newPoints.push_back(intersect);
 
 
-                    intersectionIndex = i;
-                    intersectionIndexTop = j;
+                    intersectionIndex = i+1;
+                    intersectionIndexTop = j+1;
 
                 }else if (axis == Z && lineSegmentIntersection(a.x(),a.y(), b.x(), b.y(), c.x(), c.y(), d.x(), d.y(), &x, &y)) {
                     Vector3 intersect(x,y,a.z());
 
-                    if (points[i].y() > top.points[j].y()) {
-                        for (int k = intersectionIndexTop; k <= j; k++) {
-                            newPoints.push_back(top.points[k]);
-                        }
-                    }else {
+                    if (points[i].y() > newLayer.points[j].y()) {
                         for (int k = intersectionIndex; k <= i; k++) {
                             newPoints.push_back(points[k]);
+                        }
+                    }else {
+                        for (int k = intersectionIndexTop; k <= j; k++) {
+                            newPoints.push_back(newLayer.points[k]);
                         }
                     }
                     newPoints.push_back(intersect);
 
 
-                    intersectionIndex = i;
-                    intersectionIndexTop = j;
+                    intersectionIndex = i+1;
+                    intersectionIndexTop = j+1;
                 }
 
             }
         }
+
+        if(points[points.size()-1].y() > newLayer.points[newLayer.points.size()-1].y()) {
+            for (int i = intersectionIndex; i< points.size(); i++) {
+                newPoints.push_back(points[i]);
+            }
+        } else {
+            for (int i = intersectionIndexTop; i< newLayer.points.size(); i++) {
+                newPoints.push_back(newLayer.points[i]);
+            }
+        }
+
         points = newPoints;
     }
 

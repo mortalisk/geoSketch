@@ -258,7 +258,7 @@ BaseNode* BoxNode::makeLayer() {
 
     updateCurrentBelowNode();
 
-    waterNode->below = n;
+    waterNode->below = currentBelowNode;
     waterNode->invalidate();
 
     return n;
@@ -266,6 +266,7 @@ BaseNode* BoxNode::makeLayer() {
 
 void BoxNode::updateCurrentBelowNode() {
     SurfaceNode * top = dynamic_cast<SurfaceNode*>(children[children.size()-1]);
+    currentBelowNode = new SurfaceNode(*currentBelowNode);
     currentBelowNode->front.updateForBelowNode(top->front);
     currentBelowNode->back.updateForBelowNode(top->back);
     currentBelowNode->left.updateForBelowNode(top->left);
