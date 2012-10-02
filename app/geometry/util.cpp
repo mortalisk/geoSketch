@@ -8,6 +8,7 @@
 #include "rivernode.h"
 #include "sidenode.h"
 #include "surfacenode.h"
+#include "deposit.h"
 
 static const float EPSILON=0.0000000001f;
 
@@ -24,6 +25,8 @@ BaseNode * create(QString type) {
         return new SideNode;
     } else if (type == "SurfaceNode") {
         return new SurfaceNode;
+    } else if (type == "Deposit") {
+        return new Deposit;
     } else {
         return NULL;
     }

@@ -38,6 +38,7 @@
    <addaction name="actionVisibility"/>
    <addaction name="actionColor"/>
    <addaction name="actionMakeRiver"/>
+   <addaction name="actionDeposit"/>
    <addaction name="actionMakeRidge"/>
    <addaction name="actionSea"/>
   </widget>
@@ -47,7 +48,7 @@
      <x>0</x>
      <y>0</y>
      <width>737</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
@@ -170,6 +171,11 @@
    </property>
    <property name="toolTip">
     <string>Indicate sea level</string>
+   </property>
+  </action>
+  <action name="actionDeposit">
+   <property name="text">
+    <string>Deposit</string>
    </property>
   </action>
  </widget>

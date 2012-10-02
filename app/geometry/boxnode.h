@@ -46,6 +46,8 @@ public:
 
     void setSeaLevel(float y);
 
+    float getSeaLevel();
+
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
     float intersectionPoint(Vector3 from, Vector3 direction);
 

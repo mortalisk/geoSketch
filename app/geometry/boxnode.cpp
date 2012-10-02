@@ -158,6 +158,10 @@ void BoxNode::setSeaLevel(float y) {
 
 }
 
+float BoxNode::getSeaLevel() {
+    return waterNode->front.getLeftPoint().y();
+}
+
 void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 
     // we must find the nearest intersection point

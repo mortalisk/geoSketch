@@ -3,6 +3,7 @@
 #include "surface.h"
 #include "ridgenode.h"
 #include "rivernode.h"
+#include "deposit.h"
 #include "util.h"
 
 SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false),resolution(200), skip(4)
@@ -313,21 +314,20 @@ void SurfaceNode::makeRiverNode() {
 
     if (spline.getPoints().size() < 2)
         return;
-    RiverNode * ridge = new RiverNode(uvCoordinateSpline);
-    ridge->parent = this;
-    children.append(ridge);
+    RiverNode * river = new RiverNode(uvCoordinateSpline);
+    river->parent = this;
+    children.append(river);
 
     spline.clear();
     sketchingSpline.clear();
     uvCoordinateSpline.clear();
 
-    ridge->makeWater();
-    proxy = ridge;
+    river->makeWater();
+    proxy = river;
 
     hasContructedLayer = false;
     delete shape;
     shape = NULL;
-
 
 }
 
@@ -578,6 +578,13 @@ void SurfaceNode::drawChildren() {
             r->drawSplines();
         }
     }
+    foreach(BaseNode * b, children) {
+        Deposit * d = dynamic_cast<Deposit*>(b);
+        if (d != NULL) {
+            d->draw();
+        }
+    }
+
     glDisable(GL_STENCIL_TEST);
 
 

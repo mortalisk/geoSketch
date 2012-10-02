@@ -2,17 +2,12 @@
 #include "rivernode.h"
 #include "surfacenode.h"
 #include "surface.h"
+#include "deposit.h"
 #include <float.h>
 #include <QVector2D>
 
-RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("rigde"), uv(uvs)
+RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("river"), uv(uvs)
 {
-//    foreach (BaseNode* child ,parent->children) {
-//        RiverNode * river = dynamic_cast<RiverNode *>(child);
-//        if (river) {
-
-//        }
-//    }
     smooth(uv);
     QVector2D prev = uv[0] - (uv[1]- uv[0]);
     for (int i = 0; i<uv.size(); ++i) {
@@ -34,7 +29,6 @@ RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("rigde"), uv(uvs)
         rigths.push_back(uv[i] - normal);
         prev = uv[i];
     }
-    //repositionOnSurface(*parent);
 }
 
 QVector<Vector3> RiverNode::intersectionPoints(Vector3 from, Vector3 direction) {
@@ -363,4 +357,15 @@ void RiverNode::addSubclassJson(QVariantMap &map) {
 void RiverNode::fromJsonSubclass(QVariantMap map) {
     rigths = variantToVector2DVector(map["rights"]);
     lefts = variantToVector2DVector(map["lefts"]);
+}
+
+void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {
+    for (int i = 0; i < lefts.size()-1; i++) {
+        Vector3 point = surfaceNode.getPointFromUv(lefts[i]);
+        if (point.y() < seaLevel) {
+            Deposit * deposit = new Deposit(lefts[i], lefts[i] - lefts[i-1], 0.01, &surfaceNode);
+            surfaceNode.children.push_back(deposit);
+            return;
+        }
+    }
 }

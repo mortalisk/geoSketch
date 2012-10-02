@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QFileDialog>
+#include "rivernode.h"
 
 MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
         QGLWidget(*glf,parent), move(0.01f)
@@ -372,5 +373,17 @@ void MyGLWidget::open() {
 void MyGLWidget::seaLevel() {
     scene->seaLevel();
 
+}
+
+void MyGLWidget::createDeposits() {
+    float seaLevel = scene->boxNode->getSeaLevel();
+
+    RiverNode * riverNode = dynamic_cast<RiverNode *>(scene->activeNode);
+    SurfaceNode * activeSurface = dynamic_cast<SurfaceNode *>(riverNode->parent);
+    if (riverNode != NULL && activeSurface != NULL) {
+        riverNode->createDeposit(seaLevel, *activeSurface);
+    } else {
+        std::cerr << "No active RiverNode and/or SurfaceNode in createDeposits in glwidget" << std::endl;
+    }
 }
 

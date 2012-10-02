@@ -31,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction * saveButton = findChild<QAction*>("actionSave");
     QAction * openButton = findChild<QAction*>("actionOpen");
     QAction * seaButton = findChild<QAction*>("actionSea");
+    QAction * depositButton = findChild<QAction*>("actionDeposit");
 
     layerChooser = new QComboBox();
     toolBar->addWidget(layerChooser);
@@ -53,6 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(saveButton,SIGNAL(activated()), gl, SLOT(save()));
     QObject::connect(openButton,SIGNAL(activated()), gl, SLOT(open()));
     QObject::connect(seaButton,SIGNAL(activated()), gl, SLOT(seaLevel()));
+    QObject::connect(depositButton,SIGNAL(activated()), gl, SLOT(createDeposits()));
 
     QDockWidget * sketchDock = new QDockWidget();
     SketchPad * sketchPadSlice = new SketchPad();

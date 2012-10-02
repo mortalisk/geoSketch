@@ -4,6 +4,7 @@
 #include "isurfacefeature.h"
 
 class SurfaceNode;
+class Deposit;
 
 class RiverNode : public BaseNode, public ISurfaceFeature
 {
@@ -17,6 +18,8 @@ private:
     //the two river banks
     QVector<QVector2D> lefts;
     QVector<QVector2D> rigths;
+
+    Deposit * deposit;
 
 QVector<QVector2D> uvSketch;
 
@@ -53,10 +56,14 @@ public:
 
     void fromJsonSubclass(QVariantMap map);
 
+    void createDeposit(float seaLevel, SurfaceNode& surfaceNode);
+
     QString getTypeId() {
         return QString("RiverNode");
     }
 
 };
+
+
 
 #endif // RiverNode_H

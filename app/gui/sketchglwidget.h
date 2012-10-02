@@ -87,6 +87,7 @@ public slots:
     void save();
     void open();
     void seaLevel();
+    void createDeposits();
 
 };
 
