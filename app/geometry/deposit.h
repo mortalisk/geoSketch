@@ -3,8 +3,9 @@
 
 #include "basenode.h"
 #include "surfacenode.h"
+#include "isurfacefeature.h"
 
-class Deposit : public BaseNode {
+class Deposit : public BaseNode, ISurfaceFeature {
 private:
     QVector2D flowFrom;
     QVector2D direction;
@@ -27,6 +28,10 @@ public:
     virtual QString getTypeId() {
         return QString("Deposit");
     }
+
+    virtual void repositionOnSurface(SurfaceNode &surfacenode);
+
+    virtual void doTransformSurface(QVector<QVector<Vector3> > &rows, float resolution, float size);
 
     virtual void addSubclassJson(QVariantMap &map) {
         QVariantMap flowFromMap;
