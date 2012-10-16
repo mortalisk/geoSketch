@@ -19,7 +19,7 @@ private:
     bool depositing;
 public:
     Deposit(QVector2D flowFrom, QVector2D direction, float volume, SurfaceNode * surfaceNode) : BaseNode("deposit"), flowFrom(flowFrom), direction(direction), volume(volume), surfaceNode(surfaceNode) {
-
+        diffuse = QVector4D(0.2, 0.3, 0.1, 1.0);
     }
 
     Deposit(Deposit& deposit) : BaseNode(deposit), flowFrom(flowFrom), direction(direction), volume(volume) {
@@ -35,7 +35,7 @@ public:
         return QString("Deposit");
     }
 
-    void exchange(QVector<QVector<float> > * previousDeposit, QVector<QVector<float> > * deposited, int xinc, int yinc);
+    void exchange(QVector<QVector<float> > * previousDeposit, QVector<QVector<float> > * deposited, int xinc, int yinc, int fromx, int fromy);
 
     virtual void repositionOnSurface(SurfaceNode &surfacenode);
 

@@ -19,14 +19,19 @@ void Deposit::prepareForDrawing() {
 
 
 
+    Vector3 point = surfaceNode->getPointFromUv(flowFrom);
+
+    int fromx = round((point.x()+5)*4);
+    int fromy = round((point.z()+5)*4);
     if (depositing) {
-        if ((*previousDeposit)[0][10] < 0.1)
-            (*previousDeposit)[0][10] = 0.1;
+
+        if ((*previousDeposit)[fromy][fromx] < 0.1)
+            (*previousDeposit)[fromy][fromx] = 0.1;
     }
 
-    exchange(previousDeposit, deposited, 1, 0);
+    exchange(previousDeposit, deposited, 1, 0, fromx, fromy);
 
-    exchange(deposited, previousDeposit, 0, 1);
+    exchange(deposited, previousDeposit, 0, 1, fromx, fromy);
 
     deposited = previousDeposit;
 
@@ -37,21 +42,26 @@ void Deposit::prepareForDrawing() {
             float bd = (*deposited)[y][x+1];
             float cd = (*deposited)[y+1][x];
             float dd = (*deposited)[y+1][x+1];
-            vertex a = vertex(samples[y][x].x(), samples[y][x].y() + ad, samples[y][x].z());
-            vertex b = vertex(samples[y][x+1].x(), samples[y][x+1].y() + bd, samples[y][x+1].z());
-            vertex c = vertex(samples[y+1][x].x(), samples[y+1][x].y() + cd, samples[y+1][x].z());
-            vertex d = vertex(samples[y+1][x+1].x(), samples[y+1][x+1].y() + dd, samples[y+1][x+1].z());
+            Vector3 a(samples[y][x].x(), samples[y][x].y() + ad, samples[y][x].z());
+            Vector3 b(samples[y][x+1].x(), samples[y][x+1].y() + bd, samples[y][x+1].z());
+            Vector3 c(samples[y+1][x].x(), samples[y+1][x].y() + cd, samples[y+1][x].z());
+            Vector3 d(samples[y+1][x+1].x(), samples[y+1][x+1].y() + dd, samples[y+1][x+1].z());
+            Vector3 na = (c-a).cross(b-a);
+            Vector3 nb = (a-b).cross(c-b);
+            Vector3 nc = (d-c).cross(a-c);
+            Vector3 nd = (b-d).cross(c-d);
 
-            if (!(a.y == FLT_MIN || b.y == FLT_MIN || c.y == FLT_MIN) || ad > 0.1 || bd > 0.1 || cd > 0.1) {
-                triangles.push_back(a);
-                triangles.push_back(b);
-                triangles.push_back(c);
+
+            if (ad > 0.001 || bd > 0.001 || cd > 0.001) {
+                triangles.push_back(vertex(a, na));
+                triangles.push_back(vertex(b, nb));
+                triangles.push_back(vertex(c, nc));
             }
 
-            if (!(b.y == FLT_MIN || d.y == FLT_MIN || c.y == FLT_MIN) || bd > 0.1 || dd > 0.1 || cd < 0.1) {
-                triangles.push_back(b);
-                triangles.push_back(d);
-                triangles.push_back(c);
+            if (bd > 0.001 || dd > 0.001 || cd > 0.001) {
+                triangles.push_back(vertex(b, nb));
+                triangles.push_back(vertex(d, nd));
+                triangles.push_back(vertex(c, nc));
             }
 
         }
@@ -70,7 +80,7 @@ void Deposit::doTransformSurface(QVector<QVector<Vector3> > &, float, float ) {
     return;
 }
 
-void Deposit::exchange(QVector<QVector<float> > * previousDeposit, QVector<QVector<float> > * deposited, int xinc, int yinc) {
+void Deposit::exchange(QVector<QVector<float> > * previousDeposit, QVector<QVector<float> > * deposited, int xinc, int yinc, int fromx, int fromy) {
 for (int y = 0; y < samples.size(); y++) {
 
     for (int x = 0; x < samples[0].size(); x++) {
@@ -78,6 +88,20 @@ for (int y = 0; y < samples.size(); y++) {
         float d = (*previousDeposit)[y][x];
         // t = terrain, d == deposit
         float tr, tl, dr, dl;
+
+
+        int rightx = x+xinc;
+        int righty = y+yinc;
+        int leftx = x-xinc;
+        int lefty = y-yinc;
+        int vectorRightx = rightx-fromx;
+        int vectorRighty = righty-fromy;
+        int vectorLeftx = leftx-fromx;
+        int vectorLefty = lefty-fromy;
+        float distRight =sqrt(vectorRightx*vectorRightx+vectorRighty*vectorRighty);
+        float distLeft = sqrt(vectorLeftx*vectorLeftx+vectorLefty*vectorLefty);
+        float flowRateLeft = 2+pow(distLeft,1.1);
+        float flowRateRight = 2+pow(distRight, 1.1);
         if (y+yinc >= samples.size() || x+xinc>=samples[0].size()) {
             tr = t;
             dr = d;
@@ -98,8 +122,8 @@ for (int y = 0; y < samples.size(); y++) {
         float diffLeft = (tl+dl) - (t+d);
         float diffRigth = (tr+dr) - (t+d);
 
-        diffLeft = clamp(diffLeft/2, -d/2, dl/2);
-        diffRigth = clamp(diffRigth/2, -d/2, dr/2);
+        diffLeft = clamp(diffLeft/flowRateLeft, -d/2, dl/2);
+        diffRigth = clamp(diffRigth/flowRateRight, -d/2, dr/2);
 
         (*deposited)[y][x] = (*previousDeposit)[y][x] + diffLeft + diffRigth;
 
@@ -112,21 +136,13 @@ void Deposit::repositionOnSurface(SurfaceNode &surfacenode) {
     samples.clear();
 
     int gridsize = 40;
-    float cellsize = 10.0/gridsize;
-
-    Vector3 pos = surfacenode.getPointFromUv(flowFrom);
-    Vector3 flowTowards = surfacenode.getPointFromUv(flowFrom+direction);
-    Vector3 dir(flowTowards.x()-pos.x(), 0, flowTowards.z()-pos.z());
-    // must cast rays from above
-    pos = Vector3(pos.x(), pos.y()+100, pos.z());
-    Vector3 dirx(-dir.z(),0, dir.x());
-    dirx = dirx.normalize() * cellsize;
-    Vector3 diry(dir.x(), 0, dir.z());
-    diry = diry.normalize() * cellsize;
+    float cellsize = 10.0/gridsize - 0.01/gridsize;
 
 
-    // start at upper left side of grid
-    pos = pos -dirx * gridsize/2;
+    // must cast rays from above, start in corner
+    Vector3 pos(-4.99,10,-4.99);
+    Vector3 dirx(cellsize, 0, 0);
+    Vector3 diry(0, 0, cellsize);
 
     // direction of ray
     Vector3 down(0,-1, 0);

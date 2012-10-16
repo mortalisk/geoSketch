@@ -578,6 +578,8 @@ void SurfaceNode::drawChildren() {
             r->drawSplines();
         }
     }
+
+    glDisable(GL_STENCIL_TEST);
     foreach(BaseNode * b, children) {
         Deposit * d = dynamic_cast<Deposit*>(b);
         if (d != NULL) {
@@ -585,7 +587,6 @@ void SurfaceNode::drawChildren() {
         }
     }
 
-    glDisable(GL_STENCIL_TEST);
 
 
 }
