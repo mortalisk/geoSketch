@@ -5,12 +5,18 @@
 #include "surfacenode.h"
 #include "isurfacefeature.h"
 
-class Deposit : public BaseNode, ISurfaceFeature {
+class Deposit : public BaseNode, public ISurfaceFeature {
 private:
+    int times;
     QVector2D flowFrom;
     QVector2D direction;
     float volume;
     SurfaceNode * surfaceNode;
+    QVector<QVector<Vector3> > samples;
+    QVector<QVector<float> > deposit1;
+    QVector<QVector<float> > deposit2;
+    bool alternateDeposits;
+    bool depositing;
 public:
     Deposit(QVector2D flowFrom, QVector2D direction, float volume, SurfaceNode * surfaceNode) : BaseNode("deposit"), flowFrom(flowFrom), direction(direction), volume(volume), surfaceNode(surfaceNode) {
 
@@ -28,6 +34,8 @@ public:
     virtual QString getTypeId() {
         return QString("Deposit");
     }
+
+    void exchange(QVector<QVector<float> > * previousDeposit, QVector<QVector<float> > * deposited, int xinc, int yinc);
 
     virtual void repositionOnSurface(SurfaceNode &surfacenode);
 
@@ -54,6 +62,14 @@ public:
         direction.setX(map["direction"].toMap()["x"].toDouble());
         direction.setY(map["direction"].toMap()["y"].toDouble());
         volume = map["volume"].toDouble();
+    }
+
+    bool isDepositing() {
+        return depositing;
+    }
+
+    void setDepositing(bool b) {
+        depositing = b;
     }
 
     void prepareForDrawing();

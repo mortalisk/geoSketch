@@ -6,12 +6,12 @@
 #include "deposit.h"
 #include "util.h"
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name), front(front), right(right), back(back), left(left), below(below), hasContructedLayer(false),resolution(200), skip(4)
+SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(200), skip(4),below(below),front(front), right(right), back(back), left(left)
 {
     //constructLayer();
 }
 
-SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) ,front(other.front), right(other.right), back(other.back), left(other.left), below(other.below), hasContructedLayer(false), resolution(other.resolution), skip(other.skip), uvCoordinateSpline(other.uvCoordinateSpline){
+SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) , hasContructedLayer(false), resolution(other.resolution), skip(other.skip), uvCoordinateSpline(other.uvCoordinateSpline), below(other.below),front(other.front), right(other.right), back(other.back), left(other.left){
 
 }
 

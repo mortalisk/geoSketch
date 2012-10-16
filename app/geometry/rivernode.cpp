@@ -6,7 +6,7 @@
 #include <float.h>
 #include <QVector2D>
 
-RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("river"), uv(uvs)
+RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("river"), uv(uvs), deposit(NULL)
 {
     smooth(uv);
     QVector2D prev = uv[0] - (uv[1]- uv[0]);
@@ -21,7 +21,7 @@ RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("river"), uv(uvs)
         normal = QVector2D(normal.y(), -normal.x());
         normal.normalize();
 
-        float distanceFromMiddle = fabs(i-uv.size()/2.0)/uv.size();
+        //float distanceFromMiddle = fabs(i-uv.size()/2.0)/uv.size();
 
         normal *= 0.01;
 
@@ -69,7 +69,7 @@ void RiverNode::addPoint(Vector3 from, Vector3 direction) {
 
     SurfaceNode * surfaceParent = dynamic_cast<SurfaceNode *>(parent);
 
-    float size = 10.0f;
+    //float size = 10.0f;
     QVector<Vector3> pointsParent = surfaceParent->shape->intersectionPoints(from, direction, s, t);
     QVector<Vector3> pointsThis = shape->intersectionPoints(from, direction, s2, t2);
 
@@ -224,7 +224,7 @@ void RiverNode::makeWater() {
 }
 
 
-void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size) {
+void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float) {
     if (rightSpline.getPoints().size() < 2 || spline.getPoints().size() < 2) return;
 
     float cellsize = 1.0/resolution;
@@ -241,10 +241,10 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
         QVector2D b = lefts[i+1]/cellsize;
         QVector2D c = rigths[i]/cellsize;
         QVector2D d = rigths[i+1]/cellsize;
-        float zmin = std::min(std::min(a.y(), b.y()), std::min(c.y(), d.y()));
-        float zmax = std::max(std::max(a.y(), b.y()), std::max(c.y(), d.y()));
-        float xmin = std::min(std::min(a.x(), b.x()), std::min(c.x(), d.x()));
-        float xmax = std::max(std::max(a.x(), b.x()), std::max(c.x(), d.x()));
+//        float zmin = std::min(std::min(a.y(), b.y()), std::min(c.y(), d.y()));
+//        float zmax = std::max(std::max(a.y(), b.y()), std::max(c.y(), d.y()));
+//        float xmin = std::min(std::min(a.x(), b.x()), std::min(c.x(), d.x()));
+//        float xmax = std::max(std::max(a.x(), b.x()), std::max(c.x(), d.x()));
         for (int z = 0; z<rows.size(); ++z) {
             for (int x = 0; x<rows[0].size();++x) {
                 QVector2D point(x,z);
@@ -360,11 +360,18 @@ void RiverNode::fromJsonSubclass(QVariantMap map) {
 }
 
 void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {
+    if (this->deposit != NULL) {
+        deposit->setDepositing(!deposit->isDepositing());
+        return;
+    }
     for (int i = 0; i < lefts.size()-1; i++) {
         Vector3 point = surfaceNode.getPointFromUv(lefts[i]);
         if (point.y() < seaLevel) {
             Deposit * deposit = new Deposit(lefts[i], lefts[i] - lefts[i-1], 0.01, &surfaceNode);
             surfaceNode.children.push_back(deposit);
+            deposit->setDepositing(true);
+            this->deposit = deposit;
+            surfaceNode.invalidate();
             return;
         }
     }

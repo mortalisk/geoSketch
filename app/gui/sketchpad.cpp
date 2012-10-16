@@ -24,7 +24,7 @@ void SketchPad::mouseMoveEvent(QMouseEvent * e) {
     }
 }
 
-void SketchPad::paintEvent(QPaintEvent * e) {
+void SketchPad::paintEvent(QPaintEvent *) {
     QPen pen(Qt::black, 2, Qt::SolidLine);
 
     QPainter painter(this);

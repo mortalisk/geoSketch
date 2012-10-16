@@ -379,8 +379,13 @@ void MyGLWidget::createDeposits() {
     float seaLevel = scene->boxNode->getSeaLevel();
 
     RiverNode * riverNode = dynamic_cast<RiverNode *>(scene->activeNode);
-    SurfaceNode * activeSurface = dynamic_cast<SurfaceNode *>(riverNode->parent);
-    if (riverNode != NULL && activeSurface != NULL) {
+    SurfaceNode * activeSurface = NULL;
+
+    if (riverNode != NULL) {
+        activeSurface = dynamic_cast<SurfaceNode *>(riverNode->parent);
+    }
+
+    if (activeSurface != NULL) {
         riverNode->createDeposit(seaLevel, *activeSurface);
     } else {
         std::cerr << "No active RiverNode and/or SurfaceNode in createDeposits in glwidget" << std::endl;

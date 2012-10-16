@@ -25,7 +25,7 @@ QVector<QVector2D> uvSketch;
 
 public:
     RiverNode() {}
-    RiverNode(RiverNode& o) : BaseNode(o), rightSpline(o.rightSpline), crossSpline(o.crossSpline), uv(o.uv), lefts(o.lefts), rigths(o.rigths) {}
+    RiverNode(RiverNode& o) : BaseNode(o), rightSpline(o.rightSpline), crossSpline(o.crossSpline), uv(o.uv), lefts(o.lefts), rigths(o.rigths), deposit(NULL) {}
     RiverNode(QVector<QVector2D> uv);
 
     virtual BaseNode * copy() {

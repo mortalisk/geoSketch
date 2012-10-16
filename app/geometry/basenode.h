@@ -37,7 +37,7 @@ public:
     BaseNode(BaseNode &other)
         : shape(other.shape),position(other.position),
         spline(other.spline),sketchingSpline(other.sketchingSpline),
-          drawing(other.drawing),splineDone(other.splineDone),visible(other.visible), diffuse(other.diffuse), ambient(other.ambient),proxy(NULL)
+          drawing(other.drawing),splineDone(other.splineDone),visible(other.visible),proxy(NULL), diffuse(other.diffuse), ambient(other.ambient)
     {
         name = other.name;
         foreach(BaseNode* child, other.children) {

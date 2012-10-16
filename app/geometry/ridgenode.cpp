@@ -186,7 +186,7 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                         }
                     }else if (i < uv.size()-2) {
                         QVector2D p3 = uv[i+2]/gridsize;
-                        float h3 = this->heights[i+2];
+                        //float h3 = this->heights[i+2];
                         QVector2D normal2(p3.y()-p2.y(), -(p3.x()-p2.x()));
                         QVector2D point3 = point +normal2;
 

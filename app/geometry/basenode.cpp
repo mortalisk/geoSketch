@@ -120,7 +120,7 @@ void BaseNode::oversketchSide(Vector3& pointInSketch, int nearest, bool first) {
     }
 }
 
-bool BaseNode::isPointNearerSide(Vector3& point, int indexInSpline) {
+bool BaseNode::isPointNearerSide(Vector3&, int) {
     return false;
 }
 

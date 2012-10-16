@@ -17,8 +17,8 @@ public:
         return QString("GeneralNode");
     }
 
-    void addSubclassJson(QVariantMap &map) {};
-    void fromJsonSubclass(QVariantMap map) {};
+    void addSubclassJson(QVariantMap &) {};
+    void fromJsonSubclass(QVariantMap ) {};
 };
 
 #endif // GENERALNODE_H
