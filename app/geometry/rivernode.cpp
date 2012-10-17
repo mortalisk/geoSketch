@@ -253,9 +253,9 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                 float depth = -0.5;
                 if (rows[z][x].y() >= depth) {
                     if (InsideTriangle(a.x(),a.y(),b.x(), b.y(),c.x(), c.y(),point.x(),point.y())) {
-                        rows[z][x] = Vector3(rows[z][x].x(),depth,rows[z][x].z());
+                        rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + depth,rows[z][x].z());
                     } else if (InsideTriangle(c.x(),c.y(),b.x(), b.y(),d.x(), d.y(),point.x(),point.y())) {
-                        rows[z][x] = Vector3(rows[z][x].x(),depth,rows[z][x].z());
+                        rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + depth,rows[z][x].z());
                     }
                 }
             }
@@ -367,6 +367,7 @@ void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {
     for (int i = 0; i < lefts.size()-1; i++) {
         Vector3 point = surfaceNode.getPointFromUv(lefts[i]);
         if (point.y() < seaLevel) {
+            //if (i == 0) return;
             Deposit * deposit = new Deposit(lefts[i], lefts[i] - lefts[i-1], 0.01, &surfaceNode);
             surfaceNode.children.push_back(deposit);
             deposit->setDepositing(true);

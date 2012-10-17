@@ -227,8 +227,8 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
     }
     for (int z = 0; z<rows.size(); ++z) {
         for (int x = 0; x<rows[0].size();++x) {
-            if (heigths[z][x] >= rows[z][x].y())
-                rows[z][x] = Vector3(rows[z][x].x(),heigths[z][x],rows[z][x].z());
+           //if (heigths[z][x] >= rows[z][x].y())
+                rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + heigths[z][x],rows[z][x].z());
         }
     }
 

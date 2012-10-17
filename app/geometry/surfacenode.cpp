@@ -172,21 +172,21 @@ void SurfaceNode::constructLayer() {
 //        intersectRows.push_back(row);
 //    }
 
-    QVector<Vector3> row(rows.size());
-    QVector<QVector<Vector3 > > featureRows(rows.size(),row);
+    //QVector<Vector3> row(rows.size());
+    //QVector<QVector<Vector3 > > featureRows(rows.size(),row);
     foreach (BaseNode * child , children) {
         ISurfaceFeature * feature = dynamic_cast<ISurfaceFeature *>(child);
         if (feature != NULL) {
             feature->repositionOnSurface(*this);
-            feature->doTransformSurface(featureRows, resolution, 10);
+            feature->doTransformSurface(rows, resolution, 10);
         }
     }
 
-    for (int i= 0; i<featureRows.size();++i) {
-        for (int j = 0; j<featureRows[0].size();++j) {
-            rows[i][j] += featureRows[i][j];
-        }
-    }
+//    for (int i= 0; i<featureRows.size();++i) {
+//        for (int j = 0; j<featureRows[0].size();++j) {
+//            rows[i][j] += featureRows[i][j];
+//        }
+//    }
 
     //compute normals
     QVector < QVector < Vector3 > > normalRows;
