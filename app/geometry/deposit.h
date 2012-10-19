@@ -15,6 +15,7 @@ private:
     QVector<QVector<Vector3> > samples;
     QVector<QVector<float> > deposit1;
     QVector<QVector<float> > deposit2;
+    QVector<QVector<int> > manhattan;
     bool alternateDeposits;
     bool depositing;
 public:

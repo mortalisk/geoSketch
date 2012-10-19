@@ -1,6 +1,20 @@
 #include "deposit.h"
 #include "surface.h"
 #include "float.h"
+#include <iomanip>
+#include <cmath>
+
+static void print(QVector<QVector<int> > &  vec) {
+    foreach (const QVector<int> & v, vec) {
+        foreach(int i, v) {
+            if (i == INT_MAX)
+                std::cout << std::setw(2) << 'i' << " ";
+            else
+                std::cout << std::setw(2)<< i<< " ";
+        }
+        std::cout << std::endl;
+    }
+}
 
 void Deposit::prepareForDrawing() {
 
@@ -29,7 +43,11 @@ void Deposit::prepareForDrawing() {
             (*previousDeposit)[fromy][fromx] = 0.1;
     }
 
+    print(manhattan);
+
     exchange(previousDeposit, deposited, 1, 0, fromx, fromy);
+
+    //print(manhattan);
 
     exchange(deposited, previousDeposit, 0, 1, fromx, fromy);
 
@@ -52,16 +70,30 @@ void Deposit::prepareForDrawing() {
             Vector3 nd = (b-d).cross(c-d);
 
 
-            if (ad > 0.001 || bd > 0.001 || cd > 0.001) {
-                triangles.push_back(vertex(a, na));
-                triangles.push_back(vertex(b, nb));
-                triangles.push_back(vertex(c, nc));
-            }
+            if (ad > cd || dd > bd) {
+                if (ad > 0.001 || bd > 0.001 || cd > 0.001) {
+                    triangles.push_back(vertex(a, na));
+                    triangles.push_back(vertex(b, nb));
+                    triangles.push_back(vertex(c, nc));
+                }
+                if (bd > 0.001 || dd > 0.0001 || cd > 0.001) {
+                    triangles.push_back(vertex(b, nb));
+                    triangles.push_back(vertex(d, nd));
+                    triangles.push_back(vertex(c, nc));
+                }
+            } else {
 
-            if (bd > 0.001 || dd > 0.001 || cd > 0.001) {
-                triangles.push_back(vertex(b, nb));
-                triangles.push_back(vertex(d, nd));
-                triangles.push_back(vertex(c, nc));
+                if (ad > 0.001 || bd > 0.001|| dd > 0.001) {
+                    triangles.push_back(vertex(a, na));
+                    triangles.push_back(vertex(b, nb));
+                    triangles.push_back(vertex(d, nd));
+                }
+                if (ad > 0.001 || cd > 0.001 || dd > 0.001) {
+                    triangles.push_back(vertex(a, na));
+                    triangles.push_back(vertex(d, nd));
+                    triangles.push_back(vertex(c, nc));
+                }
+
             }
 
         }
@@ -81,7 +113,9 @@ void Deposit::doTransformSurface(QVector<QVector<Vector3> > &, float, float ) {
 }
 
 void Deposit::exchange(QVector<QVector<float> > * previousDeposit, QVector<QVector<float> > * deposited, int xinc, int yinc, int fromx, int fromy) {
-for (int y = 0; y < samples.size(); y++) {
+
+    manhattan[fromy][fromx] = 0;
+    for (int y = 0; y < samples.size(); y++) {
 
     for (int x = 0; x < samples[0].size(); x++) {
         float t = samples[y][x].y();
@@ -98,14 +132,22 @@ for (int y = 0; y < samples.size(); y++) {
         int vectorRighty = righty-fromy;
         int vectorLeftx = leftx-fromx;
         int vectorLefty = lefty-fromy;
-        float distRight =sqrt(vectorRightx*vectorRightx+vectorRighty*vectorRighty);
-        float distLeft = sqrt(vectorLeftx*vectorLeftx+vectorLefty*vectorLefty);
-        float flowRateLeft = 2+pow(distLeft,1.1);
-        float flowRateRight = 2+pow(distRight, 1.1);
+        //float distRight =sqrt(vectorRightx*vectorRightx+vectorRighty*vectorRighty);
+        //float distLeft = sqrt(vectorLeftx*vectorLeftx+vectorLefty*vectorLefty);
+        int distRight;
+        int distLeft;
+        int manhattanLeft;
+        int manhattanRight;
+
         if (y+yinc >= samples.size() || x+xinc>=samples[0].size()) {
             tr = t;
             dr = d;
+            manhattanRight = manhattan[y][x];
+            if (manhattanRight < 100000) {
+                manhattanRight++;
+            }
         } else {
+            manhattanRight = manhattan[y+yinc][x+xinc];
             tr = samples[y+yinc][x+xinc].y();
             dr = (*previousDeposit)[y+yinc][x+xinc];
         }
@@ -113,17 +155,35 @@ for (int y = 0; y < samples.size(); y++) {
         if (x - xinc < 0 || y - yinc < 0) {
             tl = t;
             dl = d;
+            manhattanLeft = manhattan[y][x];
+            if (manhattanLeft < 100000) {
+                manhattanLeft++;
+            }
         } else {
+            manhattanLeft = manhattan[y-yinc][x-xinc];
             tl = samples[y-yinc][x-xinc].y();
             dl = (*previousDeposit)[y-yinc][x-xinc];
 
         }
+
+        distLeft = manhattanLeft < manhattan[y][x] ? manhattanLeft: manhattan[y][x];
+        distRight = manhattanRight < manhattan[y][x] ? manhattanRight: manhattan[y][x];
+
+        float flowRateRight = 2+pow(distRight, 2);
+        float flowRateLeft = 2+pow(distLeft, 2);
 
         float diffLeft = (tl+dl) - (t+d);
         float diffRigth = (tr+dr) - (t+d);
 
         diffLeft = clamp(diffLeft/flowRateLeft, -d/2, dl/2);
         diffRigth = clamp(diffRigth/flowRateRight, -d/2, dr/2);
+
+        if (diffLeft > 0 && distLeft + 1 < manhattan[y][x]) {
+            manhattan[y][x] = distLeft +1;
+        }
+        if (diffRigth > 0 && distRight + 1 < manhattan[y][x]) {
+            manhattan[y][x] = distRight + 1;
+        }
 
         (*deposited)[y][x] = (*previousDeposit)[y][x] + diffLeft + diffRigth;
 
@@ -166,6 +226,9 @@ void Deposit::repositionOnSurface(SurfaceNode &surfacenode) {
 
 
     QVector<float> oneRow(gridsize, 0);
+    QVector<int> oneIntRow(gridsize, INT_MAX);
+
+    manhattan.fill(oneIntRow, gridsize);
 
     deposit1.fill(oneRow, gridsize);
     deposit2.fill(oneRow, gridsize);
