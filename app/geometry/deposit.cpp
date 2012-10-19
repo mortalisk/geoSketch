@@ -71,31 +71,32 @@ void Deposit::prepareForDrawing() {
 
             float threshold = 0.01;
 
-            if (ad <= cd && ad <= bd || dd <= bd && dd <= cd) {
-                if (ad > threshold || bd > threshold || cd > threshold) {
+            if (cd > threshold && bd > threshold) {
+
+                if (ad > threshold) {
                     triangles.push_back(vertex(a, na));
                     triangles.push_back(vertex(b, nb));
                     triangles.push_back(vertex(c, nc));
                 }
-                if (bd > threshold || dd > threshold || cd > threshold) {
+                if (dd > threshold) {
                     triangles.push_back(vertex(b, nb));
-                    triangles.push_back(vertex(d, nd));
-                    triangles.push_back(vertex(c, nc));
-                }
-            } else {
-                if (ad > threshold || bd > threshold|| dd > threshold) {
-                    triangles.push_back(vertex(a, na));
-                    triangles.push_back(vertex(b, nb));
-                    triangles.push_back(vertex(d, nd));
-                }
-                if (ad > threshold || cd > threshold || dd > threshold) {
-                    triangles.push_back(vertex(a, na));
                     triangles.push_back(vertex(d, nd));
                     triangles.push_back(vertex(c, nc));
                 }
 
+            } else if (ad > threshold && dd > threshold) {
+
+                if (bd > threshold) {
+                    triangles.push_back(vertex(a, na));
+                    triangles.push_back(vertex(b, nb));
+                    triangles.push_back(vertex(d, nd));
+                }
+                if (cd > threshold ) {
+                    triangles.push_back(vertex(a, na));
+                    triangles.push_back(vertex(d, nd));
+                    triangles.push_back(vertex(c, nc));
+                }
             }
-
         }
     }
 
