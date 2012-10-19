@@ -69,26 +69,26 @@ void Deposit::prepareForDrawing() {
             Vector3 nc = (d-c).cross(a-c);
             Vector3 nd = (b-d).cross(c-d);
 
+            float threshold = 0.01;
 
-            if (ad > cd || dd > bd) {
-                if (ad > 0.001 || bd > 0.001 || cd > 0.001) {
+            if (ad <= cd && ad <= bd || dd <= bd && dd <= cd) {
+                if (ad > threshold || bd > threshold || cd > threshold) {
                     triangles.push_back(vertex(a, na));
                     triangles.push_back(vertex(b, nb));
                     triangles.push_back(vertex(c, nc));
                 }
-                if (bd > 0.001 || dd > 0.0001 || cd > 0.001) {
+                if (bd > threshold || dd > threshold || cd > threshold) {
                     triangles.push_back(vertex(b, nb));
                     triangles.push_back(vertex(d, nd));
                     triangles.push_back(vertex(c, nc));
                 }
             } else {
-
-                if (ad > 0.001 || bd > 0.001|| dd > 0.001) {
+                if (ad > threshold || bd > threshold|| dd > threshold) {
                     triangles.push_back(vertex(a, na));
                     triangles.push_back(vertex(b, nb));
                     triangles.push_back(vertex(d, nd));
                 }
-                if (ad > 0.001 || cd > 0.001 || dd > 0.001) {
+                if (ad > threshold || cd > threshold || dd > threshold) {
                     triangles.push_back(vertex(a, na));
                     triangles.push_back(vertex(d, nd));
                     triangles.push_back(vertex(c, nc));
