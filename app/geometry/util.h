@@ -89,4 +89,20 @@ double Cx, double Cy,
 double Dx, double Dy,
 double *X, double *Y);
 
+inline float distToLine(QVector2D a, QVector2D b, QVector2D c) {
+
+    double normalLength = sqrt(b.x() - a.x() + b.y() - a.y());
+     return fabs((c.x() - a.x()) * (b.y() - a.y()) - (c.y() - a.y()) * (b.x() - a.x())) / normalLength;
+}
+
+inline float depthOfRiver(float dist, float maxdist, float depth ) {
+    float x = dist/maxdist;
+    if (x <= 1 && x >= 0)
+        return (sin(M_PI*x - M_PI_2) /2 + 0.5)*depth;
+    else if (dist < 0)
+        return 0;
+    else
+        return depth;
+}
+
 #endif // UTIL_H

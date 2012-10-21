@@ -182,9 +182,9 @@ void BaseNode::drawSpline(Spline & spline, float r) {
                         glEnd();
 			glBegin(GL_LINES);
                         glColor3f(r, 0, 0);
-                        glVertex3d(spline.getPoints()[i].x(), spline.getPoints()[i].y(),
+                        glVertex3d(spline.getPoints()[i].x(), spline.getPoints()[i].y()+0.005,
                                         spline.getPoints()[i].z());
-                        glVertex3d(spline.getPoints()[i + 1].x(), spline.getPoints()[i + 1].y(),
+                        glVertex3d(spline.getPoints()[i + 1].x(), spline.getPoints()[i + 1].y()+0.005,
                                         spline.getPoints()[i + 1].z());
 			glEnd();
 		}

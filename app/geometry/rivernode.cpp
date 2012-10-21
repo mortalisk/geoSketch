@@ -173,7 +173,7 @@ void RiverNode::makeWater() {
     Spline& spline = this->spline;
 
     for (int i = 0 ; i < spline.getPoints().size(); ++i) {
-        const Vector3 & current = spline.getPoints()[i];
+        Vector3 current = spline.getPoints()[i];
         Vector3 previous, next;
         if (i == 0) {
             previous = current;
@@ -190,6 +190,8 @@ void RiverNode::makeWater() {
         Vector3 otherSide = current+left;
         QVector2D uvRight;
         QVector2D uvLeft;
+        current = Vector3(current.x(), current.y()+0.005, current.z());
+        otherSide = Vector3(otherSide.x(), otherSide.y()+0.005, otherSide.z());
         triangles.push_back(vertex(current,normal));
         triangles.push_back(vertex(otherSide,normal));
 
@@ -249,14 +251,34 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
             for (int x = 0; x<rows[0].size();++x) {
                 QVector2D point(x,z);
 
+                float u, v;
+                if (inside(a,b,c,point, &u, &v)
+                        || inside(c,b,d,point, &u, &v)) {
 
-                float depth = -0.5;
-                if (rows[z][x].y() >= depth) {
-                    if (InsideTriangle(a.x(),a.y(),b.x(), b.y(),c.x(), c.y(),point.x(),point.y())) {
-                        rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + depth,rows[z][x].z());
-                    } else if (InsideTriangle(c.x(),c.y(),b.x(), b.y(),d.x(), d.y(),point.x(),point.y())) {
-                        rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + depth,rows[z][x].z());
-                    }
+//                    QVector2D CA = a-c;
+//                    QVector2D DB = b-d;
+
+//                    QVector2D inter = (CA + DB).normalized();
+
+                    float distAB = distToLine(a, b, point);
+                    float distCD = distToLine(c, d, point);
+//                    float distCA = distToLine(c, a, point);
+//                    float distDB = distToLine(d, b, point);
+//                    float ac = (a-c).length();
+//                    float bd = (b-d).length();
+//                    float w0 = distCA/(distCA+distDB);
+//                    float w1 = distDB/(distCA+distDB);
+
+//                    float depth0 = 0.2*distCA;
+//                    float depth1 = 0.2*distDB;
+//                    float depth =
+
+                    float depthA = depthOfRiver(distAB, 0.03*resolution , -0.1);
+                    float depthB = depthOfRiver(distCD, 0.03*resolution , -0.1);
+
+                    float depth = distAB < distCD ? depthA:depthB;
+
+                    rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + depth,rows[z][x].z());
                 }
             }
         }
