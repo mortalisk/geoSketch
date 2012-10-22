@@ -69,6 +69,7 @@ BoxNode::BoxNode(BoxNode& o): BaseNode(o) {
     bottomNode = new SideNode(*o.bottomNode);
 
     setUpSurfaces();
+    makeWaterNode();
 
     activeSurface = NULL;
 }

@@ -305,7 +305,17 @@ void SurfaceNode::elevateTo(float y) {
 }
 
 void SurfaceNode::determineActionOnStoppedDrawing() {
-    BaseNode::determineActionOnStoppedDrawing();
+    sketchingSpline.clear();
+    spline.clear();
+    uvCoordinateSpline += uvSketchingSpline;
+    smoothSketchUv();
+    foreach (QVector2D v , uvSmoothed) {
+        Vector3 p = getPointFromUv(v);
+        spline.addPoint(p);
+    }
+
+    //BaseNode::determineActionOnStoppedDrawing();
+    uvSketchingSpline.clear();
 
     //makeRidgeNode();
 }
@@ -499,7 +509,7 @@ void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
     QVector<Vector3> points = shape->intersectionPoints(from, direction, s, t);
     if (points.size() > 0) {
         sketchingSpline.addPoint(points[0]);
-        uvCoordinateSpline.push_back(QVector2D(s,t));
+        uvSketchingSpline.push_back(QVector2D(s,t));
     }
 //    }
 }
@@ -611,4 +621,19 @@ void SurfaceNode::fromJsonSubclass(QVariantMap map) {
     skip = map["skip"].toInt();
     hasContructedLayer = false;
 
+}
+
+void SurfaceNode::smoothSketchUv() {
+    if (this->uvCoordinateSpline.size()<1) return;
+    QVector<QVector2D> newPoints;
+    for (float p = 0; p <1.001;p+=0.01) {
+        QVector<QVector2D> uvCoordinateSpline = this->uvCoordinateSpline;
+        for (int i = 1; i< uvCoordinateSpline.size(); ++i) {
+            for (int j = 0;j <uvCoordinateSpline.size()-i;++j) {
+                uvCoordinateSpline[j] = uvCoordinateSpline[j]*(1-p) + uvCoordinateSpline[j+1]*p;
+            }
+        }
+        newPoints.push_back(uvCoordinateSpline[0]);
+    }
+    this->uvSmoothed = newPoints;
 }

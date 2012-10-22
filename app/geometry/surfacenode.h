@@ -13,6 +13,10 @@ class SurfaceNode : public BaseNode
     int skip;
 
     QVector<QVector2D> uvCoordinateSpline;
+
+    QVector<QVector2D> uvSketchingSpline;
+
+    QVector<QVector2D> uvSmoothed;
     QVector < QVector < Vector3 > > rows;
     QVector < QVector < Vector3 > > intersectRows;
     void makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& outline);
@@ -51,6 +55,8 @@ public:
     QString getTypeId() {
         return QString("SurfaceNode");
     }
+
+    void smoothSketchUv();
 };
 
 #endif // SURFACENODE_H
