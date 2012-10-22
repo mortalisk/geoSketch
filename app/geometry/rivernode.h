@@ -8,6 +8,7 @@ class Deposit;
 
 class RiverNode : public BaseNode, public ISurfaceFeature
 {
+    Q_OBJECT
 private:
     Spline rightSpline;
     Spline crossSpline;

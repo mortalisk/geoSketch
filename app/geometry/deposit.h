@@ -6,6 +6,7 @@
 #include "isurfacefeature.h"
 
 class Deposit : public BaseNode, public ISurfaceFeature {
+    Q_OBJECT
 private:
     int times;
     QVector2D flowFrom;

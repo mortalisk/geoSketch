@@ -72,7 +72,7 @@ void Scene::makeLayer() {
 }
 
 void Scene::editLayer() {
-    SurfaceNode * sn = dynamic_cast<SurfaceNode*>(activeNode);
+    SurfaceNode * sn = qobject_cast<SurfaceNode*>(activeNode);
     if (sn != NULL && editLayerNo == -1) {
         for (int i = 0; i< boxNode->children.size(); ++i) {
             if (boxNode->children[i] == sn) {
@@ -89,7 +89,7 @@ void Scene::editLayer() {
     } else if(editLayerNo != -1) {
 
 
-        SurfaceNode * node = dynamic_cast<SurfaceNode*>(boxNode->children[editLayerNo]);
+        SurfaceNode * node = qobject_cast<SurfaceNode*>(boxNode->children[editLayerNo]);
         node->front = boxNode->frontNode->spline;
         node->left = boxNode->leftNode->spline;
         node->back = boxNode->backNode->spline;
@@ -103,7 +103,7 @@ void Scene::editLayer() {
             s->spline.isSuggestion = true;
         }
         foreach(BaseNode* s, boxNode->children) {
-            SurfaceNode * node2 = dynamic_cast<SurfaceNode*>(s);
+            SurfaceNode * node2 = qobject_cast<SurfaceNode*>(s);
             if (node2 && node2->below == node) {
                 node2->invalidate();
             }

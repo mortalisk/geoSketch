@@ -4,6 +4,7 @@
 
 class GeneralNode : public BaseNode
 {
+    Q_OBJECT
 public:
     GeneralNode() {}
     GeneralNode(Shape* shape, QString name);

@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include "rivernode.h"
+#include <QMenu>
 
 MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
         QGLWidget(*glf,parent), move(0.01f)
@@ -197,6 +198,11 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
     if (!mouseMoved && e->button() == Qt::RightButton) {
         Vector3 dir = findMouseDirection(e);
         scene->selectActiveNode(scene->camera.position, dir);
+        if (scene->activeNode) {
+            QMenu * context = new QMenu(this);
+            scene->activeNode->addActions(context);
+            context->exec(e->pos());
+        }
     }
 
     if (mouseMoved && e->button() == Qt::LeftButton) {
@@ -316,14 +322,14 @@ void MyGLWidget::editLayer() {
 
 
 void MyGLWidget::makeRiver() {
-    SurfaceNode* sn = dynamic_cast<SurfaceNode*>(scene->activeNode);
+    SurfaceNode* sn = qobject_cast<SurfaceNode*>(scene->activeNode);
     if (sn != NULL) {
         sn->makeRiverNode();
     }
 }
 
 void MyGLWidget::makeRidge() {
-    SurfaceNode* sn = dynamic_cast<SurfaceNode*>(scene->activeNode);
+    SurfaceNode* sn = qobject_cast<SurfaceNode*>(scene->activeNode);
     if (sn != NULL) {
         sn->makeRidgeNode();
     }
@@ -378,11 +384,11 @@ void MyGLWidget::seaLevel() {
 void MyGLWidget::createDeposits() {
     float seaLevel = scene->boxNode->getSeaLevel();
 
-    RiverNode * riverNode = dynamic_cast<RiverNode *>(scene->activeNode);
+    RiverNode * riverNode = qobject_cast<RiverNode *>(scene->activeNode);
     SurfaceNode * activeSurface = NULL;
 
     if (riverNode != NULL) {
-        activeSurface = dynamic_cast<SurfaceNode *>(riverNode->parent);
+        activeSurface = qobject_cast<SurfaceNode *>(riverNode->parent);
     }
 
     if (activeSurface != NULL) {

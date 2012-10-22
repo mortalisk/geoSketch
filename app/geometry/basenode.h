@@ -6,9 +6,11 @@
 #include "shape.h"
 #include "spline.h"
 #include <QVariantMap>
+#include <QAction>
 
-class BaseNode
+class BaseNode : public QObject
 {
+    Q_OBJECT
 protected:
     bool active;
 public:
@@ -31,11 +33,11 @@ public:
     QVector4D diffuse;
     QVector4D ambient;
 
-    BaseNode() {};
+    BaseNode() {}
     BaseNode(QString name);
     BaseNode(Shape * shape, QString name);
     BaseNode(BaseNode &other)
-        : shape(other.shape),position(other.position),
+        : QObject(), shape(other.shape),position(other.position),
         spline(other.spline),sketchingSpline(other.sketchingSpline),
           drawing(other.drawing),splineDone(other.splineDone),visible(other.visible),proxy(NULL), diffuse(other.diffuse), ambient(other.ambient)
     {
@@ -103,6 +105,21 @@ public:
     virtual void addSubclassJson(QVariantMap& map) = 0;
     void fromJson(QVariantMap map);
     virtual void fromJsonSubclass(QVariantMap map) = 0;
+
+    void addActions(QMenu * menu);
+    virtual void addSubclassActions(QMenu * menu) {
+        return;
+    }
+
+
+    void deleteChild(BaseNode * child);
+
+    virtual void invalidate() {}
+public slots:
+    void deleteItem() {
+        if (parent)
+            deleteChild(this);
+    }
 
 };
 

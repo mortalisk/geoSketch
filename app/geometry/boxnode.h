@@ -8,6 +8,7 @@
 
 class BoxNode : public BaseNode
 {
+    Q_OBJECT
 public:
     BoxNode();
     BoxNode(BoxNode& o);

@@ -7,6 +7,7 @@ class SurfaceNode;
 
 class RidgeNode : public BaseNode, public ISurfaceFeature
 {
+    Q_OBJECT
 private:
     Spline baseSpline;
     QVector<QVector2D> uv;

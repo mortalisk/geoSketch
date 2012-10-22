@@ -5,6 +5,7 @@
 #include "isurfacefeature.h"
 class SurfaceNode : public BaseNode
 {
+    Q_OBJECT
 
     // this vairable enables contruction of triangles before drawing
     // in stead of when copying which made interaction laggy

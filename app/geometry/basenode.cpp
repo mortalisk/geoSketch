@@ -5,8 +5,9 @@
 #include <algorithm>
 #include "util.h"
 #include <QVector2D>
+#include <QMenu>
 
-BaseNode::BaseNode(QString name) {
+BaseNode::BaseNode(QString name) : QObject() {
     init();
     this->name = name;
     this->diffuse = QVector4D(0.5,0.5,0.5,1.0);
@@ -29,7 +30,7 @@ void BaseNode::init() {
 
 }
 
-BaseNode::BaseNode(Shape *shape, QString name) {
+BaseNode::BaseNode(Shape *shape, QString name) : QObject() {
     init();
     this->shape = shape;
     this->name = name;
@@ -100,6 +101,29 @@ void BaseNode::doOversketch() {
     oversketchSide(last, nearestLast, false);
 
     moveSketchingPointsToSpline();
+}
+
+void BaseNode::addActions(QMenu * menu) {
+    QList<QAction*> opts;
+    addSubclassActions(menu);
+
+    QAction * actionDelete = new QAction("delete", menu);
+    opts.append(actionDelete);
+    QObject::connect(actionDelete,SIGNAL(activated()), this, SLOT(deleteItem()));
+
+    menu->addActions(opts);
+}
+
+void BaseNode::deleteChild(BaseNode *child) {
+    for (int i=0; i< children.size(); i++) {
+        if (children[i] == child) {
+            children.remove(i);
+            delete child;
+            i++;
+            invalidate();
+        }
+
+    }
 }
 
 void BaseNode::oversketchSide(Vector3& pointInSketch, int nearest, bool first) {

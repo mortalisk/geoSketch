@@ -234,13 +234,8 @@ void SurfaceNode::constructLayer() {
             }else {
                 ne = rows[i+1][j+1] - rows[i][j];
             }
-           Vector3 n;
-            if(i%2 != j%2) {
-                 n = (south.cross(east) + east.cross(north) + north.cross(west) + west.cross(south)).normalize();
-            } else {
-                n = (south.cross(se) + se.cross(east) + east.cross(ne) + ne.cross(north) +
+           Vector3 n = (south.cross(se) + se.cross(east) + east.cross(ne) + ne.cross(north) +
                      north.cross(nw) + nw.cross(west) + west.cross(sw) + sw.cross(south)).normalize();
-            }
 
 
             row.push_back( n);
@@ -263,21 +258,21 @@ void SurfaceNode::constructLayer() {
             Vector3 & nc = normalRows[i][j-1];
             Vector3 & d = rows[i][j];
             Vector3 & nd = normalRows[i][j];
-            if (i%2 == j%2) {
+            //if (i%2 == j%2) {
                 triangles.push_back(vertex(a,na, s0, t0));
                 triangles.push_back(vertex(b,nb, s1, t0));
                 triangles.push_back(vertex(c,nc, s0, t1));
                 triangles.push_back(vertex(b,nb, s1, t0));
                 triangles.push_back(vertex(d,nd, s1, t1));
                 triangles.push_back(vertex(c,nc, s0, t1));
-            } else {
+            //} else {
                 triangles.push_back(vertex(a,na, s0, t0));
                 triangles.push_back(vertex(b,nb, s1, t0));
                 triangles.push_back(vertex(d,nd, s1, t1));
                 triangles.push_back(vertex(d,nd, s1, t1));
                 triangles.push_back(vertex(c,nc, s0, t1));
                 triangles.push_back(vertex(a,na, s0, t0));
-            }
+            //}
 
         }
     }

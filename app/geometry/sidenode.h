@@ -5,6 +5,7 @@
 
 class SideNode : public BaseNode
 {
+    Q_OBJECT
 public:
     SideNode * opposite;
     SideNode * left;

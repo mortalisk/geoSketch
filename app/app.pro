@@ -4,6 +4,7 @@
 
 TEMPLATE = app
 TARGET = geoSketch
+
 QT += core gui opengl
 DEPENDPATH += . gui geometry morten3d
 INCLUDEPATH += . gui geometry morten3d include
