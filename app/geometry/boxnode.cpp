@@ -6,6 +6,7 @@
 #include "surface.h"
 #include "float.h"
 #include "surfacenode.h"
+#include "scene.h"
 
 BoxNode::BoxNode() :BaseNode("boxnode")
 {
@@ -245,6 +246,10 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
 
 }
 
+void BoxNode::childDeleted(BaseNode *child) {
+    scene->nodeDeleted(child);
+}
+
 BaseNode* BoxNode::makeLayer() {
 
     if (frontNode->spline.getPoints().size() < 1||rightNode->spline.getPoints().size() <1
@@ -255,6 +260,7 @@ BaseNode* BoxNode::makeLayer() {
 
     SurfaceNode * n = new SurfaceNode( "Layer", frontNode->spline, rightNode->spline, backNode->spline, leftNode->spline, below);
     children.append(n);
+    n->parent = this;
 
     foreach(SideNode* s, surfaces) {
         s->spline.clear();

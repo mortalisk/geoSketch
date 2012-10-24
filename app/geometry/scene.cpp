@@ -20,6 +20,7 @@ Scene::Scene() {
     cursor->position = Vector3(0,0,0);
     cursor->ambient = QVector4D(1.0, 0.0, 0.0, 1.0);
     boxNode = new BoxNode();
+    boxNode->scene = this;
     camera.setTrackMode(Camera::SPHERE_TRACK, Vector3(0,0,0), Vector3(10,10,10) );
     activeNode = boxNode;
     editLayerNo = -1;
@@ -127,6 +128,7 @@ void Scene::fromJson(QVariantMap &map) {
     delete boxNode;
     boxNode = new BoxNode();
     boxNode->fromJson(map["boxNode"].toMap());
+    boxNode->scene = this;
     activeNode = boxNode;
 }
 

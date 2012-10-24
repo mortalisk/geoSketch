@@ -8,6 +8,8 @@
 #include <QVariantMap>
 #include <QAction>
 
+class Scene;
+
 class BaseNode : public QObject
 {
     Q_OBJECT
@@ -33,7 +35,7 @@ public:
     QVector4D diffuse;
     QVector4D ambient;
 
-    BaseNode() {}
+    BaseNode() { init(); }
     BaseNode(QString name);
     BaseNode(Shape * shape, QString name);
     BaseNode(BaseNode &other)
@@ -41,6 +43,7 @@ public:
         spline(other.spline),sketchingSpline(other.sketchingSpline),
           drawing(other.drawing),splineDone(other.splineDone),visible(other.visible),proxy(NULL), diffuse(other.diffuse), ambient(other.ambient)
     {
+        init();
         name = other.name;
         foreach(BaseNode* child, other.children) {
             BaseNode * c = child->copy();
@@ -114,11 +117,15 @@ public:
 
     void deleteChild(BaseNode * child);
 
+    virtual void childDeleted(BaseNode * child) {
+        parent->childDeleted(child);
+    }
+
     virtual void invalidate() {}
 public slots:
     void deleteItem() {
         if (parent)
-            deleteChild(this);
+            parent->deleteChild(this);
     }
 
 };

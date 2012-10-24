@@ -33,6 +33,7 @@ public:
     SurfaceNode * bottomDummyNode;
     SurfaceNode * currentBelowNode;
     SurfaceNode * waterNode;
+    Scene * scene;
     float getWidth();
     float getHeight();
     float getDepth();
@@ -58,6 +59,8 @@ public:
 
         return node;
     }
+
+    void childDeleted(BaseNode *child);
 
     QString getTypeId() {
         return QString("BoxNode");

@@ -197,11 +197,12 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
 
     if (!mouseMoved && e->button() == Qt::RightButton) {
         Vector3 dir = findMouseDirection(e);
+        BaseNode * previous = scene->activeNode;
         scene->selectActiveNode(scene->camera.position, dir);
-        if (scene->activeNode) {
+        if (scene->activeNode && scene->activeNode == previous) {
             QMenu * context = new QMenu(this);
             scene->activeNode->addActions(context);
-            context->exec(e->pos());
+            context->exec(e->globalPos());
         }
     }
 

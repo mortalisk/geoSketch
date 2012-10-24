@@ -6,6 +6,7 @@
 #include "util.h"
 #include <QVector2D>
 #include <QMenu>
+#include "scene.h"
 
 BaseNode::BaseNode(QString name) : QObject() {
     init();
@@ -14,6 +15,7 @@ BaseNode::BaseNode(QString name) : QObject() {
 }
 
 void BaseNode::init() {
+    parent = NULL;
     shape = NULL;
     visible = true;
 
@@ -109,7 +111,7 @@ void BaseNode::addActions(QMenu * menu) {
 
     QAction * actionDelete = new QAction("delete", menu);
     opts.append(actionDelete);
-    QObject::connect(actionDelete,SIGNAL(activated()), this, SLOT(deleteItem()));
+    connect(actionDelete,SIGNAL(triggered()), this, SLOT(deleteItem()));
 
     menu->addActions(opts);
 }
@@ -119,6 +121,7 @@ void BaseNode::deleteChild(BaseNode *child) {
         if (children[i] == child) {
             children.remove(i);
             delete child;
+            childDeleted(child);
             i++;
             invalidate();
         }

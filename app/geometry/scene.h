@@ -51,12 +51,20 @@ public:
     {
         *this=scene;
         boxNode = boxNode->copy();
+        boxNode->scene = this;
         cursor = new GeneralNode(&cursorSphere, "cursor");
         cursor->ambient = scene.cursor->ambient;
         activeNode = boxNode;
     }
 
+    void nodeDeleted(BaseNode * node) {
+        if (node == activeNode) {
+            activeNode = boxNode;
+        }
+    }
+
     ~Scene();
+
 
 };
 
