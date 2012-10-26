@@ -200,9 +200,9 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
         BaseNode * previous = scene->activeNode;
         scene->selectActiveNode(scene->camera.position, dir);
         if (scene->activeNode && scene->activeNode == previous) {
-            QMenu * context = new QMenu(this);
-            scene->activeNode->addActions(context);
-            context->exec(e->globalPos());
+            QMenu context(this);
+            scene->activeNode->addActions(&context);
+            context.exec(e->globalPos());
         }
     }
 

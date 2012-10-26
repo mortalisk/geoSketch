@@ -5,6 +5,8 @@
 #include "rivernode.h"
 #include "deposit.h"
 #include "util.h"
+#include <QAction>
+#include <QMenu>
 
 SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(200), skip(4),below(below),front(front), right(right), back(back), left(left)
 {
@@ -631,4 +633,10 @@ void SurfaceNode::smoothSketchUv() {
         newPoints.push_back(uvCoordinateSpline[0]);
     }
     this->uvSmoothed = newPoints;
+}
+
+void SurfaceNode::addSubclassActions(QMenu *menu) {
+    QAction * makeRiver = new QAction(QString("Make River"), menu);
+    connect(makeRiver, SIGNAL(triggered()), this, SLOT(makeRiverNode()));
+    menu->addAction(makeRiver);
 }

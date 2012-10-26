@@ -37,7 +37,7 @@ public:
 
     virtual void determineActionOnStoppedDrawing();
 
-    void makeRiverNode();
+
 
     void makeRidgeNode();
 
@@ -58,6 +58,10 @@ public:
     }
 
     void smoothSketchUv();
+
+    void addSubclassActions(QMenu *menu);
+public slots:
+    void makeRiverNode();
 };
 
 #endif // SURFACENODE_H
