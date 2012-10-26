@@ -3,6 +3,7 @@
 #include "surface.h"
 #include "ridgenode.h"
 #include "rivernode.h"
+#include "valleynode.h"
 #include "deposit.h"
 #include "util.h"
 #include <QAction>
@@ -358,6 +359,25 @@ void SurfaceNode::makeRidgeNode() {
     shape = NULL;
 
 
+}
+
+void SurfaceNode::makeValleyNode() {
+    if (spline.getPoints().size() < 2)
+        return;
+    ValleyNode * river = new ValleyNode(uvCoordinateSpline);
+    river->parent = this;
+    children.append(river);
+
+    spline.clear();
+    sketchingSpline.clear();
+    uvCoordinateSpline.clear();
+
+    river->makeWater();
+    proxy = river;
+
+    hasContructedLayer = false;
+    delete shape;
+    shape = NULL;
 }
 
 int intersect(Vector3& p, Vector3& dir, Vector3& v0, Vector3& v1, Vector3& v2, Vector3* I, float* sp, float* tp) {

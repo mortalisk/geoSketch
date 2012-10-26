@@ -124,15 +124,6 @@ void Deposit::exchange(QVector<QVector<float> > * previousDeposit, QVector<QVect
         // t = terrain, d == deposit
         float tr, tl, dr, dl;
 
-
-        int rightx = x+xinc;
-        int righty = y+yinc;
-        int leftx = x-xinc;
-        int lefty = y-yinc;
-        int vectorRightx = rightx-fromx;
-        int vectorRighty = righty-fromy;
-        int vectorLeftx = leftx-fromx;
-        int vectorLefty = lefty-fromy;
         //float distRight =sqrt(vectorRightx*vectorRightx+vectorRighty*vectorRighty);
         //float distLeft = sqrt(vectorLeftx*vectorLeftx+vectorLefty*vectorLefty);
         int distRight;

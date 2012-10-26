@@ -412,3 +412,49 @@ double *X, double *Y) {
 
   //  Success.
   return true; }
+
+
+void nearest(QVector2D first, QVector2D last, QVector<QVector2D>& uv, int & nearestFirst, int& nearestLast) {
+
+    //find the first
+    float distFirst = FLT_MAX;
+    float distLast = FLT_MAX;
+    for (int i = 0; i< uv.size(); ++i) {
+        float lf = (first - uv[i]).length();
+        float ll = (last - uv[i]).length();
+        if (lf < distFirst) {
+            distFirst = lf;
+            nearestFirst = i;
+        }
+        if (ll < distLast) {
+            distLast = ll;
+            nearestLast = i;
+        }
+    }
+}
+
+void insertInto(QVector<QVector2D>& vec,QVector<QVector2D>& in,int first, int last) {
+
+    QVector<QVector2D> tmp;
+
+    if (first>last) {
+        std::reverse(in.begin(), in.end());
+        int tmpFirst = first;
+        first = last;
+        last = tmpFirst;
+    }
+
+
+    for (int i = 0; i<=first; ++i) {
+        tmp.push_back(vec[i]);
+    }
+
+    for (int i = 0 ; i<in.size(); ++i) {
+        tmp.push_back(in[i]);
+    }
+
+    for (int i = last;i <vec.size(); ++i) {
+        tmp.push_back(vec[i]);
+    }
+    vec = tmp;
+}
