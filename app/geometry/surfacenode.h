@@ -40,6 +40,8 @@ public:
 
     void makeRidgeNode();
 
+    void makeValleyNode();
+
     void drawChildren();
 
     void addPoint(Vector3 from, Vector3 direction);

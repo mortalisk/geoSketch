@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <float.h>
 
 class BaseNode;
 
@@ -104,5 +105,10 @@ inline float depthOfRiver(float dist, float maxdist, float depth ) {
     else
         return depth;
 }
+
+
+void nearest(QVector2D first, QVector2D last, QVector<QVector2D>& uv, int & nearestFirst, int& nearestLast);
+
+void insertInto(QVector<QVector2D>& vec,QVector<QVector2D>& in,int first, int last);
 
 #endif // UTIL_H

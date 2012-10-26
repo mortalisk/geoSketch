@@ -36,7 +36,8 @@ HEADERS += gui/mainwindow.h \
     geometry/util.h \
     gui/sketchpad.h \
     geometry/rivernode.h \
-    geometry/deposit.h
+    geometry/deposit.h \
+    geometry/valleynode.h
 
 SOURCES += main.cpp \
     gui/mainwindow.cpp \
@@ -60,4 +61,5 @@ SOURCES += main.cpp \
     gui/sketchpad.cpp \
     geometry/util.cpp \
     geometry/rivernode.cpp \
-    geometry/deposit.cpp
+    geometry/deposit.cpp \
+    geometry/valleynode.cpp
