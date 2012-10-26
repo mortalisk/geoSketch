@@ -659,4 +659,12 @@ void SurfaceNode::addSubclassActions(QMenu *menu) {
     QAction * makeRiver = new QAction(QString("Make River"), menu);
     connect(makeRiver, SIGNAL(triggered()), this, SLOT(makeRiverNode()));
     menu->addAction(makeRiver);
+
+    QAction * makeValley = new QAction(QString("Make Valley"), menu);
+    connect(makeValley, SIGNAL(triggered()), this, SLOT(makeValleyNode()));
+    menu->addAction(makeValley);
+
+    QAction * makeRidge = new QAction(QString("Make Ridge"), menu);
+    connect(makeRidge, SIGNAL(triggered()), this, SLOT(makeRidgeNode()));
+    menu->addAction(makeRidge);
 }

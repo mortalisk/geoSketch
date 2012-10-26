@@ -349,6 +349,7 @@ void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {
             Deposit * deposit = new Deposit(lefts[i], lefts[i] - lefts[i-1], 0.01, &surfaceNode);
             surfaceNode.children.push_back(deposit);
             deposit->setDepositing(true);
+            deposit->parent = &surfaceNode;
             this->deposit = deposit;
             surfaceNode.invalidate();
             return;

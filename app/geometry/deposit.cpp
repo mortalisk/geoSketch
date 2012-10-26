@@ -18,7 +18,7 @@ static void print(QVector<QVector<int> > &  vec) {
 
 void Deposit::prepareForDrawing() {
 
-    if (deposit1.size() == 0) return;
+    if (deposit1.size() == 0 || !depositing) return;
 
     QVector<QVector<float> > * deposited;
     QVector<QVector<float> > * previousDeposit;

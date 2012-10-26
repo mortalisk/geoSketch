@@ -39,9 +39,6 @@ public:
 
 
 
-    void makeRidgeNode();
-
-    void makeValleyNode();
 
     void drawChildren();
 
@@ -64,6 +61,9 @@ public:
     void addSubclassActions(QMenu *menu);
 public slots:
     void makeRiverNode();
+    void makeRidgeNode();
+
+    void makeValleyNode();
 };
 
 #endif // SURFACENODE_H
