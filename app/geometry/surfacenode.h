@@ -64,6 +64,7 @@ public slots:
     void makeRidgeNode();
 
     void makeValleyNode();
+    void clear();
 };
 
 #endif // SURFACENODE_H

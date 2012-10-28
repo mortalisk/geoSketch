@@ -380,6 +380,14 @@ void SurfaceNode::makeValleyNode() {
     shape = NULL;
 }
 
+void SurfaceNode::clear() {
+    spline.clear();
+    sketchingSpline.clear();
+    uvCoordinateSpline.clear();
+    uvSketchingSpline.clear();
+    uvSmoothed.clear();
+}
+
 int intersect(Vector3& p, Vector3& dir, Vector3& v0, Vector3& v1, Vector3& v2, Vector3* I, float* sp, float* tp) {
     // hentet fra http://softsurfer.com/Archive/algorithm_0105/algorithm_0105.htm#intersect_RayTriangle%28%29
 
@@ -656,6 +664,11 @@ void SurfaceNode::smoothSketchUv() {
 }
 
 void SurfaceNode::addSubclassActions(QMenu *menu) {
+
+    QAction * clear = new QAction(QString("Clear"), menu);
+    connect(clear, SIGNAL(triggered()), this, SLOT(clear()));
+    menu->addAction(clear);
+
     QAction * makeRiver = new QAction(QString("Make River"), menu);
     connect(makeRiver, SIGNAL(triggered()), this, SLOT(makeRiverNode()));
     menu->addAction(makeRiver);
