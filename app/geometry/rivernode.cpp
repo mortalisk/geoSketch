@@ -5,6 +5,8 @@
 #include "deposit.h"
 #include <float.h>
 #include <QVector2D>
+#include <QAction>
+#include <QMenu>
 
 RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("river"), uv(uvs), deposit(NULL)
 {
@@ -48,6 +50,9 @@ QVector<Vector3> RiverNode::intersectionPoints(Vector3 from, Vector3 direction) 
 //        }
 //        return intersects;
 //    }
+
+        lastIntersectionFrom = from;
+        lastIntersectionDriection = direction;
     return BaseNode::intersectionPoints(from, direction);
 
 }
@@ -70,14 +75,14 @@ void RiverNode::addPoint(Vector3 from, Vector3 direction) {
     SurfaceNode * surfaceParent = dynamic_cast<SurfaceNode *>(parent);
 
     //float size = 10.0f;
-    QVector<Vector3> pointsParent = surfaceParent->shape->intersectionPoints(from, direction, s, t);
-    QVector<Vector3> pointsThis = shape->intersectionPoints(from, direction, s2, t2);
+    QVector<Vector3> pointsParent = SurfaceNode::intersectionOnRows(from, direction, rows, s, t, skip);
+    //QVector<Vector3> pointsThis = shape->intersectionPoints(from, direction, s2, t2);
 
-    if (pointsThis.size() > 0) {
-        pointsParent = pointsThis;
-        s = s2;
-        t = t2;
-    }
+//    if (pointsThis.size() > 0) {
+//        pointsParent = pointsThis;
+//        s = s2;
+//        t = t2;
+//    }
     Vector3 point;
     QVector2D point2d;
 
@@ -106,14 +111,14 @@ void RiverNode::doOversketch() {
     int rigthFirst = -1, rigthLast = -1;
     nearest(uvSketch[0], uvSketch[uvSketch.size()-1],rigths, rigthFirst, rigthLast);
 
-    if ((uvSketch[0] - lefts[leftFirst]).length() < (uvSketch[0] - rigths[rigthFirst]).length()) {
+    if (editLeft) {
         // oversketching the left side
-        insertInto(lefts, uvSketch, leftFirst, leftLast);
+        insertInto(lefts, uvSketch, leftFirst, leftLast, !oversketch);
         smooth(lefts);
 
     } else {
         // oversketching the rigth side
-        insertInto(rigths, uvSketch, rigthFirst, rigthLast);
+        insertInto(rigths, uvSketch, rigthFirst, rigthLast, !oversketch);
         smooth(rigths);
     }
 
@@ -181,6 +186,46 @@ void RiverNode::makeWater() {
     shape = s;
 }
 
+void RiverNode::setActive(bool a) {
+    oversketch = true;
+    BaseNode::setActive(a);
+
+    if (a) {
+
+        float s, t;
+
+        //float size = 10.0f;
+        QVector<Vector3> pointsParent = SurfaceNode::intersectionOnRows(lastIntersectionFrom, lastIntersectionDriection, rows, s, t, skip);
+        QVector2D lastIntersection(s, t);
+        float nearestLeft = FLT_MAX;
+        for (int i = 0; i<lefts.size(); i++) {
+            float l = (lefts[i]-lastIntersection).length();
+            if (l< nearestLeft)
+                nearestLeft = l;
+        }
+
+        float nearestRight = FLT_MAX;
+        for (int i = 0; i<rigths.size(); i++) {
+
+            float l = (rigths[i]-lastIntersection).length();
+            if (l< nearestRight)
+                nearestRight = l;
+        }
+
+        editLeft = nearestLeft < nearestRight;
+        editRight = !editLeft;
+    } else {
+        editLeft = false;
+        editRight = false;
+    }
+}
+
+void RiverNode::addSubclassActions(QMenu *menu) {
+
+    QAction * replace = new QAction(QString("Replace side"), menu);
+    connect(replace, SIGNAL(triggered()), this, SLOT(replace()));
+    menu->addAction(replace);
+}
 
 void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float) {
     if (rightSpline.getPoints().size() < 2 || spline.getPoints().size() < 2) return;
@@ -190,8 +235,8 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
 
     //QVector < float > fill(rows[0].size());
     //QVector < QVector < float > > heigths(rows.size(), fill);
-    smooth(lefts);
-    smooth(rigths);
+    //smooth(lefts);
+    //smooth(rigths);
 
     for (int i = 0; i< lefts.size()-1;++i) {
 
@@ -216,8 +261,8 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
 
 //                    QVector2D inter = (CA + DB).normalized();
 
-                    float distAB = distToLine(a, b, point);
-                    float distCD = distToLine(c, d, point);
+                    float distAB = minimum_distance(a, b, point);
+                    float distCD = minimum_distance(c, d, point);
 //                    float distCA = distToLine(c, a, point);
 //                    float distDB = distToLine(d, b, point);
 //                    float ac = (a-c).length();
@@ -229,10 +274,7 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
 //                    float depth1 = 0.2*distDB;
 //                    float depth =
 
-                    float depthA = depthOfRiver(distAB, 0.03*resolution , -0.1);
-                    float depthB = depthOfRiver(distCD, 0.03*resolution , -0.1);
-
-                    float depth = distAB < distCD ? depthA:depthB;
+                    float depth = depthOfRiver(fmin(distAB, distCD), 0.03*resolution , -0.1);
 
                     rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + depth,rows[z][x].z());
                 }
@@ -287,6 +329,9 @@ void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
     rightSpline.clear();
     spline.clear();
 
+    rows = surfacenode.rows;
+    skip = surfacenode.skip;
+
     QVector<QVector2D>& rigthPoints = rigths;
     QVector<QVector2D>& leftPoints = lefts;
 
@@ -318,8 +363,8 @@ void RiverNode::drawSelf() {
 
 void RiverNode::drawSplines() {
     float r = active?1:0;
-    drawSpline(spline,r);
-    drawSpline(rightSpline,r);
+    drawSpline(spline,editLeft);
+    drawSpline(rightSpline,editRight);
     drawSpline(sketchingSpline,r);
 }
 

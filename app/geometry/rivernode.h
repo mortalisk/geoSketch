@@ -12,6 +12,11 @@ class RiverNode : public BaseNode, public ISurfaceFeature
 private:
     Spline rightSpline;
     Spline crossSpline;
+    bool editLeft;
+    bool editRight;
+    bool oversketch; // or replace
+    Vector3 lastIntersectionFrom;
+    Vector3 lastIntersectionDriection;
 
     // the original sketched line
     QVector<QVector2D> uv;
@@ -21,6 +26,9 @@ private:
     QVector<QVector2D> rigths;
 
     Deposit * deposit;
+
+    QVector<QVector<Vector3> > rows;
+    int skip;
 
 QVector<QVector2D> uvSketch;
 
@@ -63,6 +71,14 @@ public:
         return QString("RiverNode");
     }
 
+    void addSubclassActions(QMenu *menu);
+
+    void setActive(bool a);
+
+public slots:
+    void replace() {
+        oversketch = false;
+    }
 };
 
 

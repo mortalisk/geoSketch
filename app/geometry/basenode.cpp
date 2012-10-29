@@ -203,7 +203,7 @@ void BaseNode::drawSpline(Spline & spline, float r) {
                         glPointSize(3.0f);
                         glBegin(GL_POINT);
 
-                        float c[4] = {0.0,0.0,0.0,1.0};
+                        float c[4] = {r,0.0,0.0,1.0};
                         glMaterialfv(GL_FRONT, GL_AMBIENT_AND_DIFFUSE, c);
                         glVertex3f(spline.getPoints()[i].x(),spline.getPoints()[i].y(),spline.getPoints()[i].z());
                         glEnd();

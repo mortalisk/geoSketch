@@ -106,9 +106,11 @@ inline float depthOfRiver(float dist, float maxdist, float depth ) {
         return depth;
 }
 
+float minimum_distance(QVector2D v, QVector2D w, QVector2D p);
+
 
 void nearest(QVector2D first, QVector2D last, QVector<QVector2D>& uv, int & nearestFirst, int& nearestLast);
 
-void insertInto(QVector<QVector2D>& vec,QVector<QVector2D>& in,int first, int last);
+void insertInto(QVector<QVector2D>& vec,QVector<QVector2D>& in,int first, int last, bool replace = false);
 
 #endif // UTIL_H

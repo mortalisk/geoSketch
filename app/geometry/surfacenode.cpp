@@ -28,8 +28,8 @@ void SurfaceNode::prepareForDrawing()  {
 
 void SurfaceNode::invalidate() {
     hasContructedLayer = false;
-    if (shape != NULL)
-        delete shape;
+    //if (shape != NULL)
+        //delete shape;
     shape = NULL;
 }
 
@@ -334,8 +334,8 @@ void SurfaceNode::makeRiverNode() {
     proxy = river;
 
     hasContructedLayer = false;
-    delete shape;
-    shape = NULL;
+//    delete shape;
+//    shape = NULL;
 
 }
 
@@ -355,8 +355,8 @@ void SurfaceNode::makeRidgeNode() {
     proxy = ridge;
 
     hasContructedLayer = false;
-    delete shape;
-    shape = NULL;
+//    delete shape;
+//    shape = NULL;
 
 
 }
@@ -376,8 +376,8 @@ void SurfaceNode::makeValleyNode() {
     proxy = river;
 
     hasContructedLayer = false;
-    delete shape;
-    shape = NULL;
+//    delete shape;
+//    shape = NULL;
 }
 
 int intersect(Vector3& p, Vector3& dir, Vector3& v0, Vector3& v1, Vector3& v2, Vector3* I, float* sp, float* tp) {
@@ -436,8 +436,9 @@ int intersect(Vector3& p, Vector3& dir, Vector3& v0, Vector3& v1, Vector3& v2, V
     return 1;                      // I is in T
 }
 
-QVector<Vector3> SurfaceNode::intersectionPoints(Vector3 from,Vector3 direction) {
+QVector<Vector3> SurfaceNode::intersectionOnRows(Vector3& from, Vector3& direction, QVector<QVector<Vector3> > & rows, float &s, float&t, int skip) {
     QVector<Vector3> cand;
+    QVector<QVector2D> cand2d;
     for (int i = 0; i < rows.size()-skip; i+=skip) {
         for (int j = 0; j < rows[0].size()-skip; j+=skip) {
             Vector3& a = rows[i][j];
@@ -451,11 +452,15 @@ QVector<Vector3> SurfaceNode::intersectionPoints(Vector3 from,Vector3 direction)
             r = intersect(from, direction, a, b, c,&result, &s, &t);
             if (r==1) {
                 cand.push_back(result);
+                QVector2D p2d((float)j/rows.size() ,(float)i/rows[0].size() );
+                cand2d.push_back(p2d);
             }
 
             r = intersect(from, direction, d, c, b,&result, &s, &t);
             if (r==1) {
                 cand.push_back(result);
+                QVector2D p2d((float)j/rows.size() ,(float)i/rows.size() );
+                cand2d.push_back(p2d);
             }
 
         }
@@ -469,12 +474,19 @@ QVector<Vector3> SurfaceNode::intersectionPoints(Vector3 from,Vector3 direction)
             nearestDist = dist;
         }
     }
-    if (cand.size() >1) {
+    if (cand.size() >0) {
         Vector3 tmp = cand[0];
         cand[0] = cand[nearest];
         cand[nearest] = tmp;
+        s = cand2d[nearest].x();
+        t = cand2d[nearest].y();
     }
     return cand;
+}
+
+QVector<Vector3> SurfaceNode::intersectionPoints(Vector3 from,Vector3 direction) {
+    float s, t;
+    return intersectionOnRows(from, direction, rows, s, t, skip);
 }
 
 void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {

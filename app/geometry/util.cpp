@@ -433,7 +433,7 @@ void nearest(QVector2D first, QVector2D last, QVector<QVector2D>& uv, int & near
     }
 }
 
-void insertInto(QVector<QVector2D>& vec,QVector<QVector2D>& in,int first, int last) {
+void insertInto(QVector<QVector2D>& vec,QVector<QVector2D>& in,int first, int last, bool replace) {
 
     QVector<QVector2D> tmp;
 
@@ -445,16 +445,36 @@ void insertInto(QVector<QVector2D>& vec,QVector<QVector2D>& in,int first, int la
     }
 
 
-    for (int i = 0; i<=first; ++i) {
-        tmp.push_back(vec[i]);
-    }
+    if(replace) {
+        vec = in;
+    } else {
+        for (int i = 0; i<=first; ++i) {
+            tmp.push_back(vec[i]);
+        }
 
-    for (int i = 0 ; i<in.size(); ++i) {
-        tmp.push_back(in[i]);
-    }
 
-    for (int i = last;i <vec.size(); ++i) {
-        tmp.push_back(vec[i]);
+        for (int i = 0 ; i<in.size(); ++i) {
+            tmp.push_back(in[i]);
+        }
+
+        for (int i = last;i <vec.size(); ++i) {
+            tmp.push_back(vec[i]);
+        }
+        vec = tmp;
     }
-    vec = tmp;
+}
+
+float minimum_distance(QVector2D v, QVector2D w, QVector2D p) {
+  // Return minimum distance between line segment vw and point p
+  float l2 = (w-v).length();  // i.e. |w-v|^2 -  avoid a sqrt
+  l2 = l2 * l2;
+  if (l2 == 0.0) return (p - v).length();   // v == w case
+  // Consider the line extending the segment, parameterized as v + t (w - v).
+  // We find projection of point p onto the line.
+  // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+  const float t = QVector2D::dotProduct((p - v),( w - v)) / l2;
+  if (t < 0.0) return (p- v).length();       // Beyond the 'v' end of the segment
+  else if (t > 1.0) return (p- w).length();  // Beyond the 'w' end of the segment
+  const QVector2D projection = v + t * (w - v);  // Projection falls on the segment
+  return (p - projection).length();
 }

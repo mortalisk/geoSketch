@@ -62,7 +62,7 @@ public:
         return active;
     }
 
-    void setActive(bool a) {
+    virtual void setActive(bool a) {
         if (a == false) {
             foreach(BaseNode * child, children) {
                 child->setActive(a);
