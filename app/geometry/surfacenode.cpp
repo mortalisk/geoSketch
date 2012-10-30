@@ -16,6 +16,12 @@ SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& ba
 
 SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) , hasContructedLayer(false), resolution(other.resolution), skip(other.skip), uvCoordinateSpline(other.uvCoordinateSpline), below(other.below),front(other.front), right(other.right), back(other.back), left(other.left){
 
+    foreach (BaseNode * c, children) {
+        Deposit * d = dynamic_cast<Deposit*>(c);
+        if (d) {
+            d->surfaceNode = this;
+        }
+    }
 }
 
 BaseNode* SurfaceNode::copy() {
@@ -23,6 +29,10 @@ BaseNode* SurfaceNode::copy() {
 }
 
 void SurfaceNode::prepareForDrawing()  {
+    foreach(BaseNode* c, children) {
+        std::cout << c->name.toStdString() << std::endl;
+    }
+
     constructLayer();
 }
 
@@ -651,6 +661,13 @@ void SurfaceNode::fromJsonSubclass(QVariantMap map) {
     resolution = map["resolution"].toInt();
     skip = map["skip"].toInt();
     hasContructedLayer = false;
+
+    foreach (BaseNode * c, children) {
+        Deposit * d = dynamic_cast<Deposit*>(c);
+        if (d) {
+            d->surfaceNode = this;
+        }
+    }
 
 }
 

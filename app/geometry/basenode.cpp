@@ -18,6 +18,7 @@ void BaseNode::init() {
     parent = NULL;
     shape = NULL;
     visible = true;
+    active = false;
 
 //    diffuse.setX(0.5);
 //    diffuse.setY(0.5);

@@ -72,6 +72,16 @@ BoxNode::BoxNode(BoxNode& o): BaseNode(o) {
     setUpSurfaces();
     makeWaterNode();
 
+    QVector<BaseNode*> tmp = children;
+    children.clear();
+    foreach(BaseNode* c , tmp) {
+        children.push_back(c);
+        updateCurrentBelowNode();
+    }
+    waterNode->below = currentBelowNode;
+    waterNode->elevateTo(o.getSeaLevel());
+    waterNode->visible = o.waterNode->visible;
+
     activeSurface = NULL;
 }
 
@@ -340,6 +350,8 @@ void BoxNode::addSubclassJson(QVariantMap &map) {
     map["width"] = width;
     map["depth"] = depth;
     map["heigth"] = heigth;
+    map["waterLevel"] = getSeaLevel();
+    map["waterVisible"] = waterNode->visible;
 }
 
 void BoxNode::fromJsonSubclass(QVariantMap map) {
@@ -348,9 +360,13 @@ void BoxNode::fromJsonSubclass(QVariantMap map) {
     width = map["width"].toFloat();
     depth = map["depth"].toFloat();
     heigth = map["heigth"].toFloat();
+
     init();
     setUpSurfaces();
     makeWaterNode();
+
+    waterNode->visible = map["waterVisible"].toBool();
+    waterNode->elevateTo(map["waterLevel"].toDouble());
 
     QVector<BaseNode*> tmp = children;
     children.clear();
@@ -359,5 +375,9 @@ void BoxNode::fromJsonSubclass(QVariantMap map) {
         children.push_back(c);
         updateCurrentBelowNode();
     }
+
+    waterNode->below = currentBelowNode;
+    waterNode->invalidate();
+
 
 }

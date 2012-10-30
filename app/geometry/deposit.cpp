@@ -18,7 +18,7 @@ static void print(QVector<QVector<int> > &  vec) {
 
 void Deposit::prepareForDrawing() {
 
-    if (deposit1.size() == 0 || !depositing) return;
+    if (deposit1.size() == 0) return;
 
     QVector<QVector<float> > * deposited;
     QVector<QVector<float> > * previousDeposit;
@@ -37,13 +37,13 @@ void Deposit::prepareForDrawing() {
 
     int fromx = round((point.x()+5)*4);
     int fromy = round((point.z()+5)*4);
-    if (depositing) {
+    if (depositing|| times <= targetTimes) {
 
         if ((*previousDeposit)[fromy][fromx] < 0.1)
             (*previousDeposit)[fromy][fromx] = 0.1;
-    }
 
-    print(manhattan);
+
+    //print(manhattan);
 
     exchange(previousDeposit, deposited, 1, 0, fromx, fromy);
 
@@ -101,11 +101,17 @@ void Deposit::prepareForDrawing() {
     }
 
     QVector<Vector3> noOutline;
-    noOutline.push_back(Vector3(samples[0][0].x(), 5.0, samples[0][0].z()));
-    noOutline.push_back(Vector3(samples[0][samples[0].size()-1].x(), 5.0, samples[0][samples[0].size()-1].z()));
-    noOutline.push_back(Vector3(samples[samples.size()-1][samples[0].size()-1].x(), 5.0, samples[samples.size()-1][samples[0].size()-1].z()));
-    noOutline.push_back(Vector3(samples[samples.size()-1][0].x(), 5.0, samples[samples.size()-1][0].z()));
+//    noOutline.push_back(Vector3(samples[0][0].x(), 5.0, samples[0][0].z()));
+//    noOutline.push_back(Vector3(samples[0][samples[0].size()-1].x(), 5.0, samples[0][samples[0].size()-1].z()));
+//    noOutline.push_back(Vector3(samples[samples.size()-1][samples[0].size()-1].x(), 5.0, samples[samples.size()-1][samples[0].size()-1].z()));
+//    noOutline.push_back(Vector3(samples[samples.size()-1][0].x(), 5.0, samples[samples.size()-1][0].z()));
     shape = new Surface(triangles,noOutline, false);
+        times++;
+        if (depositing) {
+            targetTimes = times;
+        }
+
+    }
 
 }
 

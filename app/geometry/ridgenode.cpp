@@ -248,8 +248,9 @@ void RidgeNode::repositionOnSurface(SurfaceNode &surfacenode) {
     if (shape != NULL) {
         delete shape;
         shape = NULL;
-        makeWall();
     }
+
+    makeWall();
 }
 
 void RidgeNode::drawSelf() {
@@ -272,5 +273,6 @@ void RidgeNode::fromJsonSubclass(QVariantMap map) {
     uv = variantToVector2DVector(map["uv"]);
     heights = variantToFloatVector(map["heights"]);
     //uvSketch = QVector<QVector2D>();
+    active = false;
 
 }

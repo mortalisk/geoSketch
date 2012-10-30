@@ -10,6 +10,7 @@
 
 RiverNode::RiverNode(QVector<QVector2D> uvs, bool drawWater, float width) : BaseNode("river"), uv(uvs), deposit(NULL), drawWater(drawWater)
 {
+    deposit = NULL;
     smooth(uv);
     QVector2D prev = uv[0] - (uv[1]- uv[0]);
     for (int i = 0; i<uv.size(); ++i) {
@@ -371,15 +372,17 @@ void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
 void RiverNode::drawSelf() {
     if (drawWater)
         BaseNode::drawSelf();
-    else
+    else if (active)
         drawSplines();
 }
 
 void RiverNode::drawSplines() {
     float r = active?1:0;
-    drawSpline(spline,editLeft);
-    drawSpline(rightSpline,editRight);
-    drawSpline(sketchingSpline,r);
+    if (drawWater || active) {
+        drawSpline(spline,editLeft);
+        drawSpline(rightSpline,editRight);
+        drawSpline(sketchingSpline,r);
+    }
 }
 
 void RiverNode::addSubclassJson(QVariantMap &map) {
@@ -407,7 +410,7 @@ void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {
         Vector3 point = surfaceNode.getPointFromUv(lefts[i]);
         if (point.y() < seaLevel) {
             //if (i == 0) return;
-            Deposit * deposit = new Deposit((lefts[i]+ rigths[i])/2, lefts[i] - lefts[i-1], 0.01, &surfaceNode);
+            Deposit * deposit = new Deposit((lefts[i]+ rigths[i])/2, lefts[i] - lefts[i-1], &surfaceNode);
             surfaceNode.children.push_back(deposit);
             deposit->setDepositing(true);
             deposit->parent = &surfaceNode;

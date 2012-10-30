@@ -35,8 +35,8 @@ private:
 QVector<QVector2D> uvSketch;
 
 public:
-    RiverNode() {}
-    RiverNode(RiverNode& o) : BaseNode(o), rightSpline(o.rightSpline), crossSpline(o.crossSpline), uv(o.uv), lefts(o.lefts), rigths(o.rigths), deposit(NULL), drawWater(o.drawWater) {}
+    RiverNode() {deposit = NULL;}
+    RiverNode(RiverNode& o) : BaseNode(o), rightSpline(o.rightSpline), crossSpline(o.crossSpline), uv(o.uv), lefts(o.lefts), rigths(o.rigths), deposit(NULL), drawWater(o.drawWater){}
     RiverNode(QVector<QVector2D> uv, bool drawWater = true, float width = 0.01);
 
     virtual BaseNode * copy() {
