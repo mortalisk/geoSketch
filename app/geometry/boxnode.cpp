@@ -248,6 +248,17 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
 
 void BoxNode::childDeleted(BaseNode *child) {
     scene->nodeDeleted(child);
+        QVector<BaseNode*> tmp = children;
+        children.clear();
+        delete currentBelowNode;
+        currentBelowNode = new SurfaceNode(*bottomDummyNode);
+
+        foreach(BaseNode* c, tmp) {
+            children.push_back(c);
+            updateCurrentBelowNode();
+            waterNode->below = currentBelowNode;
+            waterNode->invalidate();
+        }
 }
 
 BaseNode* BoxNode::makeLayer() {
