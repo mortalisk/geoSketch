@@ -8,7 +8,7 @@
 #include <QAction>
 #include <QMenu>
 
-RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("river"), uv(uvs), deposit(NULL)
+RiverNode::RiverNode(QVector<QVector2D> uvs, bool drawWater, float width) : BaseNode("river"), uv(uvs), deposit(NULL), drawWater(drawWater)
 {
     smooth(uv);
     QVector2D prev = uv[0] - (uv[1]- uv[0]);
@@ -25,7 +25,7 @@ RiverNode::RiverNode(QVector<QVector2D> uvs) : BaseNode("river"), uv(uvs), depos
 
         //float distanceFromMiddle = fabs(i-uv.size()/2.0)/uv.size();
 
-        normal *= 0.01;
+        normal *= width;
 
         lefts.push_back(uv[i] + normal);
         rigths.push_back(uv[i] - normal);
@@ -53,7 +53,21 @@ QVector<Vector3> RiverNode::intersectionPoints(Vector3 from, Vector3 direction) 
 
         lastIntersectionFrom = from;
         lastIntersectionDriection = direction;
-    return BaseNode::intersectionPoints(from, direction);
+//    if (drawWater) {
+//        return BaseNode::intersectionPoints(from, direction);
+//    }
+//    else {
+        float s, t;
+        QVector<Vector3> pointsParent = SurfaceNode::intersectionOnRows(from, direction, rows, s, t, skip);
+        for(int i = 0; i<lefts.size(); i++) {
+            QVector2D p(s,t);
+            if ((lefts[i]-p).length() < 0.03 || (rigths[i]-p).length() < 0.03) {
+                return pointsParent;
+            }
+        }
+        return QVector<Vector3>();
+
+//    }
 
 }
 
@@ -70,7 +84,7 @@ void RiverNode::determineActionOnStoppedDrawing() {
 
 void RiverNode::addPoint(Vector3 from, Vector3 direction) {
     //BaseNode::addPoint(from, direction);
-    float s, t,s2,t2;
+    float s, t;
 
     SurfaceNode * surfaceParent = dynamic_cast<SurfaceNode *>(parent);
 
@@ -355,10 +369,10 @@ void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
 }
 
 void RiverNode::drawSelf() {
-    //if (active)
+    if (drawWater)
         BaseNode::drawSelf();
-   // else
-       // drawSplines();
+    else
+        drawSplines();
 }
 
 void RiverNode::drawSplines() {
@@ -374,12 +388,14 @@ void RiverNode::addSubclassJson(QVariantMap &map) {
 
     map["rights"] = rightList;
     map["lefts"] = leftList;
+    map["drawWater"] = drawWater;
 
 }
 
 void RiverNode::fromJsonSubclass(QVariantMap map) {
     rigths = variantToVector2DVector(map["rights"]);
     lefts = variantToVector2DVector(map["lefts"]);
+    drawWater = map["drawWater"].toBool();
 }
 
 void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {

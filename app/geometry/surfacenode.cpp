@@ -364,7 +364,7 @@ void SurfaceNode::makeRidgeNode() {
 void SurfaceNode::makeValleyNode() {
     if (spline.getPoints().size() < 2)
         return;
-    ValleyNode * river = new ValleyNode(uvCoordinateSpline);
+    RiverNode * river = new RiverNode(uvCoordinateSpline, false, 0.05);
     river->parent = this;
     children.append(river);
 
@@ -449,17 +449,19 @@ QVector<Vector3> SurfaceNode::intersectionOnRows(Vector3& from, Vector3& directi
             Vector3 result;
             int r;
             float s,t;
+            float res = rows.size()-1;
+            float skipRes = res/skip;
             r = intersect(from, direction, a, b, c,&result, &s, &t);
             if (r==1) {
                 cand.push_back(result);
-                QVector2D p2d((float)j/rows.size() ,(float)i/rows[0].size() );
+                QVector2D p2d((float)j/res + t/skipRes,(float)i/res +s/skipRes);
                 cand2d.push_back(p2d);
             }
 
             r = intersect(from, direction, d, c, b,&result, &s, &t);
             if (r==1) {
                 cand.push_back(result);
-                QVector2D p2d((float)j/rows.size() ,(float)i/rows.size() );
+                QVector2D p2d((float)j/res +((1-t)/skipRes),(float)i/res + ((1-s)/skipRes));
                 cand2d.push_back(p2d);
             }
 
@@ -567,8 +569,8 @@ Vector3 SurfaceNode::getPointFromUv(QVector2D uv) {
 
 //    Vector3 leftRight = leftp*(1.0-xi) + rightp*xi;
 //    Vector3 point = leftRight + diff;
-    float x = clamp(uv.x(),0,1)*(resolution-1);
-    float z = clamp(uv.y(),0,1)*(resolution-1);
+    float x = clamp(uv.x(),0,0.9999)*(resolution);
+    float z = clamp(uv.y(),0,0.9999)*(resolution);
     int xi = floor(x);
     int zi = floor(z);
     float u = (x - xi);
