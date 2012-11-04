@@ -110,7 +110,7 @@ public:
     virtual void fromJsonSubclass(QVariantMap map) = 0;
 
     void addActions(QMenu * menu);
-    virtual void addSubclassActions(QMenu * menu) {
+    virtual void addSubclassActions(QMenu *) {
         return;
     }
 

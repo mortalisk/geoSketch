@@ -8,8 +8,8 @@
 class Deposit : public BaseNode, public ISurfaceFeature {
     Q_OBJECT
 private:
-    int times;
-    int targetTimes;
+    float amount;
+    float targetAmount;
     QVector2D flowFrom;
     QVector2D direction;
     QVector<QVector<Vector3> > samples;
@@ -23,10 +23,10 @@ public:
     SurfaceNode * surfaceNode;
     Deposit(QVector2D flowFrom, QVector2D direction, SurfaceNode * surfaceNode) : BaseNode("deposit"), flowFrom(flowFrom), direction(direction), surfaceNode(surfaceNode) {
         diffuse = QVector4D(0.2, 0.3, 0.1, 1.0);
-        times = 0;
+        amount = 0;
     }
 
-    Deposit(Deposit& deposit) : BaseNode(deposit), flowFrom(deposit.flowFrom), direction(deposit.direction), targetTimes(deposit.targetTimes), depositing(deposit.depositing), times(0) {
+    Deposit(Deposit& deposit) : BaseNode(deposit), amount(0), targetAmount(deposit.targetAmount), flowFrom(deposit.flowFrom), direction(deposit.direction), depositing(deposit.depositing) {
 
     }
     Deposit(){}
@@ -56,7 +56,7 @@ public:
         flowFromMap["y"] = direction.y();
         map["direction"] = directionMap;
 
-        map["times"] = targetTimes;
+        map["amount"] = targetAmount;
 
     }
 
@@ -65,8 +65,8 @@ public:
         flowFrom.setY(map["flowFrom"].toMap()["y"].toDouble());
         direction.setX(map["direction"].toMap()["x"].toDouble());
         direction.setY(map["direction"].toMap()["y"].toDouble());
-        targetTimes = map["times"].toInt();
-        times = 0;
+        targetAmount = map["amount"].toInt();
+        amount = 0;
         depositing = false;
     }
 

@@ -137,13 +137,117 @@ After reading this section, you should have gained a basic understanding of the 
 - rivers and overlapping\\
 - mountains
 
+\section{Methodology}
+
+Here I will explain the underlying algorithms and data structures, and how they work to enable the drawing of sketches. There are three abstract steps from user to the visual image, and then a feeback of the produced image to the user will enable him to refine his input, should it be needed, such that the image better represents what he had in mind.
+
+The abstract concept from the users perspective is that there is a certain structure he wants to model. In his head he has an abstract notion of each of the parts that are needed and a notion of the image he wants to produce.
+
+The user knows how to input parameters that the program will interpret in a certain way to create the structures he needs. This is the first step of the internal algorithm. To interpret the users input.
+
+After input has been gathered and the users intent understood, the algorithms creates a structure that hopefully captures what was intended.
+
+The third step is then to create a visual representation of this structure. This is often the most computationally heavy process.
+
+
+\subsection{Sketch methods and interpretation}
+The initial state is the empty cube. At this stage the input consists of the user rotating and drawing on the cube to create layers. Rotating is as explained earlier done by dragging the mouse while holding a button, and is trivial to achieve by just rotating the camera a certain amount according to how far the mouse was dragged.
+
+Drawing is a bit more involved, and to achieve this it is first neccessary to find the correlation of where the user draws on screen and where this corresponds to on the cube. The principle of drawing is acheved in the same manner for all objects in the scene. For this purpose one must know the camera position, camera direction, viewing angle and viewport size. When there is a mouse position somewhere on the screen it is then realatively easy to compute a direction vector from the cameras position and into the scene that will point at the position on the cube that lies under the mouse pointer. When this vector is known, finding the exact point on the cube is a matter of intersection between a ray and a triangle. For most objects there is a structure that contains all the triangles it consists of. Each of the vertices of the triangles are stored together with parametric coordinates that uniqely represents the point on the two-dimentional surface of the object.
+
+While drawing on a surface the three-dimentional intersection points in the scenery space is stored in a list in order to immediately visualize it to give the user feedback. The two-dimentional parametric coordinates are stored in a seperate list for later use.
+
+When drawing on a screen you are limited to the resolution of the screen. This means that the input points that are gathered will also be limited to this resolution However, because the actual surface where you are interested in drawing exists in a point in space farther away and not on screen, moving from one pixel to the next, means you will move a much greater distance on that surface than on screen, creating jagginess. Also, depending on the angle and distance of the camera, the jagginess you get will be uneven. For this reason we need do smooth the input points that have been gathered. 
+
+The smoothing is done by regarding the n points of the  input as the control points of a n-dimentional bezier curve. This is done in the two dimentional parametric space. The rationale for doing it this way, is that the points gathered are usually not on the line where you wanted to draw, but will lie on either side of the actual line desired. The bezier curve will aproximate the control points, but will lie somewhere between them as illustrated in FIGURE.
+
+==== figure of bezier smoothing ====
+
+A similar but more advanced approach can be found in (REFERENCE to sketch input artice), and that is where I got the idea for using bezier curves from. However, I found the current procedure to give adequate results and did not spend more time on improving the input.
+
+
+It is also possible to oversketch the lines that are already drawn ==== refer to STAR ===. The are many ways to implement oversketching, and each use case might be different. === REFER to some articles on oversketching ===
+
+=== Write some more about oversketching ===
+
+
+\subsection{Representation}
+The different features that can be drawn are, as mentioned earlier, represented in an internal format before creating the structure that can be visualized. Relevant parts of this representation is also visualized to the user in a way that he can uderstand it. This makes it easier to make changes, and reason about what can be changed and what effects that will have on the final result.
+
+The curves are as mentioned stored as a list of points. On a higher level of abstraction, most of the features that can be drawn are built by using such curves in different combinations and different interpretations. In many cases the curves are augmented by some additional information, such as the height of ridges. In one instance, the deposits, the representation does not include lines at all but their shape is rather defined by a procedural method.
+
+All the features relate to each other in a child-parent relationship creating a tree structure. The cube is the top node in this tree. All layers are children of the cube. All the other features are then the children of a layer. === FIGURE of tree structure, and example scene === This structure toghether with the parametric representation is useful to enable incremental refinement of features. When a node changes, it knows whether it needs to tell the parent and a parent knows whether it needs to trigger some recalculation in a child. Such notifications are however only sent along and used for telling the geometry synthesis to do neccessary recalculations, since the parametric representation itself does not actually need to change. === REMEMBER refer to paper on iterative refinement modeling, here or somewhere ===
+
+\subsubsection{Cube}
+There is no input to change the parameters of the cube. The cube itself is represented by the size of its three dimensions. That is, height, width, and depth. It the outset it was the intention to be able to change the size of the cube in these three dimensions, but I have not had the time to get to this feature. The gemoetry of the cube is constructed by creating and positioning six square faces of correct size and the correct orientation. Each of the faces are also in turn contructed by two triangles and outlined by a line strip. When visualizing the cube geometry, only the triangle of the back faces are rendered, but all lines are shown. This effect is achieved by backface culling, makes the cube look transparent, and avoids occlusion of the geometry inside.
+
+\subsubsection{Layers}
+Input for layers are drawn on the cube faces. On faces where you draw, there is an auto-complete function and on the left, right and oppsite side, a suggestion function. The pretty simple auto-complete, will automatically complete a line you draw by extending it towards the left and right side of the current face. 
+
+The suggestion does different things according to the state of the other faces. If drawing on the first face of the cube, it will automatically mirror that input to the other side of the cube from where he is drawing, and then extends lines between these on the faces to the left and to the right of the face he is drawing. When further changes to this initial suggestion are made, what will happen depends on which sided have been draw on already. If the opposite face has already been drawn on by the user, it will not be changed. If the left and right side has been draw on, they will be modified so that the first point aligns with the last point of the left hand face, and the last point aligns with the right hand face. This is done by imagining a line from the first and last actual points of the curve, and then replicating the distance in height of each point on a new imagined line in the desired position. === see FIGURE of modification ===. Otherwize there will simply be drawn a straight line fitting the same constraints. This assures that the lines on all the faces are always connected at the edges of the cube such that they are always ready to create a layer from.
+
+A Layer is represented using 8 curves. First, the four curves from user input on the cube is used to create a surface representing the top of the layer. Then, for each of the sides, the users input on this side and a precomputed line that represents the bottom of the layer (that is, where it meets the surfaces below) are used to create a surface for the side of the layer. === FIGURE illustrating the representation of a layer ===
+
+Construction of the layer surface geometry is achieved by looping through the lenght of the curves drawn on the cube with a given resolution, first from left to right for the front and back curves, and for each point in the outer loop, again looping through from the front to the back of the left and right curve. If we then call the left, right, front and back curves Cl, Cr, Cf, Cb respectively, and denote the point along them as Clx, Crx and so on, we get a grid of new points that represent the heights of the surface according to this formula:
+
+=== FORMULA layer height calculation ===
+
+The heights in each point of the grid are not a regular height grid, but are heights according to the parametric coordinates along the curves on the side of the cube where the index divided by the resolution gives the parametic coordinate. This fits well with the parametric representation of all features, and makes it easy to associate the parametric coordinates with each point in the grid. It also enables the user to draw curved surfaces without loosing resolution on steep slopes. It also enables the user to draw surfaces that loop back over themselves, that is they do not go strictly from left to right or from right to left. This does mean that some features to be drawn on the surface of the layer later, might not have a well defined behaviour in such areas where the surface does loop back over itself, but it also enables the user to model certain geological fenomena such as folding. === Is this the name, folding?===
+
+Once a grid has been created, each of the features that needs to make modifications get the chance to do so. All features that are drawn on the surface implement an interface that enables the layer object to tell them to do their modifications at the correct time. Each feature does this in the order they were created. How they do this is covered under each of the features explanation below.
+
+For the geometry, triangles are created between the points of the grid. Normals for each vertex is created by averaging the normal of the triangles surrounding the point. Then for each of the sides of the cube another surface is created between the curves of this layer and the layers below.
+
+The sides of the layer is created for each face of the cube by filling the area between the curve of the layer for that face and the topmost point of each of the curves of the layers below. If the current layers curve goes below the layers below, then no fillings are created in the area demarked by this section of the curve. The cube will maintain a curve that represents the top of the layers below, and this will be updated as new layers are added. Therefore the layer itself needs only consern itself with this curve, and not all of the previous layers.
+
+For updating the curve demarking the top of all layers, the following prcedure is used. 
+\begin{enumerate}
+ \item Create an empty curve newPoints
+ \item For each intersection from left to right, a point is created at this intersection. Then check which of the points from each curve preceding the intersection is the topmost. Add all the points from the topmost curve since the last intersection, or if this is the first intersection, since the beginning to newPoints.
+ \item At the end add the rest of the points since the last intersection, or if no intersections since the beginning to newPoints, from the topmost curve.
+\end{enumerate}
+
+For detecting which areas of a face of the cube to cover with the layers surface polygons are created and then geometry is created from there. This procedure is used:
+\begin{enumerate}
+ \item Create a list of lists of points, call it ``polygons''
+ \item Create a point between the first point of the layer curve and the curve demarking the top of all layers, call it ``previousIntersection''
+ \item For each intersection from left to right, create a point ``intersection''. Then add ``previousIntersection'' to a new list of points ``polygon''. Check which of the two curves are the tomost at the point before the intersection. Add all points between the previous intersection and the current intersection from the topmost curve. Add the point ``intersection''. Add, in reverse order, all the points between the current intersection and the previous intersection from the lowermost curve. Add ``polygon'' to the list ``polygons''.
+ \item For each polygon in the list ``polygons'', create a triangluation suitable for visualization, and add all triangles to the geometry.
+\end{enumerate}
+
+\subsubsection{Ridges}
+Input for the ridges is first drawn on a layer as a normal curve. When the user indicates that he wants to create a ridge, a new ridge object is created based on this. A ridge is represented by this curve and a height associated with each point in the curve. The curve is the base line that the user drew on the layer where he wants the ridge to follow along. The heights are the height of the ridge at each point of the curve. Initially the height list is just a smooth function from side to side of the ridge, with a peak in the middle. The height can be changed if the user indicates so. This new height line is input on a temporary sketch wall erected for this purpose. The input prcedure is similar to other lines, but in the end it is not actually stored as normal line. When the user is done, only the height along the entire wall is stored in a list, one for each point on the base line. The wall is constructed by vertices with parametric coordinates that make it easy to read the height from each intersection, as well as where along the curve each point is. If the user inputs a line that does not go strictly from left to right or right to left, but loops back over itself, only the last input for that position will be relevant as it will overwrite the former height stored there.
+
+The ridge object itself is visualized only by a curve along the top of the ridge. This is constructed by iterating along the points of the base line. For each point in the base line, the corresponding three dimentional point is found by looking up this point on the layer the ridge belongs to, that is it's parent. Afterwards the height of this point is simply increased based on the relevant height in the list. This yields a new list of points which can then be used to draw a line on screen.
+
+The sketch wall is a simple transparent wall made of triangles between the base line and a set height above it.
+
+*** Rivers and Valleys
+Rivers and valleys are represented using two lines, one for each bank of the river or each side of the valley. These lines are constructed based on an initial line input by the user. The original line is then discarded. 
+
+
+\subsubsection{Deposits}
+Deposits are created procedurally. Therefore, the input for a deposit is implied by the river that the deposit is flowing from and where that river goes below the sea level at the time when the user requests a deposit be made and how long he wishes to let it continue depositing. Deposits are represented by the position where they start, a little below the point in the river where the sea starts, and the amount of matter that is deposited from this point over time. The intention was to also take into account the direction and speed of flow in the river, but this has not been implemented yet.
+
+Since the river is created procedurally over time, it needs an additional step to generate an intermediate representation of the deposit before generating geometry. This step consists of simulating the flow of matter across the surface underneath. For the simulation a simple volume preserving diffusion algorithm is used, that is a modified version of the one found in (??? REFER to webgl flow thing???). This algorithm assumes a regular height grid, and all the underlying layers mut be taken into account. The layers are of course represented as a irregual grid and thus a sampling must be performed to create a regular grid. First a grid overlay over the cube is created at the desired resolution and each point in the grid is set to a value low enough that no intersection could occur at this height. Then at regualar intervals, a ray is cast directly down into the cube, doing intersection tests for each layer, updating the grid value to the height of any intersection when that intersection is higher than the current value.
+
+When the height grid is ready
+
+
+
+\subsection{Geometry synthesis}
+Before a certain scene configuration is visualized, a geometry is created. For each type of feature in the scene, there is a corresponding algorithm for creating the relevant geometry. When the layers geometry is being constructed, it needs to take into account the children. This is because some of them can actually change the surface of the layer. Each node in the scene will keep it's geometry so it does not need to be generated over and over. When it needs to update, it will be notified, and trigger it's relevant algorithm for generating gemoetry.
+
+
+
+
 \section{Results and performance}
 \subsection{Produced Renderings}
 - compare with goal\\
 - Marie might draw her stuff?
-\subsection{Performance of user}
+\subsection{Evaluation}
 - learning\\
-- using
+- usability
 \subsection{Performance of program}
 - rendering speed on different hardware
 

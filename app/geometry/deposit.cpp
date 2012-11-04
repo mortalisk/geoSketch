@@ -37,10 +37,12 @@ void Deposit::prepareForDrawing() {
 
     int fromx = round((point.x()+5)*4);
     int fromy = round((point.z()+5)*4);
-    if (depositing|| times <= targetTimes) {
-
-        if ((*previousDeposit)[fromy][fromx] < 0.1)
+    if (depositing|| amount <= targetAmount) {
+        float previousAmount = (*previousDeposit)[fromy][fromx];
+        if (previousAmount < 0.1) {
             (*previousDeposit)[fromy][fromx] = 0.1;
+            amount += 0.1 - previousAmount;
+        }
 
 
     //print(manhattan);
@@ -106,9 +108,8 @@ void Deposit::prepareForDrawing() {
 //    noOutline.push_back(Vector3(samples[samples.size()-1][samples[0].size()-1].x(), 5.0, samples[samples.size()-1][samples[0].size()-1].z()));
 //    noOutline.push_back(Vector3(samples[samples.size()-1][0].x(), 5.0, samples[samples.size()-1][0].z()));
     shape = new Surface(triangles,noOutline, false);
-        times++;
         if (depositing) {
-            targetTimes = times;
+            targetAmount = amount;
         }
 
     }
@@ -167,8 +168,8 @@ void Deposit::exchange(QVector<QVector<float> > * previousDeposit, QVector<QVect
         distLeft = manhattanLeft < manhattan[y][x] ? manhattanLeft: manhattan[y][x];
         distRight = manhattanRight < manhattan[y][x] ? manhattanRight: manhattan[y][x];
 
-        float flowRateRight = 2+pow(distRight, 2);
-        float flowRateLeft = 2+pow(distLeft, 2);
+        float flowRateRight = 2+pow(distRight, 1);
+        float flowRateLeft = 2+pow(distLeft, 1);
 
         float diffLeft = (tl+dl) - (t+d);
         float diffRigth = (tr+dr) - (t+d);
