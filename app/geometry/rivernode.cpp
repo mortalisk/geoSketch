@@ -410,7 +410,7 @@ void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {
         Vector3 point = surfaceNode.getPointFromUv(lefts[i]);
         if (point.y() < seaLevel) {
             //if (i == 0) return;
-            Deposit * deposit = new Deposit((lefts[i]+ rigths[i])/2, lefts[i] - lefts[i-1], &surfaceNode);
+            Deposit * deposit = new Deposit((lefts[i]+ rigths[i])/2, lefts[i] - lefts[i-1],seaLevel, &surfaceNode);
             surfaceNode.children.push_back(deposit);
             deposit->setDepositing(true);
             deposit->parent = &surfaceNode;

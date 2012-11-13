@@ -352,6 +352,8 @@ void MyGLWidget::save() {
 
     QString fileName = QFileDialog::getSaveFileName(this,
          tr("Save Sketch"), "", tr("Geosketch Files (*.json)"));
+    if (!fileName.endsWith(".json"))
+        fileName += ".json";
     QFile file(fileName);
     file.open(QIODevice::WriteOnly | QIODevice::Text);
     QTextStream out(&file);

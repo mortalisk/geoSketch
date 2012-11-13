@@ -168,8 +168,8 @@ void Deposit::exchange(QVector<QVector<float> > * previousDeposit, QVector<QVect
         distLeft = manhattanLeft < manhattan[y][x] ? manhattanLeft: manhattan[y][x];
         distRight = manhattanRight < manhattan[y][x] ? manhattanRight: manhattan[y][x];
 
-        float flowRateRight = 2+pow(distRight, 1);
-        float flowRateLeft = 2+pow(distLeft, 1);
+        float flowRateRight = 2+pow(distRight, 2);
+        float flowRateLeft = 2+pow(distLeft, 2);
 
         float diffLeft = (tl+dl) - (t+d);
         float diffRigth = (tr+dr) - (t+d);

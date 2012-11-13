@@ -18,13 +18,13 @@ void SideNode::init() {
     QVector4D c(1.0, 1.0, 1.0, 0.5);
 
     //Front
-    vertices.push_back(vertex(lowerLeft,normal));
-    vertices.push_back(vertex(lowerRigth,normal));
-    vertices.push_back(vertex(upperLeft,normal));
+    vertices.push_back(vertex(lowerLeft,normal,0, 0));
+    vertices.push_back(vertex(lowerRigth,normal, 1, 0));
+    vertices.push_back(vertex(upperLeft,normal, 1, 0));
 
-    vertices.push_back(vertex(upperLeft,normal));
-    vertices.push_back(vertex(lowerRigth,normal));
-    vertices.push_back(vertex(upperRigth,normal));
+    vertices.push_back(vertex(upperLeft,normal, 1, 0));
+    vertices.push_back(vertex(lowerRigth,normal, 0, 1));
+    vertices.push_back(vertex(upperRigth,normal, 1, 1));
 
     lineVertices.push_back(lowerLeft);
     lineVertices.push_back(lowerRigth);

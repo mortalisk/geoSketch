@@ -21,6 +21,9 @@ public:
     QVector<BaseNode*> children;
     Spline spline;
     Spline sketchingSpline;
+    QVector<QVector2D> uvSpline;
+    QVector<QVector2D> uvSketchingSpline;
+
     bool drawing;
     bool splineDone;
     bool visible;

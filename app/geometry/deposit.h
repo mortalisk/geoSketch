@@ -10,6 +10,7 @@ class Deposit : public BaseNode, public ISurfaceFeature {
 private:
     float amount;
     float targetAmount;
+    float seaLevel;
     QVector2D flowFrom;
     QVector2D direction;
     QVector<QVector<Vector3> > samples;
@@ -21,12 +22,13 @@ private:
 public:
 
     SurfaceNode * surfaceNode;
-    Deposit(QVector2D flowFrom, QVector2D direction, SurfaceNode * surfaceNode) : BaseNode("deposit"), flowFrom(flowFrom), direction(direction), surfaceNode(surfaceNode) {
+    Deposit(QVector2D flowFrom, QVector2D direction, float seaLevel, SurfaceNode * surfaceNode) : BaseNode("deposit"), flowFrom(flowFrom), direction(direction), surfaceNode(surfaceNode) {
+        this->seaLevel = seaLevel;
         diffuse = QVector4D(0.2, 0.3, 0.1, 1.0);
         amount = 0;
     }
 
-    Deposit(Deposit& deposit) : BaseNode(deposit), amount(0), targetAmount(deposit.targetAmount), flowFrom(deposit.flowFrom), direction(deposit.direction), depositing(deposit.depositing) {
+    Deposit(Deposit& deposit) : BaseNode(deposit), amount(0), targetAmount(deposit.targetAmount), seaLevel(deposit.seaLevel), flowFrom(deposit.flowFrom), direction(deposit.direction), depositing(deposit.depositing) {
 
     }
     Deposit(){}
@@ -57,6 +59,7 @@ public:
         map["direction"] = directionMap;
 
         map["amount"] = targetAmount;
+        map["seaLevel"] = seaLevel;
 
     }
 
@@ -67,6 +70,7 @@ public:
         direction.setY(map["direction"].toMap()["y"].toDouble());
         targetAmount = map["amount"].toInt();
         amount = 0;
+        seaLevel = map["seaLevel"].toDouble();
         depositing = false;
     }
 

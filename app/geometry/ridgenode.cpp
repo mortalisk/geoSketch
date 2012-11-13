@@ -47,6 +47,7 @@ void RidgeNode::determineActionOnStoppedDrawing() {
     //BaseNode::determineActionOnStoppedDrawing();
     sketchingSpline.clear();
     smooth(uvSketch);
+    if (uvSketch.size() < 1) return;
     if (uvSketch[0].x() > uvSketch[uvSketch.size()-1].x()) {
         std::reverse(uvSketch.begin(), uvSketch.end());
     }
