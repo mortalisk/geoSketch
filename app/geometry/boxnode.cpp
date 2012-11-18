@@ -311,10 +311,10 @@ void BoxNode::draw() {
     glDisable(GL_CULL_FACE);
 
 
+    drawChildren();
     if (waterNode->visible)
         waterNode->draw();
 
-    drawChildren();
 
     glColor4f(0.5,0.5,0.5,1.0);
     glEnable(GL_CULL_FACE);
