@@ -208,13 +208,13 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
 
     if (mouseMoved && e->button() == Qt::LeftButton) {
         scene->activeNode->determineActionOnStoppedDrawing();
-        std::cout << "pushing scene to stack" << std::endl;
 
         pushScene();
     }
 }
 
 void MyGLWidget::pushScene() {
+    std::cout << "PUSHING!!" << std::endl;
     stack.push(new Scene(*scene));
     emit sceneChanged(scene);
 }

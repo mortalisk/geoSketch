@@ -37,7 +37,9 @@ void Deposit::prepareForDrawing() {
 
     int fromx = round((point.x()+5)*4);
     int fromy = round((point.z()+5)*4);
-    if (depositing|| amount <= targetAmount) {
+
+    // if we are not done depositing and the previous deposit is done depositing.
+    if ((depositing|| amount <= targetAmount) && (this->previousDeposit == NULL || this->previousDeposit->isDone())) {
         float previousAmount = (*previousDeposit)[fromy][fromx];
         if (previousAmount < 0.1) {
             (*previousDeposit)[fromy][fromx] = 0.1;
@@ -203,23 +205,33 @@ void Deposit::repositionOnSurface(SurfaceNode &surfacenode) {
     Vector3 dirx(cellsize, 0, 0);
     Vector3 diry(0, 0, cellsize);
 
+    if (this->previousDeposit != NULL) {
+    // just copy the previous deposits points, but add the deposited material to the terrain heigth
+        samples = this->previousDeposit->samples;
+        for (int i = 0; i< samples.size(); i++) {
+            for (int j = 0; j<samples[0].size();j++) {
+                samples[i][j] += previousDeposit->deposit2[i][j];
+            }
+        }
+    } else {
     // direction of ray
     Vector3 down(0,-1, 0);
-    for (int i = 0; i<gridsize; i++) {
-        samples.push_back(QVector<Vector3>());
-        for (int j = 0; j < gridsize; j++) {
-            // calculate each point in a grid by sending intersection rays from top
-            QVector<Vector3> points = surfacenode.intersectionPoints(pos, down);
-            if (points.size() > 0) {
-                samples[i].push_back(points[0]);
-            } else {
-                samples[i].push_back(Vector3(pos.x(),FLT_MIN,pos.z()));
-            }
+        for (int i = 0; i<gridsize; i++) {
+            samples.push_back(QVector<Vector3>());
+            for (int j = 0; j < gridsize; j++) {
+                // calculate each point in a grid by sending intersection rays from top
+                QVector<Vector3> points = surfacenode.intersectionPoints(pos, down);
+                if (points.size() > 0) {
+                    samples[i].push_back(points[0]);
+                } else {
+                    samples[i].push_back(Vector3(pos.x(),FLT_MIN,pos.z()));
+                }
 
-            pos += dirx;
+                pos += dirx;
+            }
+            pos = pos -dirx*gridsize;
+            pos += diry;
         }
-        pos = pos -dirx*gridsize;
-        pos += diry;
     }
 
 

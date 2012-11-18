@@ -51,6 +51,7 @@ This thesis presents an approach for creating such a solution, the relevant prob
 % --- OBS, gammel tekst i git commit 53adef7c5ef8730ab96a392efa1a10f1ae289f0b ---
 
 \section{Introduction}
+\label{sec:intro}
 
 
 % --refer to each section at one point in introduction--\\
@@ -75,18 +76,17 @@ This thesis presents an approach for creating such a solution, the relevant prob
 	
 Illustrations are important for geologists and their aspiring students when they are conducting their everyday business. It is normal to make sketched models by hand on either paper or computer. These are used in both professional and educational settings, and facilitate communication. On paper one is of course restricted to making two dimentional drawings. This can be limiting, since the fenomena of geology are of course three dimetional. One can sketch three dimentional fenomena by using perspective drawing techniques, but the model is still confined to the 2D nature of the medium.
 
-This is the problem I am attempting to solve in this project. On the computer it is of course already possible to make 3D models. However, existing tools are often complex, aimed at creating advanced and detailed models, and usually requires training to understand and use. It would therefore be nice to have a possibility to make quick 3D models for illustrative purposes in a simple and intuitive way. This project has laid another brick in the foundation for the future of such illustrative geological modeling techniques. In the last section of the thesis (\secref{conclusion}), I conclude that this has a large potential for use in education, for communication between geologists and in publications about geology.
+This is the problem I am attempting to solve in this project. On the computer it is of course already possible to make 3D models. However, existing tools are often complex, aimed at creating advanced and detailed models, and usually requires training to understand and use. It would therefore be nice to have a possibility to make quick 3D models for illustrative purposes in a simple and intuitive way. This project has laid another brick in the foundation for the future of such illustrative geological modeling techniques. In the last section of the thesis (\secref{sec:conclusion}), I conclude that this has a large potential for use in education, for communication between geologists and in publications about geology.
 
 The basic concept is to make a replacement for pen and paper 2D sketches. In other words not a solution for situations where a high degree of accuracy is needed and/or attainable, but rather when the goal is to illustrate ideas and communicate them. In \secref{sec:eval} I therefore put the most emphasis on the expressive power the final solution gives the user, and less on accuracy and speed. Resulting illustrations that were produced by users of the implementation can be seen in \secref{sec:results}, along with a performance benchmark on different hardware.
 
 It is in publications from the geologic field I have found the most inspiration for this project. Artists in such media often use what I choose to call the ``box-model'' to illustrate concepts. Examples of such illustrations can be seen in \secref{sec:geology}, for example in figure (INSERT REF TO FIGURE). In that section we will also get an introduction to the relevant geologic background and terminology. The illustration is drawn inside a box cutout of the area of interest. This gives a good way to illustrate the spatial relation of elements in the model, like layers of different rock and deposits, rivers, ridges, mountains and the landscape they create together. 
 
-Illustrations using this ``box-model'' gave rise to the approach I have choosen. The user is initially presented with an empty box, and then procedes by outlining on and in this box the particular features he wants to model. An explanation of the use of this technique and all others I have developed can be found in \secref{sec:concept}, while the algorithmic solutions are discussed in \secref{method}. To put that in context I have included a brief report on the state of the art in the fields of Computer modeling and Geological modeling as they relate to this project, in \secref{sec:star}
+Illustrations using this ``box-model'' gave rise to the approach I have choosen. The user is initially presented with an empty box, and then procedes by outlining on and in this box the particular features he wants to model. An explanation of the use of this technique and all others I have developed can be found in \secref{sec:concept}, while the algorithmic solutions are discussed in \secref{sec:method}. To put that in context I have included a brief report on the state of the art in the fields of Computer modeling and Geological modeling as they relate to this project, in \secref{sec:star}
 
 \section{Geologic Background}
 After reading this section, you should have gained a basic understanding of the gological concepts that I wish to model in the solution.
 \label{sec:geology}
-- introduce gelogic terms
 \subsection{Structured geology}
 \subsection{Sedimentary geology}
 \subsection{Rocks}
@@ -98,13 +98,10 @@ After reading this section, you should have gained a basic understanding of the 
 \section{State of the Art}
 \label{sec:star}
 \subsection{Modeling}
-- fundamental part of reasoning\\
-- isolates relevant info\\
-- usefulness\\
-  -- users understanding of relation to reality\\
-- examples (equation, wood models, etc.)
+A model is a physical or conceptual object used to represent something else in a way that isolates the information that is relevant to our intents. Geologists use models for understanding and communicating about phenomena relating to the structure of the earth.
 
 \subsection{Geologic Modeling}
+
 - models subsurface of the earth.\\
 - show examples\\(clay, wood, sand, 2d skethces and drawings, 3d computer models)
 
@@ -158,6 +155,7 @@ After reading this section, you should have gained a basic understanding of the 
 % - mountains
 
 \section{Methodology}
+\label{sec:method}
 To develop a set of procedures and find a good solution to a complicated problem, one will usually need a plan for how to do research and to approach the work itself. We will therefore begin with \secref{subsec:work}, by taking a look at how work was planned and how it progressed, from problem to general idea through reasearch, then implementation and refinement, to the final solution. 
 
 We then proceed to explain the general design, algorithms and data structures used throughout the solution in \secref{subsec:generaldesign}. We explore how they work together to enable the drawing of sketches from input to finished model at a conceptual level.
@@ -482,26 +480,28 @@ This algorithm in gives triangles that follow the entire outline of the deposit 
 When creating a deposit, the layer object will check for previous deposits, and if such exists, the grid data will be reused for the next deposit. This gives not only speed improvement, but also enebles deposits to flow on top of each other.
 
 
-	
-
- 
-\section{Results and performance}
+\section{Results}
+Here we begin by take a look at what can actually be produced by this approach at the current level of development. These results are commented to explain how they are achieved, what they depict and what are the limitations. An evaluation follows in the next section.
+\label{sec:results}
 \subsection{Produced Renderings}
-- compare with goal\\
+\subsubsection{Geologist's drawings}
 - Marie might draw her stuff?
-\subsection{Evaluation}
-- learning\\
-- usability
-\subsection{Performance of program}
-- rendering speed on different hardware
+\subsubsection{Reproduction of initial illustrations}
+- compare with goal\\
+\subsubsection{Other illustrations and possibilities}
 
 \section{Evaluation}
+\label{sec:eval}
+
+- learning\\
+- usability
  -- (focus on expressiveness) -- \\
 - How well problem was solved\\
 - Where it will be used \\
 - Discussion
 
 \section{Conclusion}
+\label{sec:conclusion}
 - Give short summary\\
 - Further work\\
 \\
