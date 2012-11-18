@@ -3,7 +3,6 @@
 #include "surface.h"
 #include "ridgenode.h"
 #include "rivernode.h"
-#include "valleynode.h"
 #include "deposit.h"
 #include "util.h"
 #include <QAction>
