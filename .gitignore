@@ -11,8 +11,8 @@ ui_*
 *.pro.user
 app-build-desktop
 *.aux
+thesis.pdf
 *.log
-*.pdf
 *.backup
 *.tex~
 *.bbl
