@@ -20,6 +20,7 @@ private:
     bool alternateDeposits;
     bool depositing;
     Deposit * previousDeposit;
+    bool hasReset;
 public:
 
     bool isDone() {
@@ -31,12 +32,15 @@ public:
         this->seaLevel = seaLevel;
         diffuse = QVector4D(0.2, 0.3, 0.1, 1.0);
         amount = 0;
+        hasReset = false;
     }
 
     Deposit(Deposit& deposit) : BaseNode(deposit), amount(0), targetAmount(deposit.targetAmount), seaLevel(deposit.seaLevel), flowFrom(deposit.flowFrom), direction(deposit.direction), depositing(deposit.depositing), previousDeposit(previousDeposit) {
-
+        hasReset = false;
     }
-    Deposit(){}
+    Deposit(){
+        hasReset = false;
+    }
 
     virtual Deposit* copy() {
         return new Deposit(*this);
@@ -88,6 +92,8 @@ public:
     }
 
     void prepareForDrawing();
+
+    void resetSimulation();
 };
 
 #endif // DEPOSIT_H

@@ -18,17 +18,16 @@ static void print(QVector<QVector<int> > &  vec) {
 
 void Deposit::prepareForDrawing() {
 
+
+
+    resetSimulation();
+
     if (deposit1.size() == 0) return;
 
     QVector<QVector<float> > * deposited;
     QVector<QVector<float> > * previousDeposit;
-    if (alternateDeposits) {
        deposited = &deposit1;
        previousDeposit = &deposit2;
-    } else {
-       deposited = &deposit2;
-       previousDeposit = &deposit1;
-    }
     //alternateDeposits = !alternateDeposits;
 
 
@@ -193,7 +192,11 @@ void Deposit::exchange(QVector<QVector<float> > * previousDeposit, QVector<QVect
 }
 }
 
-void Deposit::repositionOnSurface(SurfaceNode &surfacenode) {
+void Deposit::resetSimulation() {
+    if (hasReset)
+        return;
+    if ((this->previousDeposit != NULL && !previousDeposit->isDone()))
+        return;
     samples.clear();
 
     int gridsize = 40;
@@ -220,7 +223,7 @@ void Deposit::repositionOnSurface(SurfaceNode &surfacenode) {
             samples.push_back(QVector<Vector3>());
             for (int j = 0; j < gridsize; j++) {
                 // calculate each point in a grid by sending intersection rays from top
-                QVector<Vector3> points = surfacenode.intersectionPoints(pos, down);
+                QVector<Vector3> points = surfaceNode->intersectionPoints(pos, down);
                 if (points.size() > 0) {
                     samples[i].push_back(points[0]);
                 } else {
@@ -236,6 +239,8 @@ void Deposit::repositionOnSurface(SurfaceNode &surfacenode) {
 
 
 
+    amount = 0;
+
     QVector<float> oneRow(gridsize, 0);
     QVector<int> oneIntRow(gridsize, INT_MAX);
 
@@ -245,6 +250,14 @@ void Deposit::repositionOnSurface(SurfaceNode &surfacenode) {
     deposit2.fill(oneRow, gridsize);
 
 
+    hasReset = true;
+
+}
+
+void Deposit::repositionOnSurface(SurfaceNode &surfacenode) {
+    hasReset = false;
+    if (shape != NULL) delete shape;
+    shape = NULL;
 }
 
 
