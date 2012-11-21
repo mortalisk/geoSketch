@@ -11,18 +11,18 @@ private:
     float amount;
     float targetAmount;
     float seaLevel;
-    QVector2D flowFrom;
-    QVector2D direction;
     QVector<QVector<Vector3> > samples;
     QVector<QVector<float> > deposit1;
     QVector<QVector<float> > deposit2;
     QVector<QVector<int> > manhattan;
     bool alternateDeposits;
     bool depositing;
-    Deposit * previousDeposit;
     bool hasReset;
 public:
 
+    QVector2D flowFrom;
+    QVector2D direction;
+    Deposit * previousDeposit;
     bool isDone() {
         return amount > targetAmount;
     }
@@ -31,11 +31,12 @@ public:
     Deposit(QVector2D flowFrom, QVector2D direction, float seaLevel, SurfaceNode * surfaceNode, Deposit * previousDeposit) : BaseNode("deposit"), flowFrom(flowFrom), direction(direction), surfaceNode(surfaceNode), previousDeposit(previousDeposit) {
         this->seaLevel = seaLevel;
         diffuse = QVector4D(0.2, 0.3, 0.1, 1.0);
+        depositing = true;
         amount = 0;
         hasReset = false;
     }
 
-    Deposit(Deposit& deposit) : BaseNode(deposit), amount(0), targetAmount(deposit.targetAmount), seaLevel(deposit.seaLevel), flowFrom(deposit.flowFrom), direction(deposit.direction), depositing(deposit.depositing), previousDeposit(previousDeposit) {
+    Deposit(Deposit& deposit) : BaseNode(deposit), amount(0), targetAmount(deposit.targetAmount), seaLevel(deposit.seaLevel), flowFrom(deposit.flowFrom), direction(deposit.direction), depositing(false), previousDeposit(previousDeposit) {
         hasReset = false;
     }
     Deposit(){

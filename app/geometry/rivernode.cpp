@@ -402,31 +402,56 @@ void RiverNode::fromJsonSubclass(QVariantMap map) {
 }
 
 void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {
-    if (this->deposit != NULL) {
-        deposit->setDepositing(!deposit->isDepositing());
-        return;
-    }
-    for (int i = 0; i < lefts.size()-1; i++) {
-        Vector3 point = surfaceNode.getPointFromUv(lefts[i]);
-        if (point.y() < seaLevel) {
-            //if (i == 0) return;
 
-            // find previous deposit, if any
-            Deposit * p = NULL;
-            foreach(BaseNode* b, surfaceNode.children) {
-                Deposit * c = dynamic_cast<Deposit*>(b);
-                if (c != NULL){
-                    p = c;
-                }
-            }
-
-            Deposit * deposit = new Deposit((lefts[i]+ rigths[i])/2, lefts[i] - lefts[i-1],seaLevel, &surfaceNode, p);
-            surfaceNode.children.push_back(deposit);
-            deposit->setDepositing(true);
-            deposit->parent = &surfaceNode;
-            this->deposit = deposit;
-            surfaceNode.invalidate();
-            return;
+    QVector2D depositFrom;
+    QVector2D depositDirection;
+    QVector4D color;
+    Deposit * p = NULL;
+    // find previous deposit, if any
+    foreach(BaseNode* b, surfaceNode.children) {
+        Deposit * c = dynamic_cast<Deposit*>(b);
+        if (c != NULL){
+            p = c;
         }
     }
+
+    if (this->deposit != NULL) {
+        this->deposit->setDepositing(false);
+        depositFrom = this->deposit->flowFrom + this->deposit->direction.normalized()*0.05;
+        depositDirection = this->deposit->direction;
+        color = this->deposit->diffuse;
+        if (color.x() >= 0.3) {
+            color.setX(color.x() - 0.3);
+            color.setY(color.y() + 0.3);
+        }else {
+            color.setX(color.x() + 0.3);
+            color.setY(color.y() - 0.3);
+        }
+    } else {
+        color = QVector4D(0,0.5,1,1);
+        for (int i = 0; i < lefts.size()-1; i++) {
+            Vector3 point = surfaceNode.getPointFromUv(lefts[i]);
+            if (point.y() < seaLevel) {
+                //if (i == 0) return;
+
+
+               depositFrom = (lefts[i]+ rigths[i])/2;
+               depositDirection =  lefts[i] - lefts[i-1];
+
+                break;
+
+            }
+        }
+    }
+    Deposit * deposit = new Deposit(depositFrom,depositDirection,seaLevel, &surfaceNode, p);
+    deposit->diffuse = color;
+    surfaceNode.children.push_back(deposit);
+    //deposit->setDepositing(true);
+    deposit->parent = &surfaceNode;
+    this->deposit = deposit;
+    //surfaceNode.invalidate();
+
+
+
+    return;
 }

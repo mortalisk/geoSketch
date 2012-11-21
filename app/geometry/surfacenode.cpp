@@ -188,10 +188,7 @@ void SurfaceNode::constructLayer() {
     //QVector<QVector<Vector3 > > featureRows(rows.size(),row);
     foreach (BaseNode * child , children) {
         ISurfaceFeature * feature = dynamic_cast<ISurfaceFeature *>(child);
-        if (feature != NULL) {
-            feature->repositionOnSurface(*this);
-            feature->doTransformSurface(rows, resolution, 10);
-        }
+        inject(feature);
     }
 
 //    for (int i= 0; i<featureRows.size();++i) {
@@ -661,10 +658,13 @@ void SurfaceNode::fromJsonSubclass(QVariantMap map) {
     skip = map["skip"].toInt();
     hasContructedLayer = false;
 
+    Deposit * prev = NULL;
     foreach (BaseNode * c, children) {
         Deposit * d = dynamic_cast<Deposit*>(c);
         if (d) {
             d->surfaceNode = this;
+            d->previousDeposit = prev;
+            prev = d;
         }
     }
 

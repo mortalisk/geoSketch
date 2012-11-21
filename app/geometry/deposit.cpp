@@ -46,69 +46,69 @@ void Deposit::prepareForDrawing() {
         }
 
 
-    //print(manhattan);
+        //print(manhattan);
 
-    exchange(previousDeposit, deposited, 1, 0, fromx, fromy);
+        exchange(previousDeposit, deposited, 1, 0, fromx, fromy);
 
-    //print(manhattan);
+        //print(manhattan);
 
-    exchange(deposited, previousDeposit, 0, 1, fromx, fromy);
+        exchange(deposited, previousDeposit, 0, 1, fromx, fromy);
 
-    deposited = previousDeposit;
+        deposited = previousDeposit;
 
-    QVector<vertex> triangles;
-    for (int y = 0;y< deposited->size()-1; y++) {
-        for (int x = 0; x < (*deposited)[0].size()-1; x++) {
-            float ad = (*deposited)[y][x];
-            float bd = (*deposited)[y][x+1];
-            float cd = (*deposited)[y+1][x];
-            float dd = (*deposited)[y+1][x+1];
-            Vector3 a(samples[y][x].x(), samples[y][x].y() + ad, samples[y][x].z());
-            Vector3 b(samples[y][x+1].x(), samples[y][x+1].y() + bd, samples[y][x+1].z());
-            Vector3 c(samples[y+1][x].x(), samples[y+1][x].y() + cd, samples[y+1][x].z());
-            Vector3 d(samples[y+1][x+1].x(), samples[y+1][x+1].y() + dd, samples[y+1][x+1].z());
-            Vector3 na = (c-a).cross(b-a);
-            Vector3 nb = (a-b).cross(c-b);
-            Vector3 nc = (d-c).cross(a-c);
-            Vector3 nd = (b-d).cross(c-d);
+        QVector<vertex> triangles;
+        for (int y = 0;y< deposited->size()-1; y++) {
+            for (int x = 0; x < (*deposited)[0].size()-1; x++) {
+                float ad = (*deposited)[y][x];
+                float bd = (*deposited)[y][x+1];
+                float cd = (*deposited)[y+1][x];
+                float dd = (*deposited)[y+1][x+1];
+                Vector3 a(samples[y][x].x(), samples[y][x].y() + ad, samples[y][x].z());
+                Vector3 b(samples[y][x+1].x(), samples[y][x+1].y() + bd, samples[y][x+1].z());
+                Vector3 c(samples[y+1][x].x(), samples[y+1][x].y() + cd, samples[y+1][x].z());
+                Vector3 d(samples[y+1][x+1].x(), samples[y+1][x+1].y() + dd, samples[y+1][x+1].z());
+                Vector3 na = (c-a).cross(b-a);
+                Vector3 nb = (a-b).cross(c-b);
+                Vector3 nc = (d-c).cross(a-c);
+                Vector3 nd = (b-d).cross(c-d);
 
-            float threshold = 0.01;
+                float threshold = 0.01;
 
-            if (cd > threshold && bd > threshold) {
+                if (cd > threshold && bd > threshold) {
 
-                if (ad > threshold) {
-                    triangles.push_back(vertex(a, na));
-                    triangles.push_back(vertex(b, nb));
-                    triangles.push_back(vertex(c, nc));
-                }
-                if (dd > threshold) {
-                    triangles.push_back(vertex(b, nb));
-                    triangles.push_back(vertex(d, nd));
-                    triangles.push_back(vertex(c, nc));
-                }
+                    if (ad > threshold) {
+                        triangles.push_back(vertex(a, na));
+                        triangles.push_back(vertex(b, nb));
+                        triangles.push_back(vertex(c, nc));
+                    }
+                    if (dd > threshold) {
+                        triangles.push_back(vertex(b, nb));
+                        triangles.push_back(vertex(d, nd));
+                        triangles.push_back(vertex(c, nc));
+                    }
 
-            } else if (ad > threshold && dd > threshold) {
+                } else if (ad > threshold && dd > threshold) {
 
-                if (bd > threshold) {
-                    triangles.push_back(vertex(a, na));
-                    triangles.push_back(vertex(b, nb));
-                    triangles.push_back(vertex(d, nd));
-                }
-                if (cd > threshold ) {
-                    triangles.push_back(vertex(a, na));
-                    triangles.push_back(vertex(d, nd));
-                    triangles.push_back(vertex(c, nc));
+                    if (bd > threshold) {
+                        triangles.push_back(vertex(a, na));
+                        triangles.push_back(vertex(b, nb));
+                        triangles.push_back(vertex(d, nd));
+                    }
+                    if (cd > threshold ) {
+                        triangles.push_back(vertex(a, na));
+                        triangles.push_back(vertex(d, nd));
+                        triangles.push_back(vertex(c, nc));
+                    }
                 }
             }
         }
-    }
 
-    QVector<Vector3> noOutline;
-//    noOutline.push_back(Vector3(samples[0][0].x(), 5.0, samples[0][0].z()));
-//    noOutline.push_back(Vector3(samples[0][samples[0].size()-1].x(), 5.0, samples[0][samples[0].size()-1].z()));
-//    noOutline.push_back(Vector3(samples[samples.size()-1][samples[0].size()-1].x(), 5.0, samples[samples.size()-1][samples[0].size()-1].z()));
-//    noOutline.push_back(Vector3(samples[samples.size()-1][0].x(), 5.0, samples[samples.size()-1][0].z()));
-    shape = new Surface(triangles,noOutline, false);
+        QVector<Vector3> noOutline;
+    //    noOutline.push_back(Vector3(samples[0][0].x(), 5.0, samples[0][0].z()));
+    //    noOutline.push_back(Vector3(samples[0][samples[0].size()-1].x(), 5.0, samples[0][samples[0].size()-1].z()));
+    //    noOutline.push_back(Vector3(samples[samples.size()-1][samples[0].size()-1].x(), 5.0, samples[samples.size()-1][samples[0].size()-1].z()));
+    //    noOutline.push_back(Vector3(samples[samples.size()-1][0].x(), 5.0, samples[samples.size()-1][0].z()));
+        shape = new Surface(triangles,noOutline, false);
         if (depositing) {
             targetAmount = amount;
         }
@@ -195,7 +195,7 @@ void Deposit::exchange(QVector<QVector<float> > * previousDeposit, QVector<QVect
 void Deposit::resetSimulation() {
     if (hasReset)
         return;
-    if ((this->previousDeposit != NULL && !previousDeposit->isDone()))
+    if ((previousDeposit != NULL && !previousDeposit->isDone()))
         return;
     samples.clear();
 
@@ -208,12 +208,12 @@ void Deposit::resetSimulation() {
     Vector3 dirx(cellsize, 0, 0);
     Vector3 diry(0, 0, cellsize);
 
-    if (this->previousDeposit != NULL) {
+    if (previousDeposit != NULL) {
     // just copy the previous deposits points, but add the deposited material to the terrain heigth
-        samples = this->previousDeposit->samples;
+        samples = previousDeposit->samples;
         for (int i = 0; i< samples.size(); i++) {
             for (int j = 0; j<samples[0].size();j++) {
-                samples[i][j] += previousDeposit->deposit2[i][j];
+                samples[i][j] = Vector3(samples[i][j].x(),samples[i][j].y() + previousDeposit->deposit2[i][j], samples[i][j].z());
             }
         }
     } else {

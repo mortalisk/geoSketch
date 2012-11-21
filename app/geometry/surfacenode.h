@@ -65,6 +65,13 @@ public slots:
     void makeRidgeNode();
 
     void makeValleyNode();
+
+    void inject(ISurfaceFeature * feature) {
+        if (feature != NULL) {
+            feature->repositionOnSurface(*this);
+            feature->doTransformSurface(rows, resolution, 10);
+        }
+    }
 };
 
 #endif // SURFACENODE_H

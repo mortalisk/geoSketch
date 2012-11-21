@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include "rivernode.h"
 #include <QMenu>
+#include "deposit.h"
 
 MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
         QGLWidget(*glf,parent), move(0.01f)
@@ -392,12 +393,17 @@ void MyGLWidget::createDeposits() {
 
     if (riverNode != NULL) {
         activeSurface = qobject_cast<SurfaceNode *>(riverNode->parent);
+        if (activeSurface != NULL) {
+            riverNode->createDeposit(seaLevel, *activeSurface);
+        }
+    } else {
+        Deposit * dep = qobject_cast<Deposit *>(scene->activeNode);
+        if (dep  != NULL) {
+            dep->setDepositing(!dep->isDepositing());
+        }
     }
 
-    if (activeSurface != NULL) {
-        riverNode->createDeposit(seaLevel, *activeSurface);
-    } else {
-        std::cerr << "No active RiverNode and/or SurfaceNode in createDeposits in glwidget" << std::endl;
-    }
+
+
 }
 
