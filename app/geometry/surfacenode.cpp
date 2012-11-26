@@ -43,6 +43,8 @@ void SurfaceNode::invalidate() {
 }
 
 void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) { 
+    bool waterNode = spline.getPoints().size() == 2;
+
     Vector3 splinep1 = spline.getPoints()[0];
     Vector3 splinep2 = spline.getPoints()[1];
     Vector3 belowp = belowSpline.getPoints()[0];
@@ -87,20 +89,37 @@ void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>&
             }
 
             if (intersected) {
+
+
+
+
                 if (points[i].y() > belowPoints[j].y()) {
 
                     QVector<Vector3> polygon;
+
+                    if (previousInterSection != 0 && waterNode)
+                        boxoutline.push_back(previousInterSectionPoint);
                     polygon.push_back(previousInterSectionPoint);
                     for (int k = previousInterSection; k <= i; k++) {
                         polygon.push_back(points[k]);
+                        if (!waterNode)
+                            boxoutline.push_back(points[k]);
                     }
                     polygon.push_back(intersection);
                     for (int k = j; k >= previousInterSectionBelow; k--) {
                         polygon.push_back(belowPoints[k]);
                     }
 
+
                     polygons.push_back(polygon);
 
+
+                } else if (!waterNode){
+                    if (previousInterSectionBelow != 0)
+                        boxoutline.push_back(previousInterSectionPoint);
+                    for (int k = previousInterSectionBelow; k <= j; k++) {
+                        boxoutline.push_back(belowPoints[k]);
+                    }
                 }
                 previousInterSectionPoint = intersection;
                 previousInterSection = i+1;
@@ -130,9 +149,11 @@ void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>&
         triangles.push_back(vertex(c,normal));
     }
 
-    // create line
-    for (int i = 0;i<points.size();i++) {
-        boxoutline.push_back(points[i]);
+    // create line for water
+    if(waterNode) {
+        for (int i = 0;i<points.size();i++) {
+            boxoutline.push_back(points[i]);
+        }
     }
 
 }
