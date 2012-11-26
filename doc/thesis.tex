@@ -7,6 +7,9 @@
 \usepackage{algpseudocode}
 \usepackage{graphicx}
 
+\setlength\fboxsep{0pt}
+\setlength\fboxrule{0.5pt}
+
 \setcounter{secnumdepth}{5}
 
 \DeclareGraphicsExtensions{.pdf,.png,.jpg}
@@ -28,11 +31,10 @@
 
 \begin{document}
 
-\onecolumn
 \maketitle
 
 
-\onecolumn
+\clearpage
 \begin{abstract}
 Drawing three dimentional models of geological phenomena is today a process requiring training in specific programs, and can be a time consuming process. For illustration and communication, geologists therefore often limit themselves to drawing on paper or in general two dimentional drawing programs on the computer.
 
@@ -41,12 +43,12 @@ I propose that it would be helpful for geologists to be able to create such illu
 This thesis presents an approach for creating such a solution, the relevant problems that was encountered while developing such a solution, and finally gives an assessment of how this approach worked and how the work can be continued.
 \end{abstract}
 
-\onecolumn
+\clearpage
 \tableofcontents 
 
 
 
-\onecolumn
+\clearpage
 
 % --- OBS, gammel tekst i git commit 53adef7c5ef8730ab96a392efa1a10f1ae289f0b ---
 
@@ -83,7 +85,7 @@ The basic concept is to make a replacement for pen and paper 2D sketches. In oth
 It is in publications from the geologic field I have found the most inspiration for this project. Artists in such media often use what I choose to call the ``box-model'' to illustrate concepts. Examples of such illustrations can be seen in \secref{sec:geology}, for example in figure (INSERT REF TO FIGURE). In that section we will also get an introduction to the relevant geologic background and terminology. The illustration is drawn inside a box cutout of the area of interest. This gives a good way to illustrate the spatial relation of elements in the model, like layers of different rock and deposits, rivers, ridges, mountains and the landscape they create together. 
 
 Illustrations using this ``box-model'' gave rise to the approach I have choosen. The user is initially presented with an empty box, and then procedes by outlining on and in this box the particular features he wants to model. An explanation of the use of this technique and all others I have developed can be found in \secref{sec:concept}, while the algorithmic solutions are discussed in \secref{sec:method}. To put that in context I have included a brief report on the state of the art in the fields of Computer modeling and Geological modeling as they relate to this project, in \secref{sec:star}
-
+\clearpage
 \section{Geologic Background}
 After reading this section, you should have gained a basic understanding of the gological concepts that I wish to model in the solution.
 \label{sec:geology}
@@ -94,7 +96,7 @@ After reading this section, you should have gained a basic understanding of the 
 \subsection{Faults}
 \subsection{Rivers}
 
-
+\clearpage
 \section{State of the Art}
 \label{sec:star}
 \subsection{Modeling}
@@ -115,10 +117,19 @@ A model is a physical or conceptual object used to represent something else in a
 - explain different approaches (sketch based, procedural)\\
 - show examples(teddy, z-brush, etc..)\\
 
-
+\clearpage
 \section{Basic Concept}
 \label{sec:concept}
 \subsection{Overview}
+The solution that has been implemented for this thesis is introduced here. The basic concepts of how the program works is presented with screenshots. This is not indended to be a user manual, but rather introduce the concepts that we will be talking about in section \secref{sec:method}. 
+
+The basic idea for the solution, is based on a cube on which the user will draw layers. On these layers further details will them be possible to create by various means. Most of the input consists of drawing simple curves on surfaces, and then indicate what kind of feature is wanted. However, it was an idea from early on in the project to see if it would be possible to make a combination of a sketching approach to modeling with a procedural approach. The deposit feature has been implemented by such a method, thus giving two complementary ways to create surfaces. In any way all features are created based on user input.
+
+Once input has been gathered the program interprets it, and creates an internal model. The internal model is then used to compute a three dimentional geometry based on triangles, which can then be visualized on the computers screen via the graphics card. The user will use this generated geometry as visual feedback, and decide whether it is close to what he intended, or whether he needs to give additional input or change his input to achieve what he wants. Thus the process continues until a satisfactory result has been reached (see FIGURE for an illustration of this process). Now, the user can store the work for later, send it to someone else, or take screenshots for use in a paper, lecture etc.
+
+The internal format tries to capture the modelers intent as well as possible. It is the the meaning of the input that is stored, not the gemoetry or how it looks. As we will see, this enables a modelling aproach that let's him to go back and change earlier things in the model without having to redraw everything, since all the geometry can always be recomputed from the internal format.
+
+
 - Give an overview of solution\\
 - Visual model of solution
   -- idea/input/feedback/modification/
@@ -153,7 +164,7 @@ A model is a physical or conceptual object used to represent something else in a
 % - surfaces\\
 % - rivers and overlapping\\
 % - mountains
-
+\clearpage
 \section{Methodology}
 \label{sec:method}
 To develop a set of procedures and find a good solution to a complicated problem, one will usually need a plan for how to do research and to approach the work itself. We will therefore begin with \secref{subsec:work}, by taking a look at how work was planned and how it progressed, from problem to general idea through reasearch, then implementation and refinement, to the final solution. 
@@ -479,10 +490,64 @@ This algorithm in gives triangles that follow the entire outline of the deposit 
 
 When creating a deposit, the layer object will check for previous deposits, and if such exists, the grid data will be reused for the next deposit. This gives not only speed improvement, but also enebles deposits to flow on top of each other.
 
-
+\clearpage
 \section{Results}
-Here we begin by take a look at what can actually be produced by this approach at the current level of development. These results are commented to explain how they are achieved, what they depict and what are the limitations. An evaluation follows in the next section.
+Here we begin by taking a look at each feature seperately. Then we will see some complete sceneries that demonstrate what can actually be produced by the implemented solutions at the current level of development. These results are commented to explain how they are achieved, what they depict and what are the limitations. An evaluation follows in the next section.
 \label{sec:results}
+
+\subsection{Layers}
+Layers can be created fast and easy. In figure \ref{fig:layerCreate} we see how a layer is made by first drawing the four curves on the side of the cube, and then letting the program create the layer surface. A surface like this can be created in about 30 seconds.
+
+The layer can also be edited. When editing, the old curves are shown with a red stippled line while the new line that is the result of oversketching is drawn with a black solid line, as can be seen in figure \ref{fig:layerEdit}. Once done editing the program will compute new geometry for the layer based on the new curves.
+
+New layers may be added on top of existing layers as seen in figure \ref{fig:layerNew}. If the layers intersect, only the part that is above the previously created layers will be visible. If the new layer intersects with previously drawn layers, only the part that is above will be drawn, as seen in figure \ref{fig:layerIntersect}
+
+\begin{figure}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerDraw.png}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerCreate.png}
+ \caption{The layer is represented by the four curves the user draws, plus the lower line that represents the top of all previously drawn lines. The layer geometry is generated between these two lines.}
+ \label{fig:layerCreate}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdit.png}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdited.png}
+ \caption{Layers can be edited. The left hand picture shows the old curves in red, and the new curves in black. On the right we see the resulting layer after editing.}
+ \label{fig:layerEdit}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNew.png}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNewMarked.png}
+ \caption{It is possible to create multiple layers as can be seen here. When one has multiple layers, it is also possible to select one of the layers by right clicking it, as seen on the right. When a layer is selected, it is highlighted by a slightly brighter color, and it's outline is drawn in red.}
+ \label{fig:layerNew}
+\end{figure}
+
+\begin{figure}
+ \centering
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/simpleLayerIntersect.png}
+ \caption{Layers might also intersect with each other. In that case what is above of the last drawn layer will be what is visible, while what is below is not part of the new layer.}
+ \label{fig:layerIntersect}
+\end{figure}
+\clearpage
+
+\subsection{Rivers}
+Rivers can be drawn on the surfaces by indicating where it will run. The program then creates a river as shown in figure \ref{fig:riverDraw}. It can also be changed by oversketching as shown in figure \ref{fig:riverChange}
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDraw.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDrawn.png}
+ \caption{Sketching of rivers by indicating where it shoudl run, and letting the program create a river along this path. }
+ \label{fig:riverDraw}
+\end{figure}
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChange.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChanged.png}
+ \caption{Changing a river is possible by oversketching }
+ \label{fig:riverChange}
+\end{figure}
+
 \subsection{Produced Renderings}
 \subsubsection{Geologist's drawings}
 - Marie might draw her stuff?
@@ -490,6 +555,7 @@ Here we begin by take a look at what can actually be produced by this approach a
 - compare with goal\\
 \subsubsection{Other illustrations and possibilities}
 
+\clearpage
 \section{Evaluation}
 \label{sec:eval}
 
@@ -500,6 +566,7 @@ Here we begin by take a look at what can actually be produced by this approach a
 - Where it will be used \\
 - Discussion
 
+\clearpage
 \section{Conclusion}
 \label{sec:conclusion}
 - Give short summary\\

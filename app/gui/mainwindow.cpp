@@ -33,8 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QAction * seaButton = findChild<QAction*>("actionSea");
     QAction * depositButton = findChild<QAction*>("actionDeposit");
 
-    layerChooser = new QComboBox();
-    toolBar->addWidget(layerChooser);
+//    layerChooser = new QComboBox();
+//    toolBar->addWidget(layerChooser);
 
     glFormat = new QGLFormat;
     glFormat->setProfile(QGLFormat::CompatibilityProfile);//CoreProfile);
@@ -44,8 +44,10 @@ MainWindow::MainWindow(QWidget *parent) :
     QObject::connect(undoButton,SIGNAL(activated()), gl, SLOT(undo()));
     QObject::connect(layerButton,SIGNAL(activated()), gl, SLOT(makeLayer()));
     QObject::connect(newLayerButton,SIGNAL(activated()), gl, SLOT(newLayer()));
-    QObject::connect(gl,SIGNAL(sceneChanged(Scene *)), this, SLOT(updateLayerChooser(Scene *)));
-    QObject::connect(layerChooser,SIGNAL(activated(int)), gl, SLOT(setLayer(int)));
+    //QObject::connect(gl,SIGNAL(sceneChanged(Scene *)), this, SLOT(updateLayerChooser(Scene *)));
+
+    QObject::connect(gl,SIGNAL(itemSelected(Scene *, BaseNode*)), this, SLOT(updateMenu(Scene *, BaseNode*)));
+    //QObject::connect(layerChooser,SIGNAL(activated(int)), gl, SLOT(setLayer(int)));
     QObject::connect(toggleVisibility,SIGNAL(activated()), this, SLOT(toggleVisibility()));
     QObject::connect(colorButton,SIGNAL(activated()), this, SLOT(setColor()));
     QObject::connect(editLayer,SIGNAL(activated()), gl, SLOT(editLayer()));
@@ -98,6 +100,10 @@ void MainWindow::toggleVisibility() {
 void MainWindow::setColor() {
     QColor c = QColorDialog::getColor();
     gl->setColor(layerChooser->currentIndex(),c);
+
+}
+
+void MainWindow::updateMenu(Scene *, BaseNode*) {
 
 }
 

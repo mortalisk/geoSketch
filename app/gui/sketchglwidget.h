@@ -71,7 +71,7 @@ public:
 
 
 signals:
-    void sceneChanged(Scene * s);
+    void itemSelected(Scene *, BaseNode *);
 
 public slots:
     void setLayer(int);

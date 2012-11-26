@@ -192,6 +192,7 @@ void BaseNode::drawChildren() {
 	}
 }
 void BaseNode::drawSplines() {
+
     drawSpline(sketchingSpline, 1);
     drawSpline(spline, 0);
 }
@@ -224,7 +225,7 @@ void BaseNode::drawSelf() {
 	glTranslatef(position.x(), position.y(), position.z());
 
 	if (shape != NULL) {
-                shape->drawLines(!visible);
+                shape->drawLines(!visible, active?1:0,0,0,1);
                 if (visible) {
                     QVector4D color = diffuse;
                     if (active) {

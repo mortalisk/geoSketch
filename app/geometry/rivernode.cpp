@@ -289,7 +289,8 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
 //                    float depth1 = 0.2*distDB;
 //                    float depth =
 
-                    float depth = depthOfRiver(fmin(distAB, distCD), 0.03*resolution , -0.1);
+                    float maxDepth = -0.2;
+                    float depth = depthOfRiver(fmin(distAB, distCD), 0.03*resolution , maxDepth);
 
                     rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + depth,rows[z][x].z());
                 }
@@ -443,13 +444,17 @@ void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {
             }
         }
     }
-    Deposit * deposit = new Deposit(depositFrom,depositDirection,seaLevel, &surfaceNode, p);
-    deposit->diffuse = color;
-    surfaceNode.children.push_back(deposit);
-    //deposit->setDepositing(true);
-    deposit->parent = &surfaceNode;
-    this->deposit = deposit;
-    //surfaceNode.invalidate();
+
+    if (depositFrom.x() >= 0 && depositFrom.x() <= 1 && depositFrom.y() >= 0 && depositFrom.y() <= 1) {
+        Deposit * deposit = new Deposit(depositFrom,depositDirection,seaLevel, &surfaceNode, p);
+        deposit->diffuse = color;
+        surfaceNode.children.push_back(deposit);
+        //deposit->setDepositing(true);
+        deposit->parent = &surfaceNode;
+        this->deposit = deposit;
+        //surfaceNode.invalidate();
+
+    }
 
 
 

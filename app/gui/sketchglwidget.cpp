@@ -200,11 +200,13 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
         Vector3 dir = findMouseDirection(e);
         BaseNode * previous = scene->activeNode;
         scene->selectActiveNode(scene->camera.position, dir);
-        if (scene->activeNode && scene->activeNode == previous) {
-            QMenu context(this);
-            scene->activeNode->addActions(&context);
-            context.exec(e->globalPos());
-        }
+        if (scene->activeNode)
+            emit(itemSelected(scene,scene->activeNode));
+//        if (scene->activeNode && scene->activeNode == previous) {
+//            QMenu context(this);
+//            scene->activeNode->addActions(&context);
+//            context.exec(e->globalPos());
+//        }
     }
 
     if (mouseMoved && e->button() == Qt::LeftButton) {
@@ -217,7 +219,8 @@ void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
 void MyGLWidget::pushScene() {
     std::cout << "PUSHING!!" << std::endl;
     stack.push(new Scene(*scene));
-    emit sceneChanged(scene);
+    if (scene->activeNode)
+        emit itemSelected(scene, scene->activeNode);
 }
 
 void MyGLWidget::undo(){
@@ -232,7 +235,8 @@ void MyGLWidget::undo(){
 
     scene->camera = c;
 
-    emit sceneChanged(scene);
+    if (scene->activeNode)
+        emit itemSelected(scene, scene->activeNode);
 }
 
 bool MyGLWidget::isMousePressed(int button) {
@@ -290,7 +294,8 @@ void MyGLWidget::wheelEvent(QWheelEvent *e) {
 void MyGLWidget::makeLayer() {
     scene->makeLayer();
     pushScene();
-    emit sceneChanged(scene);
+    if (scene->activeNode)
+        emit itemSelected(scene, scene->activeNode);
 }
 
 void MyGLWidget::animate() {
@@ -303,17 +308,34 @@ void MyGLWidget::setLayer(int i) {
 }
 
 void MyGLWidget::toggleVisibility(int i) {
-    if (i >= 0 && i < scene->boxNode->children.size())
-        scene->boxNode->children[i]->visible = !scene->boxNode->children[i]->visible;
+
+    BaseNode* node = scene->activeNode;
+    if (node) {
+        node->visible = !node->visible;
+
+        bool wasSurface = false;
+        foreach (BaseNode* c,scene->boxNode->children) {
+
+            if (wasSurface) {
+                c->visible = node->visible;
+            }
+            if (c==node) {
+                wasSurface =true;
+            }
+        }
+    }
+
 }
 
 void MyGLWidget::setColor(int i, QColor c) {
-    QVector4D& color = scene->boxNode->children[i]->diffuse;
-    color.setX(c.red()/255.0);
-    color.setY(c.green()/255.0);
-    color.setZ(c.blue()/255.0);
-    color.setW(c.alpha()/255.0);
-    scene->boxNode->children[i]->ambient = color;
+    if(scene->activeNode) {
+        QVector4D& color = scene->activeNode->diffuse;
+        color.setX(c.red()/255.0);
+        color.setY(c.green()/255.0);
+        color.setZ(c.blue()/255.0);
+        color.setW(c.alpha()/255.0);
+        scene->activeNode->ambient = QVector4D(0,0,0,1);
+    }
 }
 
 void MyGLWidget::editLayer() {

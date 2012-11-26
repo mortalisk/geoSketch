@@ -11,11 +11,11 @@ Shape::Shape() : displayList(-1)
 Shape::~Shape() {
 }
 
-void Shape::drawLines(bool stipple) {
+void Shape::drawLines(bool stipple, float red, float green, float blue, float alpha) {
     glLineWidth(2.0);
-    float c[] = {0.0,0.0,0.0,1.0};
+    float c[] = {red,green,blue,alpha};
     glMaterialfv(GL_FRONT,GL_AMBIENT_AND_DIFFUSE,c);
-
+    glColor4fv(c);
     if (stipple) {
         glLineStipple(1, 0xAAAA);
         glEnable(GL_LINE_STIPPLE);

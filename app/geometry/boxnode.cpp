@@ -308,7 +308,6 @@ void BoxNode::updateCurrentBelowNode() {
 void BoxNode::draw() {
 
     glPushMatrix();
-    glDisable(GL_CULL_FACE);
 
 
     drawChildren();
@@ -316,9 +315,7 @@ void BoxNode::draw() {
         waterNode->draw();
 
 
-    glColor4f(0.5,0.5,0.5,1.0);
-    glEnable(GL_CULL_FACE);
-    glCullFace(GL_FRONT);
+    //glColor4f(0,0,0,1);
     drawSelf();
     glDisable(GL_CULL_FACE);
 
@@ -333,13 +330,17 @@ void BoxNode::drawSelf() {
     glDisable(GL_LIGHT0);
     foreach(BaseNode * s, surfaces) {
         s->drawSplines();
-        s->shape->drawLines(false);
+        s->shape->drawLines(false, activeSurface==s?1:0, 0,0,activeSurface==s?1:0.3);
     }
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
     foreach(BaseNode * s, surfaces) {
         glColor4f(0.5,0.5,0.5,0.5);
         s->shape->drawShape(ambient, diffuse);
     }
 
+    glDisable(GL_CULL_FACE);
 
 
     glEnable(GL_LIGHTING);

@@ -68,7 +68,7 @@ void Scene::selectActiveNode(Vector3 &from, Vector3 &direction) {
 
 void Scene::makeLayer() {
     if (editLayerNo == -1) {
-        activeNode = boxNode->makeLayer();
+        boxNode->makeLayer();
     }
 }
 

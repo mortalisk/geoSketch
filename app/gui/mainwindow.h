@@ -30,6 +30,7 @@ private slots:
     void toggleVisibility();
     void setColor();
     void editLayer();
+    void updateMenu(Scene *, BaseNode*);
 };
 
 #endif // MAINWINDOW_H
