@@ -38,7 +38,9 @@ public:
     virtual void determineActionOnStoppedDrawing();
 
 
-
+//    void draw() {
+//        BaseNode::draw();
+//    }
 
     void drawChildren();
 
@@ -56,9 +58,17 @@ public:
         return QString("SurfaceNode");
     }
 
+    void clearSketch() {
+        uvCoordinateSpline.clear();
+        uvSketchingSpline.clear();
+        uvSmoothed.clear();
+        spline.clear();
+        sketchingSpline.clear();
+    }
+
     void smoothSketchUv();
 
-    void addSubclassActions(QMenu *menu);
+    void addSubclassActions(QToolBar *menu);
     static QVector<Vector3> intersectionOnRows(Vector3& from, Vector3& direction, QVector<QVector<Vector3> > & rows, float &s, float&t, int skip);
 public slots:
     void makeRiverNode();

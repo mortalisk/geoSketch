@@ -126,7 +126,7 @@ void BoxNode::makeWaterNode() {
     waterNode->below = bottomDummyNode;
     waterNode->setActive(false);
     waterNode->visible = false;
-    waterNode->diffuse = QVector4D(0.5,0.5,1.0,0.5);
+    waterNode->diffuse = QVector4D(0.3,0.3,1.0,0.5);
 
 }
 
@@ -271,11 +271,11 @@ void BoxNode::childDeleted(BaseNode *child) {
         }
 }
 
-BaseNode* BoxNode::makeLayer() {
+void BoxNode::makeLayer() {
 
     if (frontNode->spline.getPoints().size() < 1||rightNode->spline.getPoints().size() <1
             ||backNode->spline.getPoints().size() <1||leftNode->spline.getPoints().size() <1)
-        return this;
+        return;
 
     SurfaceNode * below = currentBelowNode;
 
@@ -293,16 +293,20 @@ BaseNode* BoxNode::makeLayer() {
     waterNode->below = currentBelowNode;
     waterNode->invalidate();
 
-    return n;
+    emit madeNode( n);
 }
 
 void BoxNode::updateCurrentBelowNode() {
-    SurfaceNode * top = dynamic_cast<SurfaceNode*>(children[children.size()-1]);
-    currentBelowNode = new SurfaceNode(*currentBelowNode);
-    currentBelowNode->front.updateForBelowNode(top->front);
-    currentBelowNode->back.updateForBelowNode(top->back);
-    currentBelowNode->left.updateForBelowNode(top->left);
-    currentBelowNode->right.updateForBelowNode(top->right);
+    if (children.size() == 0) {
+        currentBelowNode = new SurfaceNode(*bottomDummyNode);
+    }else {
+        SurfaceNode * top = dynamic_cast<SurfaceNode*>(children[children.size()-1]);
+        currentBelowNode = new SurfaceNode(*currentBelowNode);
+        currentBelowNode->front.updateForBelowNode(top->front);
+        currentBelowNode->back.updateForBelowNode(top->back);
+        currentBelowNode->left.updateForBelowNode(top->left);
+        currentBelowNode->right.updateForBelowNode(top->right);
+    }
 }
 
 void BoxNode::draw() {
@@ -311,18 +315,24 @@ void BoxNode::draw() {
 
 
     drawChildren();
-    if (waterNode->visible)
+    if (waterNode->visible) {
+       //glEnable(GL_CULL_FACE);
         waterNode->draw();
+
+        //glDisable(GL_CULL_FACE);
+    }
 
 
     //glColor4f(0,0,0,1);
     drawSelf();
-    glDisable(GL_CULL_FACE);
+    //glDisable(GL_CULL_FACE);
 
     glPopMatrix();
 }
 
 void BoxNode::drawSelf() {
+
+    if (!visible) return;
     //Node::drawSelf();
     glTranslatef(position.x(), position.y(), position.z());
 
@@ -346,6 +356,19 @@ void BoxNode::drawSelf() {
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
+}
+
+
+void BoxNode::addSubclassActions(QToolBar * menu) {
+    QList<QAction*> opts;
+
+    if (frontNode->spline.getPoints().size() > 2) {
+        QAction * actionMakeLayer = new QAction("Make Layer", menu);
+        QObject::connect(actionMakeLayer,SIGNAL(triggered()), this, SLOT(makeLayer()));
+        opts.append(actionMakeLayer);
+    }
+
+    menu->addActions(opts);
 }
 
 void BoxNode::addSubclassJson(QVariantMap &map) {

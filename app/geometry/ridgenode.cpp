@@ -3,6 +3,7 @@
 #include "surfacenode.h"
 #include "surface.h"
 #include <QVector2D>
+#include <GL/glew.h>
 
 RidgeNode::RidgeNode(QVector<QVector2D> uv) : BaseNode("rigde"), uv(uv)
 {
@@ -254,11 +255,24 @@ void RidgeNode::repositionOnSurface(SurfaceNode &surfacenode) {
     makeWall();
 }
 
+void RidgeNode::draw() {
+    if (active) {
+        glDisable(GL_DEPTH_TEST);
+        BaseNode::draw();
+        glEnable(GL_DEPTH_TEST);
+    }else {
+        BaseNode::draw();
+    }
+}
+
 void RidgeNode::drawSelf() {
-    if (active)
+
+    if (active) {
         BaseNode::drawSelf();
-    else
+    }
+    else {
         drawSplines();
+    }
 }
 
 void RidgeNode::addSubclassJson(QVariantMap &map) {

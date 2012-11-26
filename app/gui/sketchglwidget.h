@@ -64,11 +64,11 @@ public:
 
     void pushScene();
 
-    void toggleVisibility(int i);
 
-    void setColor(int i, QColor c);
+    void setColor( QColor c);
 
 
+    void addActions(QToolBar* menu);
 
 signals:
     void itemSelected(Scene *, BaseNode *);
@@ -88,6 +88,11 @@ public slots:
     void open();
     void seaLevel();
     void createDeposits();
+
+    void toggleVisibility();
+
+    void setColor();
+    void showSea(bool);
 
 };
 

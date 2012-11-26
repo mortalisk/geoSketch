@@ -106,15 +106,21 @@ void BaseNode::doOversketch() {
     moveSketchingPointsToSpline();
 }
 
-void BaseNode::addActions(QMenu * menu) {
+void BaseNode::addActions(QToolBar * menu) {
     QList<QAction*> opts;
-    addSubclassActions(menu);
 
-    QAction * actionDelete = new QAction("delete", menu);
+    QAction * actionDelete = new QAction("Delete", menu);
     opts.append(actionDelete);
     connect(actionDelete,SIGNAL(triggered()), this, SLOT(deleteItem()));
 
+    QAction * actionClear = new QAction("Clear", menu);
+    opts.append(actionClear);
+    connect(actionClear,SIGNAL(triggered()), this, SLOT(clearSketch()));
+
     menu->addActions(opts);
+
+    menu->addSeparator();
+    addSubclassActions(menu);
 }
 
 void BaseNode::deleteChild(BaseNode *child) {
@@ -168,10 +174,6 @@ void BaseNode::correctSketchingDirection() {
 
 
     sketchingSpline.smooth();
-}
-
-BaseNode * BaseNode::makeLayer() {
-    return NULL;
 }
 
 QVector<Vector3> BaseNode::intersectionPoints(Vector3 from, Vector3 direction) {

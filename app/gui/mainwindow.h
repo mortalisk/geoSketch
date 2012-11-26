@@ -27,8 +27,6 @@ private:
     MyGLWidget * gl;
 private slots:
     void updateLayerChooser(Scene * s);
-    void toggleVisibility();
-    void setColor();
     void editLayer();
     void updateMenu(Scene *, BaseNode*);
 };

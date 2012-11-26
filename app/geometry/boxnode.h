@@ -41,8 +41,17 @@ public:
     void determineActionOnStoppedDrawing();
     void draw();
     void drawSelf();
-    BaseNode * makeLayer();
     void makeSuggestionFor(SideNode* side);
+
+    void clearSketch() {
+        frontNode->clearSketch();
+
+        backNode->clearSketch();
+
+        leftNode->clearSketch();
+
+        rightNode->clearSketch();
+    }
 
     void updateCurrentBelowNode();
 
@@ -69,6 +78,13 @@ public:
     void addSubclassJson(QVariantMap& map);
 
     void fromJsonSubclass(QVariantMap map);
+
+    void addSubclassActions(QToolBar *);
+
+public slots:
+    void makeLayer();
+signals:
+    void madeNode(BaseNode *);
 };
 
 #endif // BOXNODE_H

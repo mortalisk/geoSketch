@@ -32,6 +32,8 @@ public:
 
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
 
+    void draw();
+
     void drawSelf();
 
     void determineActionOnStoppedDrawing();
@@ -43,6 +45,8 @@ public:
     QString getTypeId() {
         return QString("RidgeNode");
     }
+
+    void addSubclassActions(QToolBar *){};
 
 
 

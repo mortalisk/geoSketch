@@ -73,6 +73,8 @@ public:
 
     }
 
+    void addSubclassActions(QToolBar *) {};
+
     virtual void fromJsonSubclass(QVariantMap map) {
         flowFrom.setX(map["flowFrom"].toMap()["x"].toDouble());
         flowFrom.setY(map["flowFrom"].toMap()["y"].toDouble());

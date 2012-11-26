@@ -103,12 +103,30 @@ void Scene::editLayer() {
             s->spline.clear();
             s->spline.isSuggestion = true;
         }
-        foreach(BaseNode* s, boxNode->children) {
-            SurfaceNode * node2 = qobject_cast<SurfaceNode*>(s);
-            if (node2 && node2->below == node) {
-                node2->invalidate();
+
+        bool hitIt = false;
+        QVector<BaseNode*> changes;
+        for (int i = 0; i<boxNode->children.size();i++) {
+            BaseNode* s =  boxNode->children[i];
+            if (s == node) {
+                hitIt = true;
+            } else if (hitIt) {
+                changes.append(s);
+                boxNode->children.remove(i);
+                i--;
             }
+
         }
+        boxNode->currentBelowNode = node->below;
+        boxNode->updateCurrentBelowNode();
+        foreach(BaseNode * n,changes) {
+            SurfaceNode * s =  qobject_cast<SurfaceNode*>(n);
+            s->below = boxNode->currentBelowNode;
+            s->invalidate();
+            boxNode->children.append(s);
+            boxNode->updateCurrentBelowNode();
+        }
+
     }
 }
 

@@ -24,23 +24,11 @@
     <string>toolBar</string>
    </property>
    <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
+    <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionUndo"/>
-   <addaction name="actionSave"/>
-   <addaction name="actionOpen"/>
-   <addaction name="actionNewLayer"/>
-   <addaction name="actionMakeLayer"/>
-   <addaction name="actionEditLayer"/>
-   <addaction name="actionVisibility"/>
-   <addaction name="actionColor"/>
-   <addaction name="actionMakeRiver"/>
-   <addaction name="actionDeposit"/>
-   <addaction name="actionMakeRidge"/>
-   <addaction name="actionSea"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -48,136 +36,22 @@
      <x>0</x>
      <y>0</y>
      <width>737</width>
-     <height>25</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionUndo"/>
    </widget>
    <widget class="QMenu" name="menuLayer">
     <property name="title">
      <string>Layer</string>
     </property>
-    <addaction name="actionNewLayer"/>
-    <addaction name="actionMakeLayer"/>
-    <addaction name="actionVisibility"/>
-    <addaction name="actionColor"/>
    </widget>
    <addaction name="menuEdit"/>
    <addaction name="menuLayer"/>
   </widget>
-  <action name="actionUndo">
-   <property name="icon">
-    <iconset>
-     <normaloff>:/icons/edit-undo.png</normaloff>:/icons/edit-undo.png</iconset>
-   </property>
-   <property name="text">
-    <string>Undo</string>
-   </property>
-   <property name="toolTip">
-    <string>Click to undo last action</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+Z</string>
-   </property>
-  </action>
-  <action name="actionMakeLayer">
-   <property name="text">
-    <string>Make Layer</string>
-   </property>
-   <property name="toolTip">
-    <string>Click to generate layer</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+M</string>
-   </property>
-  </action>
-  <action name="actionNewLayer">
-   <property name="text">
-    <string>New Layer</string>
-   </property>
-   <property name="toolTip">
-    <string>Click to start drawing a new layer</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+N</string>
-   </property>
-  </action>
-  <action name="actionVisibility">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Visibility</string>
-   </property>
-   <property name="toolTip">
-    <string>Toggle visibility of current layer</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+.</string>
-   </property>
-  </action>
-  <action name="actionColor">
-   <property name="text">
-    <string>Color</string>
-   </property>
-   <property name="toolTip">
-    <string>Click to choose color</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+K</string>
-   </property>
-  </action>
-  <action name="actionEditLayer">
-   <property name="text">
-    <string>Edit Layer</string>
-   </property>
-  </action>
-  <action name="actionMakeRiver">
-   <property name="text">
-    <string>MakeRiver</string>
-   </property>
-  </action>
-  <action name="actionMakeRidge">
-   <property name="text">
-    <string>MakeRidge</string>
-   </property>
-  </action>
-  <action name="actionSave">
-   <property name="text">
-    <string>Save</string>
-   </property>
-   <property name="toolTip">
-    <string>Save</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+S</string>
-   </property>
-  </action>
-  <action name="actionOpen">
-   <property name="text">
-    <string>Open</string>
-   </property>
-   <property name="shortcut">
-    <string>Ctrl+O</string>
-   </property>
-  </action>
-  <action name="actionSea">
-   <property name="text">
-    <string>Sea level</string>
-   </property>
-   <property name="toolTip">
-    <string>Indicate sea level</string>
-   </property>
-  </action>
-  <action name="actionDeposit">
-   <property name="text">
-    <string>Deposit</string>
-   </property>
-  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

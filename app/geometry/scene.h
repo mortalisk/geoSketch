@@ -15,11 +15,11 @@ private:
     float resolution;
     bool snapToGrid;
     bool onSurface;
-    int editLayerNo;
-    bool setSeaLevel;
 
 public:
 
+    bool setSeaLevel;
+    int editLayerNo;
     Camera camera;
     Sphere sphere;
     Sphere cursorSphere;

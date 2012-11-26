@@ -152,6 +152,9 @@ void SurfaceNode::constructLayer() {
 
     rows.clear();
     intersectRows.clear();
+    int resolution = this->resolution;
+    if (front.getPoints().size() == 2)
+        resolution = 2;
 
     for (int zi = 0;zi<=resolution;++zi) {
         QVector<Vector3> row;
@@ -275,12 +278,12 @@ void SurfaceNode::constructLayer() {
                 triangles.push_back(vertex(d,nd, s1, t1));
                 triangles.push_back(vertex(c,nc, s0, t1));
             //} else {
-                triangles.push_back(vertex(a,na, s0, t0));
-                triangles.push_back(vertex(b,nb, s1, t0));
-                triangles.push_back(vertex(d,nd, s1, t1));
-                triangles.push_back(vertex(d,nd, s1, t1));
-                triangles.push_back(vertex(c,nc, s0, t1));
-                triangles.push_back(vertex(a,na, s0, t0));
+//                triangles.push_back(vertex(a,na, s0, t0));
+//                triangles.push_back(vertex(b,nb, s1, t0));
+//                triangles.push_back(vertex(d,nd, s1, t1));
+//                triangles.push_back(vertex(d,nd, s1, t1));
+//                triangles.push_back(vertex(c,nc, s0, t1));
+//                triangles.push_back(vertex(a,na, s0, t0));
             //}
 
         }
@@ -685,16 +688,20 @@ void SurfaceNode::smoothSketchUv() {
     this->uvSmoothed = newPoints;
 }
 
-void SurfaceNode::addSubclassActions(QMenu *menu) {
-    QAction * makeRiver = new QAction(QString("Make River"), menu);
-    connect(makeRiver, SIGNAL(triggered()), this, SLOT(makeRiverNode()));
-    menu->addAction(makeRiver);
+void SurfaceNode::addSubclassActions(QToolBar *menu) {
+    if (uvCoordinateSpline.size() > 1) {
+        QAction * makeRiver = new QAction(QString("Make River"), menu);
+        connect(makeRiver, SIGNAL(triggered()), this, SLOT(makeRiverNode()));
+        menu->addAction(makeRiver);
 
-    QAction * makeValley = new QAction(QString("Make Valley"), menu);
-    connect(makeValley, SIGNAL(triggered()), this, SLOT(makeValleyNode()));
-    menu->addAction(makeValley);
+        QAction * makeValley = new QAction(QString("Make Valley"), menu);
+        connect(makeValley, SIGNAL(triggered()), this, SLOT(makeValleyNode()));
+        menu->addAction(makeValley);
 
-    QAction * makeRidge = new QAction(QString("Make Ridge"), menu);
-    connect(makeRidge, SIGNAL(triggered()), this, SLOT(makeRidgeNode()));
-    menu->addAction(makeRidge);
+        QAction * makeRidge = new QAction(QString("Make Ridge"), menu);
+        connect(makeRidge, SIGNAL(triggered()), this, SLOT(makeRidgeNode()));
+        menu->addAction(makeRidge);
+    }
+
+
 }

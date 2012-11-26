@@ -235,10 +235,12 @@ void RiverNode::setActive(bool a) {
     }
 }
 
-void RiverNode::addSubclassActions(QMenu *menu) {
+void RiverNode::addSubclassActions(QToolBar *menu) {
 
     QAction * replace = new QAction(QString("Replace side"), menu);
-    connect(replace, SIGNAL(triggered()), this, SLOT(replace()));
+    replace->setCheckable(true);
+    replace->setChecked(!oversketch);
+    connect(replace, SIGNAL(toggled(bool)), this, SLOT(replace(bool)));
     menu->addAction(replace);
 }
 

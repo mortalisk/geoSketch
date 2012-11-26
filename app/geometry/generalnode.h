@@ -18,6 +18,8 @@ public:
         return QString("GeneralNode");
     }
 
+    void addSubclassActions(QToolBar *) {};
+
     void addSubclassJson(QVariantMap &) {};
     void fromJsonSubclass(QVariantMap ) {};
 };

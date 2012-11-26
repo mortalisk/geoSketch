@@ -12,6 +12,8 @@
 #include <QFileDialog>
 #include "rivernode.h"
 #include <QMenu>
+#include <QColor>
+#include <QColorDialog>
 #include "deposit.h"
 
 MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
@@ -191,6 +193,57 @@ void MyGLWidget::mousePressEvent(QMouseEvent * e) {
     }
 }
 
+
+
+void MyGLWidget::addActions(QToolBar* menu) {
+    QAction * actionUndo = new QAction("Undo", menu);
+    menu->addAction(actionUndo);
+    connect(actionUndo,SIGNAL(triggered()), this, SLOT(undo()));
+
+    if (scene->activeNode) {
+        QAction * actionVisible = new QAction("Visible", menu);
+        actionVisible->setCheckable(true);
+        actionVisible->setChecked(scene->activeNode->visible);
+        menu->addAction(actionVisible);
+        connect(actionVisible,SIGNAL(triggered()), this, SLOT(toggleVisibility()));
+
+        QAction * actionColor = new QAction("Color", menu);
+        menu->addAction(actionColor);
+        connect(actionColor,SIGNAL(triggered()), this, SLOT(setColor()));
+
+    }
+
+    SurfaceNode * sn = qobject_cast<SurfaceNode*>(scene->activeNode);
+
+    if (sn||scene->editLayerNo != -1) {
+        QAction * editLayer = new QAction(QString("Editing"), menu);
+        editLayer->setCheckable(true);
+        editLayer->setChecked(scene->editLayerNo != -1);
+        connect(editLayer, SIGNAL(triggered()), this, SLOT(editLayer()));
+        menu->addAction(editLayer);
+    } else {
+        BoxNode * bn = qobject_cast<BoxNode*>(scene->activeNode);
+        if (bn) {
+            QAction * showSea = new QAction(QString("Change Sea"), menu);
+            showSea->setCheckable(true);
+            showSea->setChecked(scene->boxNode->waterNode->visible);
+            connect(showSea, SIGNAL(toggled(bool)), this, SLOT(seaLevel()));
+            menu->addAction(showSea);
+        }
+    }
+
+}
+
+void MyGLWidget::showSea(bool show) {
+    scene->boxNode->waterNode->visible = show;
+}
+
+void MyGLWidget::setColor() {
+    QColor c = QColorDialog::getColor();
+    setColor(c);
+
+}
+
 void MyGLWidget::mouseReleaseEvent(QMouseEvent * e) {
     mouse[e->button()] = false;
 
@@ -307,7 +360,11 @@ void MyGLWidget::setLayer(int i) {
         scene->activeNode = scene->boxNode->children[i];
 }
 
-void MyGLWidget::toggleVisibility(int i) {
+void MyGLWidget::toggleVisibility() {
+    if (scene->setSeaLevel) {
+        scene->boxNode->waterNode->visible = !scene->boxNode->waterNode->visible;
+        return;
+    }
 
     BaseNode* node = scene->activeNode;
     if (node) {
@@ -327,7 +384,7 @@ void MyGLWidget::toggleVisibility(int i) {
 
 }
 
-void MyGLWidget::setColor(int i, QColor c) {
+void MyGLWidget::setColor( QColor c) {
     if(scene->activeNode) {
         QVector4D& color = scene->activeNode->diffuse;
         color.setX(c.red()/255.0);

@@ -73,13 +73,13 @@ public:
         return QString("RiverNode");
     }
 
-    void addSubclassActions(QMenu *menu);
+    void addSubclassActions(QToolBar *menu);
 
     void setActive(bool a);
 
 public slots:
-    void replace() {
-        oversketch = false;
+    void replace(bool r) {
+        oversketch = !r;
     }
 };
 

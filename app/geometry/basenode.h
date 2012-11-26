@@ -7,6 +7,7 @@
 #include "spline.h"
 #include <QVariantMap>
 #include <QAction>
+#include <QToolBar>
 
 class Scene;
 
@@ -65,6 +66,7 @@ public:
         return active;
     }
 
+
     virtual void setActive(bool a) {
         if (a == false) {
             foreach(BaseNode * child, children) {
@@ -91,7 +93,6 @@ public:
 
     }
 
-    virtual BaseNode * makeLayer();
 
 
     virtual void drawSplines();
@@ -112,10 +113,8 @@ public:
     void fromJson(QVariantMap map);
     virtual void fromJsonSubclass(QVariantMap map) = 0;
 
-    void addActions(QMenu * menu);
-    virtual void addSubclassActions(QMenu *) {
-        return;
-    }
+    void addActions(QToolBar * menu);
+    virtual void addSubclassActions(QToolBar *) = 0;
 
 
     void deleteChild(BaseNode * child);
@@ -130,6 +129,14 @@ public slots:
         if (parent)
             parent->deleteChild(this);
     }
+
+    virtual void clearSketch() {
+        spline.clear();
+        sketchingSpline.clear();
+        uvSpline.clear();
+        uvSketchingSpline.clear();
+    }
+
 
 };
 

@@ -38,6 +38,8 @@ public:
         }
     }
 
+    void addSubclassActions(QToolBar *) {};
+
     bool isPointNearerSide(Vector3 &point, int indexInSpline) {
         Vector3 leftSide(lowerLeft.x(), point.y(), lowerLeft.z());
         Vector3 rightSide(lowerRigth.x(), point.y(), lowerRigth.z());
