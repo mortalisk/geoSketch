@@ -125,21 +125,70 @@ The solution that has been implemented for this thesis is introduced here. The b
 
 The basic idea for the solution, is based on a cube on which the user will draw layers. On these layers further details will them be possible to create by various means. Most of the input consists of drawing simple curves on surfaces, and then indicate what kind of feature is wanted. However, it was an idea from early on in the project to see if it would be possible to make a combination of a sketching approach to modeling with a procedural approach. The deposit feature has been implemented by such a method, thus giving two complementary ways to create surfaces. In any way all features are created based on user input.
 
-Once input has been gathered the program interprets it, and creates an internal model. The internal model is then used to compute a three dimentional geometry based on triangles, which can then be visualized on the computers screen via the graphics card. The user will use this generated geometry as visual feedback, and decide whether it is close to what he intended, or whether he needs to give additional input or change his input to achieve what he wants. Thus the process continues until a satisfactory result has been reached (see FIGURE for an illustration of this process). Now, the user can store the work for later, send it to someone else, or take screenshots for use in a paper, lecture etc.
+Once input has been gathered the program interprets it, and creates an internal model. The internal model is then used to compute a three dimentional geometry based on triangles, which can then be visualized on the computers screen via the graphics card. The user will use this generated geometry as visual feedback, and decide whether it is close to what he intended, or whether he needs to give additional input or change his input to achieve what he wants. Thus the process continues until a satisfactory result has been reached (see figure \ref{fig:overviewConcept} for an illustration of this process). Now, the user can store the work for later, send it to someone else, or take screenshots for use in a paper, lecture etc.
+
+\begin{figure}
+ \includegraphics[width=\linewidth]{thesis/overviewConcept.pdf}
+ \caption{Conceptual illustration: The user has an idea in his head of what he want's to model. He indicates what he want to create to the program through various input methods. The program interprets the input, and for each feature creates a representation of it in the scene tree. The representation is then used to create new geometry and alter the shape of existing geometry. Once the geometry is ready, it is used for visualizing the results back to the user. The user then compares what he sees with what he had in mind. He can then do further refinement of the model by either changing what he already drew, or adding new features by drawing on the geometry itself.}
+ \label{fig:overviewConcept}
+\end{figure}
 
 The internal format tries to capture the modelers intent as well as possible. It is the the meaning of the input that is stored, not the gemoetry or how it looks. As we will see, this enables a modelling aproach that let's him to go back and change earlier things in the model without having to redraw everything, since all the geometry can always be recomputed from the internal format.
 
-
-- Give an overview of solution\\
-- Visual model of solution
-  -- idea/input/feedback/modification/
+\clearpage
 \subsection{Features}
-- relate back to the geologic background\\
-- explain how each feature is drawn and looks like\\
-   -- Rivers
-   -- Ridges
-   -- Layers\\
-   -- etc.\\
+\subsubsection{Layers}
+Layers can be created fast and easy. In figure \ref{fig:layerCreate} we see how a layer is made by first drawing the four curves on the side of the cube, and then letting the program create the layer surface. A surface like this can be created in about 30 seconds.
+
+The layer can also be edited. When editing, the old curves are shown with a red stippled line while the new line that is the result of oversketching is drawn with a black solid line, as can be seen in figure \ref{fig:layerEdit}. Once done editing the program will compute new geometry for the layer based on the new curves.
+
+New layers may be added on top of existing layers as seen in figure \ref{fig:layerNew}. If the layers intersect, only the part that is above the previously created layers will be visible. If the new layer intersects with previously drawn layers, only the part that is above will be drawn, as seen in figure \ref{fig:layerIntersect}
+
+\begin{figure}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerDraw.png}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerCreate.png}
+ \caption{The layer is represented by the four curves the user draws, plus the lower line that represents the top of all previously drawn lines. The layer geometry is generated between these two lines.}
+ \label{fig:layerCreate}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdit.png}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdited.png}
+ \caption{Layers can be edited. The left hand picture shows the old curves in red, and the new curves in black. On the right we see the resulting layer after editing.}
+ \label{fig:layerEdit}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNew.png}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNewMarked.png}
+ \caption{It is possible to create multiple layers as can be seen here. When one has multiple layers, it is also possible to select one of the layers by right clicking it, as seen on the right. When a layer is selected, it is highlighted by a slightly brighter color, and it's outline is drawn in red.}
+ \label{fig:layerNew}
+\end{figure}
+
+\begin{figure}
+ \centering
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/simpleLayerIntersect.png}
+ \caption{Layers might also intersect with each other. In that case what is above of the last drawn layer will be what is visible, while what is below is not part of the new layer.}
+ \label{fig:layerIntersect}
+\end{figure}
+\clearpage
+
+\subsubsection{Rivers}
+Rivers can be drawn on the surfaces by indicating where it will run. The program then creates a river as shown in figure \ref{fig:riverDraw}. It can also be changed by oversketching as shown in figure \ref{fig:riverChange}
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDraw.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDrawn.png}
+ \caption{Sketching of rivers by indicating where it shoudl run, and letting the program create a river along this path. }
+ \label{fig:riverDraw}
+\end{figure}
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChange.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChanged.png}
+ \caption{Changing a river is possible by oversketching }
+ \label{fig:riverChange}
+\end{figure}
 
 % notes for methodology
 %\section{Methodology}
@@ -492,61 +541,11 @@ When creating a deposit, the layer object will check for previous deposits, and 
 
 \clearpage
 \section{Results}
-Here we begin by taking a look at each feature seperately. Then we will see some complete sceneries that demonstrate what can actually be produced by the implemented solutions at the current level of development. These results are commented to explain how they are achieved, what they depict and what are the limitations. An evaluation follows in the next section.
+Here we will see some complete sceneries that demonstrate what can actually be produced by the implemented solutions at the current level of development. These results are commented to explain how they are achieved, what they depict and what are the limitations. Then we will take a look at the results of a user study that was conducted. An evaluation of the results follows in the next section.
 \label{sec:results}
 
-\subsection{Layers}
-Layers can be created fast and easy. In figure \ref{fig:layerCreate} we see how a layer is made by first drawing the four curves on the side of the cube, and then letting the program create the layer surface. A surface like this can be created in about 30 seconds.
+\subsection{Scenarios}
 
-The layer can also be edited. When editing, the old curves are shown with a red stippled line while the new line that is the result of oversketching is drawn with a black solid line, as can be seen in figure \ref{fig:layerEdit}. Once done editing the program will compute new geometry for the layer based on the new curves.
-
-New layers may be added on top of existing layers as seen in figure \ref{fig:layerNew}. If the layers intersect, only the part that is above the previously created layers will be visible. If the new layer intersects with previously drawn layers, only the part that is above will be drawn, as seen in figure \ref{fig:layerIntersect}
-
-\begin{figure}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerDraw.png}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerCreate.png}
- \caption{The layer is represented by the four curves the user draws, plus the lower line that represents the top of all previously drawn lines. The layer geometry is generated between these two lines.}
- \label{fig:layerCreate}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdit.png}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdited.png}
- \caption{Layers can be edited. The left hand picture shows the old curves in red, and the new curves in black. On the right we see the resulting layer after editing.}
- \label{fig:layerEdit}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNew.png}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNewMarked.png}
- \caption{It is possible to create multiple layers as can be seen here. When one has multiple layers, it is also possible to select one of the layers by right clicking it, as seen on the right. When a layer is selected, it is highlighted by a slightly brighter color, and it's outline is drawn in red.}
- \label{fig:layerNew}
-\end{figure}
-
-\begin{figure}
- \centering
-\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/simpleLayerIntersect.png}
- \caption{Layers might also intersect with each other. In that case what is above of the last drawn layer will be what is visible, while what is below is not part of the new layer.}
- \label{fig:layerIntersect}
-\end{figure}
-\clearpage
-
-\subsection{Rivers}
-Rivers can be drawn on the surfaces by indicating where it will run. The program then creates a river as shown in figure \ref{fig:riverDraw}. It can also be changed by oversketching as shown in figure \ref{fig:riverChange}
-
-\begin{figure}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDraw.png}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDrawn.png}
- \caption{Sketching of rivers by indicating where it shoudl run, and letting the program create a river along this path. }
- \label{fig:riverDraw}
-\end{figure}
-
-\begin{figure}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChange.png}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChanged.png}
- \caption{Changing a river is possible by oversketching }
- \label{fig:riverChange}
-\end{figure}
 
 \subsection{Produced Renderings}
 \subsubsection{Geologist's drawings}

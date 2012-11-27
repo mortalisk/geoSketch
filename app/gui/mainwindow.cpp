@@ -19,13 +19,22 @@ MainWindow::MainWindow(QWidget *parent) :
     QVBoxLayout * mainLayout = new QVBoxLayout();
     centralWidget()->setLayout(mainLayout);
 
+    QToolBar * toolBar = findChild<QToolBar*>("toolBar");
+    QAction * actionSave = findChild<QAction*>("actionSave");
+    QAction * actionLoad = findChild<QAction*>("actionLoad");
+
+    toolBar->clear();
 
     glFormat = new QGLFormat;
     glFormat->setProfile(QGLFormat::CompatibilityProfile);//CoreProfile);
     glFormat->setVersion(3,3);
     gl = new MyGLWidget(glFormat);
 
+    gl->addActions(toolBar);
+
     connect(gl,SIGNAL(itemSelected(Scene *, BaseNode *)), this, SLOT(updateMenu(Scene*,BaseNode*)));
+    connect(actionSave,SIGNAL(triggered()),gl,SLOT(save()));
+    connect(actionLoad,SIGNAL(triggered()),gl,SLOT(open()));
 
     mainLayout->addWidget(gl);
 }

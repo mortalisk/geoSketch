@@ -13,29 +13,30 @@
 \contentsline {subsubsection}{\numberline {3.3.1}Rapid Computer Modeling}{8}{subsubsection.3.3.1}
 \contentsline {section}{\numberline {4}Basic Concept}{9}{section.4}
 \contentsline {subsection}{\numberline {4.1}Overview}{9}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}Features}{9}{subsection.4.2}
-\contentsline {section}{\numberline {5}Methodology}{10}{section.5}
-\contentsline {subsection}{\numberline {5.1}Work process}{10}{subsection.5.1}
-\contentsline {subsubsection}{\numberline {5.1.1}Inspiration and research}{10}{subsubsection.5.1.1}
-\contentsline {subsubsection}{\numberline {5.1.2}Collaboration}{11}{subsubsection.5.1.2}
-\contentsline {subsubsection}{\numberline {5.1.3}Implementation work}{13}{subsubsection.5.1.3}
-\contentsline {subsection}{\numberline {5.2}General design solutions}{14}{subsection.5.2}
-\contentsline {subsubsection}{\numberline {5.2.1}Sketch input and interpretation}{14}{subsubsection.5.2.1}
-\contentsline {subsubsection}{\numberline {5.2.2}Representation}{17}{subsubsection.5.2.2}
-\contentsline {subsubsection}{\numberline {5.2.3}Geometry synthesis}{18}{subsubsection.5.2.3}
-\contentsline {subsubsection}{\numberline {5.2.4}Visualization}{18}{subsubsection.5.2.4}
-\contentsline {subsection}{\numberline {5.3}Specific solutions}{19}{subsection.5.3}
-\contentsline {subsubsection}{\numberline {5.3.1}Technology}{19}{subsubsection.5.3.1}
-\contentsline {subsubsection}{\numberline {5.3.2}Cube}{20}{subsubsection.5.3.2}
-\contentsline {subsubsection}{\numberline {5.3.3}Layers}{20}{subsubsection.5.3.3}
-\contentsline {subsubsection}{\numberline {5.3.4}Ridges}{27}{subsubsection.5.3.4}
-\contentsline {subsubsection}{\numberline {5.3.5}Deposits}{28}{subsubsection.5.3.5}
-\contentsline {section}{\numberline {6}Results}{33}{section.6}
-\contentsline {subsection}{\numberline {6.1}Layers}{33}{subsection.6.1}
-\contentsline {subsection}{\numberline {6.2}Rivers}{36}{subsection.6.2}
-\contentsline {subsection}{\numberline {6.3}Produced Renderings}{36}{subsection.6.3}
-\contentsline {subsubsection}{\numberline {6.3.1}Geologist's drawings}{36}{subsubsection.6.3.1}
-\contentsline {subsubsection}{\numberline {6.3.2}Reproduction of initial illustrations}{36}{subsubsection.6.3.2}
-\contentsline {subsubsection}{\numberline {6.3.3}Other illustrations and possibilities}{37}{subsubsection.6.3.3}
-\contentsline {section}{\numberline {7}Evaluation}{38}{section.7}
-\contentsline {section}{\numberline {8}Conclusion}{39}{section.8}
+\contentsline {subsection}{\numberline {4.2}Features}{11}{subsection.4.2}
+\contentsline {subsubsection}{\numberline {4.2.1}Layers}{11}{subsubsection.4.2.1}
+\contentsline {subsubsection}{\numberline {4.2.2}Rivers}{14}{subsubsection.4.2.2}
+\contentsline {section}{\numberline {5}Methodology}{15}{section.5}
+\contentsline {subsection}{\numberline {5.1}Work process}{15}{subsection.5.1}
+\contentsline {subsubsection}{\numberline {5.1.1}Inspiration and research}{15}{subsubsection.5.1.1}
+\contentsline {subsubsection}{\numberline {5.1.2}Collaboration}{16}{subsubsection.5.1.2}
+\contentsline {subsubsection}{\numberline {5.1.3}Implementation work}{18}{subsubsection.5.1.3}
+\contentsline {subsection}{\numberline {5.2}General design solutions}{19}{subsection.5.2}
+\contentsline {subsubsection}{\numberline {5.2.1}Sketch input and interpretation}{19}{subsubsection.5.2.1}
+\contentsline {subsubsection}{\numberline {5.2.2}Representation}{22}{subsubsection.5.2.2}
+\contentsline {subsubsection}{\numberline {5.2.3}Geometry synthesis}{23}{subsubsection.5.2.3}
+\contentsline {subsubsection}{\numberline {5.2.4}Visualization}{23}{subsubsection.5.2.4}
+\contentsline {subsection}{\numberline {5.3}Specific solutions}{24}{subsection.5.3}
+\contentsline {subsubsection}{\numberline {5.3.1}Technology}{24}{subsubsection.5.3.1}
+\contentsline {subsubsection}{\numberline {5.3.2}Cube}{25}{subsubsection.5.3.2}
+\contentsline {subsubsection}{\numberline {5.3.3}Layers}{25}{subsubsection.5.3.3}
+\contentsline {subsubsection}{\numberline {5.3.4}Ridges}{32}{subsubsection.5.3.4}
+\contentsline {subsubsection}{\numberline {5.3.5}Deposits}{33}{subsubsection.5.3.5}
+\contentsline {section}{\numberline {6}Results}{38}{section.6}
+\contentsline {subsection}{\numberline {6.1}Scenarios}{38}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Produced Renderings}{38}{subsection.6.2}
+\contentsline {subsubsection}{\numberline {6.2.1}Geologist's drawings}{38}{subsubsection.6.2.1}
+\contentsline {subsubsection}{\numberline {6.2.2}Reproduction of initial illustrations}{38}{subsubsection.6.2.2}
+\contentsline {subsubsection}{\numberline {6.2.3}Other illustrations and possibilities}{38}{subsubsection.6.2.3}
+\contentsline {section}{\numberline {7}Evaluation}{39}{section.7}
+\contentsline {section}{\numberline {8}Conclusion}{40}{section.8}
