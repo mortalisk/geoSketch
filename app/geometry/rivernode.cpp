@@ -237,6 +237,8 @@ void RiverNode::setActive(bool a) {
 
 void RiverNode::addSubclassActions(QToolBar *menu) {
 
+
+
     QAction * replace = new QAction(QString("Replace side"), menu);
     replace->setCheckable(true);
     replace->setChecked(!oversketch);
@@ -342,6 +344,9 @@ void RiverNode::removeLoops(QVector<QVector2D>& sp) {
     }
 }
 
+void RiverNode::stopDeposit() {
+    deposit->setDepositing(!deposit->isDepositing());
+}
 
 void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {
     rightSpline.clear();

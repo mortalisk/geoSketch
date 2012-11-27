@@ -119,13 +119,13 @@ A model is a physical or conceptual object used to represent something else in a
 
 \clearpage
 \section{Basic Concept}
+In this section we get an introduction to the solution that has been developed for this thesis. First, we get an overview of the solution and the thought behind it. After, the basic concepts of how the program works is presented with screenshots.  This is meant as an introduction to the concepts that we will be talking about in section \secref{sec:method}.
 \label{sec:concept}
 \subsection{Overview}
-The solution that has been implemented for this thesis is introduced here. The basic concepts of how the program works is presented with screenshots. This is not indended to be a user manual, but rather introduce the concepts that we will be talking about in section \secref{sec:method}. 
-
 The basic idea for the solution, is based on a cube on which the user will draw layers. On these layers further details will them be possible to create by various means. Most of the input consists of drawing simple curves on surfaces, and then indicate what kind of feature is wanted. However, it was an idea from early on in the project to see if it would be possible to make a combination of a sketching approach to modeling with a procedural approach. The deposit feature has been implemented by such a method, thus giving two complementary ways to create surfaces. In any way all features are created based on user input.
 
-Once input has been gathered the program interprets it, and creates an internal model. The internal model is then used to compute a three dimentional geometry based on triangles, which can then be visualized on the computers screen via the graphics card. The user will use this generated geometry as visual feedback, and decide whether it is close to what he intended, or whether he needs to give additional input or change his input to achieve what he wants. Thus the process continues until a satisfactory result has been reached (see figure \ref{fig:overviewConcept} for an illustration of this process). Now, the user can store the work for later, send it to someone else, or take screenshots for use in a paper, lecture etc.
+Once input has been gathered the program interprets it, and creates an internal model. The internal representation is a tree structure where the cube is always the starting point. Every feature added will add a new node in the tree, and each node has parametric coordinates according to where it belongs on the parents surface. This internal representation is used to compute a three dimentional geometry based on triangles, which can then be visualized on the computers screen via the graphics card. The user will use this generated geometry as visual feedback, and decide whether it is close to what he intended, or whether he needs to give additional input or change his input to achieve what he wants. Thus the process continues until a satisfactory result has been reached (see figure \ref{fig:overviewConcept} for an illustration of this process). Now, the user can store the work for later, send it to someone else, or take screenshots for use in a paper, lecture etc.
+
 
 \begin{figure}
  \includegraphics[width=\linewidth]{thesis/overviewConcept.pdf}
@@ -174,7 +174,7 @@ New layers may be added on top of existing layers as seen in figure \ref{fig:lay
 \clearpage
 
 \subsubsection{Rivers}
-Rivers can be drawn on the surfaces by indicating where it will run. The program then creates a river as shown in figure \ref{fig:riverDraw}. It can also be changed by oversketching as shown in figure \ref{fig:riverChange}
+Rivers can be drawn on the surfaces by indicating where it will run. The program then creates a river as shown in figure \ref{fig:riverDraw}. It can also be changed by oversketching as shown in figure \ref{fig:riverChange}. The oversketching is done on one side of the river at a time. The user also has the choice of replacing the entire side of the river if that will let him more easily make the changes he wants.
 
 \begin{figure}
 \includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDraw.png}
@@ -189,6 +189,64 @@ Rivers can be drawn on the surfaces by indicating where it will run. The program
  \caption{Changing a river is possible by oversketching }
  \label{fig:riverChange}
 \end{figure}
+
+\subsubsection{Ridges}
+Ridges are also drawn by a line on the layer surface. Once a line has been drawn and the user indicates that he want's a ridge, a generic shape of a ridge is created automatically as seen in figure \ref{fig:ridgeDraw}. The user then has the choice to change the height profile along the ridge's baseline. This is done by skething on a temporary wall that is erected along the ridge's baseline, as can be seen in \ref{fig:ridgeChange}
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeDraw.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeDrawn.png}
+ \caption{Sketching of a ridge by indicating where it's base goes, and letting the program create a ridge along this path. }
+ \label{fig:ridgeDraw}
+\end{figure}
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeChange.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeChanged.png}
+ \caption{Changing a ridge is done by drawing on a wall that is erected along the ridge's baseline. }
+ \label{fig:ridgeChange}
+\end{figure}
+
+
+\subsubsection{Valleys}
+A valley functions much like a river, only it has no water and is initally wider and deeper. It is also made by first drawing a line and then can be changed by the same mechanism as the river.
+\begin{figure}
+\includegraphics[trim = 10mm 80mm 200mm 30mm, clip,width=.5\linewidth]{thesis/results/valleyMade.png}
+\includegraphics[trim = 10mm 80mm 200mm 30mm, clip,width=.5\linewidth]{thesis/results/valleyChanged.png}
+ \caption{A valley and the same valley after a change to both of it's sides }
+ \label{fig:valley}
+\end{figure}
+
+\subsubsection{Sea level}
+The sea level can be enabled at any time and moved up or down as the user pleases. Where a river meets the sea, a deposit may be generated.
+
+\begin{figure}
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/seaEnabled.png}
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/seaChanged.png}
+ \caption{Indicating where the sea level goes}
+ \label{fig:seaLevel}
+\end{figure}
+
+
+\subsubsection{Deposits}
+Deposits can be created where a river meets the sea. The user simply indicates that he want't one for a river, and the rest is done procedurally by a simple simulation. The procedure continues until the user stops it. The user can indicate more than one deposit to be made for a single river. This will make the deposits build outward on top of each other in the direction of the river.
+
+\begin{figure}
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/depositBefore.png}
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/depositCreated.png}
+ \caption{Creation of a deposit is done procedurally from the point where the river meets the sea}
+ \label{fig:seaLevel}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics[trim = 120mm 7mm 30mm 30mm, clip,width=.5\linewidth]{thesis/results/depositLayered.png}
+\includegraphics[trim = 120mm 7mm 30mm 30mm, clip,width=.5\linewidth]{thesis/results/depositNew.png}
+ \caption{The user can indicate when he wants a new layer of deposits, or when he want's to stop depositing. He can also add new rivers with new deposits.}
+ \label{fig:seaLevel}
+\end{figure}
+
+
 
 % notes for methodology
 %\section{Methodology}

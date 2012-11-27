@@ -213,6 +213,8 @@ void MyGLWidget::addActions(QToolBar* menu) {
 
     }
 
+    menu->addSeparator();
+
     SurfaceNode * sn = qobject_cast<SurfaceNode*>(scene->activeNode);
 
     if (sn||scene->editLayerNo != -1) {
@@ -229,6 +231,22 @@ void MyGLWidget::addActions(QToolBar* menu) {
             showSea->setChecked(scene->boxNode->waterNode->visible);
             connect(showSea, SIGNAL(toggled(bool)), this, SLOT(seaLevel()));
             menu->addAction(showSea);
+        } else {
+            RiverNode * rn =  qobject_cast<RiverNode*>(scene->activeNode);
+
+            if (rn) {
+                QAction * deposit = new QAction(QString("New Deposit"), menu);
+                connect(deposit, SIGNAL(triggered()), this, SLOT(createDeposits()));
+                menu->addAction(deposit);
+
+                if (deposit) {
+                    QAction * stop = new QAction(QString("Stop/start Deposit"), menu);
+                    connect(stop, SIGNAL(triggered()), rn, SLOT(stopDeposit()));
+                    menu->addAction(stop);
+                }
+
+            }
+
         }
     }
 

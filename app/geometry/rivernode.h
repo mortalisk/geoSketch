@@ -81,6 +81,8 @@ public slots:
     void replace(bool r) {
         oversketch = !r;
     }
+
+    void stopDeposit();
 };
 
 
