@@ -484,14 +484,14 @@ QVector<Vector3> SurfaceNode::intersectionOnRows(Vector3& from, Vector3& directi
             r = intersect(from, direction, a, b, c,&result, &s, &t);
             if (r==1) {
                 cand.push_back(result);
-                QVector2D p2d((float)j/res + t/skipRes,(float)i/res +s/skipRes);
+                QVector2D p2d((float)j/res +s/res*skip ,(float)i/res + t/res*skip );
                 cand2d.push_back(p2d);
             }
 
             r = intersect(from, direction, d, c, b,&result, &s, &t);
             if (r==1) {
                 cand.push_back(result);
-                QVector2D p2d((float)j/res +((1-t)/skipRes),(float)i/res + ((1-s)/skipRes));
+                QVector2D p2d((float)(j+skip)/res - (s/res*skip),(float)(i+skip)/res -(t/res*skip) );
                 cand2d.push_back(p2d);
             }
 
@@ -567,7 +567,8 @@ void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
 
 //    if (nearest != -1) {
     float s, t;
-    QVector<Vector3> points = shape->intersectionPoints(from, direction, s, t);
+    //QVector<Vector3> points = shape->intersectionPoints(from, direction, s, t);
+    QVector<Vector3> points = intersectionOnRows(from, direction,rows, s, t,skip);
     if (points.size() > 0) {
         sketchingSpline.addPoint(points[0]);
         uvSketchingSpline.push_back(QVector2D(s,t));
@@ -651,6 +652,7 @@ void SurfaceNode::drawChildren() {
     }
 
     glDisable(GL_STENCIL_TEST);
+
     foreach(BaseNode * b, children) {
         Deposit * d = dynamic_cast<Deposit*>(b);
         if (d != NULL) {

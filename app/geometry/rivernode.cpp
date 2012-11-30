@@ -7,7 +7,7 @@
 #include <QVector2D>
 #include <QAction>
 #include <QMenu>
-
+#include <GL/glew.h>
 RiverNode::RiverNode(QVector<QVector2D> uvs, bool drawWater, float width) : BaseNode("river"), uv(uvs), deposit(NULL), drawWater(drawWater)
 {
     deposit = NULL;
@@ -107,7 +107,7 @@ void RiverNode::addPoint(Vector3 from, Vector3 direction) {
         point2d.setY(t);
 
 
-        sketchingSpline.addPoint(point);
+        sketchingSpline.addPoint(point/*Vector3(point.x(), point.y()+0.01, point.z())*/);
         uvSketch.push_back(point2d);
     } else {
         return;
@@ -236,8 +236,6 @@ void RiverNode::setActive(bool a) {
 }
 
 void RiverNode::addSubclassActions(QToolBar *menu) {
-
-
 
     QAction * replace = new QAction(QString("Replace side"), menu);
     replace->setCheckable(true);
@@ -389,7 +387,11 @@ void RiverNode::drawSplines() {
     if (drawWater || active) {
         drawSpline(spline,editLeft);
         drawSpline(rightSpline,editRight);
+
+        glDisable(GL_STENCIL_TEST);
         drawSpline(sketchingSpline,r);
+
+        glEnable(GL_STENCIL_TEST);
     }
 }
 

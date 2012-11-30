@@ -45,16 +45,20 @@ void MyGLWidget::checkInput() {
 
     bool moving = false;
     if (isKeyPressed(Qt::Key_Up)) {
-        scene->camera.pitch(0.05);
+        scene->camera.trackCenter += Vector3(0,0.1,0);
+        scene->camera.fix();
     }
     if (isKeyPressed(Qt::Key_Left)) {
-        scene->camera.yaw(0.05);
+        scene->camera.trackCenter = scene->camera.trackCenter - scene->camera.forward.cross(scene->camera.up).normalize()*0.1;
+        scene->camera.fix();
     }
     if (isKeyPressed(Qt::Key_Right)) {
-        scene->camera.yaw(-0.05);
+        scene->camera.trackCenter = scene->camera.trackCenter + scene->camera.forward.cross(scene->camera.up).normalize()*0.1;
+        scene->camera.fix();
     }
     if (isKeyPressed(Qt::Key_Down)) {
-        scene->camera.pitch(-0.05);
+        scene->camera.trackCenter += Vector3(0,-0.1,0);
+        scene->camera.fix();
     }
     if (isKeyPressed(Qt::Key_W)) {
         scene->camera.goForward(move*multiplier);
