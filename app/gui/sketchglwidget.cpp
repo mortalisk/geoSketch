@@ -15,6 +15,7 @@
 #include <QColor>
 #include <QColorDialog>
 #include "deposit.h"
+#include <QFileInfo>
 
 MyGLWidget::MyGLWidget(QGLFormat * glf, QWidget *parent) :
         QGLWidget(*glf,parent), move(0.01f)
@@ -435,6 +436,28 @@ void MyGLWidget::makeRidge() {
     SurfaceNode* sn = qobject_cast<SurfaceNode*>(scene->activeNode);
     if (sn != NULL) {
         sn->makeRidgeNode();
+    }
+}
+
+void MyGLWidget::exportObj() {
+
+
+    QString fileName = QFileDialog::getSaveFileName(this,
+         tr("Save 3D geometry"), "", tr("Wavefront object (*.obj)"));
+    if (!fileName.endsWith(".obj"))
+        fileName += ".obj";
+
+    QString matName = fileName.left(fileName.length() - 3);
+    matName += "mtl";
+    QFile file(fileName);
+    QFile mat(matName);
+    if(file.open(QIODevice::WriteOnly | QIODevice::Text) && mat.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        QFileInfo matInfo(mat);
+        out << "mtllib "<< matInfo.baseName() <<"\n";
+        QTextStream materials(&mat);
+        int objNo = 0;
+        scene->activeNode->makeObj(out, materials, &objNo);
     }
 }
 

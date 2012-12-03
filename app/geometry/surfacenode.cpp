@@ -187,14 +187,29 @@ void SurfaceNode::constructLayer() {
         Vector3 rightp = right.getPoint(zif);
         for (int xi = 0;xi<=resolution;xi++) {
             float xif = xi/(float)resolution;
-            Vector3 colInt = rowLeft * (1.0-xif) + rowRigth * xif;
+
             Vector3 frontp = front.getPoint(xif);
             Vector3 backp = back.getPoint(1.0-xif);
+
+            // the normal approach
+            Vector3 colInt = rowLeft * (1.0-xif) + rowRigth * xif;
             Vector3 frontBack = frontp*(1.0-zif)+backp*zif;
             Vector3 diff = frontBack - colInt;
 
             Vector3 leftRight = leftp*(1.0-xif) + rightp*xif;
             Vector3 point = leftRight + diff;
+
+            // IDW approach
+//            float var = 4;
+//            float wf, wb, wl, wr;
+//            wf = zif > 0 ? 1/pow(zif,var): 999999999;
+//            wb = (1-zif) > 0 ? 1/pow((1-zif),var): 999999999;
+//            wl = xif > 0 ? 1/pow(xif,var): 999999999;
+//            wr = (1-xif) > 0 ? 1/pow((1-xif),var): 999999999;
+//            float wsum = wf + wb + wl + wr;
+//            Vector3 point = frontp * (wf/wsum) + backp * (wb/wsum) + leftp * (wl/wsum) + rightp * (wr/wsum);
+
+
             row.push_back(point);
         }
         rows.push_back(row);

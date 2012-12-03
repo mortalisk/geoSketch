@@ -9,6 +9,8 @@
 #include <QAction>
 #include <QToolBar>
 
+class QTextStream;
+
 class Scene;
 
 class BaseNode : public QObject
@@ -116,6 +118,9 @@ public:
     void addActions(QToolBar * menu);
     virtual void addSubclassActions(QToolBar *) = 0;
 
+    virtual bool includeShapeInExport() = 0;
+
+    void makeObj(QTextStream&, QTextStream &materials, int *objNo);
 
     void deleteChild(BaseNode * child);
 

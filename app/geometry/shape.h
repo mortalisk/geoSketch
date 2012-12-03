@@ -9,10 +9,11 @@ class Shape
 {
 protected:
     int displayList;
-    QVector<vertex> triangles;
     QVector<vertex> lineVertices;
-    bool strip;
+
 public:
+bool strip;
+    QVector<vertex> triangles;
     Shape();
     ~Shape();
     void drawLines(bool stipple, float red, float green, float blue, float alpha);

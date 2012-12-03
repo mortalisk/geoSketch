@@ -26,7 +26,15 @@ RiverNode::RiverNode(QVector<QVector2D> uvs, bool drawWater, float width) : Base
 
         //float distanceFromMiddle = fabs(i-uv.size()/2.0)/uv.size();
 
-        normal *= width;
+        float w = width;
+        float startl = (uv[i]-uv[0]).length();
+        float endl = (uv[i]-uv[uv.size()-1]).length();
+        if (startl <= 0.05)
+            w *= fmax(0,log10(startl/0.05 *100))/2;
+        else if (endl <= 0.05)
+            w *= fmax(0,log10(endl/0.05 *100))/2;
+
+        normal *= w;
 
         lefts.push_back(uv[i] + normal);
         rigths.push_back(uv[i] - normal);
@@ -163,6 +171,7 @@ void RiverNode::makeWater() {
         }
         Vector3 left = rightSpline.getPoints()[i]-current;
         Vector3 normal = (next-previous).cross(left).normalize();
+        if (normal.y() < 0) normal = -normal;
         Vector3 otherSide = current+left;
         QVector2D uvRight;
         QVector2D uvLeft;

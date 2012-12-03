@@ -48,6 +48,8 @@ public:
 
     void addSubclassActions(QToolBar *){};
 
+    bool includeShapeInExport() {return false;}
+
 
 
 };

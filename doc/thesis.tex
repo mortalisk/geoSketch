@@ -99,15 +99,17 @@ After reading this section, you should have gained a basic understanding of the 
 \clearpage
 \chapter{State of the Art}
 \label{sec:star}
-\section{Modeling}
-A model is a physical or conceptual object used to represent something else in a way that isolates the information that is relevant to our intents. Geologists use models for understanding and communicating about phenomena relating to the structure of the earth.
+A model is a physical or conceptual object used to represent something else in a way that isolates the information that is relevant to our intents.  On the computer, models can be made in many ways. Here we expolore the relevant developments in techniques for rapid computer modeling in general and as it applies to geologic modeling particularly.
+
+\section{Computer Modeling}
+There are many approaches to achieving rapid computer modeling. The one that is perhaps most focused on, is sketch based modeling. Sket
 
 \section{Geologic Modeling}
-
+Geologists use models for understanding and communicating about phenomena relating to the structure of the earth and how it changes over time. These structures exhibit certain patterns which distinguishes each of them, and this can be exploited in a modeling system to ease the 
 - models subsurface of the earth.\\
 - show examples\\(clay, wood, sand, 2d skethces and drawings, 3d computer models)
 
-\section{Computer Modeling}
+\section{}
 - great power to be exploited\\
 - examples (spreadsheet, 3d models, simulations...)\\
 \subsection{Rapid Computer Modeling}
@@ -394,7 +396,7 @@ to objects in many places. Another problem is that arrays are restricted to cont
 running speed noticeably.
 
 \subsection{Cube}
-There is no input to change the parameters of the cube. The cube itself is represented by the size of its three dimensions. That is, height, width, and depth. It the outset it was the intention to be able to change the size of the cube in these three dimensions, but there was not enough time to get to this feature. The gemoetry of the cube is constructed by creating and positioning six square faces of correct size and the correct orientation. Each of the faces are also in turn contructed by two triangles and outlined by a line strip. When visualizing the cube geometry, only the triangle of the back faces are rendered, but all lines are shown. This effect is achieved by backface culling, makes the cube look transparent, and avoids occlusion of the geometry inside.
+There is no input to change the parameters of the cube. The cube itself is represented by the size of its three dimensions. That is, height, width, and depth. It the outset it was the intention to be able to change the size of the cube in these three dimensions, but there was not enough time to get to this feature. The gemoetry of the cube is constructed by creating and positioning six square faces of correct size and the correct orientation. Each of the faces are also in turn contructed by two triangles and outlined by a line strip. When visualizing the cube geometry, only the triangle of the back faces are rendered, but all lines are shown. This effect is achieved by backface culling, makes the cube look transparent, and avoids occlusion of the geometry inside. The cube can also be made invisible like other objects, which can be useful for making screenshots where the cube is not neccessary.
 
 \subsection{Layers}
 \label{subsec:layers}
@@ -403,7 +405,7 @@ base class that would become the basis for the tree structure that eventually be
 
 The interpolation of a layer from these points did work to create a surface structure, and it was a robust solution. The problem was that it did not interpolate each point that had been drawn on the cube, and thus it was difficult to predict what you needed to draw in order to get the desired result (INSERT ILLUSTRATION). A solution where the user coud expect the layer surface to pass through the actual points he would draw was desired to achieve the goals of being a tool for rapid sketching that did not require advanced training. Another solution would therefore need to be found.
 
-A lot of time was spent in order to find a satisfactory solution to this problem. Books on curves and surfaces were read for a while, but in the end the solution came from the geologic field itself. A technique that geologists use to model surfaces in sand was stubled accross. This old technique involves using two wooden profiles, and then slide a third profile across to create a surface. The technique is depicted in figure \ref{fig:wooden} and how it was adapted for the final solution is described later in \secref{subsec:indepth}. Another technique was also developed at the same time, inspired by Inverse Distance Weighing interpolation. This yielded similar results, but was a bit more unpredictable and required more user input, and was thus not included in the final solution.
+A lot of time was spent in order to find a satisfactory solution to this problem. Books on curves and surfaces were read for a while, but in the end the solution came from the geologic field itself. A technique that geologists use to model surfaces in sand was stubled accross. This old technique involves using two wooden profiles, and then slide a third profile across to create a surface. The technique is depicted in figure \ref{fig:wooden} and how it was adapted for the final solution is described later in \secref{subsec:indepth}. Another technique was also developed concurrently with that approach, inspired by Inverse Distance Weighing interpolation, but only using the four perpendicular points like in the other approach and weighting them. The points were weighted by the function $1/distance$ if distance were more than 0. If distance was 0, only that point was used. This yielded similar results, but results was a bit more unpredictable when making a complex surface. Also, the irregular grid tended to get distorted according to how close to the edges a point on the grid was. This created further problems with the parametric space later. For these reasons that approach was not included in the final solution.
 
 Input for layers are drawn on the cube faces. On faces where the user draws, there is an auto-complete function while on the left, right and oppsite side there is a suggestion function. The simple auto-complete will automatically complete a line you draw by extending it towards the left and right side of the current face. 
 

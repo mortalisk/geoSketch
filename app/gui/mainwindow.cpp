@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QToolBar * toolBar = findChild<QToolBar*>("toolBar");
     QAction * actionSave = findChild<QAction*>("actionSave");
     QAction * actionLoad = findChild<QAction*>("actionLoad");
+    QAction * actionExport = findChild<QAction*>("actionExport");
 
     toolBar->clear();
 
@@ -35,6 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(gl,SIGNAL(itemSelected(Scene *, BaseNode *)), this, SLOT(updateMenu(Scene*,BaseNode*)));
     connect(actionSave,SIGNAL(triggered()),gl,SLOT(save()));
     connect(actionLoad,SIGNAL(triggered()),gl,SLOT(open()));
+
+    connect(actionExport,SIGNAL(triggered()),gl,SLOT(exportObj()));
 
     mainLayout->addWidget(gl);
 }

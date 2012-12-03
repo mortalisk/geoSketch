@@ -45,6 +45,7 @@
     </property>
     <addaction name="actionSave"/>
     <addaction name="actionLoad"/>
+    <addaction name="actionExport"/>
    </widget>
    <addaction name="menuEdit"/>
   </widget>
@@ -56,6 +57,11 @@
   <action name="actionLoad">
    <property name="text">
     <string>Load</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export</string>
    </property>
   </action>
  </widget>

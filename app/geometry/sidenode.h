@@ -37,6 +37,7 @@ public:
                 spline.addPoint(point+diff);
         }
     }
+    bool includeShapeInExport() {return true;}
 
     void addSubclassActions(QToolBar *) {};
 
@@ -65,7 +66,7 @@ public:
             spline.isSuggestion = true;
         }else {
             const QVector<Vector3> & points = spline.getPoints();
-            const Vector3& first = points[0];
+            Vector3 first = points[0];
             Vector3 last = points[points.size()-1];
             float length = 0.0;
             for (int i = 1; i< points.size();++i) {

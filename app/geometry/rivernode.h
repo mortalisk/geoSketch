@@ -49,6 +49,8 @@ public:
 
     void doOversketch();
 
+    bool includeShapeInExport() { return drawWater;}
+
     virtual void repositionOnSurface(SurfaceNode &surfacenode);
     virtual void doTransformSurface(QVector < QVector < Vector3 > > & rows, float resolution, float size);
 

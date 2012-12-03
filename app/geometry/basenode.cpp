@@ -7,6 +7,8 @@
 #include <QVector2D>
 #include <QMenu>
 #include "scene.h"
+#include <QTextStream>
+#include "boxnode.h"
 
 BaseNode::BaseNode(QString name) : QObject() {
     init();
@@ -279,6 +281,59 @@ void BaseNode::fromJson(QVariantMap map) {
     }
     init();
     fromJsonSubclass(map);
+}
+
+void BaseNode::makeObj(QTextStream& s, QTextStream &materials, int* objNo) {
+
+
+    BoxNode * bn = qobject_cast<BoxNode*>(this);
+    if(bn) {
+        bn->waterNode->makeObj(s, materials, objNo);
+//        bn->frontNode->makeObj(s, materials, objNo);
+
+
+//        bn->topNode->makeObj(s, materials, objNo);
+//        bn->bottomNode->makeObj(s, materials, objNo);
+//        bn->backNode->makeObj(s, materials, objNo);
+
+//        bn->leftNode->makeObj(s, materials, objNo);
+
+//        bn->rightNode->makeObj(s, materials, objNo);
+    }
+    if (shape != NULL && visible && includeShapeInExport()) {
+         *objNo = *objNo + 1;
+        s << "usemtl Color" << name << *objNo << "\n";
+        s << "o [" << name << *objNo << "]" << "\n";
+        materials << "newmtl Color" << name << *objNo << "\n";
+        materials << "Tr " << ambient.w() << "\n";
+        materials << "Ka " << ambient.x() << " " << ambient.y() << " " << ambient.z() << "\n";
+        materials << "Kd " << diffuse.x() << " " << diffuse.y() << " " << diffuse.z() << "\n";
+        materials << "Ks 0 0 0\n";
+        if(shape->strip) {
+            for (int i = 0; i< shape->triangles.size(); i++) {
+                vertex & v1 = shape->triangles[i];
+                s << "v " << v1.x << " " << v1.y << " "<< v1.z << "\n";
+                if (i >= 2) {
+                    s << "f -3 -2 -1" << "\n";
+                }
+
+            }
+        }else {
+            for(int i = 0; i< shape->triangles.size(); i+=3) {
+                vertex & v1 = shape->triangles[i];
+                vertex & v2 = shape->triangles[i+1];
+                vertex & v3 = shape->triangles[i+2];
+
+                s << "v " << v1.x << " " << v1.y << " "<< v1.z << "\n";
+                s << "v " << v2.x << " " << v2.y << " "<< v2.z << "\n";
+                s << "v " << v3.x << " " << v3.y << " "<< v3.z << "\n";
+                s << "f -3 -2 -1" << "\n";
+            }
+        }
+    }
+    foreach(BaseNode * b,children) {
+        b->makeObj(s, materials, objNo);
+    }
 }
 
 void BaseNode::draw() {

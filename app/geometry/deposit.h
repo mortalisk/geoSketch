@@ -75,6 +75,8 @@ public:
 
     void addSubclassActions(QToolBar *) {};
 
+    bool includeShapeInExport() {return true;}
+
     virtual void fromJsonSubclass(QVariantMap map) {
         flowFrom.setX(map["flowFrom"].toMap()["x"].toDouble());
         flowFrom.setY(map["flowFrom"].toMap()["y"].toDouble());

@@ -156,16 +156,36 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
 
     QVector < float > fill(rows[0].size());
     QVector < QVector < float > > heigths(rows.size(), fill);
-    for (int z = 0; z<rows.size(); ++z) {
-        for (int x = 0; x<rows[0].size();++x) {
-            QVector2D point(x,z);
 
-            for (int i = 0; i< uv.size()-1;++i) {
-                QVector2D p1 = uv[i]/gridsize;
-                QVector2D p2 = uv[i+1]/gridsize;
-                float h1 = this->heights[i];
-                float h2 = this->heights[i+1];
-                QVector2D normal(p2.y()-p1.y(), -(p2.x()-p1.x()));
+
+
+    for (int i = 0; i< uv.size()-1;++i) {
+
+
+        QVector2D p1 = uv[i]/gridsize;
+        QVector2D p2 = uv[i+1]/gridsize;
+        float h1 = this->heights[i];
+        float h2 = this->heights[i+1];
+        QVector2D normal(p2.y()-p1.y(), -(p2.x()-p1.x()));
+
+        float minx = fmin(p1.x(), p2.x());
+        float maxx = fmax(p1.x(), p2.x());
+
+        float miny = fmin(p1.y(), p2.y());
+        float maxy = fmax(p1.y(), p2.y());
+
+        float maxheight = fmax(h1,h2);
+
+        float fromx = minx-maxheight*worldToGrid;
+        float tox = maxx +maxheight*worldToGrid;
+        float fromy = miny -maxheight*worldToGrid;
+        float toy = maxy +maxheight*worldToGrid;
+
+//        for (int z = 0; z<rows.size(); ++z) {
+//            for (int x = 0; x<rows[0].size();++x) {
+        for (int z = fromy; z<toy; ++z) {
+            for (int x = fromx; x<tox;++x) {
+                QVector2D point(x,z);
                 QVector2D point2 = point +normal;
 
                 QVector2D intersect = linesIntersection(p1,p2, point, point2);

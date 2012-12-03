@@ -19,6 +19,7 @@ public:
     }
 
     void addSubclassActions(QToolBar *) {};
+    bool includeShapeInExport() {return false;}
 
     void addSubclassJson(QVariantMap &) {};
     void fromJsonSubclass(QVariantMap ) {};

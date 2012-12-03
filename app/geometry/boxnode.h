@@ -42,6 +42,7 @@ public:
     void draw();
     void drawSelf();
     void makeSuggestionFor(SideNode* side);
+    bool includeShapeInExport() {return false;}
 
     void clearSketch() {
         frontNode->clearSketch();
