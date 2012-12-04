@@ -233,7 +233,7 @@ void MyGLWidget::addActions(QToolBar* menu) {
         if (bn) {
             QAction * showSea = new QAction(QString("Change Sea"), menu);
             showSea->setCheckable(true);
-            showSea->setChecked(scene->boxNode->waterNode->visible);
+            showSea->setChecked(scene->setSeaLevel);
             connect(showSea, SIGNAL(toggled(bool)), this, SLOT(seaLevel()));
             menu->addAction(showSea);
         } else {

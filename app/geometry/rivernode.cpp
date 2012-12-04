@@ -270,12 +270,18 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
         QVector2D b = lefts[i+1]/cellsize;
         QVector2D c = rigths[i]/cellsize;
         QVector2D d = rigths[i+1]/cellsize;
-//        float zmin = std::min(std::min(a.y(), b.y()), std::min(c.y(), d.y()));
-//        float zmax = std::max(std::max(a.y(), b.y()), std::max(c.y(), d.y()));
-//        float xmin = std::min(std::min(a.x(), b.x()), std::min(c.x(), d.x()));
-//        float xmax = std::max(std::max(a.x(), b.x()), std::max(c.x(), d.x()));
-        for (int z = 0; z<rows.size(); ++z) {
-            for (int x = 0; x<rows[0].size();++x) {
+        float zmin = std::min(std::min(a.y(), b.y()), std::min(c.y(), d.y()));
+        float zmax = std::max(std::max(a.y(), b.y()), std::max(c.y(), d.y()));
+        float xmin = std::min(std::min(a.x(), b.x()), std::min(c.x(), d.x()));
+        float xmax = std::max(std::max(a.x(), b.x()), std::max(c.x(), d.x()));
+//        zmin = fmax (zmin, 0);
+//        zmax = fmin (zmax, resolution);
+//        xmin = fmax (xmin, 0);
+//        xmax = fmin (xmax, resolution);
+//        for (int z = 0; z<rows.size(); ++z) {
+//            for (int x = 0; x<rows[0].size();++x) {
+        for (int z =zmin; z<=zmax; ++z) {
+            for (int x = xmin; x<xmax;++x) {
                 QVector2D point(x,z);
 
                 float u, v;
@@ -303,7 +309,10 @@ void RiverNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                     float maxDepth = -0.2;
                     float depth = depthOfRiver(fmin(distAB, distCD), 0.03*resolution , maxDepth);
 
-                    rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + depth,rows[z][x].z());
+                    if (z >=0 && z <resolution &&
+                            x >=0 && x < resolution) {
+                        rows[z][x] = Vector3(rows[z][x].x(),rows[z][x].y() + depth,rows[z][x].z());
+                    }
                 }
             }
         }

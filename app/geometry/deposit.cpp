@@ -22,7 +22,7 @@ void Deposit::prepareForDrawing() {
 
     resetSimulation();
 
-    if (deposit1.size() == 0) return;
+    if (deposit1.size() == 0 || (this->previousDeposit != NULL && !this->previousDeposit->isDone())) return;
 
     QVector<QVector<float> > * deposited;
     QVector<QVector<float> > * previousDeposit;

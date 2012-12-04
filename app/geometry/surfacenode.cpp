@@ -8,17 +8,20 @@
 #include <QAction>
 #include <QMenu>
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(200), skip(4),below(below),front(front), right(right), back(back), left(left)
+SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(150), skip(4),below(below),front(front), right(right), back(back), left(left)
 {
     //constructLayer();
 }
 
 SurfaceNode::SurfaceNode(SurfaceNode &other): BaseNode(other) , hasContructedLayer(false), resolution(other.resolution), skip(other.skip), uvCoordinateSpline(other.uvCoordinateSpline), below(other.below),front(other.front), right(other.right), back(other.back), left(other.left){
 
+    Deposit * prev = NULL;
     foreach (BaseNode * c, children) {
         Deposit * d = dynamic_cast<Deposit*>(c);
         if (d) {
             d->surfaceNode = this;
+            d->previousDeposit = prev;
+            prev = d;
         }
     }
 }
@@ -37,6 +40,10 @@ void SurfaceNode::prepareForDrawing()  {
 
 void SurfaceNode::invalidate() {
     hasContructedLayer = false;
+
+    foreach (BaseNode* b, children) {
+        b->invalidate();
+    }
     //if (shape != NULL)
         //delete shape;
     shape = NULL;

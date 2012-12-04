@@ -127,6 +127,9 @@ void Scene::editLayer() {
             boxNode->updateCurrentBelowNode();
         }
 
+        boxNode->waterNode->below = boxNode->currentBelowNode;
+        boxNode->waterNode->invalidate();
+
     }
 }
 

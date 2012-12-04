@@ -27,6 +27,14 @@ public:
         return amount > targetAmount;
     }
 
+    void invalidate() {
+        amount = 0;
+        hasReset = false;
+        deposit1.clear();
+        deposit2.clear();
+        samples.clear();
+    }
+
     SurfaceNode * surfaceNode;
     Deposit(QVector2D flowFrom, QVector2D direction, float seaLevel, SurfaceNode * surfaceNode, Deposit * previousDeposit) : BaseNode("deposit"), flowFrom(flowFrom), direction(direction), surfaceNode(surfaceNode), previousDeposit(previousDeposit) {
         this->seaLevel = seaLevel;
