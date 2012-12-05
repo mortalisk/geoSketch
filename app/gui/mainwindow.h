@@ -29,6 +29,11 @@ private slots:
     void updateLayerChooser(Scene * s);
     void editLayer();
     void updateMenu(Scene *, BaseNode*);
+    void pushScene(QAction * a) {
+        if (a->text() != "Undo") {
+            gl->pushScene();
+        }
+    }
 };
 
 #endif // MAINWINDOW_H

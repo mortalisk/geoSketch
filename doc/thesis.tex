@@ -102,7 +102,7 @@ After reading this section, you should have gained a basic understanding of the 
 A model is a physical or conceptual object used to represent something else in a way that isolates the information that is relevant to our intents.  On the computer, models can be made in many ways. Here we expolore the relevant developments in techniques for rapid computer modeling in general and as it applies to geologic modeling particularly.
 
 \section{Computer Modeling}
-There are many approaches to achieving rapid computer modeling. The one that is perhaps most focused on, is sketch based modeling. Sket
+There are many approaches to achieving rapid computer modeling. The one that is perhaps most focused on, is sketch based modeling. Sketch based modeling is an approach to three dimentional modeling where the interaction is made to feel like traditional pen and paper sketching as opposed to editing vertices and edges directly. Teddy, a soft o
 
 \section{Geologic Modeling}
 Geologists use models for understanding and communicating about phenomena relating to the structure of the earth and how it changes over time. Many tools exist for modeling such phenomena based on parameters gathered 
@@ -135,119 +135,11 @@ Once input has been gathered the program interprets it, and creates an internal 
  \label{fig:overviewConcept}
 \end{figure}
 
-The internal format tries to capture the modelers intent as well as possible. It is the the meaning of the input that is stored, not the gemoetry or how it looks. As we will see, this enables a modelling aproach that let's him to go back and change earlier things in the model without having to redraw everything, since all the geometry can always be recomputed from the internal format.
+The aim of the internal format is to capture the modelers intent as well as possible. It is the the meaning of the input that is interesting and stored for the representation, not the geometry or how it looks. As we will see, this enables a modelling aproach that let's him to go back and change earlier things in the model without having to redraw everything, since all the geometry can always be recomputed from the internal format.
 
 \clearpage
 \section{Features}
-\subsection{Layers}
-Layers can be created fast and easy. In figure \ref{fig:layerCreate} we see how a layer is made by first drawing the four curves on the side of the cube, and then letting the program create the layer surface. A surface like this can be created in about 30 seconds.
-
-The layer can also be edited. When editing, the old curves are shown with a red stippled line while the new line that is the result of oversketching is drawn with a black solid line, as can be seen in figure \ref{fig:layerEdit}. Once done editing the program will compute new geometry for the layer based on the new curves.
-
-New layers may be added on top of existing layers as seen in figure \ref{fig:layerNew}. If the layers intersect, only the part that is above the previously created layers will be visible. If the new layer intersects with previously drawn layers, only the part that is above will be drawn, as seen in figure \ref{fig:layerIntersect}
-
-\begin{figure}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerDraw.png}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerCreate.png}
- \caption{The layer is represented by the four curves the user draws, plus the lower line that represents the top of all previously drawn lines. The layer geometry is generated between these two lines.}
- \label{fig:layerCreate}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdit.png}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdited.png}
- \caption{Layers can be edited. The left hand picture shows the old curves in red, and the new curves in black. On the right we see the resulting layer after editing.}
- \label{fig:layerEdit}
-\end{figure}
-
-\begin{figure}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNew.png}
-\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNewMarked.png}
- \caption{It is possible to create multiple layers as can be seen here. When one has multiple layers, it is also possible to select one of the layers by right clicking it, as seen on the right. When a layer is selected, it is highlighted by a slightly brighter color, and it's outline is drawn in red.}
- \label{fig:layerNew}
-\end{figure}
-
-\begin{figure}
- \centering
-\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/simpleLayerIntersect.png}
- \caption{Layers might also intersect with each other. In that case what is above of the last drawn layer will be what is visible, while what is below is not part of the new layer.}
- \label{fig:layerIntersect}
-\end{figure}
-\clearpage
-
-\subsection{Rivers}
-Rivers can be drawn on the surfaces by indicating where it will run. The program then creates a river as shown in figure \ref{fig:riverDraw}. It can also be changed by oversketching as shown in figure \ref{fig:riverChange}. The oversketching is done on one side of the river at a time. The user also has the choice of replacing the entire side of the river if that will let him more easily make the changes he wants.
-
-\begin{figure}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDraw.png}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDrawn.png}
- \caption{Sketching of rivers by indicating where it shoudl run, and letting the program create a river along this path. }
- \label{fig:riverDraw}
-\end{figure}
-
-\begin{figure}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChange.png}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChanged.png}
- \caption{Changing a river is possible by oversketching }
- \label{fig:riverChange}
-\end{figure}
-
-\subsection{Ridges}
-Ridges are also drawn by a line on the layer surface. Once a line has been drawn and the user indicates that he want's a ridge, a generic shape of a ridge is created automatically as seen in figure \ref{fig:ridgeDraw}. The user then has the choice to change the height profile along the ridge's baseline. This is done by skething on a temporary wall that is erected along the ridge's baseline, as can be seen in \ref{fig:ridgeChange}
-
-\begin{figure}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeDraw.png}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeDrawn.png}
- \caption{Sketching of a ridge by indicating where it's base goes, and letting the program create a ridge along this path. }
- \label{fig:ridgeDraw}
-\end{figure}
-
-\begin{figure}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeChange.png}
-\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeChanged.png}
- \caption{Changing a ridge is done by drawing on a wall that is erected along the ridge's baseline. }
- \label{fig:ridgeChange}
-\end{figure}
-
-
-\subsection{Valleys}
-A valley functions much like a river, only it has no water and is initally wider and deeper. It is also made by first drawing a line and then can be changed by the same mechanism as the river.
-\begin{figure}
-\includegraphics[trim = 10mm 80mm 200mm 30mm, clip,width=.5\linewidth]{thesis/results/valleyMade.png}
-\includegraphics[trim = 10mm 80mm 200mm 30mm, clip,width=.5\linewidth]{thesis/results/valleyChanged.png}
- \caption{A valley and the same valley after a change to both of it's sides }
- \label{fig:valley}
-\end{figure}
-
-\subsection{Sea level}
-The sea level can be enabled at any time and moved up or down as the user pleases. Where a river meets the sea, a deposit may be generated.
-
-\begin{figure}
-\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/seaEnabled.png}
-\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/seaChanged.png}
- \caption{Indicating where the sea level goes}
- \label{fig:seaLevel}
-\end{figure}
-
-
-\subsection{Deposits}
-Deposits can be created where a river meets the sea. The user simply indicates that he want't one for a river, and the rest is done procedurally by a simple simulation. The procedure continues until the user stops it. The user can indicate more than one deposit to be made for a single river. This will make the deposits build outward on top of each other in the direction of the river.
-
-\begin{figure}
-\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/depositBefore.png}
-\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/depositCreated.png}
- \caption{Creation of a deposit is done procedurally from the point where the river meets the sea}
- \label{fig:seaLevel}
-\end{figure}
-
-
-\begin{figure}
-\includegraphics[trim = 120mm 7mm 30mm 30mm, clip,width=.5\linewidth]{thesis/results/depositLayered.png}
-\includegraphics[trim = 120mm 7mm 30mm 30mm, clip,width=.5\linewidth]{thesis/results/depositNew.png}
- \caption{The user can indicate when he wants a new layer of deposits, or when he want's to stop depositing. He can also add new rivers with new deposits.}
- \label{fig:seaLevel}
-\end{figure}
-
+There are a few different features that can be combined to create a scene inside the cube. Thes are layers, rivers, ridges, valleys, deposits and sea level. They can all be seen in figure \ref{fig:basicScreenhot}. The layers are created by drawing on the cube, while rivers, ridges and valleys are created by drawing on the layers. The sea level is simply indicated by clicking on the cube at the correct height. It can also be changed by dragging while holding the mouse button. The deposits are created procedurally by selecting a river, and then indicating that a deposit is to be made. The deposit will be made at the intersection of the river and the sea level.
 
 
 % notes for methodology
@@ -399,6 +291,40 @@ running speed noticeably.
 There is no input to change the parameters of the cube. The cube itself is represented by the size of its three dimensions. That is, height, width, and depth. It the outset it was the intention to be able to change the size of the cube in these three dimensions, but there was not enough time to get to this feature. The gemoetry of the cube is constructed by creating and positioning six square faces of correct size and the correct orientation. Each of the faces are also in turn contructed by two triangles and outlined by a line strip. When visualizing the cube geometry, only the triangle of the back faces are rendered, but all lines are shown. This effect is achieved by backface culling, makes the cube look transparent, and avoids occlusion of the geometry inside. The cube can also be made invisible like other objects, which can be useful for making screenshots where the cube is not neccessary.
 
 \subsection{Layers}
+Layers can be created fast and easy. In figure \ref{fig:layerCreate} we see how a layer is made by first drawing the four curves on the side of the cube, and then letting the program create the layer surface. A surface like this can be created in about 30 seconds.
+
+The layer can also be edited. When editing, the old curves are shown with a red stippled line while the new line that is the result of oversketching is drawn with a black solid line, as can be seen in figure \ref{fig:layerEdit}. Once done editing the program will compute new geometry for the layer based on the new curves.
+
+New layers may be added on top of existing layers as seen in figure \ref{fig:layerNew}. If the layers intersect, only the part that is above the previously created layers will be visible. If the new layer intersects with previously drawn layers, only the part that is above will be drawn, as seen in figure \ref{fig:layerIntersect}
+
+\begin{figure}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerDraw.png}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerCreate.png}
+ \caption{The layer is represented by the four curves the user draws, plus the lower line that represents the top of all previously drawn lines. The layer geometry is generated between these two lines.}
+ \label{fig:layerCreate}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdit.png}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerEdited.png}
+ \caption{Layers can be edited. The left hand picture shows the old curves in red, and the new curves in black. On the right we see the resulting layer after editing.}
+ \label{fig:layerEdit}
+\end{figure}
+
+\begin{figure}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNew.png}
+\includegraphics[width=.5\linewidth]{thesis/results/simpleLayerNewMarked.png}
+ \caption{It is possible to create multiple layers as can be seen here. When one has multiple layers, it is also possible to select one of the layers by right clicking it, as seen on the right. When a layer is selected, it is highlighted by a slightly brighter color, and it's outline is drawn in red.}
+ \label{fig:layerNew}
+\end{figure}
+
+\begin{figure}
+ \centering
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/simpleLayerIntersect.png}
+ \caption{Layers might also intersect with each other. In that case what is above of the last drawn layer will be what is visible, while what is below is not part of the new layer.}
+ \label{fig:layerIntersect}
+\end{figure}
+
 \label{subsec:layers}
 At the onset of development, while the final solution was still only an idea, creating the layer wasn't really considered to be a challenge deserving all that much consideration. However, a considerable amount of time was spent on figuring this out. The very first thing done was to simply loop through all the points and draw triangle strips beginning with the first and last point, then second and second to last, and so on. This created some structure that could resemble a layer, but it was clear that it would not be usable for anything, and it was not very robust at all. The second approach was to do a simple interpolation of the points on the cube faces for each point, by going from left to right, back to front of the cube along the curves drawn on the cubes faces. Before this could be achieved, it was then clear that the four sides of the cubes needed to have separate structures and detection of which face was being drawn on. This was achived by creating a separate structure out of each side, and making a 
 base class that would become the basis for the tree structure that eventually became an important part of the final solution. Thus, each face now kept track of it's own point as they were being drawn on.
@@ -498,7 +424,51 @@ For detecting which areas of a face of the cube to cover with the layers surface
  \item For each polygon in the list ``polygons'', create a triangluation suitable for visualization, and add all triangles to the geometry.
 \end{enumerate}
 
+\subsection{Rivers}
+Rivers can be drawn on the surfaces by indicating where it will run. The program then creates a river as shown in figure \ref{fig:riverDraw}. It can also be changed by oversketching as shown in figure \ref{fig:riverChange}. The oversketching is done on one side of the river at a time. The user also has the choice of replacing the entire side of the river if that will let him more easily make the changes he wants.
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDraw.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverDrawn.png}
+ \caption{Sketching of rivers by indicating where it should run, and letting the program create a river along this path. }
+ \label{fig:riverDraw}
+\end{figure}
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChange.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/riverChanged.png}
+ \caption{Changing a river is possible by oversketching }
+ \label{fig:riverChange}
+\end{figure}
+
+
+\subsection{Valleys}
+A valley functions much like a river, only it has no water and is initally wider and deeper. It is also made by first drawing a line and then can be changed by the same mechanism as the river.
+\begin{figure}
+\includegraphics[trim = 10mm 80mm 200mm 30mm, clip,width=.5\linewidth]{thesis/results/valleyMade.png}
+\includegraphics[trim = 10mm 80mm 200mm 30mm, clip,width=.5\linewidth]{thesis/results/valleyChanged.png}
+ \caption{A valley and the same valley after a change to both of it's sides }
+ \label{fig:valley}
+\end{figure}
+
 \subsection{Ridges}
+Ridges are also drawn by a line on the layer surface. Once a line has been drawn and the user indicates that he want's a ridge, a generic shape of a ridge is created automatically as seen in figure \ref{fig:ridgeDraw}. The user then has the choice to change the height profile along the ridge's baseline. This is done by skething on a temporary wall that is erected along the ridge's baseline, as can be seen in \ref{fig:ridgeChange}
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeDraw.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeDrawn.png}
+ \caption{Sketching of a ridge by indicating where it's base goes, and letting the program create a ridge along this path. }
+ \label{fig:ridgeDraw}
+\end{figure}
+
+\begin{figure}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeChange.png}
+\includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeChanged.png}
+ \caption{Changing a ridge is done by drawing on a wall that is erected along the ridge's baseline. }
+ \label{fig:ridgeChange}
+\end{figure}
+
+
 Input for the ridges is first drawn on a layer as a normal curve. When the user indicates that he wants to create a ridge, a new ridge object is created based on this. A ridge is represented by this curve and a height associated with each point in the curve. The curve is the base line that the user drew on the layer where he wants the ridge to follow along. The heights are the height of the ridge at each point of the curve. Initially the height list is just a smooth function from side to side of the ridge, with a peak in the middle. The height can be changed if the user indicates so. This new height line is input on a temporary sketch wall erected for this purpose. The input prcedure is similar to other lines, but in the end it is not actually stored as normal line. When the user is done, only the height along the entire wall is stored in a list, one for each point on the base line. The wall is constructed by vertices with parametric coordinates that make it easy to read the height from each intersection, as 
 well as where along the curve each point is. If the user inputs a line that does not go strictly from left to right or right to left, but loops back over itself, only the last input for that position will be relevant as it will overwrite the former height stored there.
 
@@ -511,6 +481,24 @@ Rivers and valleys are represented using two lines, one for each bank of the riv
 
 
 \subsection{Deposits}
+Deposits can be created where a river meets the sea. The user simply indicates that he want't one for a river, and the rest is done procedurally by a simple simulation. The procedure continues until the user stops it. The user can indicate more than one deposit to be made for a single river. This will make the deposits build outward on top of each other in the direction of the river.
+
+\begin{figure}
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/depositBefore.png}
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/depositCreated.png}
+ \caption{Creation of a deposit is done procedurally from the point where the river meets the sea}
+ \label{fig:depositCreate}
+\end{figure}
+
+
+\begin{figure}
+\includegraphics[trim = 120mm 7mm 30mm 30mm, clip,width=.5\linewidth]{thesis/results/depositLayered.png}
+\includegraphics[trim = 120mm 7mm 30mm 30mm, clip,width=.5\linewidth]{thesis/results/depositNew.png}
+ \caption{The user can indicate when he wants a new layer of deposits, or when he want's to stop depositing. He can also add new rivers with new deposits.}
+ \label{fig:depositLayer}
+\end{figure}
+
+
 Deposits are created procedurally. Therefore, the input for a deposit is implied by the river that the deposit is flowing from and where that river goes below the sea level at the time when the user requests a deposit be made and how long he wishes to let it continue depositing. Deposits are represented by the position where they start, a little below the point in the river where the sea starts, and the amount of matter that is deposited from this point over time. The intention was to also take into account the direction and speed of flow in the river, but this has not been implemented yet.
 
 Since the river is created procedurally over time, it needs an additional step to generate an intermediate representation of the deposit before generating geometry. This step consists of simulating the flow of matter across the surface underneath. For the simulation a simple volume preserving diffusion algorithm is used, that is a modified version of the one found in (??? REFER to webgl flow thing???). This algorithm assumes a regular height grid, and all the underlying layers mut be taken into account. The layers are of course represented as a irregual grid and thus a sampling must be performed to create a regular grid. First a grid overlay over the cube is created at the desired resolution and each point in the grid is set to a value low enough that no intersection could occur at this height. Then at regualar intervals, a ray is cast directly down into the cube, doing intersection tests for each layer, updating the grid value to the height of any intersection when that intersection is higher than the 
@@ -599,6 +587,17 @@ This algorithm in gives triangles that follow the entire outline of the deposit 
 
 
 When creating a deposit, the layer object will check for previous deposits, and if such exists, the grid data will be reused for the next deposit. This gives not only speed improvement, but also enebles deposits to flow on top of each other.
+
+\subsection{Sea level}
+The sea level can be enabled at any time and moved up or down as the user pleases. Where a river meets the sea, a deposit may be generated.
+
+\begin{figure}
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/seaEnabled.png}
+\includegraphics[trim = 90mm 7mm 80mm 30mm, clip,width=.5\linewidth]{thesis/results/seaChanged.png}
+ \caption{Indicating where the sea level goes}
+ \label{fig:seaLevel}
+\end{figure}
+
 
 \clearpage
 \chapter{Results}

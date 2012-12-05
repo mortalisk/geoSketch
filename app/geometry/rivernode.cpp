@@ -362,6 +362,7 @@ void RiverNode::removeLoops(QVector<QVector2D>& sp) {
 
 void RiverNode::stopDeposit() {
     deposit->setDepositing(!deposit->isDepositing());
+    this->deposit = NULL;
 }
 
 void RiverNode::repositionOnSurface(SurfaceNode &surfacenode) {

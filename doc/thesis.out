@@ -7,9 +7,9 @@
 \BOOKMARK [1][-]{section.2.5}{Faults}{chapter.2}
 \BOOKMARK [1][-]{section.2.6}{Rivers}{chapter.2}
 \BOOKMARK [0][-]{chapter.3}{State of the Art}{}
-\BOOKMARK [1][-]{section.3.1}{Modeling}{chapter.3}
+\BOOKMARK [1][-]{section.3.1}{Computer Modeling}{chapter.3}
 \BOOKMARK [1][-]{section.3.2}{Geologic Modeling}{chapter.3}
-\BOOKMARK [1][-]{section.3.3}{Computer Modeling}{chapter.3}
+\BOOKMARK [1][-]{section.3.3}{}{chapter.3}
 \BOOKMARK [2][-]{subsection.3.3.1}{Rapid Computer Modeling}{section.3.3}
 \BOOKMARK [0][-]{chapter.4}{Basic Concept}{}
 \BOOKMARK [1][-]{section.4.1}{Overview}{chapter.4}
@@ -17,9 +17,7 @@
 \BOOKMARK [2][-]{subsection.4.2.1}{Layers}{section.4.2}
 \BOOKMARK [2][-]{subsection.4.2.2}{Rivers}{section.4.2}
 \BOOKMARK [2][-]{subsection.4.2.3}{Ridges}{section.4.2}
-\BOOKMARK [2][-]{subsection.4.2.4}{Valleys}{section.4.2}
-\BOOKMARK [2][-]{subsection.4.2.5}{Sea level}{section.4.2}
-\BOOKMARK [2][-]{subsection.4.2.6}{Deposits}{section.4.2}
+\BOOKMARK [2][-]{subsection.4.2.4}{Deposits}{section.4.2}
 \BOOKMARK [0][-]{chapter.5}{Methodology}{}
 \BOOKMARK [1][-]{section.5.1}{Work process}{chapter.5}
 \BOOKMARK [2][-]{subsection.5.1.1}{Inspiration and research}{section.5.1}
@@ -34,8 +32,11 @@
 \BOOKMARK [2][-]{subsection.5.3.1}{Technology}{section.5.3}
 \BOOKMARK [2][-]{subsection.5.3.2}{Cube}{section.5.3}
 \BOOKMARK [2][-]{subsection.5.3.3}{Layers}{section.5.3}
-\BOOKMARK [2][-]{subsection.5.3.4}{Ridges}{section.5.3}
-\BOOKMARK [2][-]{subsection.5.3.5}{Deposits}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.4}{Rivers}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.5}{Valleys}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.6}{Ridges}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.7}{Deposits}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.8}{Sea level}{section.5.3}
 \BOOKMARK [0][-]{chapter.6}{Results}{}
 \BOOKMARK [1][-]{section.6.1}{Scenarios}{chapter.6}
 \BOOKMARK [1][-]{section.6.2}{Produced Renderings}{chapter.6}

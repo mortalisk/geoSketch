@@ -34,8 +34,8 @@ void Deposit::prepareForDrawing() {
 
     Vector3 point = surfaceNode->getPointFromUv(flowFrom);
 
-    int fromx = round((point.x()+5)*4);
-    int fromy = round((point.z()+5)*4);
+    int fromx = round((point.x()+5)*gridsize/10);
+    int fromy = round((point.z()+5)*gridsize/10);
 
     // if we are not done depositing and the previous deposit is done depositing.
     if ((depositing|| amount <= targetAmount) && (this->previousDeposit == NULL || this->previousDeposit->isDone())) {
@@ -198,8 +198,6 @@ void Deposit::resetSimulation() {
     if ((previousDeposit != NULL && !previousDeposit->isDone()))
         return;
     samples.clear();
-
-    int gridsize = 40;
     float cellsize = 10.0/gridsize - 0.01/gridsize;
 
 

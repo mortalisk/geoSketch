@@ -33,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     gl->addActions(toolBar);
 
+    connect(toolBar, SIGNAL(actionTriggered(QAction*)), this, SLOT(pushScene(QAction *)));
+
     connect(gl,SIGNAL(itemSelected(Scene *, BaseNode *)), this, SLOT(updateMenu(Scene*,BaseNode*)));
     connect(actionSave,SIGNAL(triggered()),gl,SLOT(save()));
     connect(actionLoad,SIGNAL(triggered()),gl,SLOT(open()));

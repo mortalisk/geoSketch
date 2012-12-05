@@ -62,7 +62,7 @@ public:
 
     void checkInput();
 
-    void pushScene();
+
 
 
     void setColor( QColor c);
@@ -74,6 +74,7 @@ signals:
     void itemSelected(Scene *, BaseNode *);
 
 public slots:
+    void pushScene();
     void setLayer(int);
     void animate();
     void makeLayer();

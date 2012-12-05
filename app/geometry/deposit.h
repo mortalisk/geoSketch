@@ -11,6 +11,7 @@ private:
     float amount;
     float targetAmount;
     float seaLevel;
+    float gridsize;
     QVector<QVector<Vector3> > samples;
     QVector<QVector<float> > deposit1;
     QVector<QVector<float> > deposit2;
@@ -42,9 +43,10 @@ public:
         depositing = true;
         amount = 0;
         hasReset = false;
+        gridsize = 40;
     }
 
-    Deposit(Deposit& deposit) : BaseNode(deposit), amount(0), targetAmount(deposit.targetAmount), seaLevel(deposit.seaLevel), flowFrom(deposit.flowFrom), direction(deposit.direction), depositing(false), previousDeposit(previousDeposit) {
+    Deposit(Deposit& deposit) : BaseNode(deposit), amount(0), targetAmount(deposit.targetAmount), seaLevel(deposit.seaLevel), flowFrom(deposit.flowFrom), direction(deposit.direction), depositing(false), previousDeposit(NULL), gridsize(deposit.gridsize) {
         hasReset = false;
     }
     Deposit(){
