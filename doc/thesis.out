@@ -12,12 +12,6 @@
 \BOOKMARK [1][-]{section.3.3}{}{chapter.3}
 \BOOKMARK [2][-]{subsection.3.3.1}{Rapid Computer Modeling}{section.3.3}
 \BOOKMARK [0][-]{chapter.4}{Basic Concept}{}
-\BOOKMARK [1][-]{section.4.1}{Overview}{chapter.4}
-\BOOKMARK [1][-]{section.4.2}{Features}{chapter.4}
-\BOOKMARK [2][-]{subsection.4.2.1}{Layers}{section.4.2}
-\BOOKMARK [2][-]{subsection.4.2.2}{Rivers}{section.4.2}
-\BOOKMARK [2][-]{subsection.4.2.3}{Ridges}{section.4.2}
-\BOOKMARK [2][-]{subsection.4.2.4}{Deposits}{section.4.2}
 \BOOKMARK [0][-]{chapter.5}{Methodology}{}
 \BOOKMARK [1][-]{section.5.1}{Work process}{chapter.5}
 \BOOKMARK [2][-]{subsection.5.1.1}{Inspiration and research}{section.5.1}
@@ -29,7 +23,7 @@
 \BOOKMARK [2][-]{subsection.5.2.3}{Geometry synthesis}{section.5.2}
 \BOOKMARK [2][-]{subsection.5.2.4}{Visualization}{section.5.2}
 \BOOKMARK [1][-]{section.5.3}{Specific solutions}{chapter.5}
-\BOOKMARK [2][-]{subsection.5.3.1}{Technology}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.1}{Technology choices}{section.5.3}
 \BOOKMARK [2][-]{subsection.5.3.2}{Cube}{section.5.3}
 \BOOKMARK [2][-]{subsection.5.3.3}{Layers}{section.5.3}
 \BOOKMARK [2][-]{subsection.5.3.4}{Rivers}{section.5.3}
