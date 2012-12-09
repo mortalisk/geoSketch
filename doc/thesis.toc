@@ -7,10 +7,6 @@
 \contentsline {section}{\numberline {2.5}Faults}{5}{section.2.5}
 \contentsline {section}{\numberline {2.6}Rivers}{5}{section.2.6}
 \contentsline {chapter}{\numberline {3}State of the Art}{6}{chapter.3}
-\contentsline {section}{\numberline {3.1}Computer Modeling}{6}{section.3.1}
-\contentsline {section}{\numberline {3.2}Geologic Modeling}{6}{section.3.2}
-\contentsline {section}{\numberline {3.3}}{7}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Rapid Computer Modeling}{7}{subsection.3.3.1}
 \contentsline {chapter}{\numberline {4}Basic Concept}{8}{chapter.4}
 \contentsline {chapter}{\numberline {5}Methodology}{12}{chapter.5}
 \contentsline {section}{\numberline {5.1}Work process}{12}{section.5.1}
