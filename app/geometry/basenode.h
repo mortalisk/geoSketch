@@ -78,7 +78,7 @@ public:
         active = a;
     }
 
-    BaseNode * findIntersectingNode(Vector3& from, Vector3& direction, Vector3& point);
+    virtual BaseNode * findIntersectingNode(Vector3& from, Vector3& direction, Vector3& point);
 
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 

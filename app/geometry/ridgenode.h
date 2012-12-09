@@ -32,6 +32,8 @@ public:
 
     QVector<Vector3> intersectionPoints(Vector3 from, Vector3 direction);
 
+    float dist(float s, float t);
+
     void draw();
 
     void drawSelf();

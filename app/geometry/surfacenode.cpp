@@ -7,8 +7,9 @@
 #include "util.h"
 #include <QAction>
 #include <QMenu>
+#include <isurfacefeature.h>
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(150), skip(4),below(below),front(front), right(right), back(back), left(left)
+SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(250), skip(4),below(below),front(front), right(right), back(back), left(left)
 {
     //constructLayer();
 }
@@ -542,6 +543,45 @@ QVector<Vector3> SurfaceNode::intersectionPoints(Vector3 from,Vector3 direction)
     float s, t;
     return intersectionOnRows(from, direction, rows, s, t, skip);
 }
+
+BaseNode * SurfaceNode::findIntersectingNode(Vector3& from, Vector3& direction, Vector3& point) {
+    float s, t;
+    QVector<Vector3> points = shape->intersectionPoints(from, direction,s, t );
+
+    if (points.size() > 0 && s >= 0 && t >= 0){
+        float distance = FLT_MAX;
+        BaseNode * cand = NULL;
+        foreach(BaseNode* c, children) {
+            ISurfaceFeature * i = dynamic_cast<ISurfaceFeature*>(c);
+            Deposit * d = dynamic_cast<Deposit*>(c);
+            if(d) {
+                QVector<Vector3> pointsD = d->intersectionPoints(from, direction);
+                if (pointsD.size() > 0) {
+                    return d;
+                }
+            }else if (i) {
+                float dist = i->dist(s, t);
+                if (dist < distance) {
+                    cand = c;
+                    distance = dist;
+                }
+            }
+        }
+        if (cand && distance < 0.05) {
+            return cand;
+            point = points[0];
+        }
+    }
+
+    if (points.size() > 0) {
+        point = points[0];
+        return this;
+    }else {
+        return NULL;
+    }
+
+}
+
 
 void SurfaceNode::addPoint(Vector3 from, Vector3 direction) {
 //    QVector<Vector3> cand;

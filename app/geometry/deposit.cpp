@@ -16,6 +16,10 @@ static void print(QVector<QVector<int> > &  vec) {
     }
 }
 
+float Deposit::dist(float s, float t) {
+    return FLT_MAX;
+}
+
 void Deposit::prepareForDrawing() {
 
 

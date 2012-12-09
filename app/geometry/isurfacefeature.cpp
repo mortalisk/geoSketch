@@ -1,5 +1,5 @@
 #include "isurfacefeature.h"
 
-ISurfaceFeature::ISurfaceFeature()
-{
-}
+//ISurfaceFeature::ISurfaceFeature()
+//{
+//}

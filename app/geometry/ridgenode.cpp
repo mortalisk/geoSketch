@@ -34,6 +34,18 @@ QVector<Vector3> RidgeNode::intersectionPoints(Vector3 from, Vector3 direction) 
     }
 }
 
+float RidgeNode::dist(float s, float t) {
+    QVector2D p(s,t);
+    float distance = FLT_MAX;
+    for (int i = 0; i<uv.size(); i++) {
+        float dist = (uv[i] - p).length();
+        if (dist < distance) {
+            distance = dist;
+        }
+    }
+    return distance;
+}
+
 void RidgeNode::addPoint(Vector3 from, Vector3 direction) {
     float s,t;
 

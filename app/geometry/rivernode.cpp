@@ -42,6 +42,18 @@ RiverNode::RiverNode(QVector<QVector2D> uvs, bool drawWater, float width) : Base
     }
 }
 
+float RiverNode::dist(float s, float t) {
+    QVector2D p(s,t);
+    float distance = FLT_MAX;
+    for (int i = 0; i<uv.size(); i++) {
+        float dist = (uv[i] - p).length();
+        if (dist < distance) {
+            distance = dist;
+        }
+    }
+    return distance;
+}
+
 QVector<Vector3> RiverNode::intersectionPoints(Vector3 from, Vector3 direction) {
 //    if (active) {
 //        return BaseNode::intersectionPoints(from, direction);

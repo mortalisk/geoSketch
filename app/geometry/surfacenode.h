@@ -48,6 +48,8 @@ public:
 
     virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
 
+    BaseNode * findIntersectingNode(Vector3& from, Vector3& direction, Vector3& point);
+
     void addSubclassJson(QVariantMap &map);
 
     void fromJsonSubclass(QVariantMap map);

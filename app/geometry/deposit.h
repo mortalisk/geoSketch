@@ -63,6 +63,8 @@ public:
 
     void exchange(QVector<QVector<float> > * previousDeposit, QVector<QVector<float> > * deposited, int xinc, int yinc, int fromx, int fromy);
 
+    float dist(float s, float t);
+
     virtual void repositionOnSurface(SurfaceNode &surfacenode);
 
     virtual void doTransformSurface(QVector<QVector<Vector3> > &rows, float resolution, float size);
