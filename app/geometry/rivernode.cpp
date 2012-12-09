@@ -373,7 +373,8 @@ void RiverNode::removeLoops(QVector<QVector2D>& sp) {
 }
 
 void RiverNode::stopDeposit() {
-    deposit->setDepositing(!deposit->isDepositing());
+    if (deposit)
+        deposit->setDepositing(!deposit->isDepositing());
     this->deposit = NULL;
 }
 
@@ -470,7 +471,7 @@ void RiverNode::createDeposit(float seaLevel, SurfaceNode& surfaceNode) {
         }
     } else {
         color = QVector4D(0,0.5,1,1);
-        for (int i = 0; i < lefts.size()-1; i++) {
+        for (int i = 1; i < lefts.size()-1; i++) {
             Vector3 point = surfaceNode.getPointFromUv(lefts[i]);
             if (point.y() < seaLevel) {
                 //if (i == 0) return;
