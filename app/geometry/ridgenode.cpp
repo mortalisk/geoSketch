@@ -99,8 +99,9 @@ void RidgeNode::makeWall() {
         Vector3 up(0, 5, 0);
         Vector3 normal = (next-previous).cross(up).normalize();
         Vector3 top = current+up;
+        Vector3 bottom = current-up;
         float u = i/size;
-        triangles.push_back(vertex(current.x(), current.y(), current.z(), normal.x(), normal.y(), normal.z(), u, 0));
+        triangles.push_back(vertex(bottom.x(), bottom.y(), bottom.z(), normal.x(), normal.y(), normal.z(), u, -5));
         triangles.push_back(vertex(top.x(), top.y(), top.z(), top.x(), top.y(), top.z(), u, 5));
 
 
@@ -174,7 +175,7 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
         float miny = fmin(p1.y(), p2.y());
         float maxy = fmax(p1.y(), p2.y());
 
-        float maxheight = fmax(h1,h2);
+        float maxheight = fmax(fabs(h1),fabs(h2));
 
         float fromx = minx-maxheight*worldToGrid;
         float tox = maxx +maxheight*worldToGrid;
@@ -198,14 +199,15 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                     if (where <= 1.0) {
                         float heigth = h1*(1-where) + h2 *where;
                         //heigth*=20;
-                        float influence = heigth*worldToGrid;
+                        float influence = fabs(heigth)*worldToGrid;
                         float dist = (point-intersect).length();
                         if (dist <= influence) {
                             float weigth = 1.0 - dist/influence;
-                            float newheigth = clamp(heigth * weigth, 0, heigth-gridsize*size);
+                            float top = fabs(heigth)-gridsize*size;
+                            float newheigth = clamp(heigth * weigth, -top,top );
                             if (z >=0 && z <resolution &&
                                     x >=0 && x < resolution &&
-                                    heigths[z][x] < newheigth)
+                                    (heigths[z][x] < newheigth || (newheigth < 0 && heigths[z][x] > newheigth)))
                                 heigths[z][x] = newheigth;
                         }
                     }else if (i < uv.size()-2) {
@@ -222,13 +224,14 @@ void RidgeNode::doTransformSurface(QVector < QVector < Vector3 > > & rows, float
                         if (((a2.x() >= 0 && b2.x() >= 0 )||(a2.x() <= 0 && b2.x() <= 0))) {
 
                             float l1 = (point - p2).length();
-                            float influence1 = h2 * worldToGrid;
+                            float influence1 = fabs(h2) * worldToGrid;
                             if (l1 <= influence1) {
                                 float weigth = 1.0 - l1/influence1;
-                                float newheigth = clamp(h2 * weigth, 0, h2-gridsize*size);
+                                float top = fabs(h2)-gridsize*size;
+                                float newheigth = clamp(h2 * weigth, -top, top);
                                 if (z >=0 && z <resolution &&
                                         x >=0 && x < resolution &&
-                                        heigths[z][x] < newheigth)
+                                        (heigths[z][x] < newheigth || (newheigth < 0 && heigths[z][x] > newheigth)))
                                     heigths[z][x] = newheigth;
                                 continue;
                             }
