@@ -103,22 +103,28 @@ After reading this section, you should have gained a basic understanding of the 
 \section{Rivers}
 
 \clearpage
-\chapter{State of the Art}
+\chapter{Related Work}
 \label{sec:star}
 
 Here we will expolore the relevant developments in techniques for rapid 3D computer modeling in general and as it applies to geologic modeling especially.
 
-3D models can be made in many ways, automatically or manually, and can be represented in various ways. Most programs use a polygonal representation, meaning 3D vertices, connected by edges, forming polygons. These are easy to visualize and manipulate for the computer hardware. One traditional way to create 3D modeles on the computer, often called CAD (computer-aided design),	 usually consists of modeling and compositing different kinds of solid objects to create precise models of industrial designs, buildings etc. Other types of 3D modelling consists of editing vertices and control points of curves. These are well established ways to create detailed and sophisticated 3D models. Lots of reasearch has been done on this type of modeling over the years and much progress has been made. However, it still requires a substantial amount of training and the modeling takes a lot of time. When creating models that do not need to be perfect, such as rapid prototyping, illustration etc. this can be prohibitive. Therefore a lot of reseach has gone into developing alternative methods for user input for 3D modeling in recent years.
+3D models can be made in many ways, automatically or manually, and can be represented in various ways. Most programs use a polygonal representation, meaning 3D vertices, connected by edges, forming polygons. These are easy to visualize and manipulate for the computer hardware. One traditional way to create 3D modeles on the computer, often called CAD (computer-aided design),	 usually consists of modeling and compositing different kinds of solid objects to create precise models of industrial designs, buildings etc. One commercial program of that type is Autodesk AutoCAD. Other types of 3D modelling consists of editing vertices and control points of curves, which are often used for moves, games and other graphics purposes. One commercial example of that is Autodesk 3D Studio Max. These are well established ways to create detailed and sophisticated 3D models. Lots of reasearch has been done on this type of modeling over the years and much progress has been made. However, it still requires a substantial amount of training and the modeling takes a lot of time. When creating models that do not need to be perfect, such as rapid prototyping, illustration etc. this can be prohibitive. Therefore a lot of reseach has gone into developing alternative methods for user input for enabling more rapid 3D modeling in recent years.
 
-The SKETCH system was one early development in this area \cite{zeleznik2007sketch}. With SKETH, Zeleznik et al. produced a gesture-based input method for rapid modeling of simple 3D geometric shapes that could be composited using constructive solid geometry (CSG). Teddy \cite{Igarashi:1999:TSI:311535.311602} later expanded on these ideas by creating a freeform sketching tool for 3d models where the user draws the silhouette of objects, and they are created automatically. Teddy made it simple for even first time users to make simple, expressive figures.
+\section{Rapid 3D Modeling}
+ Z Brush by pixologic is one example of an alternative way of input for easing 3D modeling, where the modeling more resembles real world sculpting by applying pressure and similar methaphors. 
+ 
+ Sketch based input is another way of achieving simpler and more rapid modeling. With sketch based input the idea is to do 3D modeling with a method that is made to feel more like traditional pen and paper sketching as opposed to editing vertices and edges directly.
 
-%\section{Computer Modeling}
-There are many approaches to achieving rapid computer modeling. One that is much focused on these days is sketch based modeling. Sketch based modeling is an approach to 3D modeling where the interaction is made to feel like traditional pen and paper sketching as opposed to editing vertices and edges directly. Teddy, a soft o
+The SKETCH system was one early development in this area \cite{zeleznik2007sketch}. With SKETH, Zeleznik et al. produced a gesture-based input method for rapid modeling of simple 3D geometric shapes that could be composited using constructive solid geometry (CSG). Teddy \cite{Igarashi:1999:TSI:311535.311602} later expanded on these ideas by creating a freeform sketching tool for 3d models where the user draws the silhouette of objects, and they are created automatically. Teddy made it simple for even first time users to make simple, expressive figures. Brazil et al. \cite{brazil2010sketching} also show promising results for modeling soft looking objects by sketching variational hermite-RBF implicits.
 
-%\section{Geologic Modeling}
-Geologists use models for understanding and communicating about phenomena relating to the structure of the earth and how it changes over time. Many tools exist for modeling such phenomena. Most of the existing tools however are based on interpreting data gathered from seismic surveys or borehole data either automatically, or semiautomatically by letting the user indicate various parameters and fix the finished model manually. Examples of such programs include Petrel.
+\section{Geologic Modeling}
+Geologists use models for understanding and communicating about phenomena relating to the structure of the earth and how it changes over time. Several tools exist for modeling, displayin, editing and automatically calculate parameters for geological modeling. Examples of commercial programs for geologic modeling include Petrel \cite{petrel} and . Most of the existing tools however include an intensive workflow, and are based on interpreting data gathered from seismic surveys or borehole data either automatically, or semiautomatically by letting the user indicate various parameters and fix the finished model manually.
 
-Not that many purely sketch based input methods exist for the geology domain, however there exists some for sketching terrain, which are applicable to geology. Harold is an early example of a sketch based system that incorporates methods for sketching terrain, made by Cohen et al. \cite{cohen2000harold}. In Harold, the user can sketch hills on the terrain by simple strokes that start and end on the terrain. The terrain is then warped to try and match the stroke. 
+Not that many purely sketch based input methods exist for the geology domain that I could find. Natali et al. \cite{natalirapid} describes an approach where the user sketches the boundaries of geological layers on a 2D vertical plane. Then the user can sketch folding and faulting operations, and thus create many different scenarios. The input in this approach is restricted to making conceptually 2D sketches, allthough the visualization is in 3D. Projecting drawings on the 3D structure can however give some more information and context than a pure 2D approach. Amorim et al. \cite{amorim2012sketch} descibe how various sketh based approaches can be used to allows the user to sketch directly over the raw seismic reflection volume and its derived data. This helps the expert in interpreting and and building a structural framwork for a reservior.
+
+There exists several approaches for sketching terrain, which are applicable to geology. Harold is an early example of a sketch based system that incorporates methods for sketching terrain, made by Cohen et al. \cite{cohen2000harold}. In Harold, the user can sketch hills on the terrain by simple strokes that start and end on the terrain. The terrain is then warped to try and match the stroke. Watanabe et al. made a further development of this in \cite{Watanabe:2004:SIT:1186415.1186500}, where the shape of the stroke also influences the width of hills that are generated, making for more natural looking hills. They also incorporated noise on top of the generated terrain to make the visualization more realistic. Gain et al. later improved further on this by allowing the user to sketch the width of the hill and change the baseline along wich this hill runs \cite{Gain:2009:TS:1507149.1507155}.
+
+Some geologic modeling tools exist for educational purposes that allow the illustration of geological phenomena by inputting paraters. Cockett's Visual Geology \cite{Cockett:Online} and Jessell's Noddy \cite{jessell1981noddy} are two such programs. Visual Geometry  The basis for Noddy is the ability to construct a complex geological history as a succession of relatively simple structural, sedimentary and igneous events , which allows you to rapidly create models and calculate resulting gravity and magnetic fields.
 
 
 
@@ -657,24 +663,22 @@ The sea level can be enabled at any time and moved up or down as the user please
 
 \clearpage
 \chapter{Results}
-Here we will see some complete sceneries that demonstrate what can actually be produced by the implemented solutions at the current level of development. These results are commented to explain how they are achieved, what they depict and what are the limitations. Then we will take a look at the results of a user study that was conducted. An evaluation of the results follows in the next section.
+Here we will see some sceneries that demonstrate what can actually be produced by the implemented solutions at the current level of development. These results are commented to explain how they are achieved, what they depict and what are the limitations. Then we will take a look at the results of a user study that was conducted. An evaluation of the results follows in the next section.
 \label{sec:results}
 
 \section{Scenarios}
 
 
-\section{Produced Renderings}
-\subsection{Geologist's drawings}
-- Marie might draw her stuff?
-\subsection{Reproduction of initial illustrations}
-- compare with goal\\
-\subsection{Other illustrations and possibilities}
+\section{User study}
 
 \clearpage
 \chapter{Evaluation}
 \label{sec:eval}
-The test user was often observed to struggle with understanding how the interface works and what the programmer intended him to do to complete a specific goal. It was difficult for the user to put into words what the problem was, and often the problem was that he did not have the knowledge or languag required to communicate it. Observation of user interaction therefore helped in revealing problem areas. Once identified, intelligent questions by a person familiar with the program might help, but what seemed to work better was to try and deduce what the problem could be, propose a solution, first by explanation and later by actually implementing it, and let the user evaluate the new approach.
+Through the main part of the implementation of the program there was a test user, Marie Songve, who helped evaluate the progress and direction of the programming. She was often observed to struggle with understanding how the interface works and what the programmer intended her to do, to complete a specific goal. It was difficult for her to put into words what the problem was, and often the problem was that she did not have the knowledge or languag required to communicate it. Observation of user interaction therefore helped in revealing problem areas. Once identified, intelligent questions by a person familiar with the program might help, but what seemed to work better was to try and deduce what the problem could be, propose a solution, first by explanation and later by actually implementing it, and let the user evaluate the new approach. This way of working with feedback from a test user lead to a lot of smaller problems being fixed, particularly in the user interface. Some problem areas that were not dealt with for time constraints will be discussed in \secref{sec:further}. In short this method was fruitful for directing work.
 
+The user study that was conducted at the end, sheds some more light on what aspects of the approach works and in what direction any further work might consider going. 
+
+From the work with Marie Songve and the user study and their interest in the subject, I think it is safe to say that a geologic sketching application would be useful to them. Marie seems to pick up on the concepts very well, allthough it is important to focus on the usability and ease of use. What is obvioius for the programmer of a solution, is not always easy to understand for a person not familiar of the internals of that solution. 
 
 - learning\\
 - usability
@@ -683,12 +687,16 @@ The test user was often observed to struggle with understanding how the interfac
 - Where it will be used \\
 - Discussion
 
+
+\clearpage
+\chapter{Further work}
+\label{sec:further}
+
 \clearpage
 \chapter{Conclusion}
 \label{sec:conclusion}
-- Give short summary\\
-- Further work\\
-\\
+This thesis started by taking a look at how geologists have a use for an application that lets them create simple models that lets them illustrate their thoughts amongst themselves. Also in education and literature such a tool might be useful. An approach for such a tool was explained and how it was developed was explained in detail. At the end a user study showed that such a tool is indeed highly interesting for the target group of people. The approach developed has some merit to it according to this user study. Some methaphors for input worked better than others in the way they were executed though, and most of the fetures do need further development and thought. Even in the state it is in though, some users expressed a possibility for applying the solution in real world situations. Finally some thoughts and wishes for furhter development were discussed.
+
 
 
 Testing references: Cherlin ~\cite{Cherlin:2005:SMF:1090122.1090145} explores techniques for rapid sketch based 3d modeling.
