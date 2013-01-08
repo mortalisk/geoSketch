@@ -51,6 +51,7 @@ public:
     }
     Deposit(){
         hasReset = false;
+        gridsize = 40;
     }
 
     virtual Deposit* copy() {

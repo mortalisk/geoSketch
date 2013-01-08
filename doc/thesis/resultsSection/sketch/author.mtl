@@ -1,0 +1,45 @@
+newmtl ColorBottomDummy1
+Tr 1
+Ka 0.5 0.5 0.5
+Kd 0.3 0.3 1
+Ks 0 0 0
+newmtl ColorLayer2
+Tr 1
+Ka 0.5 0.5 0.5
+Kd 0.156863 0.74902 0.266667
+Ks 0 0 0
+newmtl ColorLayer3
+Tr 1
+Ka 0.5 0.5 0.5
+Kd 0.87451 0.823529 0.223529
+Ks 0 0 0
+newmtl Colorriver4
+Tr 1
+Ka 0.5 0.5 0.5
+Kd 0 0 0.8
+Ks 0 0 0
+newmtl Colordeposit5
+Tr 1
+Ka 0.5 0.5 0.5
+Kd 0 0.5 1
+Ks 0 0 0
+newmtl Colordeposit6
+Tr 1
+Ka 0.5 0.5 0.5
+Kd 0.3 0.2 1
+Ks 0 0 0
+newmtl Colordeposit7
+Tr 1
+Ka 0.5 0.5 0.5
+Kd 1.19209e-08 0.5 1
+Ks 0 0 0
+newmtl Colordeposit8
+Tr 1
+Ka 0.5 0.5 0.5
+Kd 0.3 0.2 1
+Ks 0 0 0
+newmtl Colordeposit9
+Tr 1
+Ka 0.5 0.5 0.5
+Kd 1.19209e-08 0.5 1
+Ks 0 0 0
