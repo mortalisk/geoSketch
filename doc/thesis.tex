@@ -41,18 +41,81 @@
 \title{Rapid Geologic Modeling}
 \author{Morten Bendiksen}
 
+
+
+
+%% title page
+
+
+\usepackage[svgnames]{xcolor} % Required to specify font color
+
+\newcommand*{\plogo}{\fbox{$\mathcal{PL}$}} % Generic publisher logo
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\newcommand*{\titleAT}{\begingroup % Create the command for including the title page in the document
+\newlength{\drop} % Command for generating a specific amount of whitespace
+\drop=0.1\textheight % Define the command as 10% of the total text height
+
+\rule{\textwidth}{1pt}\par % Thick horizontal line
+\vspace{2pt}\vspace{-\baselineskip} % Whitespace between lines
+\rule{\textwidth}{0.4pt}\par % Thin horizontal line
+
+\vspace{\drop} % Whitespace between the top lines and title
+\centering % Center all text
+\textcolor{Red}{ % Red font color
+{\Huge Rapid Modeling}\\[0.5\baselineskip] % Title line 1
+{\Large of}\\[0.75\baselineskip] % Title line 2
+{\Huge Geologic Structures}} % Title line 3
+
+\vspace{0.25\drop} % Whitespace between the title and short horizontal line
+\rule{0.3\textwidth}{0.4pt}\par % Short horizontal line under the title
+\vspace{\drop} % Whitespace between the thin horizontal line and the author name
+
+
+{ \textsc{Author:}}\par % Author name
+{\Large \textsc{Morten Bendiksen}}\par % Author name
+\vspace{\drop}
+\vspace{\drop}
+{ \textsc{Supervisors:}}\par % Author name
+{\Large \textsc{Ivan Viola}}\par % Author name
+{\Large \textsc{Endre M. Lidal}}\par % Author name
+
+\vfill % Whitespace between the author name and publisher text
+{\large \textcolor{Red}{\plogo}}\\[0.5\baselineskip] % Publisher logo
+{\large \textsc{University of Bergen}}\par % Publisher
+
+\vspace*{\drop} % Whitespace under the publisher text
+
+\rule{\textwidth}{0.4pt}\par % Thin horizontal line
+\vspace{2pt}\vspace{-\baselineskip} % Whitespace between lines
+\rule{\textwidth}{1pt}\par % Thick horizontal line
+
+\endgroup}
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+
+
+
+
+
 \begin{document}
 
-\maketitle
+\titleAT
 
 
 \clearpage
 \begin{abstract}
-Drawing three dimensional models of geological phenomena is today a process requiring training in specific programs, and can be a time consuming process. For illustration and communication, geologists therefore often limit themselves to drawing on paper or in general two dimensional drawing programs on the computer.
+Drawing three dimensional models of geological phenomena is today a process requiring training in specific programs that can be very time consuming. For illustration and communication, geologists therefore often limit themselves to drawing on paper or to two dimensional drawing applications.
 
-In this thesis I propose an approach for making rapid geologic illustrations in 3D. The novel idea for the approach consists of sketch based input on a cube in order to create a layered geological structure. Further details like rivers, ridges, mountains and deposits can be sketched on these layers. Awareness of the geologic domain enables a sparse amount of input strokes to be interpreted into geological structures. Creation of a three dimensional geometry on a computer gives advantages like perspective control, lighting changes, etc. as compared with a 2D sketch.
+In this thesis I propose an approach for making rapid geologic illustrations in 3D. The novel idea for the approach consists of sketch based input on a cube in order to create a layered geological structure. Further details can be added to the layers by sketching geological features such as rivers, ridges, and mountains. Sedimentary deposits can also be created through a procedural modeling approach that employs a volume preserving diffusion algorithm to simulate the flow of depositional materia on top of the terrain. Awareness of the geologic domain enables a sparse amount of input strokes to be interpreted into geological structures. 
 
-I explore the relevant background material necessary and give a detailed description of the particulars of my approach and how it works. A user study was conducted with four geologists. I conclude based on this that the approach shows promise and can be useful in certain situations as it is now, and with further development such an approach could become a standard way for geologists to draw their illustrations in stead of pen and paper.
+Results show that the proposed approach can be used with success to model geological layers. Compared with a 2D sketch, the creation of a 3D geometry on a computer gives advantages such as perspective control, lighting changes, ease of changing the model, etc. The approach shows promise and can be useful in many situations as it is now. A program based on the proposed approach can become a standard way for geologists to draw their illustrations.
 \end{abstract}
 
 \clearpage
@@ -83,6 +146,25 @@ Made at the University of Bergen
 \chapter{Introduction}
 \label{sec:intro}
 
+\section{Problem description}
+The Earth is constantly changing. We have all experienced this through natural events such as earthquakes, volcanic eruptions, tsunamis, avalanches and floods. When we study such changes in a longer time frame, they are even more dramatic. In geologic time oceans are formed and then they disappear, mountains are created and different forms of life become extinct while new life forms develop. Through much of human history big events were explained by appeal to the supernatural. The study of such changes is today the work of a dicipline called geology. Geology as a science started in the 19th century, but is founded on scientific fields of inquiry much older than that.
+
+Illustration is an important mechanism for geologists and their aspiring students when they are trying to undestand these proccesses that have shaped the Earth and how these proccesses are still continuing to this day. It is a common practice to make sketched models by hand on either paper or computer. These are used in both professional and educational settings, and facilitate communication. Geolgic phenomena are four dimentional in nature since they occur over time in the three spatial dimensions. There are many techniques and standards for illustrating these phenomena in a two dimensional drawing. One can for example sketch three dimensional phenomena by using perspective drawing techniques, but the model is still confined to the 2D nature of the medium. These techniques and standards can also be limiting  as they require signifcant time and training to master and understand. It is from this background that the goal of this thesis was formed. 
+
+\section{Goal}
+The goal of this thesis is to enable the rapid creation of 3D models of geologic structures by creating an approach that lets geologists quickly specify input in an intuitive way that is easy to learn.
+
+\section{Approach}
+
+\section{Outcome}
+
+\section{Benefits}
+
+\section{Outline of thesis}
+
+
+
+
 
 % --refer to each section at one point in introduction--\\
 % 
@@ -103,18 +185,18 @@ Made at the University of Bergen
 % (solution/approach)\\
 % 	- the box metaphor\\\\
 	
-
-The earth is constantly changing. We have all experienced this through natural events such as earthquakes, volcanic eruptions, tsunamis, avalanches and floods. When we study such changes in a greater time frame, they are even more dramatic. In geologic time oceans are created and disappear, mountains are created and different forms of life go extinct and new life forms develop. Through much of human history big events like this were explained by appeal to the supernatural. The study of such changes is today the work of geologists. Geology as a science started in the 19th century, but is founded on scientific fields of inquiry much older that that.
-
-Illustrations are important for geologists and their aspiring students when they are conducting their everyday business. It is normal to make sketched models by hand on either paper or computer. These are used in both professional and educational settings, and facilitate communication. On paper one is of course restricted to making two dimensional drawings. This can be limiting, since the phenomena of geology are of course three dimensional. One can sketch three dimensional phenomenon by using perspective drawing techniques, but the model is still confined to the 2D nature of the medium. It is from this background that the goal of my thesis was formed; to create an approach for rapid and easy sketching of geologic structures in 3D.
-
-On the computer it is already possible to make 3D models in many different ways. However, existing tools are often complex, aimed at creating advanced and detailed models, and usually requires training to understand and use. It would therefore be nice to have a possibility to make quick 3D models for illustrative purposes in a simple and intuitive way. This project attempts to lay another brick in the foundation for the future of such illustrative geological modeling techniques. In the last section of the thesis (\secref{sec:conclusion}), I conclude that this has a large potential for use in education, for communication between geologists and in publications about geology, although more research is still needed.
-
-This work presents an approach to rapid sketching of geological structures like rock layers, rivers, mountains and delta deposits. Geology is a vast field, and a lot of different features would be desirable to include. However, in order to finish, I had to limit the focus to the ones mentioned. The aim is to make a replacement for pen and paper 2D sketches of such structures. In other words, the aim is not a solution for situations where a high degree of accuracy is needed and/or attainable, but rather when the goal is to illustrate ideas and communicate them. In \secref{sec:eval} I therefore put the most emphasis on the expressive power the final solution gives the user relative to the effort needed, and less emphasis on accuracy. Resulting illustrations that were produced by users of an implementation of the approach can be seen in \secref{sec:results}.
-
-It is in publications from the geologic field I have found the most inspiration for this project. Artists in such media often use what I choose to call the ``box-model'' to illustrate concepts. Examples of such illustrations can be seen in \secref{sec:geology}. In that section we will also get an introduction to the relevant geologic background and terminology. Illustrations by geologists are often drawn inside a box cutout of the area of interest. This gives a good way to illustrate the spatial relation of elements in the model, like layers of different rock and deposits, rivers, ridges, mountains and the landscape they create together.
-
-Illustrations using this ``box-model'' gave rise to the approach I have chosen. The user is initially presented with an empty box, and then proceeds by outlining on and in this box the particular features he wants to model. An explanation of the use of this technique and all others I have developed can be found in \secref{sec:concept}, while the algorithmic solutions are discussed in \secref{sec:method}. In \secref{subsec:work} I take a look at how the work was planned and how it progressed, from definition, through research and development, to the final solution. To put the work I have done in a scientific context I have included a report on the state of the art in the fields of Computer modeling and Geological modeling as they relate to this project, in \secref{sec:star}.
+% 
+% The earth is constantly changing. We have all experienced this through natural events such as earthquakes, volcanic eruptions, tsunamis, avalanches and floods. When we study such changes in a greater time frame, they are even more dramatic. In geologic time oceans are created and disappear, mountains are created and different forms of life go extinct and new life forms develop. Through much of human history big events like this were explained by appeal to the supernatural. The study of such changes is today the work of geologists. Geology as a science started in the 19th century, but is founded on scientific fields of inquiry much older that that.
+% 
+% Illustrations are important for geologists and their aspiring students when they are conducting their everyday business. It is normal to make sketched models by hand on either paper or computer. These are used in both professional and educational settings, and facilitate communication. On paper one is of course restricted to making two dimensional drawings. This can be limiting, since the phenomena of geology are of course three dimensional. One can sketch three dimensional phenomenon by using perspective drawing techniques, but the model is still confined to the 2D nature of the medium. It is from this background that the goal of my thesis was formed; to create an approach for rapid and easy sketching of geologic structures in 3D.
+% 
+% On the computer it is already possible to make 3D models in many different ways. However, existing tools are often complex, aimed at creating advanced and detailed models, and usually requires training to understand and use. It would therefore be nice to have a possibility to make quick 3D models for illustrative purposes in a simple and intuitive way. This project attempts to lay another brick in the foundation for the future of such illustrative geological modeling techniques. In the last section of the thesis (\secref{sec:conclusion}), I conclude that this has a large potential for use in education, for communication between geologists and in publications about geology, although more research is still needed.
+% 
+% This work presents an approach to rapid sketching of geological structures like rock layers, rivers, mountains and delta deposits. Geology is a vast field, and a lot of different features would be desirable to include. However, in order to finish, I had to limit the focus to the ones mentioned. The aim is to make a replacement for pen and paper 2D sketches of such structures. In other words, the aim is not a solution for situations where a high degree of accuracy is needed and/or attainable, but rather when the goal is to illustrate ideas and communicate them. In \secref{sec:eval} I therefore put the most emphasis on the expressive power the final solution gives the user relative to the effort needed, and less emphasis on accuracy. Resulting illustrations that were produced by users of an implementation of the approach can be seen in \secref{sec:results}.
+% 
+% It is in publications from the geologic field I have found the most inspiration for this project. Artists in such media often use what I choose to call the ``box-model'' to illustrate concepts. Examples of such illustrations can be seen in \secref{sec:geology}. In that section we will also get an introduction to the relevant geologic background and terminology. Illustrations by geologists are often drawn inside a box cutout of the area of interest. This gives a good way to illustrate the spatial relation of elements in the model, like layers of different rock and deposits, rivers, ridges, mountains and the landscape they create together.
+% 
+% Illustrations using this ``box-model'' gave rise to the approach I have chosen. The user is initially presented with an empty box, and then proceeds by outlining on and in this box the particular features he wants to model. In \secref{sec:method} an explanation of the use of this technique and all others I have developed is given by first presenting a conceptual overview before presenting the specific algorithmic solutions. In \secref{subsec:work} I take a look at how the work was planned and how it progressed, from definition, through research and development, to the final solution. To put the work I have done in a scientific context I have included a report on the state of the art in the fields of Computer modeling and Geological modeling as they relate to this project, in \secref{sec:star}.
 \clearpage
 
 
@@ -300,14 +382,14 @@ In this chapter we have seen many different illustrations of geological structur
 
 This chapter explores the field of 3D computer modeling as it applies to geologic modeling with special focus on techniques for rapid modeling. For reference and technical background while doing research the book ``Real Time Rendering'' \cite{moller2008real} has been used for along with the book ``Curves and surfaces for CAGD: a practical guide'' \cite{farin2001curves}.
 
-3D models can be made manually, procedurally, or as a combination of both. A traditional way to create 3D models on the computer called computer-aided design or CAD, usually consists of modeling and compositing different kinds of solid objects to create precise models of industrial designs, buildings etc. One commercial program of that type is Autodesk AutoCAD. One types of 3D modeling consists of editing vertices and control points of curves and surfaces to build geometry meshes of different shapes. This is often used for movies, games and other graphics purposes. A commercial example of that is Autodesk 3D Studio Max.
+3D models can be made manually, procedurally, or as a combination of both. A traditional way to create 3D models on the computer called computer-aided design or CAD, usually consists of modeling and compositing different kinds of solid objects to create precise models of industrial designs, buildings etc. One commercial program of that type is Autodesk AutoCAD. Another type of modeling consists of editing vertices and control points of curves and surfaces to build geometry meshes of all kinds shapes. This is often used for movies, games and other graphics purposes. A commercial example of that is Autodesk 3D Studio Max.
 
 Models can also be represented in various ways. Many modeling programs use a polygonal representation, meaning 3D vertices, connected by edges, forming polygons. These are easy to visualize and manipulate for the computer hardware.  Others use a mathematical representation of solid objects. There are well established ways to create detailed and sophisticated 3D models with these kinds of representation. A lot of research has been done on this type of modeling over the years and much progress has been made. However, many of these techniques requires a substantial amount of training and the modeling often takes a lot of time. When creating models that do not need perfect precicion, such as models for rapid prototyping, illustrative models, models for communication etc. this can be prohibitive. In recent years there has therefore been a lot of research effort put into developing alternative methods for user input for enabling more rapid 3D modeling.
 
 \section{Rapid 3D Modeling}
  Sketch based input is one way of achieving simpler and more rapid modeling input. With sketch based input the idea is to do 3D modeling with a method that is made to feel more like traditional pen and paper sketching as opposed to editing vertices and edges directly.
 The SKETCH system was one early development in this area \cite{zeleznik2007sketch}. With SKETH, Zeleznik et al. produced a gesture-based input method for rapid modeling of simple 3D geometric shapes that could be composited using constructive solid geometry (CSG). Teddy \cite{Igarashi:1999:TSI:311535.311602} later expanded on these ideas by creating a freeform sketching tool for 3d models where the user draws the silhouette of objects, and they are created automatically. Teddy made it simple for even first time users to make simple, expressive figures. A Brazil et al. \cite{brazil2010sketching} also show promising results for modeling soft looking objects by sketching variational hermite-RBF implicits.
-Digital sculpting is an alternative method of input for easing 3D modeling, where the modeling more resembles real world sculpting by applying pressure and similar methaphors. Z Brush by Pixologic is a commercial modeling program that uses this approach mainly for charachter creation \cite{spencer2008zbrush}.
+Digital sculpting is an alternative method of input for easing 3D modeling, where the modeling more resembles real world sculpting by applying pressure, pinching and similar methaphors. Z Brush by Pixologic is a commercial modeling program that uses this approach mainly for charachter creation \cite{spencer2008zbrush}.
 
 Another approach for rapid modeling is procedural modeling. Fractals are one type of rules often applied to create terrains procedurally.  However, any algorithm that focuses on creating a model from a rule set, rather than editing the model via user input can be called a procedural method. Parish et al. \cite{parish2001procedural} use a procedural approach for modeling cities while Müller \cite{muller2006procedural} et al. desribe an approach to modeling buildings procedurally. 
  
@@ -389,9 +471,9 @@ Natali et al. \cite{natalirapid} describes an approach where the user sketches t
 
 Amorim et al. \cite{amorim2012sketch} descibe how various sketh based approaches can be used to allows the user to sketch directly over the raw seismic reflection volume and its derived data. This helps the expert in interpreting and and building a structural framwork for a reservior by using a sketch based input for helping in the interpretation process.
 
-There exists several approaches for sketching terrain, which are applicable to geology. Harold is an early example of a sketch based system that incorporates methods for sketching terrain, made by Cohen et al. \cite{cohen2000harold}. In Harold, the user can sketch hills on the terrain by simple strokes that start and end on the terrain. The terrain is then warped to try and match the stroke. Watanabe et al.  \cite{Watanabe:2004:SIT:1186415.1186500} made a further development of this, where the shape of the stroke also influences the width of hills that are generated, making for more natural looking hills. They also incorporated noise on top of the generated terrain to make the visualization more realistic. Gain et al. \cite{Gain:2009:TS:1507149.1507155} later improved further on this by allowing the user to sketch the width of the hill and change the baseline along wich this hill runs. To achieve real-time terrain creation Bernhardt et al. combine cpu and gpu processing in their sketch based approach for generating and displaying complex and high-resoultion terrains. The user can see the terrain changing as he is sketching. De Carpentier combine brushing and procedural terrain creation \cite{de2009interactive}.
-
 Cockett's Visual Geology \cite{Cockett:Online} and Jessell's Noddy \cite{jessell1981noddy} are two geologic modeling tools designed for educational purposes that allow the realatively rapid building of geological layer structures by user input of parameters. Visual Geometry lets the user specify things like how many layers he wants ant their thickness, and then apply various functions like a fault line and it's angle, a folding phenomenon and it's angle, wave frequency etc. The basis for Noddy is the ability to construct a complex geological history as a succession of relatively simple structural, sedimentary and igneous events similarly to Visual Geometry, which allows you to rapidly create models and then calculate resulting gravity and magnetic fields. Both of these are based on parameterized procedural methodologies.
+
+There exists several approaches for sketching terrain, which are applicable to geology. Harold is an early example of a sketch based system that incorporates methods for sketching terrain, made by Cohen et al. \cite{cohen2000harold}. In Harold, the user can sketch hills on the terrain by simple strokes that start and end on the terrain. The terrain is then warped to try and match the stroke. Watanabe et al.  \cite{Watanabe:2004:SIT:1186415.1186500} made a further development of this, where the shape of the stroke also influences the width of hills that are generated, making for more natural looking hills. They also incorporated noise on top of the generated terrain to make the visualization more realistic. Gain et al. \cite{Gain:2009:TS:1507149.1507155} later improved further on this by allowing the user to sketch the width of the hill and change the baseline along wich this hill runs. To achieve real-time terrain creation Bernhardt et al. combine cpu and gpu processing in their sketch based approach for generating and displaying complex and high-resoultion terrains. The user can see the terrain changing as he is sketching. De Carpentier combine brushing and procedural terrain creation \cite{de2009interactive}.
 
 
 \clearpage
