@@ -1,30 +1,31 @@
 \BOOKMARK [0][-]{chapter.1}{Introduction}{}
 \BOOKMARK [0][-]{chapter.2}{Geologic Background}{}
 \BOOKMARK [0][-]{chapter.3}{Related Work}{}
-\BOOKMARK [0][-]{chapter.4}{Methodology}{}
-\BOOKMARK [1][-]{section.4.1}{Basic Concept}{chapter.4}
-\BOOKMARK [1][-]{section.4.2}{Work process}{chapter.4}
-\BOOKMARK [2][-]{subsection.4.2.1}{Inspiration and research}{section.4.2}
-\BOOKMARK [2][-]{subsection.4.2.2}{Collaboration}{section.4.2}
-\BOOKMARK [2][-]{subsection.4.2.3}{Implementation work}{section.4.2}
-\BOOKMARK [1][-]{section.4.3}{General design solutions}{chapter.4}
-\BOOKMARK [2][-]{subsection.4.3.1}{Sketch input and interpretation}{section.4.3}
-\BOOKMARK [2][-]{subsection.4.3.2}{Representation}{section.4.3}
-\BOOKMARK [2][-]{subsection.4.3.3}{Geometry synthesis}{section.4.3}
-\BOOKMARK [2][-]{subsection.4.3.4}{Visualization}{section.4.3}
-\BOOKMARK [1][-]{section.4.4}{Specific solutions}{chapter.4}
-\BOOKMARK [2][-]{subsection.4.4.1}{Cube}{section.4.4}
-\BOOKMARK [2][-]{subsection.4.4.2}{Layers}{section.4.4}
-\BOOKMARK [2][-]{subsection.4.4.3}{Rivers}{section.4.4}
-\BOOKMARK [2][-]{subsection.4.4.4}{Valleys}{section.4.4}
-\BOOKMARK [2][-]{subsection.4.4.5}{Ridges}{section.4.4}
-\BOOKMARK [2][-]{subsection.4.4.6}{Deposits}{section.4.4}
-\BOOKMARK [2][-]{subsection.4.4.7}{Sea level}{section.4.4}
-\BOOKMARK [1][-]{section.4.5}{Supporting features and technology}{chapter.4}
-\BOOKMARK [0][-]{chapter.5}{Results}{}
-\BOOKMARK [1][-]{section.5.1}{Example Scenes}{chapter.5}
-\BOOKMARK [1][-]{section.5.2}{User study}{chapter.5}
-\BOOKMARK [2][-]{subsection.5.2.1}{Responses}{section.5.2}
-\BOOKMARK [0][-]{chapter.6}{Evaluation}{}
-\BOOKMARK [0][-]{chapter.7}{Further work}{}
-\BOOKMARK [0][-]{chapter.8}{Conclusion}{}
+\BOOKMARK [1][-]{section.3.1}{Rapid 3D Modeling}{chapter.3}
+\BOOKMARK [1][-]{section.3.2}{Geologic Modeling}{chapter.3}
+\BOOKMARK [0][-]{chapter.4}{Work process}{}
+\BOOKMARK [1][-]{section.4.1}{Inspiration and research}{chapter.4}
+\BOOKMARK [1][-]{section.4.2}{Collaboration}{chapter.4}
+\BOOKMARK [1][-]{section.4.3}{Implementation work}{chapter.4}
+\BOOKMARK [0][-]{chapter.5}{Methodology}{}
+\BOOKMARK [1][-]{section.5.1}{Basic Concept}{chapter.5}
+\BOOKMARK [1][-]{section.5.2}{General Approach}{chapter.5}
+\BOOKMARK [2][-]{subsection.5.2.1}{Sketch input and interpretation}{section.5.2}
+\BOOKMARK [2][-]{subsection.5.2.2}{Representation}{section.5.2}
+\BOOKMARK [2][-]{subsection.5.2.3}{Geometry synthesis and Visualization}{section.5.2}
+\BOOKMARK [1][-]{section.5.3}{Specific solutions}{chapter.5}
+\BOOKMARK [2][-]{subsection.5.3.1}{Cube}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.2}{Layers}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.3}{Rivers}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.4}{Valleys}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.5}{Ridges}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.6}{Sedimentary Depositions}{section.5.3}
+\BOOKMARK [2][-]{subsection.5.3.7}{Sea level}{section.5.3}
+\BOOKMARK [1][-]{section.5.4}{Implementation details}{chapter.5}
+\BOOKMARK [0][-]{chapter.6}{Results}{}
+\BOOKMARK [1][-]{section.6.1}{Example Scenes}{chapter.6}
+\BOOKMARK [1][-]{section.6.2}{User study}{chapter.6}
+\BOOKMARK [2][-]{subsection.6.2.1}{Responses}{section.6.2}
+\BOOKMARK [0][-]{chapter.7}{Evaluation}{}
+\BOOKMARK [0][-]{chapter.8}{Further work}{}
+\BOOKMARK [0][-]{chapter.9}{Conclusion}{}
