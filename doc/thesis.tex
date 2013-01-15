@@ -8,6 +8,8 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{wrapfig}
+\usepackage{pdfpages}
+\usepackage{sidecap}
 
 %\usepackage[small,it]{caption}
 \usepackage[small,it,labelfont=bf, width=0.9\linewidth]{caption}
@@ -31,14 +33,14 @@
 \def\sectionautorefname{Section}
 \def\chapterautorefname{Chapter}
 \newcommand{\secref}[1]{\autoref{#1}}
-%, \nameref{#1}
+\newcommand{\secname}[1]{\nameref{#1}}
 \newcommand{\And}{\textbf{ and }}
 %\newcommand{\secref}[1]{\ref{#1}}
 
 %%%%% end definition of custom commands %%%%%
 
 %opening
-\title{Rapid Geologic Modeling}
+\title{Rapid Modeling of Geology}
 \author{Morten Bendiksen}
 
 
@@ -49,7 +51,7 @@
 
 \usepackage[svgnames]{xcolor} % Required to specify font color
 
-\newcommand*{\plogo}{\fbox{$\mathcal{PL}$}} % Generic publisher logo
+\newcommand*{\plogo}{\includegraphics[width=0.1\textwidth]{uiblogo.pdf}} % Generic publisher logo
 
 %----------------------------------------------------------------------------------------
 %	TITLE PAGE
@@ -57,7 +59,7 @@
 
 \newcommand*{\titleAT}{\begingroup % Create the command for including the title page in the document
 \newlength{\drop} % Command for generating a specific amount of whitespace
-\drop=0.1\textheight % Define the command as 10% of the total text height
+\drop=0.06\textheight % Define the command as 10% of the total text height
 
 \rule{\textwidth}{1pt}\par % Thick horizontal line
 \vspace{2pt}\vspace{-\baselineskip} % Whitespace between lines
@@ -68,7 +70,7 @@
 \textcolor{Red}{ % Red font color
 {\Huge Rapid Modeling}\\[0.5\baselineskip] % Title line 1
 {\Large of}\\[0.75\baselineskip] % Title line 2
-{\Huge Geologic Structures}} % Title line 3
+{\Huge Geology}} % Title line 3
 
 \vspace{0.25\drop} % Whitespace between the title and short horizontal line
 \rule{0.3\textwidth}{0.4pt}\par % Short horizontal line under the title
@@ -84,8 +86,12 @@
 {\Large \textsc{Endre M. Lidal}}\par % Author name
 
 \vfill % Whitespace between the author name and publisher text
-{\large \textcolor{Red}{\plogo}}\\[0.5\baselineskip] % Publisher logo
+
+
+{\large \textcolor{Red}{\plogo}}\par % Publisher logo
 {\large \textsc{University of Bergen}}\par % Publisher
+{\large \textsc{Department of Informatics}}\par % Publisher
+{\large \textsc{Spring 2013}}\par % Publisher
 
 \vspace*{\drop} % Whitespace under the publisher text
 
@@ -105,17 +111,17 @@
 
 
 \begin{document}
-
+\pagestyle{empty} 
 \titleAT
 
 
 \clearpage
 \begin{abstract}
-Drawing three dimensional models of geological phenomena is today a process requiring training in specific programs that can be very time consuming. For illustration and communication, geologists therefore often limit themselves to drawing on paper or to two dimensional drawing applications.
+Drawing three dimensional models of geological phenomena is today a process requiring training in specific programs that can be very time consuming. For illustration and communication of geological concepts, geologists therefore often limit themselves to drawing on paper or to two dimensional drawing applications.
 
-In this thesis I propose an approach for making rapid geologic illustrations in 3D. The novel idea for the approach consists of sketch based input on a cube in order to create a layered geological structure. Further details can be added to the layers by sketching geological features such as rivers, ridges, and mountains. Sedimentary deposits can also be created through a procedural modeling approach that employs a volume preserving diffusion algorithm to simulate the flow of depositional materia on top of the terrain. Awareness of the geologic domain enables a sparse amount of input strokes to be interpreted into geological structures. 
+In this thesis I propose an approach for making rapid geologic illustrations in 3D. The novel idea for the approach consists of sketch based input on a cube in order to create a layered geological structure. Further details can be added to the layers by sketching geological concepts such as rivers, mountains and valleys. Sedimentary deposits can be created through a procedural modeling approach that employs a volume preserving diffusion algorithm to simulate the flow of depositional material on top of the terrain. Awareness of the geologic domain enables a sparse amount of input strokes to be interpreted into geological structures.
 
-Results show that the proposed approach can be used with success to model geological layers. Compared with a 2D sketch, the creation of a 3D geometry on a computer gives advantages such as perspective control, lighting changes, ease of changing the model, etc. The approach shows promise and can be useful in many situations as it is now. A program based on the proposed approach can become a standard way for geologists to draw their illustrations.
+Results show that the proposed approach can be used with success to model geological layers. Compared with a 2D sketch, the creation of a 3D geometry on a computer gives advantages such as perspective control, ease making changes to the model, etc. The approach shows great promise and can be useful in many situations. A program based on the proposed approach could become a standard way for geologists to draw their illustrations.
 \end{abstract}
 
 \clearpage
@@ -125,9 +131,9 @@ Results show that the proposed approach can be used with success to model geolog
 \footnotesize\raggedright
 \setlength{\parskip}{0.5\baselineskip}
 Copyright \copyright 2013 by Morten Bendiksen\par
+Contact email: morten.bendiksen@gmail.com
 
-All illustrations made by the author can be used without permission for any purpose but must be attributed. The figures made by the author are all figures from the Methodology chapter, and the screenshots from the Results chapter. All other figures are copyrighted their respective creators. All pictures and illustrations in the Geologic Background chapter are taken with permission from Haakon Fossens book ``Geologi, Stein, mineraler, fossiler og olje'', except where noted differently. The geologic illustrations from the Results chapter are also from this book. Pictures in the Related Work chapter are from the repective papers as noted. 
-% TODO permission? 
+All illustrations made by the author can be used for reference purposes but must be attributed. The figures made by the author are all figures from the Methodology chapter, and the screenshots from the Results chapter. All other figures are copyrighted their indicated creators.
 
 Made at the University of Bergen
 
@@ -146,22 +152,128 @@ Made at the University of Bergen
 \chapter{Introduction}
 \label{sec:intro}
 
-\section{Problem description}
-The Earth is constantly changing. We have all experienced this through natural events such as earthquakes, volcanic eruptions, tsunamis, avalanches and floods. When we study such changes in a longer time frame, they are even more dramatic. In geologic time oceans are formed and then they disappear, mountains are created and different forms of life become extinct while new life forms develop. Through much of human history big events were explained by appeal to the supernatural. The study of such changes is today the work of a dicipline called geology. Geology as a science started in the 19th century, but is founded on scientific fields of inquiry much older than that.
+The Earth is constantly changing. We have all experienced this through natural events such as earthquakes, volcanic eruptions, tsunamis, avalanches and floods. When we study such changes in a longer time frame, they are even more dramatic. In geologic time oceans are formed and then they disappear, mountains are created and different forms of life become extinct while new life forms develop. Through much of human history big events were explained by appeal to the supernatural. The study of such changes is today the work of a discipline called geology. Geology as a science started in the 19th century, but is founded on scientific fields of inquiry much older than that. Illustration is an important mechanism for geologists and their aspiring students when they are trying to understand these processes that have shaped the Earth and how these processes are still continuing to this day
 
-Illustration is an important mechanism for geologists and their aspiring students when they are trying to undestand these proccesses that have shaped the Earth and how these proccesses are still continuing to this day. It is a common practice to make sketched models by hand on either paper or computer. These are used in both professional and educational settings, and facilitate communication. Geolgic phenomena are four dimentional in nature since they occur over time in the three spatial dimensions. There are many techniques and standards for illustrating these phenomena in a two dimensional drawing. One can for example sketch three dimensional phenomena by using perspective drawing techniques, but the model is still confined to the 2D nature of the medium. These techniques and standards can also be limiting  as they require signifcant time and training to master and understand. It is from this background that the goal of this thesis was formed. 
+\section{Problem description}
+
+It is a common practice to make sketched models by hand on either paper or computer. These sketches are used in both professional and educational settings, and facilitate communication and understanding. Geologic phenomena are four dimensional in nature since they occur over time in the three spatial dimensions. There are many techniques and standards for illustrating these phenomena in a two dimensional drawing. One can for example sketch three dimensional phenomena by using perspective drawing techniques, but the model is still confined to the 2D nature of the medium. These techniques and standards can also be limiting  as they require significant time and training to master and understand. Before I started working on this thesis a problem was identified; there did not exist any tools aimed at helping geologists sketch 3D models for illustration purposes. On the computer it is already possible to make 3D models in traditional modeling approaches. However, existing tools are often complex, aimed at creating advanced and detailed models, and usually requires training to understand and use. It is from this background that the goal of this thesis was formed. 
 
 \section{Goal}
-The goal of this thesis is to enable the rapid creation of 3D models of geologic structures by creating an approach that lets geologists quickly specify input in an intuitive way that is easy to learn.
+The goal of this thesis is to enable the rapid creation of 3D models of geologic structures by creating an approach that lets geologists quickly specify input in an intuitive way that is easy to learn. The model will be used for illustrative purposes to facilitate communication between geologists by letting them create sketched models quicker, help lecturers explain concepts to students by creating models that can be changed interactively, and reduce the need for artistic skills and long training for students to master illustration techniques.
+
+Geology is a big field of study with a lot of different sub-fields. Sedimentology, the study of sedimentary layer structures are perhaps the field of study that has resulted in the most knowledge about the history of the Earth. The study of the processes that deform such layers and other rock structures is called structural geology. These two fields of study are both important for in the search for and recovery of natural resources like oil and gas. The Earth itself also consist of a layered structure of minerals. Because of the importance of layered structures in geology, I will concentrate my effort around the creation of rapid modeling techniques for geological layer structures. The aim is to create an approach for the creation of such structures.
 
 \section{Approach}
+To reach the goal of rapid geologic sketching, I propose to employ a sketch based input for modeling the geological layer structures. The sketched strokes are input via a mouse pointer by the user on the computer screen, and projected onto a transparent cube. Layered geological structures are often sketched in a cube, and I therefore propose to mimic this technique for the sketching interface. The user can rotate around the cube and sketch to create  on the four vertical faces of the cube. On the faces the user sketches the outlines of a surface that will be the top boundary of one of the layer volumes. The surface is then interpolated between the sketched outline. In geology, a surface the is called a horizon. The horizon is also what separate two layers stacked on top of each other. I therefore use the top horizons of previously drawn layers as the bottom boundary of new layers. The user can thus create a stack of layers by adding the layers from bottom to top.
+
+In order to change and model details on the layers, I propose methods for drawing further structure features such as mountains, rivers, valleys and deposits. The user can create ridges, rivers and valleys by sketching on the layers. Separate algorithms for each of the features will then modify the layer surface on which it was drawn. The features the user sketches is positioned on the 2D space of the surface is was sketched on such that a change in the underlying layers representation can be made without having to redraw or manually reposition all the features that exist on that layer. Deposits are created by a procedure that distributes material from the point where the river meets the sea. The material is distributed by a volume preserving diffusion algorithm that considers the topology of the underlying layer surface to create a plausible flow of material from the river.
 
 \section{Outcome}
+\begin{wrapfigure}{r}{0.45\textwidth}
+
+  \begin{center}
+    \includegraphics[trim = 80mm 20mm 80mm 25mm, clip,width=0.42\textwidth]{thesis/introSketch.png}
+  \end{center}
+ 
+  \caption{Sketched layer structure with an imagined coastline sketched on the top layer.}
+  \vspace{15pt}
+  \label{fig:introSketch}
+  
+\end{wrapfigure}
+In the proposed approach it is possible to draw layers in seconds.  The sketch in Figure \ref{fig:introSketch} shows the cube with a layer structure created inside.  On top layer an imagined coastline with fjords an islands have been created by sketching mountains and setting the sea level. For every new layer drawn, it is defined as the volume below its sketched horizon surface minus the volume of previously drawn layers. If the user sketches a horizon surface that intersects with any previously defined layers, the newly created layer will be defined only in the area between the already existing layers and the sketched surface. This way of sketching and defining the layers allows a layer structure such as the one in the figure to be completed in one minute. Other features such as the mountains seen in the figure can also be rapidly  created on the layer surface.
+
+Ridges, rivers and valleys can be sketched on the layers to modify the layer surface. Ridges can be used to illustrate mountains quickly by letting the user input a sketched curve where the ridge should be placed, and then specify with another curve along the length of the ridge how much the underlying layer surface should elevated. Rivers and valley are also input quickly by sketching a curve that represent the path along which they will run. Their width can then be modified along this path by sketching new outline curves along either side.	
+
+Deposits can be created in the sketch by a procedural approach. The deposit is created by indicating the height of the sea level, and then selecting a river where the deposited material flows from. The user can see the deposit grow in real time. When a satisfactory amount of material is deposited, the flow is stopped by the user.
 
 \section{Benefits}
+The proposed approach lets geologists create sketches that are useful for communication and educational purposes. They can be created rapidly and with minimal effort. The sketching input is intuitive and quick to learn. Once a sketch has been made all parts of it can be modified easily. Any layer surface outline can be changed or deleted and the other layers that have been sketched will be redefined to fit. The perspective can also effortlessly be changed. Compared with traditional 2D sketches this lets the geologist and students focus on the geological aspects in stead of their sketching technique. The user can thus start sketching without committing to a perspective, the colors he uses, the exact structure of each layer etc. This frees up time to think about the ideas that are to be illustrated in stead of how it will look in the end, since the user knows that changes can be made at any point with minimal need for recreating the entire sketch.
+
+Saving to files and loading from files on the computer enables sending of the files back and forth over the internet. Sending files to each other lets geologists working at geographically separate locations cooperate on the creation of a sketch by incrementally making modifications to it. An export feature also enables usage of a finalized sketch in other programs giving the possibility for further modifications by mature 3D modeling techniques once the basic structure has been created. The export feature also makes it possible to use rendering techniques of other programs to give the sketch a different look.
+
+
+\section{Work process}
+\label{subsec:work}
+This section starts by acknowledging all the help my supervisors have been through the whole period I have worked on this thesis. Next, an explanation of how the first idea was formed and how the initial research proceeded is presented. Then a description of how collaboration with geologists and geology students helped the progression of the project is given. The section ends by describing the development of the approach itself.
+
+\subsection{Supervision}
+Central to all the work and time I have spent on this thesis have been all the supervision and help I have received from my supervisors Ivan Viola and Endre M. Lidal. Both are attached to the Institute of Informatics, Department of Visualization at the University of Bergen, where Ivan Viola is a Professor and Endre M. Lidal is a Ph.D. student. My supervisors are the ones who identified the need for an approach to modeling geological structures for illustration purposes and suggested this as a topic for my thesis. Ivan and Endre have also given me a lot of advice and guidance regarding research, planning and writing. I have learned a lot regarding these skills during my work, and I owe that to my supervisors. Many of the ideas regarding the approach I have developed have come from discussions I have had together with Ivan and Endre.
+
+As work progressed I would constantly present my results and findings to my supervisors.  We would discuss what would be the next step and plan for when we would meet again. Usually we would meet every other week. Such regular meeting gave me a drive to continue work, especially in situations when I had difficulties with finding a solution to a problem that needed solving in order to continue. All in all the interaction with Ivan and Endre has been invaluable. Without them this thesis could not have existed.
+
+
+\subsection{Inspiration and research}
+As mentioned earlier in the chapter, work started with the need for a tool to rapidly create three dimensional sketches for geological structures. Various existing geological illustrations were investigated and there were some discussions about what would be the goal of the thesis. At the beginning however, there was not a clear idea of how to approach the problem. Research therefore started by reading  relevant geologic papers and books, both to get an idea of what kinds of sketches were needed, what was actually to be sketched and to get a little bit of an overview of what geology is.
+
+A large portion of the sketches encountered in literature were drawn inside a cube shaped cutout. The cutout of the geologic structure along a primitive and easy to understand object like a cube, gives the viewer a good way of understanding how the different structures relate to each other. This was how the idea of the sketch cube, which is the starting point of the approach presented in this thesis, began.
+
+To make a final decision to proceed with that approach, a more detailed strategy was needed. Therefore a new research phase began, were techniques dealing specifically with sketch based input, procedural modeling, terrain modeling, geological modeling etc. were researched. A couple of example illustrations that were found in a geological research paper \cite{neal1993sequence}, were used as a goal for what was  possible to model in the approach. Figure \ref{fig:inspiration1} shows these illustrations, which depict several depositional rock layers at the different times when they were deposited. The sea level at which they were deposited is indicated by the dotted lines. A set of different geological phenomena could be seen in these examples. Further research of modeling techniques gave some possible ways to specify the input of features such as rock layers and rivers that could be seen in the illustrations. An idea of how the finished solution could look and function from a users perspective was forming.
+
+% TODO give examples of the techniques mentioned
+
+\begin{figure}
+ \includegraphics[width=\linewidth]{thesis/inspiration1.png}
+ \caption{Example illustration that served as inspiration in the beginning of research. Image from Sequence Stratigraphy - A Global Theory For Local Success, by Neal et al.}
+ \label{fig:inspiration1}
+\end{figure}
+
+To explain the idea, illustrations and explaining text were put in a project description document. Figure \ref{fig:riverDesription} is an example illustration from that document showing how drawing of river structures was planned. The complete document can be found in Appendix \ref{apx:description}. This was the basis for the implementation work at the beginning of the project. A lot of further research and clarification of ideas was still needed, but since the general approach had been decided, the only thing remaining before development of a concrete approach could begin was to decide on technology.
+
+\begin{figure}
+ \includegraphics[width=\linewidth]{thesis/river.png}
+ \caption{Illustration of how the drawing on rivers were planned to work at the beginning of the project, before implementation started. First, drawing a line on a surface where the rivers should go. Then, a river is created by an algorithm in the program}
+ \label{fig:riverDesription}
+\end{figure}
+
+
+\subsection{Collaboration}
+After having created a version of the program that could be used as a prototype for demonstration, a professor from the department of geology was contacted. He also put me in contact with a geology student. The rest of research and development was guided by the collaboration with them. 
+
+The basic idea of the solution was shown to a professor of geology. He showed great interest and believed this could be good approach for illustrations in geology and he had some suggestions for improvements. What what learned from this meeting was that the focus on the ability of creating nice looking sketches rapidly was the most important. There were also some other ideas and features suggested for further development. These included things like illustrating the sea level, illustrating vegetation and many more ideas. Features that I had already thought of, like mountains and rivers, were confirmed to be important also. To help assess the development and suggest more improvements in the future, he gave the contact details of one of his students, Marie Songve.
+
+%%%%%% TODO append notes from meeting
+
+Marie helped develop some sketches that would be the main focus of development (see sketch in Figure \ref{fig:illuSketch}) from that point on. They would serve as a guide for what should be possible to create in the final approach. She also helped evaluate the direction of the development from this point. In addition to giving concrete advice on the geologic features of the approach, observing her testing the input methods helped identify some of the user interface problems. After development was concluded Marie also helped in assessing the success of the project by giving her impressions and trying out the program by creating several sketches on her own. This helped create some of the results that can be found in \secref{sec:results} and in evaluating the approach in \secref{sec:eval}. 
+
+\begin{figure}
+ \centering
+\includegraphics[width=.4\linewidth]{thesis/illuSketch1.png}
+\includegraphics[width=.4\linewidth]{thesis/illuSketch2.png}
+ \caption{Sketches that were made in collaboration with Marie Songve}
+ \label{fig:illuSketch}
+\end{figure}
+
+\subsection{Implementation work}
+
+This section explained the development of the approach without going into much detail about the specific solutions created. The only details included are those that are relevant for understanding the most important choices which are discussed here and which are not explained earlier. For more details about the specific solutions, have a look at \secref{subsec:indepth}.
+
+Implementation work was started by creating the cube and a camera system that would allow rotating around and zooming in and out of the cube. This was achieved relatively quickly. Intersection tests and input on the cube was the next step. At first this was achieved by simply looping through all the triangles and storing each intersection point in a list, and then drawing lines between the points that were drawn. However, the next step was the real challenge, which had not really been considered in depth until now. That challenge was how in the world to create a sensible layer from lines drawn on the faces of the cube. Different approaches were tried, and the details of how that turned out can be found in \secref{subsec:layers} further back. This ended up taking a lot more time that was initially expected. However, in order to focus on the solution, one has to know the problem, so all the work that might seem like a waste was actually needed in order to realize that there was a problem and therefore what 
+kind of solution to look for.
+
+Once a solution to the layer problem was found, there was of course a lot of other features needed to create a program that could be used for making useful sketches. Meetings with Marie helped focus the direction and prioritization of their implementation. All the different features that were planned in order to reproduce the initial pen and paper sketch, were going to be implemented one after the other. Very often introduction of new capabilities meant going back and modifying existing code. In addition there were the non-geologic features of the program to think about, like undo functionality, save and load possibilities etc. These also had to work together with the other features in a way that would not upset any of the other features. As new features were added, it sometimes seemed as if the complexity was growing exponentially. It quickly became a problem keeping the different features working together in a smooth and predictable way. The program code was therefore changed many times to try and abstract 
+the complexity to make the implementation of new features as easy as possible.
+
+It was while realizing the complexity of the initial approaches that an idea of a parametric and ordered hierarchical structure was introduced. In the start, everything was based on three dimensional coordinates, which made it difficult to calculate the relationship between for example the points on a layer and a river on it. If the layer changed, what point on the new surface would correspond to the beginning of the river? The user would have to draw the river again, which was not a good solution for a rapid modeling tool. The idea was that parametric coordinates would restrict the placement of a feature to two dimensions on its parents surface. Thus, a new point in three dimensions could be calculated based on the parents position and geometry. The inspiration for this approach came from the paper by Schmidt et al. \cite{CGF:CGF1129}. This would ease the recalculation of coordinates once something changed. The ordered structure meant that each feature would only have to deal with immediate parent and 
+children, and the order in which they had been drawn would be the guiding way to solve conflicts that might arise. The thought behind this was that the user would be thinking of the structures in a hierarchical way already, and after familiarizing himself with the program would know in what order features need to be drawn to create the desired effect. After all, it does not make sense to have a river without first having a surface on which it flows.
+
+The parametric and hierarchical solution could now be used for many problems. For example, how does one specify the height of a ridge and how does this height change if the layer changes, and how and where does it affect the underlying parent? The simple solution was making the ridge baseline a parametric coordinate on the layer, and for each point along the baseline, there was associated a height value, which could then be used to compute the actual resulting top point of the ridge by first finding the position of the baseline point on the surface, and then adding the height. How to do the actual morphing of the underlying surface to create the ridge also became a lot easier, since the lookup of surrounding points now was restricted to two dimensions and the baseline point was already known in this space.
+
+There were of course a lot of other difficulties remaining to solve to reach the stage the program is in now. However, the rest of the development was more about smaller issues local to each problem, and will be covered in the relevant subsection in \ref{subsec:indepth}.  There were still complexity issues of course, about how to fit each feature into the general solution without interfering with what was already implemented. New ideas were developed as work progressed, and others discarded along the way, mainly for lack of time. Going into all those details would mean we could write several books, but the details about solutions that have been implemented, and the problems and their solutions that are relevant to understanding choices will be included in the next two sections.
+
 
 \section{Outline of thesis}
 
+Following the introduction chapter an introduction to the relevant geologic background and terminology is given in \secref{sec:geology}. The Geologic Background chapter also includes many examples of sketches made by geologists to illustrate different geological phenomena.
+
+A report on the state of the art in the fields of Computer modeling and Geological modeling as they relate to this project is found in \secref{sec:star}.
+
+An explanation of the methodology of the proposed approach is given in \secref{sec:method}. The chapter starts with a conceptual overview of the proposed approach and then gives the specific algorithmic solutions used.
+
+Resulting illustrations that were produced by users of an implementation of the approach can be seen in \secref{sec:results}. Results of the user study that was conducted are also presented there.
+
+In \secref{sec:eval} I give my evaluation of the results. I put the most emphasis on the expressive power the final solution gives the user in illustration and on what users have reported.
+
+Finally, I conclude in \secref{sec:conclusion}. I find that the approach enables the rapid modeling of geological structures.
 
 
 
@@ -185,18 +297,7 @@ The goal of this thesis is to enable the rapid creation of 3D models of geologic
 % (solution/approach)\\
 % 	- the box metaphor\\\\
 	
-% 
-% The earth is constantly changing. We have all experienced this through natural events such as earthquakes, volcanic eruptions, tsunamis, avalanches and floods. When we study such changes in a greater time frame, they are even more dramatic. In geologic time oceans are created and disappear, mountains are created and different forms of life go extinct and new life forms develop. Through much of human history big events like this were explained by appeal to the supernatural. The study of such changes is today the work of geologists. Geology as a science started in the 19th century, but is founded on scientific fields of inquiry much older that that.
-% 
-% Illustrations are important for geologists and their aspiring students when they are conducting their everyday business. It is normal to make sketched models by hand on either paper or computer. These are used in both professional and educational settings, and facilitate communication. On paper one is of course restricted to making two dimensional drawings. This can be limiting, since the phenomena of geology are of course three dimensional. One can sketch three dimensional phenomenon by using perspective drawing techniques, but the model is still confined to the 2D nature of the medium. It is from this background that the goal of my thesis was formed; to create an approach for rapid and easy sketching of geologic structures in 3D.
-% 
-% On the computer it is already possible to make 3D models in many different ways. However, existing tools are often complex, aimed at creating advanced and detailed models, and usually requires training to understand and use. It would therefore be nice to have a possibility to make quick 3D models for illustrative purposes in a simple and intuitive way. This project attempts to lay another brick in the foundation for the future of such illustrative geological modeling techniques. In the last section of the thesis (\secref{sec:conclusion}), I conclude that this has a large potential for use in education, for communication between geologists and in publications about geology, although more research is still needed.
-% 
-% This work presents an approach to rapid sketching of geological structures like rock layers, rivers, mountains and delta deposits. Geology is a vast field, and a lot of different features would be desirable to include. However, in order to finish, I had to limit the focus to the ones mentioned. The aim is to make a replacement for pen and paper 2D sketches of such structures. In other words, the aim is not a solution for situations where a high degree of accuracy is needed and/or attainable, but rather when the goal is to illustrate ideas and communicate them. In \secref{sec:eval} I therefore put the most emphasis on the expressive power the final solution gives the user relative to the effort needed, and less emphasis on accuracy. Resulting illustrations that were produced by users of an implementation of the approach can be seen in \secref{sec:results}.
-% 
-% It is in publications from the geologic field I have found the most inspiration for this project. Artists in such media often use what I choose to call the ``box-model'' to illustrate concepts. Examples of such illustrations can be seen in \secref{sec:geology}. In that section we will also get an introduction to the relevant geologic background and terminology. Illustrations by geologists are often drawn inside a box cutout of the area of interest. This gives a good way to illustrate the spatial relation of elements in the model, like layers of different rock and deposits, rivers, ridges, mountains and the landscape they create together.
-% 
-% Illustrations using this ``box-model'' gave rise to the approach I have chosen. The user is initially presented with an empty box, and then proceeds by outlining on and in this box the particular features he wants to model. In \secref{sec:method} an explanation of the use of this technique and all others I have developed is given by first presenting a conceptual overview before presenting the specific algorithmic solutions. In \secref{subsec:work} I take a look at how the work was planned and how it progressed, from definition, through research and development, to the final solution. To put the work I have done in a scientific context I have included a report on the state of the art in the fields of Computer modeling and Geological modeling as they relate to this project, in \secref{sec:star}.
+
 \clearpage
 
 
@@ -206,27 +307,25 @@ The goal of this thesis is to enable the rapid creation of 3D models of geologic
   \begin{center}
     \includegraphics[width=0.38\textwidth]{thesis/geo/english/indre.jpg}
   \end{center}
-  \caption{The structure of the earth.}
+  \caption{The structure of the Earth. Illustration courtesy of Haakon Fossen.}
   \label{fig:core}
 \end{wrapfigure}
 This chapter gives a basic introduction of geological concepts. Focus is on those aspects that are needed to understand for the rest of the chapters in this thesis. The information that follows is based on the book ``Geologi, Stein, mineraler, fossiler og olje'', by Haakon Fossen \cite{fossen2008geologi}.
 
-Geology is a complex science, and this explains why there are so many fields within geology. Just a few of the fields will be mentioned here. Geomorphology is the study of landforms and the processes that shape the surface of the earth. Sedimentology is about how particles are transported, where they settle and are compressed into rock. Structural geology is the study of how the rock layers and crust is deformed by various movements. Tectonics is closely related to Structural geology and describes the movement of earth plates and how that causes the formation of mountain ranges and basins.
+Geology is a complex science, and this explains why there are so many subfields within geology. Just a few of the fields will be mentioned here. Geomorphology is the study of landforms and the processes that shape the surface of the Earth. Sedimentology is about how particles are transported, where they are deposited and how they are compressed into rock. Structural geology is the study of how the rock layers and crust is deformed by various movements. Tectonics is closely related to Structural geology and describes the movement of Earth plates and how that causes the formation of mountain ranges and basins.
 
-Geology is the study of the earth. The main purpose for the geologists work is to gain an understanding of the structure of the earth and the processes that shape it such as how mountains are built and how the oceans form. Most geologists usually concern themselves with only the surface and the part of the earth that is called the crust, the top 30 to 40 kilometers. Only rarely do they get into contact with what is deeper down. However, what happens there is still important to understand the processes that occur in the crust. 
+Geology is the study of the Earth. The main purpose for the geologists work is to gain an understanding of the structure of the Earth and the processes that shape it such as how mountains are built and how the oceans form. Most geologists usually concern themselves with only the surface and the part of the Earth that is called the crust, the top 30 to 40 kilometers. Only rarely do they get into contact with what is deeper down. However, what happens there is still important to understand the processes that occur in the crust. 
 
-Figure \ref{fig:core} depicts the structure of the earth. The core of the earth is over 4000 $^\circ$C. It is made up of an iron-nickel alloy. There is an inner core that is solid due to the high pressure, which raises the melting point, while the outer part of the core is liquid. Between the core and the upper parts, there is a thick layer called the mantle. The mantle has a malleable consistency like butter or dough, although it is less malleable the closer it gets to the core. It is thus able to move around without building tension and forming cracks. The upper part of the earth is called the lithosphere. It consists of the upper part of the mantle and the crust and it is stiff. This is why, when it moves around, it creates large amounts of tension resulting in earthquakes.
+Figure \ref{fig:core} depicts the structure of the Earth. The core of the Earth is over 4000 $^\circ$C. It consists of an iron-nickel alloy. There is an inner core that is solid due to the high pressure, which raises the melting point, while the outer part of the core is liquid. Between the core and the upper parts, there is a thick layer called the mantle. The mantle has a malleable consistency like butter or dough, although it is less malleable the closer it gets to the core. The mantle is thus able to move around without building tension and forming cracks. The upper part of the Earth is called the lithosphere. The lithosphere consists of the upper part of the mantle and the crust and they are is solid. This is why, when the lithosphere is moved by geological forces, large amounts of tension can build, resulting in earthquakes.
 
-The earths crust is made up by several plates that are moving in relation to each other. They collide with each other, glide across each other, or separate from each other. Figure \ref{fig:fig99subduction} shows what happens at the point of contact and divergence.  Because of the large forces involved when the plates move around, the crust is constantly being changed by the plates being subdued underneath each other and made anew by magma flowing up at different locations around the earth at the place of divergence between the plates. The plates are not only made of the continents, but also consist of the oceanic crust and lithosphere. It is made at the points of divergence and is thinner and heavier than the continental crust. Therefor it floats lower in the mantle. At the point of impact, one of the plates is pushed down into the hot parts of the mantle, and melts away.
-
-\begin{figure}
+\begin{figure}[t]
  \includegraphics[width=\linewidth]{thesis/geo/english/subduksjon.jpg}
- \caption{Subduction and creation of oceanic plates}
+ \caption{Subduction and creation of oceanic plates. Illustration courtesy of Haakon Fossen.}
  \label{fig:fig99subduction}
 \end{figure}
 
-Because the plates move around, large tensions can build up in them. When the tension gets bigger than what the rock can withstand various structures will appear. Such structures can occur where the plates meet, split apart and glide across each other. They can also occur in other places where tension might build. A layer of rock might fold, get stretched or break apart. Different types of rock might react differently to tensions according to their mineral composition and the temperature when the deformation occurs. When rock reacts by breaking apart, fractures are created. There are two types of fractures, faults and cracks. Cracks have very little movement along the fracture direction, and occur all over the earth. They can form when rock is lifted and compacts due to the falling temperatures. Faults are fractures where there has been considerable movement along the fracture direction. Figure \ref{fig:faults} shows different types of faults that can occur. In stead of breaking apart and creating a fault, 
-the rock might also fold, bend and stretch, creating a shear zone. They look similar to faults, but are wider, and in stead of the discontinuity of the broken rock have a zone where the rock is folded and stretched along the movements direction. Such shear zones are created in warm and deep parts of the crust, where rock becomes softer.
+The Earths crust consists of several plates that undergo constant change in relation to each other. They collide with each other, glide across each other, or separate from each other. Figure \ref{fig:fig99subduction} shows what happens at the point of contact and divergence.  Because of the large forces involved when the plates move around, the crust is constantly being changed by the plates being subdued underneath each other and made anew by magma flowing up at different locations around the Earth at the place of divergence between the plates where spreading ridges form by the molten rock that flows up. The plates are not only made of the continents, but also consist of the oceanic crust and lithosphere. The oceanic plates are made at spreading ridges at the points of divergence and is thinner and heavier than the continental crust. Therefore the oceanic plates float lower in the mantle. At the point of impact between plates, one of the plates is pushed down into the hot and softer parts of the mantle, and starts melting. The soft parts of the mantle lie beneath the lithospheric mantle, and is not draw in the illustration. The molten rock pushes through the existing plate above and creates new land masses.
+
 
 \begin{wrapfigure}{l}{0.4\textwidth}
 
@@ -234,30 +333,36 @@ the rock might also fold, bend and stretch, creating a shear zone. They look sim
     \includegraphics[width=0.38\textwidth]{thesis/geo/english/faults.jpg}
   \end{center}
  
-  \caption{Different types of faults}
+  \caption{Different types of faults. Illustration courtesy of Haakon Fossen.}
   \vspace{15pt}
   \label{fig:faults}
   
 \end{wrapfigure}
+Because the plates move around, large tensions can build up in them. When the tension gets bigger than what the rock can withstand structures such as folding, stretching and fracturing will appear. Such structures can occur where the plates meet, split apart and glide across each other. Folding and breaking structures can also occur in other places where tension might build. Different types of rock might react differently to tensions according to their mineral composition and the temperature when the deformation occurs. When rock reacts by breaking apart, fractures are created. There are two types of fractures, faults and cracks. Cracks have very little movement along the fracture direction, and occur all over the Earth. 
+They can form when rock is lifted and compacts due to the falling temperatures. Faults are fractures where there has been considerable movement along the fracture direction. Figure \ref{fig:faults} shows different types of faults that can occur. 
+Instead of breaking apart and creating a fault, 
+the rock might also fold, bend and stretch, creating a shear zone. They look similar to faults, but are wider, and instead of the discontinuity of the broken rock have a zone where the rock is folded and stretched along the movements direction. Such shear zones are created in warm and deep parts of the crust, where rock becomes softer.
 
-In the deep it is also normal for rock layers to fold. Folds are very frequent in metamorphic rock types. One way normal folds are created are by compression of layers, where the forces are working in the direction of the layers. Another way is by shearing movement. However, folds can also occur nearer to the surface, especially in sediments that have yet to complete it's transition to firm rock.
+
+
+In the deeper parts of the crust it is also usual for rock layers to fold. An image of folded rock can be seen in Figure \ref{fig:fold}. Folds are very frequent in metamorphic rock types. One way common folds are created, is by compression of layers, where the forces are working in the direction of the layers. Another way is by shearing movement. However, folds can also occur closer to the surface, especially in sediments that have yet to complete the metamorphosis to firm rock.
 
 \begin{wrapfigure}{r}{0.4\textwidth}
   \begin{center}
     \includegraphics[width=0.38\textwidth]{thesis/geo/fold.png}
   \end{center}
-  \caption{Folded rock}
+  \caption{Folded rock. Image courtesy of Haakon Fossen.}
   \label{fig:fold}
   
 \end{wrapfigure}
 
-The age of the earth is about 4.6 billion years. Geologic processes that shape it take a very long time and still continue today. Geologists need to understand what processes took place during this time, how geologic phenomena have and is still interacting with each other over time, and how structures that can be observed, relate to each other in the geologic time scale. Often layers can be observed to be stacked neatly on top of each other in which case it is easy to understand that the youngest layers are on top of the older ones and a relative time scale can thus be mapped for these structures by simple observation. Even when layers have been distorted, an understanding of the processes involved makes it possible to establish such a relative time scale. By radiometric dating, on the other hand, one can establish an absolute time scale. This is possible by studying the decay time of radioactive materials. This makes it easier to relate different structures around the world in a time scale.
+The age of the Earth is about 4.6 billion years. Geologic processes that shape it take a very long time and still continue today. Geologists need to understand what processes took place during this time, how geologic phenomena have been and still are interacting with each other over time, and how structures that can be observed, related to each other in the geologic time scale. Often layers can be observed to be stacked on top of each other in which case it is easy to understand that the youngest layers are on top of the older ones and a ordinal time scale can thus be mapped for these structures by simple observation. Even when layers have been distorted, an understanding of the processes involved, makes it possible to establish such an ordinal time scale, often referred to as the relative geologic time scale. By radiometric dating, on the other hand, one can establish an absolute time scale. This is possible by studying the decay time of radioactive materials. This makes it easier to relate different structures around the world in a time scale.
 
-The geologic time scale, as illustrated in Figure \ref{fig:geoTime}, has been developed by studying layer structures around the earth and dating them. The scale shows the relative times of different processes, but also as radiometric measurements of the different structures have been taken it has become possible to date the events that created them absolutely. In a similar way to how a historic time scale can be divided into stone age, bronze age, iron age, middle age and so on, the history of the earth is also divided into eras and time periods. The closer we get to our own time, the more details are known and included in the geologic time scale. Fossil records also give useful information about the relation and absolute position in time of structure found at different places, without having to do a radiometric dating every time.
+The geologic time scale, as illustrated in Figure \ref{fig:geoTime}, has been developed by studying layer structures around the Earth and dating them. The scale shows the relative times of different processes, but as radiometric measurements of the different structures have been taken it has become possible to date absolutely the events that created these structures. In a similar way to how a historic time scale can be divided into stone age, bronze age, iron age, middle age and so on, the history of the Earth is also divided into eras and time periods. The closer we get to our own time, the more details are known and included in the geologic time scale. Fossil records also give useful information about the relation and absolute position in time of structures found at different places, without having to perform a radiometric dating every time.
 
 \begin{figure}
  \includegraphics[width=\linewidth]{thesis/geo/english/time.jpg}
- \caption{The geologic time scale. These pictures are public domain, from Wikipedia}
+ \caption{The geologic time scale. Illustration courtesy of Haakon Fossen.}
  \label{fig:geoTime}
 \end{figure}
 
@@ -285,59 +390,45 @@ The geologic time scale, as illustrated in Figure \ref{fig:geoTime}, has been de
                 \caption{Metamorphic rock (Quartzite)}
                 \label{fig:mouse}
         \end{subfigure}
-        \caption{Pictures of rock types}\label{fig:rocks}
+        \caption{Pictures of rock types. Images from Wikipedia in the public domain.}\label{fig:rocks}
 \end{figure}
 
-If we disregard water, vegetation and dirt, the surface of the earth is made of rock. Rocks are made out of different minerals and come in many different varieties. Minerals are chemical elements bound together in certain ways. For a compound to be called a mineral it must be solid, have a particular chemical composition and a special crystalline structure. The mineral composition of rock is an important aspect that geologists study when examining geologic structures. There are three types of rock. Igneous rock, sedimentary rock and metamorphic rock. Igneous rock forms when magma (molten rock) crystallizes into solid form. When this happens in the deep where the temperature is high, crystals have long time to form. When crystal forms slowly like that, the individual crystal forms become bigger than when they are rapidly cooled down. If the magma reaches the surface before it crystallizes, we get smaller crystal forms, and thus a more fine grained rock. Sedimentary rock forms when sediments like clay, sand 
-and gravel is transported and deposited over time and solidifies into rock after it settles. Sedimentary rock cover about 75\% of the continents of the earth. When either igneous or sedimentary rock gets under high pressure and temperature, they start to change their mineral composition and deformation. They then become what is called metamorphic rock.
-
-\begin{wrapfigure}{l}{0.6\textwidth}
+If we disregard water, organisms and soil, the surface of the Earth is largely made of rock. Rocks are made out of different minerals and come in many different varieties. Minerals are chemical elements bound together in certain ways. For a compound to be called a mineral it must be solid, have a particular chemical composition and a special crystalline structure. The mineral composition of rock is an important aspect that geologists study when examining geologic structures. 
+There are three types of rock. Igneous rock, sedimentary rock and metamorphic rock. Igneous rock forms when magma (molten rock) crystallizes into solid form. When this happens in the deeper parts of the crust, where the temperature is high, crystals have long time to form. When crystal forms slowly, the individual crystal forms become bigger than when they are rapidly cooled down. 
+If the magma reaches the surface before it crystallizes, we get smaller crystal forms, and thus a more fine grained rock. 
+\begin{wrapfigure}{r}{0.6\textwidth}
   \begin{center}
     \includegraphics[width=0.58\textwidth]{thesis/geo/english/geoDeposits.jpg}
   \end{center}
-  \caption{Different processes that deposit sediments}
+  \caption{Different processes that deposit sediments. Illustration courtesy of Haakon Fossen.}
   \label{fig:geoDeposit}
 \end{wrapfigure}
+Sedimentary rock forms when sediments such as clay, sand 
+and gravel are transported and deposited over time and solidify into rock after it is deposited. Sedimentary rock cover about 75\% of the continents on Earth. When either igneous or sedimentary rock gets under high pressure and temperature, they start to change their mineral composition and deformation. They then become what is called metamorphic rock.
 
 
-Figure \ref{fig:geoDeposit} shows many of the processes that can erode rock and deposit material elsewhere. The study of erosion, deposition and how this creates sedimentary rock structures is the most important way geologists have developed scientific knowledge about the history of the earth. When rock is exposed to the weather it is eroded away and becomes loose particles of clay, sand or gravel. It is transported by water, wind or ice until it settles at some other location. These forces are constantly trying to flatten the features of the earth. Mountains are eroded away, while basins and valleys are constantly being filled with material. All the different processes that deposit material will create layers of different kinds of sedimentary rock. These layers are called strata. Figure \ref{fig:strata} shows such strata once created in a delta system by a river.
+
+Many of the processes that can erode rock and deposit material elsewhere can be seen in Figure \ref{fig:geoDeposit}. The study of erosion, deposition and how this creates sedimentary rock structures is the most important way geologists have developed scientific knowledge about the history of the Earth. When rock is exposed to the weather, it is eroded away and becomes loose particles of clay, sand or gravel. It is transported by water, wind or ice until it settles at some other location. These forces are constantly trying to flatten the features of the Earth. Mountains are eroded away, while basins and valleys are constantly being filled with material. All the different processes that deposit material will create layers of different kinds of sedimentary rock. These layers are called strata. Figure \ref{fig:strata} shows such strata once created in a delta system by a river.
 
 
 \begin{figure}
  \includegraphics[width=\linewidth]{thesis/geo/english/strata.jpg}
- \caption{Delta deposits in Book Cliffs, Utah. The deposits have formed layers, or strata of different rock types.}
+ \caption{Delta deposits in Book Cliffs, Utah. The deposits have formed layers, or strata of different rock types. Image courtesy of Haakon Fossen.}
  \label{fig:strata}
 \end{figure}
 
-Rivers will form from precipitation, and as they run trough the terrain will dig out and erode it, while at the same time transporting material downstream. This creates valleys in the terrain where the river runs in the bottom. As the river digs out the terrain it creates a v-shaped valley, more pronounced farther up the river, and considerably wider at the bottom. As the river carves lower, parts of the valley sides will also start falling down, also widening it. In the lower parts, the river will at some point not be digging out any more, but rather only deposit material from the upper parts thus flattening the landscape over a long time. Rivers can flow in different patterns.
 \begin{wrapfigure}{r}{0.5\textwidth}
   \begin{center}
-   \vspace{-15pt}
+   \vspace{-25pt}
     \includegraphics[width=0.48\textwidth]{thesis/geo/miss.jpg}
   \end{center}
    \vspace{-15pt}
-  \caption{The Mississippi river delta. This picture is public domain, from Wikipedia}
-   \vspace{10pt}
+  \caption{The Mississippi river delta. Image from Wikipedia, in public domain.}
+   \vspace{-20pt}
   \label{fig:miss}
 \end{wrapfigure}
-Where the terrain is steep, they will flow more straight and where there is enough water they can flow in a braided pattern covering a large area. If the terrain is flatter rivers usually follow a meandering pattern, flowing back and forth in meanders. Meandering rivers dig in the outer sides of meanders and deposit in the inner side of meanders. Thus they will move around in the valley where they flow. Sometimes a meander get cut of, leaving an abandoned meander. 
-
-
-
-
-Where the river meets the sea, it will create a delta deposit system. A delta is formed by the deposition of sediments carried by the river. Since the river is no longer confined to it's valley the flow will spread out and the flow velocity will drop. This means that the flow can no longer carry sediments, and they will deposit. As sediments are carried out into the sea, they tend to create s shaped deposits called clinoforms which can build outward into the sea.
-\begin{figure}
- \centering
-
-    \includegraphics[width=0.35\textwidth]{thesis/geo/english/Delta3D.jpg}
-  
-  \caption{A delta depositional system. }
-  \label{fig:delta}
-\end{figure}
-As the river deposits material, the slope of the river will therefore decrease as it builds outward in the sea. As the slope decreases the river path will tend to get unstable, and the river finds a new way to reach the sea after a while. In this way the river path changes and distributes the deposits. The delta can take many forms depending on the circumstances. Figure \ref{fig:delta} shows the structure of a possible delta system. Figure \ref{fig:miss} show a picture of the Mississippi river delta.
-
-
-
+Rivers will form from precipitation and spring water, and as they flow trough, the terrain will be carved out and eroded, while at the same time the river is transporting material downstream. This process creates valleys in the terrain where the river runs in the bottom of the valley. As the river carves out the terrain, it creates a V-shaped valley, more pronounced farther up the river, and considerably wider at the bottom. As the river carves lower, parts of the valley sides will also start falling down, also making the valley wider. In the lower parts, the river will at some point not be carving out any more, but rather only deposit material from the upper parts thus flattening the landscape over a long time. Rivers can flow in different patterns.
+Where the terrain is steep, they will flow more straight and where there is enough of water, they can flow in a braided pattern covering a large area. If the terrain is flatter rivers usually follow a meandering pattern, flowing back and forth in meanders. Meandering rivers carve in the outer sides of meanders and deposit in the inner side of meanders. Thus they will move around in the valley where they flow. Sometimes a meander gets cut off, leaving an abandoned meander. 
 
 
 \begin{wrapfigure}{r}{0.3\textwidth}
@@ -346,28 +437,42 @@ As the river deposits material, the slope of the river will therefore decrease a
     \includegraphics[width=0.28\textwidth]{thesis/geo/english/coal.jpg}
   \end{center}
    \vspace{-15pt}
-  \caption{Making of coal}
-   \vspace{-15pt}
+  \caption{Making of coal. Illustration courtesy of Haakon Fossen.}
+%    \vspace{-10pt}
   \label{fig:coal}
 \end{wrapfigure}
-When looking for resources, many different insights from the different fields of geology are important. Coal, oil and gas are examples of very important resources where all necessary knowledge is used to make the search and recovery efficient. Figure \ref{fig:coal} shows how coal is formed from biological material being compressed and heated. When it is buried, gases and liquids are forced out, and chemical reactions happen. As time passes the carbon content in the coal rises.
 
+Where the river meets the sea, it will create a delta deposit system. A delta is formed by the deposition of sediments carried by the river. Since the river is no longer confined to its valley the flow will spread out and the flow velocity will drop. This means that the flow can no longer carry sediments, and they will deposit. As sediments are carried out into the sea, they tend to create S-shaped deposits called clinoforms which can build outward into the sea.
+\begin{SCfigure}
+ \centering
 
-
-
-Oil and gas is formed from organic material like plankton and algae that is buried without access to oxygen. It takes millions of years to develop when there is the right temperature. Figure \ref{fig:oilMigrate} shows how, when it is mature, the oil and gas will migrate upwards. If it hits certain structures in the rocks layers it can get get stuck there. Such areas are known as oil traps. The study of geologic layers can therefore help in determining where oil and gas can be found. When looking for such resources, very often a seismic study will be made. Simply explained, this consists of sending sound waves down into the rock and listening for the echoes. At the boundaries of layers some of the sound will be reflected. By recording how much time it takes for each reflection, and by repeating this procedure at different locations, it is possible to create images of the horizons underneath the surface. Another technique for gathering data on the subsurface is by boring holes and taking physical samples or 
-measuring other properties of the rock directly. Interpreting the data that is is one of the jobs geologists do to determine where resources might be found. Many technologies exist to help geologists do this interpretation to create a model of the subsurface.
-
-In this chapter we have seen many different illustrations of geological structures. Geologists frequently need to make such illustrations and models of what they are researching. Geological modeling tools is one of the things that are described in the next chapter, which outlines the state of the art of computer and geological modeling.
-%\begin{wrapfigure}{r}{0.35\textwidth}
- \begin{figure}
+    \includegraphics[width=0.35\textwidth]{thesis/geo/english/Delta3D.jpg}
   
- \begin{center}
+  \caption{A delta depositional system. Illustration courtesy of Haakon Fossen.}
+  \label{fig:delta}
+\end{SCfigure}
+As the river deposits the material, the slope of the river will therefore decrease as it builds outward in the sea. As the slope decreases the river path will tend to get unstable, and the river finds a new way to reach the sea after a while. In this way the river path changes and distributes the deposits. The delta can take many forms depending on the circumstances. Figure \ref{fig:delta} shows the structure of a possible delta system. Figure \ref{fig:miss} shows a picture of the Mississippi river delta.
+
+
+
+When looking for resources, many different insights from the different fields of geology are important. Coal, oil and gas are examples of very important resources where all necessary knowledge is used to make the search and recovery efficient. Figure \ref{fig:coal} shows how coal is formed from biological material being compressed and heated. When it is buried, gases and liquids are forced out, and chemical reactions happen. As time passes, the carbon content in the coal rises.
+
+
+Oil and gas is formed from organic material like plankton and algae that is buried without access to oxygen. It takes millions of years to develop when there is the right temperature. Figure \ref{fig:oilMigrate} shows how, when it is mature, the oil and gas will migrate upwards. If it hits certain structures in the rocks layers it can get trapped there. Such areas are known as oil traps. The study of geologic layers can therefore help in determining where oil and gas can be trapped.
+
+When looking for such resources, very often a seismic study will be made. Simply explained, this consists of sending sound waves down into the rock and listening for the echoes. At the boundaries of layers some of the sound will be reflected. By recording how long time it takes for the sound waves to reach the boundary and get reflected back to the surface , and by repeating this procedure at different locations, it is possible to create images of the horizons underneath the surface. Another technique for gathering data on the subsurface is by boring holes and taking physical samples or 
+measuring other properties of the rock directly. Interpreting the data to determine where resources might be found is one of the concerns of geologists and geoscientists. Many technologies exist to help the geologists and geoscientists carry out this interpretation to create a representation of the subsurface.
+
+In this chapter we have seen many different illustrations of geological structures. Geologists frequently need to make such illustrations and models of what they are researching. Geological modeling tools is one of the topics that are described in the next chapter, which outlines the state of the art of computer geological modeling.
+%\begin{wrapfigure}{r}{0.35\textwidth}
+ \begin{SCfigure}
+  
+\centering
     \includegraphics[width=0.33\textwidth]{thesis/geo/english/Antiformfelle.jpg}
-  \end{center}
-  \caption{Migration and trapping of oil and gas}
+
+  \caption{Migration and trapping of oil and gas. Illustration courtesy of Haakon Fossen.}
   \label{fig:oilMigrate}
- \end{figure}
+ \end{SCfigure}
 
 %\end{wrapfigure}
 
@@ -380,7 +485,7 @@ In this chapter we have seen many different illustrations of geological structur
 \chapter{Related Work}
 \label{sec:star}
 
-This chapter explores the field of 3D computer modeling as it applies to geologic modeling with special focus on techniques for rapid modeling. For reference and technical background while doing research the book ``Real Time Rendering'' \cite{moller2008real} has been used for along with the book ``Curves and surfaces for CAGD: a practical guide'' \cite{farin2001curves}.
+This chapter explores the field of 3D computer modeling as it applies to geologic modeling with special focus on techniques for rapid modeling. For reference and technical background int the field of computer graphics the book ``Real Time Rendering'' \cite{moller2008real} has been used.  The book ``Curves and surfaces for CAGD: a practical guide'' \cite{farin2001curves} was used to understand curve and surface theory.
 
 3D models can be made manually, procedurally, or as a combination of both. A traditional way to create 3D models on the computer called computer-aided design or CAD, usually consists of modeling and compositing different kinds of solid objects to create precise models of industrial designs, buildings etc. One commercial program of that type is Autodesk AutoCAD. Another type of modeling consists of editing vertices and control points of curves and surfaces to build geometry meshes of all kinds shapes. This is often used for movies, games and other graphics purposes. A commercial example of that is Autodesk 3D Studio Max.
 
@@ -395,7 +500,7 @@ Another approach for rapid modeling is procedural modeling. Fractals are one typ
  
 
 \section{Geologic Modeling}
-In geology, models are used for understanding and communicating about phenomena relating to the structure of the earth and how it changes over time. At the first international conference for 3-D geoscientific modelling, held in 1989, Dr Brian Kelk defined the requirements for subsurface characterisation and modelling:
+In geology, models are used for understanding and communicating about phenomena relating to the structure of the Earth and how it changes over time. At the first international conference for 3-D geoscientific modelling, held in 1989, Dr Brian Kelk defined the requirements for subsurface characterisation and modelling:
 ‘‘The industry requires a system for interactive creation
 of spatial and spatio-temporal models of the physical
 nature of portions of the Earth’s crust. i.e. the
@@ -410,11 +515,11 @@ capability to effectively model and visualise:
 
 Traditional CAD systems have several problems when used to make geological models (Turner et al. \cite{turner2006challenges}). There have been attempts at using such system to create geological models (Kelk and Challen \cite{kelk1992experiments}). Such experiments have shown some problems in using normal CAD systems for geological modeling. The reason for this is the carachteristics of geological objects. As Caumron et al. \cite{caumon2009surface} identify these include: complex geometry and topology, scale dependency and hierarchical relationships, indistinct boundaries defined by complex spatial variations and the intrinsic property heterogeneity and anisotropy of most subsurface features. 
 
-A realistic geological scenario will follow certain constraints.  Caumron et al. gives rules for modeling that define boundaries between layers. For example, geological objects have a spacial continuity such that abrupt changes of normal orientation are not common. They also describe  the typical process of creating a structural model. The modeling usually starts with fault modeling, then the connection between fault surfaces is defined. Finally horizons are modeled. If the fault structure is very complex, it is normal to start with horizon definition and introduce the faults after. 
+A realistic geological scenario will follow certain constraints.  Caumron et al. gives rules for modeling that define boundaries between layers. For example, geological objects have a spacial continuity such that abrupt changes of normal orientation are not common. This is relevant for the creation of layers in the approach I propose, as it allows the use of smooth curves to represent layers. They also describe  the typical process of creating a structural model. The modeling usually starts with fault modeling, then the connection between fault surfaces is defined. Finally horizons are modeled. If the fault structure is very complex, it is normal to start with horizon definition and introduce the faults after.
 
 Natali et al. explores different modeling techniques in their recent report \cite{natali2013modeling} (approved for publishing). They describe a data oriented taxonomy where modeling is divided into three different scenarios, one data free, one sparse data, and one dence data. They also describe a workflow oriented taxonomy, where modeling is divided into the separate stages necessary for creating a geological model. They also show how geological modeling trends are approaching modeling methods that have been developed in computer graphics. They also give an in-depth description of selected methods for geological modeling. The sparse and dense data scenario occurs when there is geologically measured data available and used as input for a modeling approach. The data free scenario on the contrary has no ground truth information and relies entirely on procedural and/or geometric modeling. In this thesis the approach described is a data free scenario, since the idea is to create a sketching tool. However, some approaches from the sparse and dense data scenarios are also relevant as the user sometimes will guide the interpretation of the input data to varying degrees. 
 
-The data sparse scenario is the most normal one in the geoscienses and is most often the result of borehole data. In such situations the data points are spread around and needs to be interpolated, which is relevant for the approach I propose. The main interpolating methods are the B-Spline method, inverse distance method, Kriging method, and discrete smooth interpolation method \cite{mallet1992discrete, mallet1997discrete}. The data dense scenario is usually the case when data from seismic surveys is available. Here the problem is how to display the huge amounts of data, and how to interpret them to make a model of the structures present. Patel et al. describe techniques for rapid horizon extraction from seismic data in both 2D \cite{patel2008seismic} and 3D \cite{patel2010seismic} using a sketching interface.
+The data sparse scenario is the most normal one in the geoscienses and is most often the result of borehole data collection. In such situations the data points are spread around and needs to be interpolated, which is relevant for the approach I propose. The main interpolating methods are the B-Spline method, inverse distance method, Kriging method, and discrete smooth interpolation method \cite{mallet1992discrete, mallet1997discrete}. Interpolation methods are interresting in regards to the approach as they might be uesd to interpolate horizons from the sketched curves for horizon creation. The data dense scenario is usually the case when data from seismic surveys is available. Here the problem is how to display the huge amounts of data, and how to interpret them to make a model of the structures present. Approaches that aim at making the interpretation process easier and quicker have emerged in recent years. Patel et al. describe techniques for rapid horizon extraction from seismic data in both 2D \cite{patel2008seismic} and 3D \cite{patel2010seismic}. Amorim et al. \cite{amorim2012sketch} have an interresting approach that allows sketching directly over the raw seismic reflection volume and its derived data to help build the structural model of the subsurface.
 
 Many existing tools are based on the assumption that there is extensive data available and that geologists will have a lot of time developing a model of the area of interest. Several tools exist for modeling, displaying, editing and automatically calculate parameters for geological modeling.  Petrel \cite{petrel} is an example of a commercial program for geologic modeling that is in use. Most of such existing tools rely on an intensive work flow, and are based on interpreting data gathered from seismic surveys or bore hole data. The modeling is done either automatically, or semi-automatically by letting the user indicate various parameters and alter the suggested model manually. Sometimes up to a year is spent on developing such models. Recently a need for rapid developments of geologic prospects have been identified. A lot of techniques have therefore been taken from other fields that model terrain, such as the video games industry and movie industry \cite{natali2013modeling}.
 
@@ -471,7 +576,7 @@ Natali et al. \cite{natalirapid} describes an approach where the user sketches t
 
 Amorim et al. \cite{amorim2012sketch} descibe how various sketh based approaches can be used to allows the user to sketch directly over the raw seismic reflection volume and its derived data. This helps the expert in interpreting and and building a structural framwork for a reservior by using a sketch based input for helping in the interpretation process.
 
-Cockett's Visual Geology \cite{Cockett:Online} and Jessell's Noddy \cite{jessell1981noddy} are two geologic modeling tools designed for educational purposes that allow the realatively rapid building of geological layer structures by user input of parameters. Visual Geometry lets the user specify things like how many layers he wants ant their thickness, and then apply various functions like a fault line and it's angle, a folding phenomenon and it's angle, wave frequency etc. The basis for Noddy is the ability to construct a complex geological history as a succession of relatively simple structural, sedimentary and igneous events similarly to Visual Geometry, which allows you to rapidly create models and then calculate resulting gravity and magnetic fields. Both of these are based on parameterized procedural methodologies.
+Cockett's Visual Geology \cite{Cockett:Online} and Jessell's Noddy \cite{jessell1981noddy} are two geologic modeling tools designed for educational purposes that allow the realatively rapid building of geological layer structures by user input of parameters. Visual Geometry lets the user specify things like how many layers he wants ant their thickness, and then apply various functions like a fault line and its angle, a folding phenomenon and its angle, wave frequency etc. The basis for Noddy is the ability to construct a complex geological history as a succession of relatively simple structural, sedimentary and igneous events similarly to Visual Geometry, which allows you to rapidly create models and then calculate resulting gravity and magnetic fields. Both of these are based on parameterized procedural methodologies.
 
 There exists several approaches for sketching terrain, which are applicable to geology. Harold is an early example of a sketch based system that incorporates methods for sketching terrain, made by Cohen et al. \cite{cohen2000harold}. In Harold, the user can sketch hills on the terrain by simple strokes that start and end on the terrain. The terrain is then warped to try and match the stroke. Watanabe et al.  \cite{Watanabe:2004:SIT:1186415.1186500} made a further development of this, where the shape of the stroke also influences the width of hills that are generated, making for more natural looking hills. They also incorporated noise on top of the generated terrain to make the visualization more realistic. Gain et al. \cite{Gain:2009:TS:1507149.1507155} later improved further on this by allowing the user to sketch the width of the hill and change the baseline along wich this hill runs. To achieve real-time terrain creation Bernhardt et al. combine cpu and gpu processing in their sketch based approach for generating and displaying complex and high-resoultion terrains. The user can see the terrain changing as he is sketching. De Carpentier combine brushing and procedural terrain creation \cite{de2009interactive}.
 
@@ -479,69 +584,6 @@ There exists several approaches for sketching terrain, which are applicable to g
 \clearpage
 
 
-
-\chapter{Work process}
-This chapter describes the research and development process from start to finish. It begins by explaining how the first idea was formed and how the initial research proceeded. The next section regards how collaboration with geologists and students helped the progression of the project. The chapter ends by describing the development of the approach itself.
-\label{subsec:work}
-\section{Inspiration and research}
-As mentioned in \secref{sec:intro}, work started with the need for a tool to rapidly create three dimensional sketches for geological structures. Various existing geological illustrations were investigated and there were some discussions about what would be the goal. At the beginning however, there was not a clear idea of to approach it or how this would be achieved. Research therefore started by reading some geologic papers and books, both to get an idea of what kinds of sketches was needed, what was to actually be sketched and to get a little bit of an overview of what geology is.
-
-A large portion of the sketches encountered in literature were drawn inside a cube shaped cutout. The cutout of the geologic structure along a primitive and easy to understand object like a cube, gives the viewer a good way of understanding how the different structures relate to each other. This was how the idea of the sketch cube, which is the starting point of the approach presented in this thesis, began.
-
-To make a final decision to proceed with that approach, a more detailed strategy was needed. Therefore a new research phase began, were techniques dealing specifically with sketch based input, procedural modeling, terrain modeling, geological modeling etc. were researched. A couple of example illustrations that were found in a geological research paper \cite{neal1993sequence}, were used as a goal for what was to be possible in the program. Figure \ref{fig:inspiration1} these illustrations, which depict several depositional rock layers at the different times when they were deposited. The sea level at which they were deposited is indicated by the dotted lines. A set of different geological phenomena could be seen in these examples. Further research of modeling techniques gave some possible ways to do the input of such features, An idea of how the finished solution could look and function from a users perspective was forming.
-
-% TODO give examples of the techniques mentioned
-
-\begin{figure}
- \includegraphics[width=\linewidth]{thesis/inspiration1.png}
- \caption{Example illustration that served as inspiration in the beginning of research. Image from Sequence Stratigraphy - A Global Theory For Local Success, by Neal et. al}
- \label{fig:inspiration1}
-\end{figure}
-
-
-% TODO add description to appendices
-To explain the idea, illustrations and explaining text were put in a project description document. Figure \ref{fig:riverDesription} is an example illustration from that document showing how drawing of river structures was planned. The complete document can be found in the appendices. This was the basis for the implementation work at the beginning of the project. A lot of further research and clarification of ideas was still needed, but since the general approach had been decided, the only thing remaining before development of a concrete approach could begin was to decide on technology.
-
-\begin{figure}
- \includegraphics[width=\linewidth]{thesis/river.png}
- \caption{Illustration of how the drawing on rivers were planned to work at the beginning of the project, before implementation started. First, drawing a line on a surface where the rivers should go. Then, a river is created by an algorithm in the program}
- \label{fig:riverDesription}
-\end{figure}
-
-
-\section{Collaboration}
-After having created a version of the program that could be used as a prototype for demonstration, a professor from the department of geology was contacted. He also put me in contact with a geology student. The rest of research and development was guided by the collaboration with them. 
-
-The basic idea of the solution was shown to a professor of geology. He showed great interest and believed this could be good approach for illustrations in geology and he had some suggestions for improvements. What what learned from this meeting was that the focus on the ability of creating nice looking sketches rapidly was the most important. There were also some other ideas and features suggested for further development. These included things like illustrating the sea level, illustrating vegetation and many more ideas. Features that I had already thought of, like mountains and rivers, were confirmed to be important also. To help assess the development and suggest more improvements in the future, he gave the contact details of one of his students, Marie Songve.
-
-%%%%%% TODO append notes from meeting
-
-Marie helped develop some sketches that would be the main focus of development (see sketch in Figure \ref{fig:illuSketch}) from that point on. They would serve as a guide for what should be possible to create in the final approach. She also helped evaluate the direction of the development from this point. In addition to giving concrete advice on the geologic features of the approach, observing her testing the input methods helped identify some of the user interface problems. After development was concluded Marie also helped in assessing the success of the project by giving her impressions and trying out the program by creating several sketches on her own. This helped create some of the results that can be found in \secref{sec:results} and in evaluating the approach in \secref{sec:eval}. 
-
-\begin{figure}
- \centering
-\includegraphics[width=.4\linewidth]{thesis/illuSketch1.png}
-\includegraphics[width=.4\linewidth]{thesis/illuSketch2.png}
- \caption{Sketches that were made in collaboration with Marie Songve}
- \label{fig:illuSketch}
-\end{figure}
-
-\section{Implementation work}
-
-This section explained the development of the approach without going into much detail about the specific solutions created. The only details included are those that are relevant for understanding the most important choices which are discussed here and which are not explained earlier. For more details about the specific solutions, have a look at \secref{subsec:indepth}.
-
-Implementation work was started by creating the cube and a camera system that would allow rotating around and zooming in and out of the cube. This was achieved relatively quickly. Intersection tests and input on the cube was the next step. At first this was achieved by simply looping through all the triangles and storing each intersection point in a list, and then drawing lines between the points that were drawn. However, the next step was the real challenge, which had not really been considered in depth until now. That challenge was how in the world to create a sensible layer from lines drawn on the faces of the cube. Different approaches were tried, and the details of how that turned out can be found in \secref{subsec:layers} further back. This ended up taking a lot more time that was initially expected. However, in order to focus on the solution, one has to know the problem, so all the work that might seem like a waste was actually needed in order to realize that there was a problem and therefore what 
-kind of solution to look for.
-
-Once a solution to the layer problem was found, there was of course a lot of other features needed to create a program that could be used for making useful sketches. Meetings with Marie helped focus the direction and prioritization of their implementation. All the different features that were planned in order to reproduce the initial pen and paper sketch, were going to be implemented one after the other. Very often introduction of new capabilities meant going back and modifying existing code. In addition there were the non-geologic features of the program to think about, like undo functionality, save and load possibilities etc. These also had to work together with the other features in a way that would not upset any of the other features. As new features were added, it sometimes seemed as if the complexity was growing exponentially. It quickly became a problem keeping the different features working together in a smooth and predictable way. The program code was therefore changed many times to try and abstract 
-the complexity to make the implementation of new features as easy as possible.
-
-It was while realizing the complexity of the initial approaches that an idea of a parametric and ordered hierarchical structure was introduced. In the start, everything was based on three dimensional coordinates, which made it difficult to calculate the relationship between for example the points on a layer and a river on it. If the layer changed, what point on the new surface would correspond to the beginning of the river? The user would have to draw the river again, which was not a good solution for a rapid modeling tool. The idea was that parametric coordinates would restrict the placement of a feature to two dimensions on it's parents surface. Thus, a new point in three dimensions could be calculated based on the parents position and geometry. The inspiration for this approach came from the paper by Schmidt et al. \cite{CGF:CGF1129}. This would ease the recalculation of coordinates once something changed. The ordered structure meant that each feature would only have to deal with immediate parent and 
-children, and the order in which they had been drawn would be the guiding way to solve conflicts that might arise. The thought behind this was that the user would be thinking of the structures in a hierarchical way already, and after familiarizing himself with the program would know in what order features need to be drawn to create the desired effect. After all, it does not make sense to have a river without first having a surface on which it flows.
-
-The parametric and hierarchical solution could now be used for many problems. For example, how does one specify the height of a ridge and how does this height change if the layer changes, and how and where does it affect the underlying parent? The simple solution was making the ridge baseline a parametric coordinate on the layer, and for each point along the baseline, there was associated a height value, which could then be used to compute the actual resulting top point of the ridge by first finding the position of the baseline point on the surface, and then adding the height. How to do the actual morphing of the underlying surface to create the ridge also became a lot easier, since the lookup of surrounding points now was restricted to two dimensions and the baseline point was already known in this space.
-
-There were of course a lot of other difficulties remaining to solve to reach the stage the program is in now. However, the rest of the development was more about smaller issues local to each problem, and will be covered in the relevant subsection in \ref{subsec:indepth}.  There were still complexity issues of course, about how to fit each feature into the general solution without interfering with what was already implemented. New ideas were developed as work progressed, and others discarded along the way, mainly for lack of time. Going into all those details would mean we could write several books, but the details about solutions that have been implemented, and the problems and their solutions that are relevant to understanding choices will be included in the next two sections.
 
 
 \clearpage
@@ -562,20 +604,18 @@ The chapter concludes with \secref{sec:tech} by describing what technology like 
 \section{Basic Concept}
 \label{sec:concept}
 
+ A conceptual overview of the approach is illustrated in Figure \ref{fig:overviewConcept}. The arrows represent processes, either in the computer or performed by the user. the Square boxes represent data. The user starts with an idea in his head of what he wants to model. He indicates what he wants to create through input using the mouse, resulting in the input data. The program interprets the input data, and for each feature recognized, creates a representation of it in the scene tree. The representation is then used by the geometry synthesis code, to create new geometry and alter the shape of existing geometry.This happens at interactive frame rates. Once the scene geometry is ready, it is used by the visualization code for creating an image that is given back to the user on the computer display. The user then compares what he sees with what he had in mind. He can then do further refinement of the model by either changing some of what he already drew, or adding new features by drawing on the existing geometry.
+
+The basic idea of the approach, is based on a cube on which the user will draw curves that represent an outline of a surface. The cube can be viewed from all directions by means of a virtual camera that rotates around the scene. These surfaces represent the horizons of geological layers that could represent the strata of depositional rocks or other layered structures. By further sketching or user input it is then possible to modify these layers to create other structures like rivers and ridges. For the rest of the text, such structures that can be made by the user are called features. Most of the input consists of drawing simple curves on surfaces, and then indicate what kind of feature is wanted. However, it was an idea from early on in the project to see if it would be possible to make a combination of a sketching approach to modeling with a procedural approach. By procedural I mean that the geometry is calculated by some algorithm in stead of the user sketching it or in other ways specifying its final 
+geometric properties. A feature for creating depositional delta structures has been implemented procedurally. A deposit in the current approach is a layer of material that has been deposited by a river where it enters the sea. The geological background chapter explained how all sedimentary rock layers are created by such deposited material. All features are created based on the users input, meaning that there is no data representing real world conditions given as input to the algorithms.
 \begin{figure}[h]
  \includegraphics[width=\linewidth]{thesis/overviewConcept.pdf}
  \caption{Conceptual overview}
  \label{fig:overviewConcept}
 \end{figure}
-
-Figure \ref{fig:overviewConcept} gives a conceptual overview of the approach. The arrows represent processes, either in the computer or performed by the user. the Square boxes represent data. The user starts with an idea in his head of what he wants to model. He indicates what he wants to create through input using the mouse, resulting in the input data. The program interprets the input data, and for each feature recognized, creates a representation of it in the scene tree. The representation is then used by the geometry synthesis code, to create new geometry and alter the shape of existing geometry.This happens at interactive frame rates. Once the scene geometry is ready, it is used by the visualization code for creating an image that is given back to the user on the computer display. The user then compares what he sees with what he had in mind. He can then do further refinement of the model by either changing some of what he already drew, or adding new features by drawing on the existing geometry.
-
-The basic idea of the approach, is based on a cube on which the user will draw curves that represent an outline of a surface. The cube can be viewed from all directions by means of a virtual camera that rotates around the scene. These surfaces represent the horizons of geological layers that could represent the strata of depositional rocks or other layered structures. By further sketching or user input it is then possible to modify these layers to create other structures like rivers and ridges. For the rest of the text, such structures that can be made by the user are called features. Most of the input consists of drawing simple curves on surfaces, and then indicate what kind of feature is wanted. However, it was an idea from early on in the project to see if it would be possible to make a combination of a sketching approach to modeling with a procedural approach. By procedural I mean that the geometry is calculated by some algorithm in stead of the user sketching it or in other ways specifying it's final 
-geometric properties. A feature for creating depositional delta structures has been implemented procedurally. A deposit in the current approach is a layer of material that has been deposited by a river where it enters the sea. The geological background chapter explained how all sedimentary rock layers are created by such deposited material. All features are created based on the users input, meaning that there is no data representing real world conditions given as input to the algorithms.
-
 The users input has to be interpreted in some way. The most significant part of the input is the selecting of geometric structures in the scene, and drawing of curves on these structures. The first part of this process is to transform the screen space coordinates of the mouse into a ray pointing into the scene from the position of the camera. This vector is then used to check for intersections with the geometrical structures in the scene. Depending on which mouse button is pressed, the feature that the geometric structure belongs to is either marked as selected, or the point of intersection is added to a structure representing a curve that is visualized to the user. Some special interpretation rules are in place for different features which will be covered later. By clicking on various buttons in the user interface, the user provides information of what his input was intended to represent.
 
-Once this basic input has been gathered the intent of the user understood, each of the features does further interpretation of the curves that have been drawn. The output is an internal representation of the model. The internal representation is contained in a tree structure where the cube is always the starting point.  Every feature added will add a new node in the tree. Schmidt and Singh 2008 \cite{CGF:CGF1129} was an inspiration for this parametric and hierachical way to represent the sketches. This internal representation does not store the 3D points where the user drew in the scene, but rather uses a 2D parametric representation. Each 3D point can be found by looking up it's placement by a function defined in the parent feature. This internal representation is used later in the process to compute a 3D geometry based on triangles, which can then be visualized on the computers screen via the graphics card. The user will utilize this generated geometry as visual feedback, and decide whether it is close to 
+Once this basic input has been gathered the intent of the user understood, each of the features does further interpretation of the curves that have been drawn. The output is an internal representation of the model. The internal representation is contained in a tree structure where the cube is always the starting point.  Every feature added will add a new node in the tree. Schmidt and Singh 2008 \cite{CGF:CGF1129} was an inspiration for this parametric and hierachical way to represent the sketches. This internal representation does not store the 3D points where the user drew in the scene, but rather uses a 2D parametric representation. Each 3D point can be found by looking up its placement by a function defined in the parent feature. This internal representation is used later in the process to compute a 3D geometry based on triangles, which can then be visualized on the computers screen via the graphics card. The user will utilize this generated geometry as visual feedback, and decide whether it is close to 
 what he intended, or whether he needs to give additional input or change his input to achieve what he wants. Thus the process continues until a satisfactory result has been reached. Now, the user can store the work for later, send it to someone else, or take screenshots for use in a paper, lecture etc.
 
 
@@ -583,7 +623,7 @@ what he intended, or whether he needs to give additional input or change his inp
 
 The purpose of the internal representation is to capture the modeler's intent as well as possible. From a technical viewpoint, it is the the meaning of the input that is interesting and stored for the representation. How the geometry is presented in the end is interesting for the user, but capturing the intent enables a modeling approach that lets the user to go back and change earlier features in the model without having to redraw everything, since all the geometry can always be recomputed from the internal representation.
 
-The available features are layers, rivers, ridges, valleys, deposits and a sea level indication. All of the different features can be combined to create a scene inside the cube. Figure \ref{fig:allFeatures} depicts an example of a scene with all the features used. There are three layers, where the bottom two are intersecting. On the top layer there are several ridges drawn. A river runs down a valley into the sea. Where the river meets the sea, several deposits have been created. On both the layers and deposits surfaces, the colors have been set manually. The layers are created by drawing on the cube, while rivers, ridges and valleys are created by sketching a path along which they will run on top of the layers surface. The sea level is simply indicated by indicating it's height on the cube with the mouse. The deposits are created procedurally by selecting a river, and then indicating that a deposit is to be made. The deposit will be made at the intersection of the river and the sea level.
+The available features are layers, rivers, ridges, valleys, deposits and a sea level indication. All of the different features can be combined to create a scene inside the cube. Figure \ref{fig:allFeatures} depicts an example of a scene with all the features used. There are three layers, where the bottom two are intersecting. On the top layer there are several ridges drawn. A river runs down a valley into the sea. Where the river meets the sea, several deposits have been created. On both the layers and deposits surfaces, the colors have been set manually. The layers are created by drawing on the cube, while rivers, ridges and valleys are created by sketching a path along which they will run on top of the layers surface. The sea level is simply indicated by indicating its height on the cube with the mouse. The deposits are created procedurally by selecting a river, and then indicating that a deposit is to be made. The deposit will be made at the intersection of the river and the sea level.
 
 \begin{figure}
  \includegraphics[trim = 50mm 5mm 50mm 7mm, clip,width=\linewidth]{thesis/results/allFeatures.png}
@@ -658,9 +698,9 @@ All the features relate to each other in a child-parent relationship creating a 
 
 
 \subsection{Geometry synthesis and Visualization}
-Before a scene configuration can be visualized, a geometry needs to be synthesized. For each type of feature in the scene, there is a corresponding algorithm for creating the relevant geometry. When the layers geometry is being constructed, it needs to take into account the children. This is because some of them can actually change the surface of the layer. Each node in the scene will store it's geometry so it does not need to be generated over and over for each frame. When there are changes made to the representation of the node or any other that will affects it's appearance the geometry needs to update. It will be notified through a dirty-flag mechanism, which triggers the relevant algorithm for generating new geometry.
+Before a scene configuration can be visualized, a geometry needs to be synthesized. For each type of feature in the scene, there is a corresponding algorithm for creating the relevant geometry. When the layers geometry is being constructed, it needs to take into account the children. This is because some of them can actually change the surface of the layer. Each node in the scene will store its geometry so it does not need to be generated over and over for each frame. When there are changes made to the representation of the node or any other that will affects its appearance the geometry needs to update. It will be notified through a dirty-flag mechanism, which triggers the relevant algorithm for generating new geometry.
 
-The visualization is achieved by painting the geometry object associated with each feature to the screen. The geometry object consists of a data structure that contain the vertices and for each verex an associated normal. This class is also responsible for intersection testing, and thus each vertex also has an associated parametric coordinate. The parametric coordinate of the intersection point is interpolated from the three vertices of the triangle where an intersection has been found. Simple opengl functions are used for drawing the triangles. There is also color vectors associated with the geometry object to enable different material colors for the different objects. To achieve a transparency effect, care must be taken to draw the transparent objects last. The cube will draw all it's children before it draws itself. The layers draws itself first and thus the rivers transparent water will be drawn after. The geometry object also has a list of points that it uses to draw polylines if present, intended for 
+The visualization is achieved by painting the geometry object associated with each feature to the screen. The geometry object consists of a data structure that contain the vertices and for each verex an associated normal. This class is also responsible for intersection testing, and thus each vertex also has an associated parametric coordinate. The parametric coordinate of the intersection point is interpolated from the three vertices of the triangle where an intersection has been found. Simple opengl functions are used for drawing the triangles. There is also color vectors associated with the geometry object to enable different material colors for the different objects. To achieve a transparency effect, care must be taken to draw the transparent objects last. The cube will draw all its children before it draws itself. The layers draws itself first and thus the rivers transparent water will be drawn after. The geometry object also has a list of points that it uses to draw polylines if present, intended for 
 illustrating the sketched lines of features in the scene such as the outline around horizons of the layers, a line tracing the top of the ridges, etc.
 
 \section{Specific solutions}
@@ -698,7 +738,7 @@ New layers may be added on top of existing layers as seen in Figure \ref{fig:lay
  \centering
 \includegraphics[width=.3\linewidth]{thesis/results/simpleLayerNew.png}
 \includegraphics[width=.3\linewidth]{thesis/results/simpleLayerNewMarked.png}
- \caption{It is possible to create multiple layers as can be seen here. When one has multiple layers, it is also possible to select one of the layers by right clicking it, as seen on the right. When a layer is selected, it is highlighted by a slightly brighter color, and it's outline is drawn in red.}
+ \caption{It is possible to create multiple layers as can be seen here. When one has multiple layers, it is also possible to select one of the layers by right clicking it, as seen on the right. When a layer is selected, it is highlighted by a slightly brighter color, and its outline is drawn in red.}
  \label{fig:layerNew}
 \end{figure}
 
@@ -723,7 +763,7 @@ unneccessarily recomputing it. In Figure \ref{fig:layerRep} you can see the curv
 
 
 A considerable amount of time was spent on figuring out how the horizon surfaces would be created. The first attempt was to simply loop through all the points and draw triangle strips beginning with the first and last point, then second and second to last, and so on. This created some structure that could resemble a layer, but the connection of points was very arbitrary and therefore it was difficult to predict the results of what was drawn. It was also difficult to modify further. The second idea was to do a simple interpolation of the points on the cube faces for each point, by going from left to right, back to front of the cube along the curves drawn on the cubes faces. Before this could be achieved, it was then clear that the four sides of the cubes needed to have separate structures and detection of which face was being drawn on. This was achieved by creating a separate structure out of each 
-face of the cube. Each face also keeps it's own structure of the input points that the user inputs.
+face of the cube. Each face also keeps its own structure of the input points that the user inputs.
 
 
 Input for layers are drawn on the cube faces. On faces where the user draws, there is an auto-complete function while on the left, right and oppsite side there is a suggestion function. The simple auto-complete will automatically complete a line you draw by extending it towards the left and right side of the current face, by simply adding points at the beginning and end horizontally until the edge is reached.
@@ -841,7 +881,7 @@ The intersection testing on the layer is not achieved the same way as all other 
 The visualization of a layer is straightforward and achieved by simply drawing all the triangles and the outline. If the layer is made invisible or marked for editing, the outline is drawn in a dotted line and no triangles are drawn.
 
 \subsection{Rivers}
-Rivers can be drawn on top of the surfaces by indicating it's path with a curve. An algorithm then creates a river as shown in Figure \ref{fig:riverDraw}. 
+Rivers can be drawn on top of the surfaces by indicating its path with a curve. An algorithm then creates a river as shown in Figure \ref{fig:riverDraw}. 
 The input capture of the initial curve of the river is achieved by drawing on the surface as explained earlier.
 
 The initial curve is interpreted as the center point of the river. Each of the two sides is then computed by constructing a vector in the parametric space perpendicular to the river direction, and extending a new point in both directions from the center point. At the ends of the river a logarithmic function is used to create a smooth falloff towards zero, to make the two sides meet. These two sides of the river becomes the representation of the river, and they are the lines that can now be further modified by the user. The initial line is discarded.
@@ -898,7 +938,7 @@ A valley functions almost identical to a river, only it does not create a geomet
 \begin{figure}
 \includegraphics[trim = 10mm 80mm 200mm 30mm, clip,width=.5\linewidth]{thesis/results/valleyMade.png}
 \includegraphics[trim = 10mm 80mm 200mm 30mm, clip,width=.5\linewidth]{thesis/results/valleyChanged.png}
- \caption{A valley and the same valley after a change to both of it's sides }
+ \caption{A valley and the same valley after a change to both of its sides }
  \label{fig:valley}
 \end{figure}
 
@@ -910,7 +950,7 @@ Ridges are also drawn by a line on the layer surface. Once a line has been drawn
 \begin{figure}
 \includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeDraw.png}
 \includegraphics[trim = 30mm 80mm 120mm 30mm, clip,width=.5\linewidth]{thesis/results/ridgeDrawn.png}
- \caption{Sketching of a ridge by indicating where it's base goes, and letting the program create a ridge along this path. }
+ \caption{Sketching of a ridge by indicating where its base goes, and letting the program create a ridge along this path. }
  \label{fig:ridgeDraw}
 \end{figure}
 
@@ -970,7 +1010,7 @@ current value.
 When the height grid is ready, the simulation can begin. The simulation uses an additional grid, to keep track of the amount of deposits at each point. Here follows a description of the simulation algorithm ( see Algorithm \ref{alg:layer} for pseudo-code );
 1. Matter is deposited at the point where the deposit starts (where the river meets the sea), such that is does not go above the sea level. A variable keeps track of how much has been deposited over time.
 2. For each axis in the grid(x-direction and y-direction), for each point in the grid;
-Set the deposit height of the current cell to it's previous value plus half the difference as compared to the previous cell (according to the axis currently considered and the next cell. Both these values are clamped by the available amount of matter. The algorithm is given as pseudo-code in \ref{alg:layer}
+Set the deposit height of the current cell to its previous value plus half the difference as compared to the previous cell (according to the axis currently considered and the next cell. Both these values are clamped by the available amount of matter. The algorithm is given as pseudo-code in \ref{alg:layer}
 
 
 \begin{algorithm}
@@ -1070,11 +1110,11 @@ This chapter explains the choice of technology like programming language and lib
 
 The choice of technology to base the work on was made by a bit of trial and error. Different scene graphs in c++ and Java were tested to see what would work the best. In the end it was decided that the project would be based on c++ as programming language with Qt for user interface and OpenGL for graphics. Custom visualization and scene graph code would be created, as some specific things would be needed that might not fit nicely into a premade solution. Qt was chosen as the user interface library because of previous experience. In addition to having a good set of user interface classes it also has a lot of helpful classes with things like collections and event handling that make the process of programming in c++ pleasant.
 
-Some tests were initially conducted in java by porting the code from c++ as it was made. Although the java runtime itself is theoretically fast enough, naively using it's methods of abstraction slows down data access a lot. This forces you to write complicated and unreadable code that defeats one of the main purposes of using java in the first place. The abstractions in c++ can be a bit more complicated to use than in standard Java, but also allow much faster data access and better control over memory allocation. The main problem here was that Java would constantly allocate objects on the heap even though they would only be needed temporarily. The Java compiler does have optimizations that removes such allocations where possible, but a lot of times it cannot know what the life expectancy of an object is. This was possible to overcome by writing specially designed code to make it possible for the compiler to see where a temporary object is not being reused and by passing primitive types in stead of pointers 
-to objects in many places. Another problem is that arrays are restricted to contain primitive types or pointers. Thus an array of objects cannot be allocated such that it's objects lie in contiguous memory, and this slows down access a lot. This was also possible to overcome by making arrays of primitive types in stead of objects. Both these approaches put together made the code run comparably fast to the c++ code, but difficult to modify. It would probably have been possible to solve all such problems with Java by relying on doing all heavy calculations on the GPU by using opengl shading language or a similar GPU programming language. This was decided against for lack experience with GPU programming and a lack of time for learning and experimenting with development tools designed for such programming. None of the algorithms explained utilize this possibility, although that would probably increase the 
+Some tests were initially conducted in java by porting the code from c++ as it was made. Although the java runtime itself is theoretically fast enough, naively using its methods of abstraction slows down data access a lot. This forces you to write complicated and unreadable code that defeats one of the main purposes of using java in the first place. The abstractions in c++ can be a bit more complicated to use than in standard Java, but also allow much faster data access and better control over memory allocation. The main problem here was that Java would constantly allocate objects on the heap even though they would only be needed temporarily. The Java compiler does have optimizations that removes such allocations where possible, but a lot of times it cannot know what the life expectancy of an object is. This was possible to overcome by writing specially designed code to make it possible for the compiler to see where a temporary object is not being reused and by passing primitive types in stead of pointers 
+to objects in many places. Another problem is that arrays are restricted to contain primitive types or pointers. Thus an array of objects cannot be allocated such that its objects lie in contiguous memory, and this slows down access a lot. This was also possible to overcome by making arrays of primitive types in stead of objects. Both these approaches put together made the code run comparably fast to the c++ code, but difficult to modify. It would probably have been possible to solve all such problems with Java by relying on doing all heavy calculations on the GPU by using opengl shading language or a similar GPU programming language. This was decided against for lack experience with GPU programming and a lack of time for learning and experimenting with development tools designed for such programming. None of the algorithms explained utilize this possibility, although that would probably increase the 
 running speed noticeably.
 
-The save feature is implemented by a function in each node in the scene tree that will convert that nodes data and a string representing it's type into QVariant objects. A QVariant is an object defined in the QT library that can hold any type of primitive value and also collections. Thus it is possible to build a tree structure with arbitrary data. When this conversion is done the data is sent to a library that will convert such a tree of QVariants to a text string in the json format. The json format is a way of structuring hierarchical data similar to XML. It comes from JavaScript where objects can be declared with object literals. The json format uses the same format as these object literals. The text string is stored in a file the user specifies. At loading time the entire process goes in reverse. With the aid of a function that instantiates an object from the type string the correct type of object is instantiated. Then a function that populates that objects data is run. Each object knows what kind of 
+The save feature is implemented by a function in each node in the scene tree that will convert that nodes data and a string representing its type into QVariant objects. A QVariant is an object defined in the QT library that can hold any type of primitive value and also collections. Thus it is possible to build a tree structure with arbitrary data. When this conversion is done the data is sent to a library that will convert such a tree of QVariants to a text string in the json format. The json format is a way of structuring hierarchical data similar to XML. It comes from JavaScript where objects can be declared with object literals. The json format uses the same format as these object literals. The text string is stored in a file the user specifies. At loading time the entire process goes in reverse. With the aid of a function that instantiates an object from the type string the correct type of object is instantiated. Then a function that populates that objects data is run. Each object knows what kind of 
 special procedures it must run to do to become valid. To restore the state exactly as it was at save time is the most complicated and crucial part of the save and load code.
 
 The undo function works by simply copying the whole scene tree when ever something is changes. Each node type in the tree has a copy method that is used to create a copy of it. Only the representational data is copied of course. The most complicated part is like with the save and load feature to keep the state of the copies exactly the same as the original. The new copy is then pushed onto a stack. When the undo button is pressed the stack is popped and the scene tree is replaced for the one that was at the top in the stack. The copying code does only copy the reference to the geometry objects, thus saving time on not recomputing all the geometry if that is unnecessary.
@@ -1136,7 +1176,7 @@ For the total user experience, the users indicated the average scale values of 6
 
 On the difficulty of learning and using the program the subjects indicated an average score of 5.5. They commented that having the menus visible at all time would be less confusing. There was also a suggestion to make a list for selecting the different objects in the scene, as that could sometimes pose difficulties.
 
-When assessing the usefulness of the tool in it's current form the subjects gave an average score of 4. Comments mentioned that the tool can in it's current form be useful for illustrating some very simple geological scenes, but that it would require more development for it to be a really useful tool. Suggestions for improvements was a feature for creating faults, the ability to alter the width of mountains and the depth of valleys. One subject indicated that it was difficult to suggest, because he didn't know what is possible to make.
+When assessing the usefulness of the tool in its current form the subjects gave an average score of 4. Comments mentioned that the tool can in its current form be useful for illustrating some very simple geological scenes, but that it would require more development for it to be a really useful tool. Suggestions for improvements was a feature for creating faults, the ability to alter the width of mountains and the depth of valleys. One subject indicated that it was difficult to suggest, because he didn't know what is possible to make.
 
 For the potential of the approach the subjects gave an average score of 8.5. One subject indicated a belief that if the features suggested could be implemented, the program could become very useful for them. Another said that the way they make illustrations today is usually by hand, which is time consuming. This approach helps create quick illustrations.
 
@@ -1166,7 +1206,7 @@ When the approach gains more maturity, I expect it or some similar approach coul
 The user study also sheds some more light on what aspects of the approach works and in what direction any further work might consider going. The subjects responded very positively to the approach, although they indicated that further development is needed to make it useful in more than a few instances. According to the study, the chosen input method for creating a surface makes it possible to draw simple surfaces quickly compared to what subjects do on paper. However, as betrayed by the glacier reproduction attempt (figure \ref{fig:glacier}) the algorithm that interpolates the lines drawn works in such a way that it will favor structures that manifest themselves along the interpolation direction. Similar structures could be made in that instance by the valley feature, but it can be frustrating for a user to draw the same type of features in one case and another in other cases. Other features like rivers, ridges and sketches were all described as easy to use. However, the valleys and ridges could benefit from 
 more control over depth and width respectively. 
 
-Deposits are a feature that shows how a procedural approach can be combined with the sketching approach for creating surfaces. It is the last feature that was included, and will need more development to show it's real potential. Subjects remarked on some bugs, and requested more features regarding the deposits however, so in their eyes it presumably can also be useful to illustrate deposits in this way. 
+Deposits are a feature that shows how a procedural approach can be combined with the sketching approach for creating surfaces. It is the last feature that was included, and will need more development to show its real potential. Subjects remarked on some bugs, and requested more features regarding the deposits however, so in their eyes it presumably can also be useful to illustrate deposits in this way. 
 
 During the development of the approach, work was conducted in an experimental fashion. I would try out different approaches, and decide which one worked best based on trying it, often together with Marie. After a while I decided I needed some discussion and collaboration with people from the geologic field to continue. This was very helpful during the development phase in order to get direction and focus where my own experience and knowledge about geology was not sufficient. I suspect that involving geologists from an even earlier point could have helped the process. Even in questions not pertaining directly to geology, it was helpful to get input from people not from the computer science field. They were not familiar with the internals of my particular implementation and way of thinking, and would therefore mention problems that I would not notice. Several usability issues were ironed out this way.
 
@@ -1196,7 +1236,7 @@ There are also a lot of possible improvements on the features that are already i
 
 To make deposits a more powerful feature, I would make them into fully fledged layers. By this I mean that it should be possible to modify them in all the same ways as the sketched layers in the cube. The procedure that creates the deposits could also have the option of specifying several parameters, like how far it will flow, how much material is transported, how fast the river flows, etc. It could take into account the possibility of the river stream carrying different sized particles at the same time, thus depositing them in different regions. The flow speed of the river could be calculated based on the terrains slope. The amount of deposits would be dependent on several factors possibly outside the sketch, like terrain material, length of river, etc., and can therefore not always be calculated, so would need to be input by the user somehow.
 
-Many of the illustrations could benefit from a feature that allowed painting on the surfaces of the sketch like Natali et al. \cite{natalirapid}, and by creating billboards like in Harold \cite{cohen2000harold}. This would for example allow the illustration of subduction of oceanic plates sketch in Figure \ref{fig:subduction} to be completely reproduced. A billboard feature would also allow geologist to input context giving features such as vegetation and animal life, plumes of smoke from volcanoes, etc. Artistic users could input details that would improve the visual appearance of the sketch. I would also like to see a texturing feature similar to what Natali et al. proposes where textures by default follow the layer structure, but the user can also sketch to override it's direction and deformation to illustrate details of a layers internal structure. Another way to add a more realistic look for the horizon surfaces could be achieved through a fractal noise method.
+Many of the illustrations could benefit from a feature that allowed painting on the surfaces of the sketch like Natali et al. \cite{natalirapid}, and by creating billboards like in Harold \cite{cohen2000harold}. This would for example allow the illustration of subduction of oceanic plates sketch in Figure \ref{fig:subduction} to be completely reproduced. A billboard feature would also allow geologist to input context giving features such as vegetation and animal life, plumes of smoke from volcanoes, etc. Artistic users could input details that would improve the visual appearance of the sketch. I would also like to see a texturing feature similar to what Natali et al. proposes where textures by default follow the layer structure, but the user can also sketch to override its direction and deformation to illustrate details of a layers internal structure. Another way to add a more realistic look for the horizon surfaces could be achieved through a fractal noise method.
 
 If implementing any of these features it is important to focus on the usability and ease of use. In that respect I would continue to involve users from the geologic field. One of the things test users have commented was the ease of use of the features and of creating sketches in this approach. If it would become more difficult to use, they might prefer to draw things by hand. It should preferably not become more complicated to do the things that are already possible. New features should simply add possibilities that are as easy to use as the rest.
 
@@ -1214,4 +1254,11 @@ I expect that when this approach gains more maturity, or similar approaches are 
 
 \bibliography{thesis}{}
 \bibliographystyle{plain}
+
+\appendix
+\chapter{Project Description}
+\label{apx:description}
+In the following pages, the project description document that was made at the beginning of the project is included. As can be observed, some changes to the planned approach were made, but the main idea of sketching inside a cube is basically the same.
+\includepdf[pages={1-8}]{thesis/description.pdf}
+
 \end{document}
