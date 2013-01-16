@@ -157,8 +157,8 @@
      showguides="true"
      inkscape:guide-bbox="true"
      inkscape:window-width="1440"
-     inkscape:window-height="829"
-     inkscape:window-x="-2"
+     inkscape:window-height="823"
+     inkscape:window-x="-3"
      inkscape:window-y="-3"
      inkscape:window-maximized="1"
      inkscape:snap-grids="false">
@@ -1385,16 +1385,16 @@
          id="tspan4715-4">Geometry</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:21.58331871px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
-       x="260.4458"
-       y="262.62817"
+       style="font-size:18.29741287px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
+       x="296.68912"
+       y="222.64493"
        id="text4747"
        sodipodi:linespacing="125%"
-       transform="scale(1.0791659,0.92664158)"><tspan
+       transform="scale(0.91487064,1.0930507)"><tspan
          sodipodi:role="line"
-         x="260.4458"
-         y="262.62817"
-         id="tspan4763">Input data</tspan></text>
+         x="296.68912"
+         y="222.64493"
+         id="tspan4763">Conceptual data</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:20px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans;-inkscape-font-specification:Sans"
