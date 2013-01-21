@@ -144,8 +144,9 @@ float BoxNode::getHeight() {
 
 float BoxNode::intersectionPoint(Vector3 from, Vector3 direction) {
     float dist = FLT_MAX;
+    float ss, tt;
     foreach (BaseNode * s, surfaces) {
-        QVector<Vector3> points = s->intersectionPoints(from, direction);
+        QVector<Vector3> points = s->intersectionPoints(from, direction,ss,tt);
         if (points.size() >0) {
             Vector3& p = points[0];
             float d = (p-from).lenght();
@@ -179,15 +180,17 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
     // we must find the nearest intersection point
     float candidateDistance = FLT_MAX;
     Vector3 candidatePoint;
+    QVector2D uvCandidate;
     SideNode * candidate = NULL;
-
+    float ss, tt;
     foreach (SideNode * s, surfaces) {
-        QVector<Vector3> points = s->intersectionPoints(from, direction);
+        QVector<Vector3> points = s->intersectionPoints(from, direction,ss,tt);
         if (points.size() >0 ) {
                 float dist = (points[0]-from).lenght();
                 if ((activeSurface == NULL || s == activeSurface) && dist < candidateDistance) {
                     candidateDistance = dist;
                     candidatePoint = points[0];
+                    uvCandidate = QVector2D(ss, tt);
                     candidate=s;
                }
 
@@ -196,6 +199,7 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 
     if (candidate) {
         candidate->sketchingSpline.addPoint(candidatePoint);
+        candidate->uvSketchingSpline.addPoint(uvCandidate);
 
 
         activeSurface = candidate;

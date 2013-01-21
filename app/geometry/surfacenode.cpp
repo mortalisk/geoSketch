@@ -555,7 +555,8 @@ BaseNode * SurfaceNode::findIntersectingNode(Vector3& from, Vector3& direction, 
             ISurfaceFeature * i = dynamic_cast<ISurfaceFeature*>(c);
             Deposit * d = dynamic_cast<Deposit*>(c);
             if(d) {
-                QVector<Vector3> pointsD = d->intersectionPoints(from, direction);
+                float ss, tt;
+                QVector<Vector3> pointsD = d->intersectionPoints(from, direction,ss,tt);
                 if (pointsD.size() > 0) {
                     return d;
                 }

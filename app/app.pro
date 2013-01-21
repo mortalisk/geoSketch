@@ -26,6 +26,7 @@ HEADERS += gui/mainwindow.h \
     morten3d/json.h \
     geometry/sphere.h \
     geometry/spline.h \
+    geometry/spline2DE.h \
     geometry/surface.h \
     geometry/boxnode.h \
     geometry/sidenode.h \
@@ -51,6 +52,7 @@ SOURCES += main.cpp \
     morten3d/json.cpp \
     geometry/sphere.cpp \
     geometry/spline.cpp \
+    geometry/spline2DE.cpp \
     geometry/surface.cpp \
     geometry/boxnode.cpp \
     geometry/sidenode.cpp \

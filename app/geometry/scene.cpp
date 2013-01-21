@@ -28,7 +28,8 @@ Scene::Scene() {
 }
 
 void Scene::showCursor(Vector3& from, Vector3& direction) {
-    QVector<Vector3> points = activeNode->intersectionPoints(from,direction);
+    float ss, tt;
+    QVector<Vector3> points = activeNode->intersectionPoints(from,direction,ss,tt);
     if ( points.size() > 0) {
         float x = points[0].x();
         float y = points[0].y();

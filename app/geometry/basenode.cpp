@@ -53,9 +53,11 @@ void BaseNode::addPoint(Vector3 from, Vector3 direction) {
 //        proxy->addPoint(from,direction);
 //    }
 //    else {
-        QVector<Vector3> points = intersectionPoints(from, direction);
+    float ss, tt;
+        QVector<Vector3> points = intersectionPoints(from, direction,ss,tt);
         if (points.size() > 0) {
             sketchingSpline.addPoint(points[0]);
+            uvSketchingSpline.addPoint(QVector2D(ss,tt));
         }
 //    }
 
@@ -74,7 +76,8 @@ BaseNode * BaseNode::findIntersectingNode(Vector3 &from, Vector3 &direction, Vec
         }
     }
     if (found == NULL) {
-        QVector<Vector3> points = intersectionPoints(from, direction);
+        float ss, tt;
+        QVector<Vector3> points = intersectionPoints(from, direction,ss,tt);
         if (points.size() > 0) {
             point = points[0];
             return this;
@@ -178,10 +181,9 @@ void BaseNode::correctSketchingDirection() {
     sketchingSpline.smooth();
 }
 
-QVector<Vector3> BaseNode::intersectionPoints(Vector3 from, Vector3 direction) {
+QVector<Vector3> BaseNode::intersectionPoints(Vector3 from, Vector3 direction, float&s, float&t) {
 	from = from - position;
-	direction = direction - position;
-    float s, t;
+    direction = direction - position;
 	if (shape != NULL) {
         return shape->intersectionPoints(from, direction,s,t);
 	} else {
