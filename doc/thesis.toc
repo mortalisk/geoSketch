@@ -38,3 +38,4 @@
 \contentsline {chapter}{\numberline {8}Conclusion}{75}{chapter.8}
 \contentsline {chapter}{\numberline {A}Project Description}{81}{appendix.A}
 \contentsline {chapter}{\numberline {B}User Study Results}{90}{appendix.B}
+\contentsline {chapter}{\numberline {C}Contact details}{101}{appendix.C}
