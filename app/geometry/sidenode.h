@@ -31,10 +31,17 @@ public:
         return QString("SideNode");
     }
 
-    void projectPoints(Vector3 diff,const QVector<Vector3>& points) {
+    void redrawPoints() {
+        spline.clear();
+        foreach(QVector2D p, uvSpline.getPoints()) {
+            spline.addPoint(getPointFromUv(p));
+        }
+    }
 
-        foreach(const Vector3& point, points) {
-                spline.addPoint(point+diff);
+    void projectPoints(Vector3 diff,const QVector<QVector2D>& points) {
+
+        for (int i = points.size()-1; i>=0; --i) {
+            uvSpline.addPoint(QVector2D(1.0-points[i].x(),points[i].y()));
         }
     }
     bool includeShapeInExport() {return true;}
@@ -52,48 +59,54 @@ public:
         return distLeft < distSpline || distRight < distSpline;
     }
 
+    Vector3 getPointFromUv(QVector2D point) {
+        Vector3 a = (lowerLeft*(1.0-point.x()) + lowerRigth * point.x());
+        Vector3 b = (lowerLeft*(1.0-point.y()) + upperLeft * point.y());
+        return Vector3(a.x(),b.y(),a.z());
+    }
+
     void addInterpolatedSuggestion(float yLeft, float yRight) {
         ensureLeftToRigth();
-        if(spline.isSuggestion) {
-            spline.clear();
+        if(uvSpline.isSuggestion) {
+            uvSpline.clear();
 
-            Vector3 pointA(lowerLeft.x(), yLeft, lowerLeft.z());
-            Vector3 pointB(lowerRigth.x(), yRight, lowerRigth.z());
+            QVector2D pointA(0, yLeft);
+            QVector2D pointB(1, yRight);
             for (float i = 0.0; i<1.01; i+=0.05) {
-                Vector3 add = interpolate(pointA, pointB, i);
-                spline.addPoint(add);
+                QVector2D add = interpolate(pointA, pointB, i);
+                uvSpline.addPoint(add);
             }
-            spline.isSuggestion = true;
-        }else {
-            const QVector<Vector3> & points = spline.getPoints();
-            Vector3 first = points[0];
-            Vector3 last = points[points.size()-1];
+            uvSpline.isSuggestion = true;
+        }else if (uvSpline.getPoints().size() > 0){
+            const QVector<QVector2D> & points = uvSpline.getPoints();
+            QVector2D first = points[0];
+            QVector2D last = points[points.size()-1];
             float length = 0.0;
             for (int i = 1; i< points.size();++i) {
-                length += (points[i-1]-points[i]).lenght();
+                length += (points[i-1]-points[i]).length();
             }
             float along = 0.0;
-            Vector3 previous = first;
+            QVector2D previous = first;
             for (int i = 0; i <points.size(); ++i) {
-                along += (previous-points[i]).lenght();
+                along += (previous-points[i]).length();
                 previous = points[i];
                 float w = along/length;
                 float targetY = yLeft*(1.0-w) + yRight*w;
                 float lineY = first.y()*(1.0-w)+last.y()*w;
                 float diff = points[i].y() - lineY;
                 float newY = targetY + diff;
-                spline.setPoint(i, Vector3(points[i].x(), newY, points[i].z()));
+                uvSpline.setPoint(i, QVector2D(points[i].x(), newY));
             }
         }
     }
 
-    Vector3 interpolate(Vector3 pointA, Vector3 pointB, float t) {
+    QVector2D interpolate(QVector2D pointA, QVector2D pointB, float t) {
         return (pointA*t) + (pointB*(1.0-t));
     }
 
     void ensureLeftToRigth() {
-        if (!spline.isLeftToRight()) {
-            spline.reverse();
+        if (!uvSpline.isLeftToRight()) {
+            uvSpline.reverse();
         }
     }
 

@@ -101,12 +101,16 @@ public:
     virtual void drawSplines();
     void drawSpline(Spline & spline, float r);
 
+    virtual Vector3 getPointFromUv(QVector2D point) {
+        // not needed everywhere
+        return Vector3(0,0,0);
+    }
 
     void correctSketchingDirection();
 
     void doOversketch();
-    void oversketchSide(Vector3& pointInSketch, int nearest, bool first);
-    virtual bool isPointNearerSide(Vector3& point, int indexInSpline);
+    void oversketchSide(QVector2D& pointInSketch, int nearest, bool first);
+    virtual bool isPointNearerSide(QVector2D& point, int indexInSpline);
 
     void moveSketchingPointsToSpline();
 

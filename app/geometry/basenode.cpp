@@ -91,19 +91,27 @@ BaseNode * BaseNode::findIntersectingNode(Vector3 &from, Vector3 &direction, Vec
 
 void BaseNode::moveSketchingPointsToSpline() {
    spline.clear();
-   spline.addAll(sketchingSpline.getPoints());
    sketchingSpline.clear();
+
+   uvSpline.clear();
+   uvSpline.addAll(uvSketchingSpline.getPoints());
+   uvSketchingSpline.clear();
+
+   for(int i = 0; i<uvSpline.getPoints().size(); ++i) {
+       spline.addPoint(getPointFromUv(uvSpline.getPoints()[i]));
+   }
 }
 
 void BaseNode::doOversketch() {
-    if (sketchingSpline.getPoints().size() < 2) {
+    if (uvSketchingSpline.getPoints().size() < 2) {
+        uvSketchingSpline.clear();
         sketchingSpline.clear();
         return;
     }
-    Vector3 first = sketchingSpline.getPoints()[0];
-    int nearestFirst = spline.findNearestPoint(first);
-    Vector3 last = sketchingSpline.getPoints()[sketchingSpline.getPoints().size() - 1];
-    int nearestLast = spline.findNearestPoint(last);
+    QVector2D first = uvSketchingSpline.getPoints()[0];
+    int nearestFirst = uvSpline.findNearestPoint(first);
+    QVector2D last = uvSketchingSpline.getPoints()[uvSketchingSpline.getPoints().size() - 1];
+    int nearestLast = uvSpline.findNearestPoint(last);
 
     oversketchSide(first, nearestFirst, true);
     oversketchSide(last, nearestLast, false);
@@ -141,25 +149,25 @@ void BaseNode::deleteChild(BaseNode *child) {
     }
 }
 
-void BaseNode::oversketchSide(Vector3& pointInSketch, int nearest, bool first) {
+void BaseNode::oversketchSide(QVector2D& pointInSketch, int nearest, bool first) {
 
     if (isPointNearerSide(pointInSketch, nearest)) return;
 
     if (nearest != 0) {
         if (first) {
             for (int i = nearest; i >= 0; --i) {
-                sketchingSpline.addPointFront(spline.getPoints()[i]);
+                uvSketchingSpline.addPointFront(uvSpline.getPoints()[i]);
             }
         }else {
-            for (int i = nearest; i < spline.getPoints().size()-1; ++i) {
+            for (int i = nearest; i < uvSpline.getPoints().size()-1; ++i) {
 
-                sketchingSpline.addPoint(spline.getPoints()[i]);
+                uvSketchingSpline.addPoint(uvSpline.getPoints()[i]);
             }
         }
     }
 }
 
-bool BaseNode::isPointNearerSide(Vector3&, int) {
+bool BaseNode::isPointNearerSide(QVector2D&, int) {
     return false;
 }
 
@@ -171,14 +179,14 @@ void BaseNode::determineActionOnStoppedDrawing() {
 }
 
 void BaseNode::correctSketchingDirection() {
-    bool isOpposite = spline.isLeftToRight() != sketchingSpline.isLeftToRight();
+    bool isOpposite = uvSpline.isLeftToRight() != uvSketchingSpline.isLeftToRight();
 
     if (isOpposite) {
-        sketchingSpline.reverse();
+        uvSketchingSpline.reverse();
     }
 
 
-    sketchingSpline.smooth();
+    uvSketchingSpline.smooth();
 }
 
 QVector<Vector3> BaseNode::intersectionPoints(Vector3 from, Vector3 direction, float&s, float&t) {

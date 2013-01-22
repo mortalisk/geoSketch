@@ -46,12 +46,16 @@ public:
 
     void clearSketch() {
         frontNode->clearSketch();
+        frontNode->uvSpline.isSuggestion = true;
 
         backNode->clearSketch();
+        backNode->uvSpline.isSuggestion = true;
 
         leftNode->clearSketch();
+        leftNode->uvSpline.isSuggestion = true;
 
         rightNode->clearSketch();
+        rightNode->uvSpline.isSuggestion = true;
     }
 
     void updateCurrentBelowNode();

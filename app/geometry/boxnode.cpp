@@ -210,13 +210,15 @@ void BoxNode::determineActionOnStoppedDrawing() {
         if (activeSurface == topNode||activeSurface == bottomNode){
             activeSurface->spline.clear();
             activeSurface->sketchingSpline.clear();
+            activeSurface->uvSpline.clear();
+            activeSurface->uvSketchingSpline.clear();
             activeSurface = NULL;
             return;
         }
 	if (activeSurface) {
             activeSurface->correctSketchingDirection();
 
-            if (activeSurface->spline.getPoints().size() == 0) {
+            if (activeSurface->uvSpline.getPoints().size() == 0) {
                 activeSurface->moveSketchingPointsToSpline();
             } else {
                 activeSurface->doOversketch();
@@ -228,25 +230,34 @@ void BoxNode::determineActionOnStoppedDrawing() {
 
             activeSurface = NULL;
 	}
+
+    frontNode->redrawPoints();
+
+    leftNode->redrawPoints();
+
+    rightNode->redrawPoints();
+
+    backNode->redrawPoints();
+
 }
 
 void BoxNode::makeSuggestionFor(SideNode* side) {
 
 
-    if (side->opposite->spline.isSuggestion && side->left->spline.isSuggestion && side->right->spline.isSuggestion) {
+    if (side->opposite->uvSpline.isSuggestion && side->left->uvSpline.isSuggestion && side->right->uvSpline.isSuggestion) {
         side->opposite->spline.clear();
-
+        side->opposite->uvSpline.clear();
         // project points from this side to opposite
         Vector3 direction = side->opposite->lowerRigth - side->lowerLeft;
-        side->opposite->projectPoints(direction, side->spline.getPoints());
+        side->opposite->projectPoints(direction, side->uvSpline.getPoints());
 
-        side->opposite->spline.isSuggestion = true;
+        side->opposite->uvSpline.isSuggestion = true;
     }
 
-    Vector3 left = side->spline.getLeftPoint();
-    Vector3 right = side->spline.getRightPoint();
-    Vector3 leftOpposite = side->opposite->spline.getLeftPoint();
-    Vector3 rightOpposite = side->opposite->spline.getRightPoint();
+    QVector2D left = side->uvSpline.getLeftPoint();
+    QVector2D right = side->uvSpline.getRightPoint();
+    QVector2D leftOpposite = side->opposite->uvSpline.getLeftPoint();
+    QVector2D rightOpposite = side->opposite->uvSpline.getRightPoint();
 
     side->left->addInterpolatedSuggestion(rightOpposite.y(), left.y());
     side->right->addInterpolatedSuggestion(right.y(), leftOpposite.y());
@@ -256,7 +267,7 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
     backNode->ensureLeftToRigth();
     leftNode->ensureLeftToRigth();
 
-    side->spline.isSuggestion = false;
+    side->uvSpline.isSuggestion = false;
 
 }
 
@@ -277,9 +288,14 @@ void BoxNode::childDeleted(BaseNode *child) {
 
 void BoxNode::makeLayer() {
 
-    if (frontNode->spline.getPoints().size() < 1||rightNode->spline.getPoints().size() <1
-            ||backNode->spline.getPoints().size() <1||leftNode->spline.getPoints().size() <1)
+    if (frontNode->uvSpline.getPoints().size() < 1||rightNode->uvSpline.getPoints().size() <1
+            ||backNode->uvSpline.getPoints().size() <1||leftNode->uvSpline.getPoints().size() <1)
         return;
+
+    frontNode->redrawPoints();
+    backNode->redrawPoints();
+    leftNode->redrawPoints();
+    rightNode->redrawPoints();
 
     SurfaceNode * below = currentBelowNode;
 
@@ -288,7 +304,10 @@ void BoxNode::makeLayer() {
     n->parent = this;
 
     foreach(SideNode* s, surfaces) {
+        s->uvSpline.clear();
+        s->uvSketchingSpline.clear();
         s->spline.clear();
+        s->sketchingSpline.clear();
         s->spline.isSuggestion = true;
     }
 
