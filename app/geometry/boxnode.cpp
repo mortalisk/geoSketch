@@ -105,18 +105,18 @@ void BoxNode::setUpSurfaces() {
 }
 
 void BoxNode::makeWaterNode() {
-    Spline front;
-    Spline right;
-    Spline back;
-    Spline left;
-    front.addPoint(frontNode->lowerLeft);
-    front.addPoint(frontNode->lowerRigth);
-    right.addPoint(rightNode->lowerLeft);
-    right.addPoint(rightNode->lowerRigth);
-    back.addPoint(backNode->lowerLeft);
-    back.addPoint(backNode->lowerRigth);
-    left.addPoint(leftNode->lowerLeft);
-    left.addPoint(leftNode->lowerRigth);
+    Spline2d front;
+    Spline2d right;
+    Spline2d back;
+    Spline2d left;
+    front.addPoint(QVector2D(0,0));
+    front.addPoint(QVector2D(0,1));
+    right.addPoint(QVector2D(0,0));
+    right.addPoint(QVector2D(0,1));
+    back.addPoint(QVector2D(0,0));
+    back.addPoint(QVector2D(0,1));
+    left.addPoint(QVector2D(0,0));
+    left.addPoint(QVector2D(0,1));
 
     bottomDummyNode = new SurfaceNode("BottomDummy", front, right, back, left, NULL);
     currentBelowNode = new SurfaceNode(*bottomDummyNode);
@@ -299,7 +299,7 @@ void BoxNode::makeLayer() {
 
     SurfaceNode * below = currentBelowNode;
 
-    SurfaceNode * n = new SurfaceNode( "Layer", frontNode->spline, rightNode->spline, backNode->spline, leftNode->spline, below);
+    SurfaceNode * n = new SurfaceNode( "Layer", frontNode->uvSpline, rightNode->uvSpline, backNode->uvSpline, leftNode->uvSpline, below);
     children.append(n);
     n->parent = this;
 

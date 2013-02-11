@@ -82,20 +82,20 @@ void Scene::editLayer() {
                 break;
             }
         }
-        boxNode->frontNode->spline = sn->front;
-        boxNode->leftNode->spline = sn->left;
-        boxNode->rightNode->spline = sn->right;
-        boxNode->backNode->spline = sn->back;
+        boxNode->frontNode->uvSpline = sn->front;
+        boxNode->leftNode->uvSpline = sn->left;
+        boxNode->rightNode->uvSpline = sn->right;
+        boxNode->backNode->uvSpline = sn->back;
         sn->visible = false;
         activeNode = boxNode;
     } else if(editLayerNo != -1) {
 
 
         SurfaceNode * node = qobject_cast<SurfaceNode*>(boxNode->children[editLayerNo]);
-        node->front = boxNode->frontNode->spline;
-        node->left = boxNode->leftNode->spline;
-        node->back = boxNode->backNode->spline;
-        node->right = boxNode->rightNode->spline;
+        node->front = boxNode->frontNode->uvSpline;
+        node->left = boxNode->leftNode->uvSpline;
+        node->back = boxNode->backNode->uvSpline;
+        node->right = boxNode->rightNode->uvSpline;
         node->invalidate();
         node->visible = true;
         editLayerNo = -1;

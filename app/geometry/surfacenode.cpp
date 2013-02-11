@@ -4,12 +4,13 @@
 #include "ridgenode.h"
 #include "rivernode.h"
 #include "deposit.h"
+#include "boxnode.h"
 #include "util.h"
 #include <QAction>
 #include <QMenu>
 #include <isurfacefeature.h>
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(250), skip(4),below(below),front(front), right(right), back(back), left(left)
+SurfaceNode::SurfaceNode(QString name , Spline2d& front, Spline2d& right, Spline2d& back, Spline2d& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(250), skip(4),below(below),front(front), right(right), back(back), left(left)
 {
     //constructLayer();
 }
@@ -50,7 +51,7 @@ void SurfaceNode::invalidate() {
     shape = NULL;
 }
 
-void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) { 
+void SurfaceNode::makeSide(Spline2d& belowSpline, Spline2d& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) {
     bool waterNode = spline.getPoints().size() == 2;
 
     Vector3 splinep1 = spline.getPoints()[0];
@@ -173,11 +174,19 @@ void SurfaceNode::constructLayer() {
     QVector4D c(0.1, 0.3, 0.4, 1.0);
     QVector<Vector3> previousRow;
 
+    BoxNode * box = dynamic_cast<BoxNode * > (parent);
 
-    Vector3 frontRight = right.getPoint(0.0);
-    Vector3 frontLeft = left.getPoint(1.0);
-    Vector3 backLeft = left.getPoint(0.0);
-    Vector3 backRight = right.getPoint(1.0);
+    Vector3 frontRight = box->rightNode->lowerLeft * (1- right.getPoint(0.0).y()) +
+            box->rightNode->upperLeft*right.getPoint(0.0).y();
+
+    Vector3 frontLeft = box->frontNode->lowerLeft * (1- front.getPoint(0.0).y()) +
+            box->frontNode->upperLeft*front.getPoint(0.0).y();
+
+    Vector3 backLeft = box->leftNode->lowerLeft * (1- left.getPoint(0.0).y()) +
+            box->leftNode->upperLeft*left.getPoint(0.0).y();
+
+    Vector3 backRight = box->rightNode->lowerRigth * (1- right.getPoint(1.0).y()) +
+            box->rightNode->upperRigth*right.getPoint(1.0).y();
 
     rows.clear();
     intersectRows.clear();
@@ -191,13 +200,31 @@ void SurfaceNode::constructLayer() {
         Vector3 rowLeft = frontLeft*(1.0-zif) + backLeft *(zif);
         Vector3 rowRigth = frontRight*(1.0-zif) + backRight * (zif);
 
-        Vector3 leftp = left.getPoint(1.0-zif);
-        Vector3 rightp = right.getPoint(zif);
+        Vector3 leftp = box->leftNode->lowerLeft*(1-left.getPoint(1.0-zif).x()) +
+                        box->leftNode->lowerRigth*(left.getPoint(1.0-zif).x()) +
+                        box->leftNode->lowerLeft*(1-left.getPoint(1.0-zif).y()) +
+                        box->leftNode->upperLeft*(left.getPoint(1.0-zif).y()) -
+                        box->leftNode->lowerLeft;
+
+        Vector3 rightp = box->rightNode->lowerLeft*(1-right.getPoint(zif).x()) +
+                        box->rightNode->lowerRigth*(right.getPoint(zif).x()) +
+                        box->rightNode->lowerLeft*(1-right.getPoint(zif).y()) +
+                        box->rightNode->upperLeft*(right.getPoint(zif).y()) -
+                        box->rightNode->lowerLeft;
         for (int xi = 0;xi<=resolution;xi++) {
             float xif = xi/(float)resolution;
 
-            Vector3 frontp = front.getPoint(xif);
-            Vector3 backp = back.getPoint(1.0-xif);
+            Vector3 frontp = box->frontNode->lowerLeft*(1-front.getPoint(xif).x()) +
+                            box->frontNode->lowerRigth*(front.getPoint(xif).x()) +
+                            box->frontNode->lowerLeft*(1-front.getPoint(xif).y()) +
+                            box->frontNode->upperLeft*(front.getPoint(xif).y()) -
+                            box->frontNode->lowerLeft;
+
+            Vector3 backp = box->backNode->lowerLeft*(1-back.getPoint(1.0-xif).x()) +
+                            box->backNode->lowerRigth*(back.getPoint(1.0-xif).x()) +
+                            box->backNode->lowerLeft*(1-back.getPoint(1.0-xif).y()) +
+                            box->backNode->upperLeft*(back.getPoint(1.0-xif).y()) -
+                            box->backNode->lowerLeft;
 
             // the normal approach
             Vector3 colInt = rowLeft * (1.0-xif) + rowRigth * xif;
