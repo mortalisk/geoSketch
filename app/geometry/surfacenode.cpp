@@ -51,7 +51,7 @@ void SurfaceNode::invalidate() {
     shape = NULL;
 }
 
-void SurfaceNode::makeSide(Spline2d& belowSpline, Spline2d& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) {
+void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) {
     bool waterNode = spline.getPoints().size() == 2;
 
     Vector3 splinep1 = spline.getPoints()[0];
@@ -176,17 +176,13 @@ void SurfaceNode::constructLayer() {
 
     BoxNode * box = dynamic_cast<BoxNode * > (parent);
 
-    Vector3 frontRight = box->rightNode->lowerLeft * (1- right.getPoint(0.0).y()) +
-            box->rightNode->upperLeft*right.getPoint(0.0).y();
+    Vector3 frontRight = box->rightNode->getPointFromUv(right.getPoint(0.0));
 
-    Vector3 frontLeft = box->frontNode->lowerLeft * (1- front.getPoint(0.0).y()) +
-            box->frontNode->upperLeft*front.getPoint(0.0).y();
+    Vector3 frontLeft = box->frontNode->getPointFromUv(front.getPoint(0.0));
 
-    Vector3 backLeft = box->leftNode->lowerLeft * (1- left.getPoint(0.0).y()) +
-            box->leftNode->upperLeft*left.getPoint(0.0).y();
+    Vector3 backLeft = box->leftNode->getPointFromUv(left.getPoint(0.0));
 
-    Vector3 backRight = box->rightNode->lowerRigth * (1- right.getPoint(1.0).y()) +
-            box->rightNode->upperRigth*right.getPoint(1.0).y();
+    Vector3 backRight = box->backNode->getPointFromUv(back.getPoint(0.0));
 
     rows.clear();
     intersectRows.clear();
@@ -200,31 +196,15 @@ void SurfaceNode::constructLayer() {
         Vector3 rowLeft = frontLeft*(1.0-zif) + backLeft *(zif);
         Vector3 rowRigth = frontRight*(1.0-zif) + backRight * (zif);
 
-        Vector3 leftp = box->leftNode->lowerLeft*(1-left.getPoint(1.0-zif).x()) +
-                        box->leftNode->lowerRigth*(left.getPoint(1.0-zif).x()) +
-                        box->leftNode->lowerLeft*(1-left.getPoint(1.0-zif).y()) +
-                        box->leftNode->upperLeft*(left.getPoint(1.0-zif).y()) -
-                        box->leftNode->lowerLeft;
+        Vector3 leftp = box->leftNode->getPointFromUv(left.getPoint(1.0-zif));
 
-        Vector3 rightp = box->rightNode->lowerLeft*(1-right.getPoint(zif).x()) +
-                        box->rightNode->lowerRigth*(right.getPoint(zif).x()) +
-                        box->rightNode->lowerLeft*(1-right.getPoint(zif).y()) +
-                        box->rightNode->upperLeft*(right.getPoint(zif).y()) -
-                        box->rightNode->lowerLeft;
+        Vector3 rightp = box->rightNode->getPointFromUv(right.getPoint(zif));
         for (int xi = 0;xi<=resolution;xi++) {
             float xif = xi/(float)resolution;
 
-            Vector3 frontp = box->frontNode->lowerLeft*(1-front.getPoint(xif).x()) +
-                            box->frontNode->lowerRigth*(front.getPoint(xif).x()) +
-                            box->frontNode->lowerLeft*(1-front.getPoint(xif).y()) +
-                            box->frontNode->upperLeft*(front.getPoint(xif).y()) -
-                            box->frontNode->lowerLeft;
+            Vector3 frontp = box->frontNode->getPointFromUv(front.getPoint(xif));
 
-            Vector3 backp = box->backNode->lowerLeft*(1-back.getPoint(1.0-xif).x()) +
-                            box->backNode->lowerRigth*(back.getPoint(1.0-xif).x()) +
-                            box->backNode->lowerLeft*(1-back.getPoint(1.0-xif).y()) +
-                            box->backNode->upperLeft*(back.getPoint(1.0-xif).y()) -
-                            box->backNode->lowerLeft;
+            Vector3 backp = box->backNode->getPointFromUv(back.getPoint(1.0-xif));
 
             // the normal approach
             Vector3 colInt = rowLeft * (1.0-xif) + rowRigth * xif;
@@ -363,10 +343,20 @@ void SurfaceNode::constructLayer() {
     QVector<Vector3> outline;
 
     if (below) {
-        makeSide(below->front, front, triangles, outline);
-        makeSide(below->right, right, triangles, outline);
-        makeSide(below->back, back, triangles, outline);
-        makeSide(below->left, left, triangles, outline);
+        Spline belowFront = box->frontNode->getPoints(below->front);
+        Spline belowRight = box->rightNode->getPoints(below->right);
+        Spline belowBack = box->backNode->getPoints(below->back);
+        Spline belowLeft = box->leftNode->getPoints(below->left);
+
+        Spline thisFront = box->frontNode->getPoints(front);
+        Spline thisRight = box->rightNode->getPoints(right);
+        Spline thisBack = box->backNode->getPoints(back);
+        Spline thisLeft = box->leftNode->getPoints(left);
+
+        makeSide(belowFront, thisFront, triangles, outline);
+        makeSide(belowRight, thisRight, triangles, outline);
+        makeSide(belowBack, thisBack, triangles, outline);
+        makeSide(belowLeft, thisLeft, triangles, outline);
     }
 
 
@@ -578,6 +568,8 @@ BaseNode * SurfaceNode::findIntersectingNode(Vector3& from, Vector3& direction, 
     if (points.size() > 0 && s >= 0 && t >= 0){
         float distance = FLT_MAX;
         BaseNode * cand = NULL;
+        float depositDist = FLT_MAX;
+        Deposit * depositCand = NULL;
         foreach(BaseNode* c, children) {
             ISurfaceFeature * i = dynamic_cast<ISurfaceFeature*>(c);
             Deposit * d = dynamic_cast<Deposit*>(c);
@@ -585,7 +577,11 @@ BaseNode * SurfaceNode::findIntersectingNode(Vector3& from, Vector3& direction, 
                 float ss, tt;
                 QVector<Vector3> pointsD = d->intersectionPoints(from, direction,ss,tt);
                 if (pointsD.size() > 0) {
-                    return d;
+                    float depDist = (pointsD[0] - from).lenght();
+                    if (depDist < depositDist) {
+                        depositCand = d;
+                        depositDist = depDist;
+                    }
                 }
             }else if (i) {
                 float dist = i->dist(s, t);
@@ -595,9 +591,12 @@ BaseNode * SurfaceNode::findIntersectingNode(Vector3& from, Vector3& direction, 
                 }
             }
         }
-        if (cand && distance < 0.05) {
+        if (depositCand) {
+            return depositCand;
+        }
+
+        if (cand && distance < 0.02) {
             return cand;
-            point = points[0];
         }
     }
 

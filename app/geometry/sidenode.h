@@ -59,10 +59,19 @@ public:
         return distLeft < distSpline || distRight < distSpline;
     }
 
+    Spline getPoints(Spline2d & s) {
+        Spline r;
+        foreach(QVector2D p, s.getPoints()) {
+            Vector3 toAdd = getPointFromUv(p);
+            r.addPoint(toAdd);
+        }
+        return r;
+    }
+
     Vector3 getPointFromUv(QVector2D point) {
         Vector3 a = (lowerLeft*(1.0-point.x()) + lowerRigth * point.x());
         Vector3 b = (lowerLeft*(1.0-point.y()) + upperLeft * point.y());
-        return Vector3(a.x(),b.y(),a.z());
+        return a + b - lowerLeft;
     }
 
     void addInterpolatedSuggestion(float yLeft, float yRight) {

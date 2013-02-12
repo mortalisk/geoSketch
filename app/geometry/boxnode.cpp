@@ -110,13 +110,13 @@ void BoxNode::makeWaterNode() {
     Spline2d back;
     Spline2d left;
     front.addPoint(QVector2D(0,0));
-    front.addPoint(QVector2D(0,1));
+    front.addPoint(QVector2D(1,0));
     right.addPoint(QVector2D(0,0));
-    right.addPoint(QVector2D(0,1));
+    right.addPoint(QVector2D(1,0));
     back.addPoint(QVector2D(0,0));
-    back.addPoint(QVector2D(0,1));
+    back.addPoint(QVector2D(1,0));
     left.addPoint(QVector2D(0,0));
-    left.addPoint(QVector2D(0,1));
+    left.addPoint(QVector2D(1,0));
 
     bottomDummyNode = new SurfaceNode("BottomDummy", front, right, back, left, NULL);
     currentBelowNode = new SurfaceNode(*bottomDummyNode);
@@ -336,6 +336,7 @@ void BoxNode::draw() {
 
     glPushMatrix();
 
+    glTranslatef(position.x(), position.y(), position.z());
 
     drawChildren();
     if (waterNode->visible) {
@@ -357,7 +358,6 @@ void BoxNode::drawSelf() {
 
     if (!visible) return;
     //Node::drawSelf();
-    glTranslatef(position.x(), position.y(), position.z());
 
     glDisable(GL_LIGHTING);
     glDisable(GL_LIGHT0);
