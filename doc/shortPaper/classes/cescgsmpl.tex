@@ -1,0 +1,342 @@
+%%
+%% This is file `cescgsmpl.tex',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% cescg.dtx  (with options: `sample')
+%% 
+%% IMPORTANT NOTICE:
+%% 
+%% For the copyright see the source file.
+%% 
+%% Any modified versions of this file must be renamed
+%% with new filenames distinct from cescgsmpl.tex.
+%% 
+%% For distribution of the original source see the terms
+%% for copying and modification in the file cescg.dtx.
+%% 
+%% This generated file may be distributed as long as the
+%% original source files, as listed above, are part of the
+%% same distribution. (The sources need not necessarily be
+%% in the same archive or directory.)
+%% Copyright (c) 1999, 2005
+%%               Institute of Computer Graphics and Algorithms
+%%               TU Vienna, Austria
+%% Based on the LaTeX2e document class SCCG
+%% Copyright (C) 1999 Pavel Chalmoviansky
+%%                    Katedra geometrie
+%%                    Faculty of Mathematics and Physics
+%%                    Comenius University, Bratislava
+%%                    chalmo@fmph.uniba.sk
+%%
+%% This file is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%%
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+\ProvidesFile{cescgsmpl.tex}
+            [2005/11/29 v0.1.4
+ CESCG proceedings sample file]
+ %%% The document class command loads the CESCG class and sets the basic
+ %%%  options.  See the user's guide for more options and their meaning.
+
+
+\documentclass{cescg}[2005/11/12] % Use this for your submission and the final paper
+ %%% Use e.g. this package to include figures via \includegraphics[options]{filename}.
+ %%% If you don't have it in your latex installation, complain to your
+ %%% sysadmin that he's not doing his job.
+\usepackage{graphicx}
+ %%% The following packages are somewhat system and installation dependent, and may not work
+ %%% on some systems.
+ %%% If you use pdfLaTeX on Windows (part of MiKTeX), you may use package epstopdf to automatically
+ %%% convert eps files to pdf. Use this line:
+ %\usepackage{epstopdf}
+ %%% Linux users may have to call epstopdf on the command line or configure a Makefile appropriately.
+
+ %%% If you know how to create bounding boxes for png and jpg files, you can uncomment this
+ %%% to include png files etc. directly.
+ %%% For example bmeps -b myfigure.png >myfigure.bb will do the trick in Windows.
+ %%% Also, dvips needs the option "-I c3r8f" to be able to convert the bitmaps.
+ %%% See the bmeps faq for more info: http://bmeps.sourceforge.net/faq.html
+ %\ifx\pdfoutput\undefined \DeclareGraphicsExtensions{.eps,.png,.gif,.jpg} \fi
+
+ %%% Now we set the fields for the title block and cover sheet
+ %%% See the user's guide for more information on these items
+
+ %% Title, author(s), and affiliation
+ %%  Note that we have included both individual affiliations for each author
+ %%   within the author block, as well as a common affiliation.  Only one
+ %%   of these is necessary.
+ %%  Footnotes to items in the title block should be created with the \thanks
+ %%   command.
+\title{What to Do With Money}
+\author{Andreas Xnai\thanks{andreas@xnai.com} %
+        \and John Jim Brown\thanks{jjb@widget.com}}
+\supervisor{Molly Teacher\thanks{mt@cescg.org}}
+\affiliation{Institute of Computer Graphics\\
+             Whatever University of Technology\\
+             Alexandria~/~Egypt}
+
+ %% Keywords of paper
+\keywords{Bank Sector, Save Trees, Sparefroh}
+ %%% Begin the paper
+\begin{document}
+
+ %%% Create the title block
+\maketitle
+
+ %%% The abstract
+\begin{abstract}
+  In the time being the popularity of money is permanently decreasing.
+  The question what to do with unusable money arose among the others.
+  We would like to consider all aspects of this phenomenon according to the
+  present knowledge and the state of the art. We collected huge amount of
+  ideas and last ten years we sort them. Unfortunately up to now we have
+  not found two of the same category. But our effort is not at the end.
+\end{abstract}
+
+ %%% Keywords
+
+\keywordlist
+
+ %%% The main text
+\section{Introduction}
+
+This is the main text of the contribution containing various information on
+the topic, which has several aspects including those mentioned in Barry Williams
+book~\cite{Williams}. It is not terribly fun for the rest of us.
+No one of us can say wht will be in future with money. They are becoming useless.
+In this paper, we detail the results of our study.%
+\footnote{Note: This is a note to the text.}
+
+This\footnote{This is another note to the text.}
+ is the main text of the contribution containing various information on
+the topic, which has several aspects including those mentioned in a book by
+Karabas~\cite{Karabas}. It is not terribly fun for the rest of us.
+No one of us can say what will be in future with money. They are becoming useless.
+In this paper, we detail the results of our study. Compare with the literature,
+e.g.~\cite{Williams,Karabas}%
+
+In Section~\ref{sec:what}, we describe the present state of methods used in the
+ area.
+In Section~\ref{sec:who}, we discuss difficulties and describe
+ techniques which we subsequently developed (see Figure~\ref{fig:example}) to overcome them.
+Finally, in Section~\ref{sec:why}, we examine the effects of these
+ techniques on mind health of the user.
+
+\section{Background}\label{sec:what}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+ \footnote{This is one more footnote for you.}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+\section{Getting Away With It}\label{sec:who}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+%%% Figure inclusion. If the file extension is left away, pdfLaTeX will use
+%%% png/gif/jpg/pdf versions of your figures automatically if you provide them.
+%%% "Classic" LaTeX needs .eps figures with BoundingBox information.
+\begin{figure}[ht]
+  \centering
+    \includegraphics[width=0.8\linewidth]{example.pdf}
+  \caption{Example Tree}
+  \label{fig:example}
+\end{figure}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.%
+ \footnote{You're not still reading are you? It just goes on like this.}.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+\section{Results}\label{sec:why}
+
+As shown in figure \ref{fig:example} and table \ref{table_1}
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+\begin{table}[t]
+  \centering
+   \begin{tabular}{|r|c|l|}
+     \hline
+     heading 1&heading 2&heading 3\\
+     \hline
+     1&2&3\\
+     one&two&three\\
+     \hline
+   \end{tabular}
+   \caption{Example Table}
+  \label{table_1}
+\end{table}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+\section{Conclusions}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick
+brown fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+ %%% The bibliography
+\bibliographystyle{plain}
+\bibliography{smplbib}
+
+\end{document}
+
+\endinput
+%%
+%% End of file `cescgsmpl.tex'.

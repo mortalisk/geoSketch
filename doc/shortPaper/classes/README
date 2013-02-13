@@ -1,0 +1,77 @@
+CESCG class, version 0.1.4, Frbruary 18, 2010
+
+
+Copyright (C) 2002 Thomas Theuﬂl
+                   Institute of Computer Graphics and Algorithms
+                   Vienna University of Technology, Austria
+                   theussl@cg.tuwien.ac.at
+Copyright (C) 2005 Georg Zotti
+                   Institute of Computer Graphics and Algorithms
+                   Vienna University of Technology, Austria
+                   gzotti@cg.tuwien.ac.at
+Copyright (C) 2010 Martin Ilcik
+                   Institute of Computer Graphics and Algorithms
+                   Vienna University of Technology, Austria
+                   ilcik@cg.tuwien.ac.at
+				   
+				   
+The latest version of these files can be found at
+  http://www.cg.tuwien.ac.at/studentwork/CESCG/guidelines/
+
+Shamelessly copied and adapted for our needs from SCCG class
+Copyright (C) 1999 Pavel Chalmoviansky
+                   Katedra geometrie
+                   Faculty of Mathematics and Physics
+                   Comenius University, Bratislava
+                   chalmo@fmph.uniba.sk
+
+The latest version of which can be found at
+  http://www.sccg.sk/
+
+This distribution provides a document class for formatting papers
+according to the specifications for submission to the annual
+Central European Seminar on Computer Graphics for students.
+It contains four files:
+
+README - this file
+cescg.dtx - documented source code
+cescg.ins - installation driver
+Makefile  - LaTeX configuration file for GNU make
+
+To install it, type
+  latex cescg.ins
+
+This will produce 4 more files:
+cescg.cls     - the CESCG class file, which should be placed somewhere
+                in the TeX search path (you can leave it in your paper directory)
+cescgsmpl.tex - an example paper
+smplbib.bib   - a small bibliography file used by the example
+example.eps   - a small image used by the example
+
+To generate the user's guide, run
+  latex cescg.dtx
+  makeindex -s gglo.ist -o cescg.gls cescg.glo
+  latex cescg.dtx
+
+or simply "make classdoc"
+
+To compile the example, run
+  latex cescgsmpl
+  bibtex cescgsmpl
+  latex cescgsmpl
+  latex cescgsmpl
+
+or simply "make dvi". Edit the Makefile to configure it for your paper.
+
+=============================================================================
+
+This package is distributed in the hope that it will be useful,
+and to promote compatibility of documents created at different sites,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  Please see the
+cescg.dtx file for full copyright and distribution information.
+
+=============================================================================
+
+
+

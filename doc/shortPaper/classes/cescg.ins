@@ -1,0 +1,10 @@
+\def\batchfile{cescg.ins}
+\input docstrip.tex
+\keepsilent
+\askforoverwritetrue
+\generate{\file{cescg.cls}{\from{cescg.dtx}{class}}
+          \file{cescgsmpl.tex}{\from{cescg.dtx}{sample}}
+          \file{smplbib.bib}{\from{cescg.dtx}{bib}}
+          \nopreamble\nopostamble
+          \file{example.eps}{\from{cescg.dtx}{eps}}
+         }

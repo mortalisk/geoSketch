@@ -1,0 +1,1621 @@
+% \iffalse meta-comment
+% file: cescg.dtx
+% version: 0.1.2
+% date: November 25, 2005
+%
+% Provides `cescg' document class for use with LaTeX2e.
+% Formats a document according to CESCG conference proceedings specifications.
+%
+% \iffalse
+%<bib>@String{COPYRIGHT = {
+%<*!eps>
+% \fi
+%% Copyright (c) 1999, 2005
+%%               Institute of Computer Graphics and Algorithms
+%%               TU Vienna, Austria
+%% Based on the LaTeX2e document class SCCG 
+%% Copyright (C) 1999 Pavel Chalmoviansky
+%%                    Katedra geometrie
+%%                    Faculty of Mathematics and Physics
+%%                    Comenius University, Bratislava
+%%                    chalmo@fmph.uniba.sk
+%%
+%% This file is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+%%
+% \iffalse
+%<bib>}}
+% \fi
+%
+% This file may be freely copied in whole or in part under the following 
+%  conditions:
+% 1) Unmodified copies may be freely distributed separately or as part
+%    of larger packages.
+% 2) You may make modified copies of this file for your own personal use,
+%    but you may not distribute modified copies. You may place any 
+%    modifications in a cescg.cfg file (see the documentation), and distribute 
+%    that file individually or along with this source. However, if you do
+%    so, the .cfg file must contain code to issue a warning when it is
+%    invoked by LaTeX that states:
+%       a) The fact that it is being loaded and it is not part of the
+%           standard distribution
+%       b) What it does (briefly)
+%       c) That it can be disabled by removing or renaming the .cfg file
+% 3) Excerpts from this file may be freely used and distributed as part
+%    of other macro packages.
+%
+% Portions of this file (namely the \@maketitle macro) are modified versions 
+%  of those provided with the standard LaTeX files `article.cls' file and 
+%  `size10.clo', and their distribution may be further restricted by the 
+%  LaTeX copyright. (Probably not, but better safe than sorry.)
+%  
+%
+% \fi
+%
+% \CheckSum{848}
+% \iffalse
+%<bib>@String{CHARACTERTABLE = {
+% \fi
+%% \CharacterTable
+%%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%%   Digits        \0\1\2\3\4\5\6\7\8\9
+%%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%%   Dollar        \$     Percent       \%     Ampersand     \&
+%%   Acute accent  \'     Left paren    \(     Right paren   \)
+%%   Asterisk      \*     Plus          \+     Comma         \,
+%%   Minus         \-     Point         \.     Solidus       \/
+%%   Colon         \:     Semicolon     \;     Less than     \<
+%%   Equals        \=     Greater than  \>     Question mark \?
+%%   Commercial at \@     Left bracket  \[     Backslash     \\
+%%   Right bracket \]     Circumflex    \^     Underscore    \_
+%%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%%   Right brace   \}     Tilde         \~}
+%%
+% \iffalse
+%</!eps>
+%<bib>}}
+% \fi
+% 
+% \iffalse
+%    \begin{macrocode}
+%<class>\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+%<class>\ProvidesClass{cescg}
+%<sample>\ProvidesFile{cescgsmpl.tex}
+%<*driver>
+        \ProvidesFile{cescg.drv}
+%</driver>
+%<*class|sample|driver>
+            [2005/11/29 v0.1.4 
+%</class|sample|driver>
+%<class> CESCG proceedings document class]
+%<sample> CESCG proceedings sample file]
+%<*driver> 
+       CESCG proceedings document class]
+%</driver> 
+%    \end{macrocode}
+%
+%
+% \section{Driver for this document}
+%
+% The following contains the driver for generating this document.
+% It can be extracted from the |.dtx| file with the \dst{} program.
+%
+%    \begin{macrocode}
+%<*driver>
+\documentclass{ltxdoc}
+\GetFileInfo{cescg.drv}
+%\DisableCrossrefs
+\RecordChanges
+\OnlyDescription % comment out for full source description
+\begin{document}
+    \DocInput{cescg.dtx}
+\end{document}
+%</driver>
+%    \end{macrocode}
+%\fi
+%
+% \newenvironment{mylist}{%
+%       \begin{list}{\labelitemi}{%
+%               \addtolength{\leftmargin}{2em}%
+%               \setlength{\itemindent}{-1em}%
+%               \setlength{\parsep}{0in}%
+%               \setlength{\itemsep}{0.5ex}}}{\end{list}}
+%
+% \changes{v0.1.0}{1999/1/31}{TT: Created the CESCG document class,
+%                                based on Pavel Chalmoviansky's \texttt{sccg.cls},
+%                                which is itself based on the version 1.2.1 of `siggraph.dtx'.}
+%
+% \changes{v0.1.1}{2005/11/12}{MW:
+%                  (1) cls-file: pass option a4paper to article class automatically
+%                  (2) template file:
+%                      (a) changed to \texttt{graphicx} graphic driver instead of \texttt{epsfig}
+%                      (b) included instructions to include \texttt{.png} files directly
+%                      (c) included instructions to include \texttt{.eps} files for \texttt{pdflatex}}
+% 
+% \changes{v0.1.2}{2005/11/25}{GZ: fixed \texttt{.dtx} file, updated documentation}
+% \changes{v0.1.3}{2005/11/28}{GZ: Bugfix, removed buggy option epstopdf}
+% \changes{v0.1.4}{2010/02/18}{MI: Footer line}
+%
+% \title{The |CESCG| Document Class Users' Guide\thanks{
+%    This file has version number \fileversion{} dated \filedate{}.
+%    The most recent version can be found at
+%    \texttt{http://www.cg.tuwien.ac.at/studentwork/CESCG/}}}
+%
+% \author{Thomas Theu{\ss}l, Michael Wimmer, Georg Zotti, Martin Ilcik\thanks{\{theussl,wimmer,gzotti,ilcik\}@cg.tuwien.ac.at}}
+%
+% \date{\filedate}
+%
+% \maketitle
+%
+% \begin{abstract}
+%   This document class modifies the standard |article| class to conform to
+%   the specifications for papers published in the proceedings of the annual
+%   Spring Conference on Computer Graphics.
+%   It sets all the necessary layout parameters and handles the differences
+%   in format between a paper being submitted for blind review and a camera
+%   ready copy of an accepted paper. (currently discouraged.)
+%   Several additional features are also provided.
+%
+%   \vspace{\baselineskip}
+%   \begin{quote}\scshape
+%     \textbf{DISCLAIMER}:  This class is distributed in the hope that it will be useful,
+%     and to promote compatibility of documents created at different sites.
+%     However it is provided \textbf{WITHOUT ANY WARRANTY}; without even the implied
+%     warranty of \textbf{MERCHANTABILITY} or \textbf{FITNESS FOR A PARTICULAR PURPOSE}.
+%     Please see the |cescg.dtx| source file for copyright and distribution
+%     information.
+%   \end{quote}
+% \end{abstract}
+%
+% \section{Introduction}
+%
+% This document describes the |cescg| document class, for use with \LaTeXe{}.
+% It loads in the |article| class and modifies several parameters
+% to comply with the layout specifications for a paper submitted to
+% the CESCG conference.
+% Currently, these specifications are:
+% \begin{mylist}
+%   \label{layoutlist}
+%   \item A4 paper size
+%   \item $2$ cm margins on top and sides, $2.6$ margin on bottom
+%   \item two column mode with $0.7$ cm column separation
+%   \item 10 point type on 12 point baselines
+%   \item no page numbers
+% \end{mylist}
+% Also set by the class but not part of the CESCG specifications are:
+% \begin{mylist}
+%   \item titles and section headings are bold sans serif
+%   \item 1 em paragraph indentation
+%   \item |flushbottom| mode
+%   \item whole title flushed left or right
+% \end{mylist}
+%
+% The class also allows the user to specify whether the paper is being
+% submitted for blind review or as a final, camera-ready document.
+% When review mode is specified, it will automatically generate a
+% cover sheet for the paper, modify the title block on the first page
+% to protect anonymity, and (optionally) switch to a more widely spaced
+% layout.
+% Mechanisms are also provided to allow the user to introduce text conditional
+% on the chosen submission mode.
+%
+% \section{Class Usage}
+%
+% To use this class, specify
+%  \begin{quote}
+%     |\documentclass[|\meta{options}|]{cescg}|
+%  \end{quote}
+%  at the beginning of your document.
+% The following options may be included in the |\documentclass| command:
+%
+% \begin{mylist}
+%  \item \DescribeMacro{cameraready}|cameraready|,
+%        \DescribeMacro{preprint}|preprint|,
+%        \DescribeMacro{review}|review|, or
+%        \DescribeMacro{widereview}|widereview|
+%       \newline These specify the submission mode for the paper.
+%       |cameraready|, the default, sets the layout parameters as
+%       described in section~\ref{layoutlist}.
+%       The other options are deprecated and may go away, please don't use them.
+% \iffalse       % GZ, 2005/11/25
+%       The |preprint| option adds page numbers and prints the message
+%       ``To appear in the CESCG conference proceedings'' in the top
+%       margin.  This message can be changed with the
+%       \DescribeMacro{\preprinttext}|\preprinttext{|\meta{message}|}|
+%       command.
+%       The |review| option uses the same layout as |cameraready| but
+%       adds page numbers and modifies the title block as described
+%       in the following sections, and causes a cover page to
+%       be generated.
+%       The |widereview| option is for people who prefer review papers
+%       that have a more widely spaced layout.
+%       It uses one-column mode with 12 point, double-spaced type.
+% \fi
+%  \item \DescribeMacro{flushtitleleft}|flushtitleleft| or
+%        \DescribeMacro{flushtitleright}|flushtitleright|
+%       \newline These option specify, where the title will be flushed.
+%       The default option is |flushright|.
+%  \item \DescribeMacro{onecolumn}|onecolumn| or
+%        \DescribeMacro{twocolumn}|twocolumn|
+%  \item \DescribeMacro{singlespace}|singlespace| or
+%        \DescribeMacro{doublespace}|doublespace|
+%  \item \DescribeMacro{10pt}|10pt|,
+%        \DescribeMacro{11pt}|11pt|, or
+%        \DescribeMacro{12pt}|12pt|
+%       \newline These three sets of options will override the default
+%       settings for the number of columns, line spacing, and point size
+%       determined by the submission mode.
+%       Overriding the settings when in camera-ready mode, while allowed,
+%       is a violation of the submission specifications and will produce
+%       a warning message.
+%   \item \DescribeMacro{epstopdf}|epstopdf| loads the package of the same name,
+%         allowing the inclusion of |.eps| figures when using pdf\LaTeX.
+%
+%  \item Additionally, any other options supported by the |article| class
+%       may be used, except for |landscape| and |titlepage|, which are
+%       disabled.
+% \end{mylist}
+%       
+%
+% \section{Title Block, Abstract, and Cover Page}
+%
+% \subsection{Data fields}
+%
+% To produce the title block and cover sheet, a number of data fields must
+%  be set in the preamble of the paper (i.e.~before |\begin{document}|).
+% Each of the following commands takes a single argument, the value to which
+%  the corresponding field should be set.
+% Footnotes to any of these items should be specified with the |\thanks|
+%  command, rather than |\footnote|.
+%
+% \begin{mylist}
+%   \item \DescribeMacro{\title}|\title|
+%
+%       The title of the paper.
+%
+%   \item \DescribeMacro{\author}|\author|
+%
+%       The author(s) of the paper and their individual affiliations.
+%       (See the sample file for examples.)
+%
+%   \item \DescribeMacro{\affiliation}|\affiliation|
+%
+%       If all the authors share an affiliation, it can be set with this
+%       command rather than individually within the author command.
+%       The affiliation will appear centered below the author list.
+%   \item \DescribeMacro{\supervisor}|\supervisor|
+%
+%		This command is used to set the name of the supervisor.
+%		It will appear centered below the authors listing.
+%
+% \iffalse GZ: 2005-11-28: taken out, we don't need it currently.
+%<*gobble>
+%   \item \DescribeMacro{\category}|\category| and
+%         \DescribeMacro{\format}|\format|
+%
+%       The paper category (research, systems, application, survey, \ldots) and format (print, video).
+%
+%   \item \DescribeMacro{\contactname}|\contactname|,
+%         \DescribeMacro{\contactaddress}|\contactaddress|,
+%         \DescribeMacro{\contactphone}|\contactphone|,
+%         \DescribeMacro{\contactfax}|\contactfax|,
+%         \DescribeMacro{\contactemail}|\contactemail|
+%
+%       These should be used to set the information about the person to
+%       be contacted about the paper. They will be shown only on cover page.
+%</gobble>
+% \fi
+%   \item \DescribeMacro{\keywords}|\keywords|
+%
+%       A list of keywords to be printed on the cover page
+%
+% \iffalse GZ: 2005-11-28: taken out, we don't need it currently.
+%<*gobble>
+%   \item \DescribeMacro{\estpages}|\estpages|
+%
+%       The estimated number of pages that the paper would require in the
+%       conference proceedings.
+%</gobble>
+% \fi
+% \end{mylist}
+%
+% \subsection{Title block}
+%
+% The title block should be generated with the normal \LaTeX{}
+%  \DescribeMacro{\maketitle}|\maketitle| command, place after
+%  the |\begin{document}| command.
+% In camera ready or preprint mode it will contain:
+% \begin{mylist}
+%   \item Title
+%   \item Authors
+%   \item Affiliation (if any)
+% \end{mylist}
+% For a review paper it will instead contain:
+% \begin{mylist}
+%   \item Title
+%   \item Paper category
+% \end{mylist}
+% The review options will also suppress printing of any information
+% specified with the |\thanks| command.
+%
+% \subsection{Abstract}
+%
+% The abstract should be specified with the |abstract| environment.
+% In addition to appearing in the paper itself, its contents will stored
+% and will appear on the cover page (in review mode).
+%
+% \subsection{Keywords}
+%
+% Authors may wish to include a list of keywords after the abstract.
+% The \DescribeMacro{\keywordlist}|\keywordlist| command will include the
+%  list set by the |\keywords| command described above.
+%
+% \iffalse GZ: 2005-11-28: taken out, we don't need it currently.
+%<*gobble>
+% \subsection{Cover page}
+%
+% When the |review| or |widereview| option is specified,
+% a cover sheet will automatically be generated at the end of the document.
+% Placing the \DescribeMacro{\suppresscover}|\suppresscover| command
+% in the preamble will prevent this.
+% The cover sheet will contain:
+% \begin{mylist}
+%   \item Title
+%   \item Authors
+%   \item Affiliation (if any)
+%   \item Paper category
+%   \item Contact information
+%   \item A copy of the abstract
+%   \item List of keywords
+%   \item Estimated number of pages
+% \end{mylist}
+%</gobble>
+% \fi
+%
+% \section{Other Features}
+%
+% \subsection{Title and section heading font}
+%
+% By default, this class uses bold sans-serif for the title and
+% section heading font.
+% This behavior can be altered with the
+% \DescribeMacro{\sectionfont}|\sectionfont{|\meta{fontcommands}|}| command.
+% \meta{fontcommands} should be one or more font changing commands,
+% for instance ``|\rmfamily\scshape|'' or ``|\fontfamily{pcr}\selectfont|''.
+% Normally, you should not use this command, though, as it breaks the
+% formatting guidelines.
+% Please do \emph{not} load packages that change the regular text font,               
+% e.g. \texttt{times} etc., for the same reason.  
+%
+% \subsection{Conditional text}
+%
+% \DescribeMacro{\ifcamera}\DescribeMacro{\ifreview}
+% \DescribeMacro{\ifcameraelse}\DescribeMacro{\ifreviewelse}
+% The class also provides the following four commands for writing text
+% conditional on whether camera-ready or review mode has been
+% chosen:
+% \begin{quote}
+%       |\ifcamera{|\meta{thenclause}|}|
+%
+%       |\ifreview{|\meta{thenclause}|}|
+%
+%       |\ifcameraelse{|\meta{thenclause}|}{|\meta{elseclause}|}|
+%
+%       |\ifreviewelse{|\meta{thenclause}|}{|\meta{elseclause}|}|
+% \end{quote}
+% The first two will generate the \meta{thenclause} if camera-ready
+% (resp. review) mode is chosen, otherwise they resolve to a null string.
+% The second two are the same as the first two but generate the
+% \meta{elseclause} instead of a null string if the condition is not met.
+%
+% These can be used for writing the paper so as to protect anonymity for
+% a submission for review, without having to worry about going back over it
+% months later to put the identifying information back in if the paper
+% is accepted.  For example:
+% \begin{quote}^^A
+%   |In \cite{FooBar1994}, \ifcameraelse{we}{Foo and Bar} showed that ...|
+% \end{quote}
+% or
+% \begin{quote}^^A
+%   |as illustrated in the following \ifcameraelse{three}{two} images:|
+%
+%   [include generic image]
+%
+%   |\ifcamera{| [include our logo] |}|
+%
+%   [include another generic image]
+% \end{quote}
+%
+% \subsection{Configuration file}
+%
+% Individual users or sites may wish to modify the behavior of this
+% class (for instance, to use a particular set of fonts.)
+% Rather than having people hack the |.cls| file, which can lead to
+% various incompatible versions at different sites, the class provides
+% for a configuration file.
+% After the class has finished loading, it will check to see if a
+% |cescg.cfg| file exists in the \TeX{} search path.
+% If so, it will be input.
+% Any user-- or site--specific modifications should be placed in this file.
+% \textit{(See the copyright notice in the |cescg.dtx| source file for
+% information on distribution of configuration files.)}
+%
+% \section{Example File}
+%
+%  This class comes with a file named ``cescgsmpl.tex'', which provides
+%   a simple example of how to use this class.
+%  To compile it, run
+%  \begin{verbatim}
+%    latex cescgsmpl
+%    bibtex cescgsmpl
+%    latex cescgsmpl
+%    latex cescgsmpl
+%  \end{verbatim}
+%
+% \StopEventually{\PrintChanges}
+%
+% \iffalse
+%<*class>
+% \fi
+%
+% \section{Implementation}
+%
+% \subsection{Initial stuff}
+%
+%  \begin{macro}{\ifcescg@camera}
+%  \begin{macro}{\ifcescg@preprint}
+%  \begin{macro}{\ifcescg@review}
+%  \begin{macro}{\cescg@columnmode}
+%  \begin{macro}{\cescg@pointsize}
+%  \begin{macro}{\ifcescg@doublespaced}
+%   First off, we need to initialize a few variables.
+%   |cescg@camera| is a boolean which determines whether or not we're in
+%   camera ready mode.
+%   |\cescg@preprint|, |\cescg@columnmode|, |\cescg@pointsize|,
+%   |cescg@doublespaced| and |flushtitleleft| are pretty obvious.
+%    \begin{macrocode}
+\newif\ifcescg@camera
+\newif\ifcescg@preprint
+\newif\ifcescg@review
+\newcommand{\cescg@columnmode}{}
+\newcommand{\cescg@pointsize}{}
+\newif\ifcescg@doublespaced
+\newif\ifcescg@flushtitleleft
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%
+% \subsection{Option processing}
+%
+% \subsubsection{Submission mode}
+%
+%  \begin{macro}{cameraready}
+%  \begin{macro}{preprint}
+%  \begin{macro}{review}
+%  \begin{macro}{widereview}
+%   The |cameraready|, |preprint|, |review|, and |widereview| options set the 
+%   variables defined above appropriately.
+%    \begin{macrocode}
+\DeclareOption{cameraready}{%
+    \cescg@cameratrue%
+    \cescg@preprintfalse%
+    \cescg@reviewfalse%
+    \renewcommand{\cescg@columnmode}{twocolumn}%
+    \cescg@doublespacedfalse%
+    \renewcommand{\cescg@pointsize}{10pt}}
+\DeclareOption{review}{%
+    \cescg@camerafalse%
+    \cescg@preprintfalse%
+    \cescg@reviewtrue%
+    \renewcommand{\cescg@columnmode}{twocolumn}%
+    \cescg@doublespacedfalse%
+    \renewcommand{\cescg@pointsize}{10pt}}
+\DeclareOption{widereview}{%
+    \cescg@camerafalse%
+    \cescg@preprintfalse%
+    \cescg@reviewtrue%
+    \renewcommand{\cescg@columnmode}{onecolumn}%
+    \cescg@doublespacedtrue%
+    \renewcommand{\cescg@pointsize}{12pt}}
+\DeclareOption{preprint}{%
+    \cescg@camerafalse%
+    \cescg@preprinttrue%
+    \cescg@reviewfalse%
+    \renewcommand{\cescg@columnmode}{twocolumn}%
+    \cescg@doublespacedfalse%
+    \renewcommand{\cescg@pointsize}{10pt}}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  By default, |cameraready| mode should be used.
+%    \begin{macrocode}
+\ExecuteOptions{cameraready}
+%    \end{macrocode}
+%
+% \subsubsection{Layout parameters}
+%
+%  \begin{macro}{\cescg@optwarning}
+%   The |\cescg@optwarning| command produces a warning message when one
+%   tries to override the default layout parameters while in camera-ready
+%   mode.
+%    \begin{macrocode}
+\newcommand{\cescg@optwarning}[1]{%
+    \ifcescg@camera
+        \ClassWarningNoLine{cescg}%
+            {#1 option used in camera-ready mode.\MessageBreak
+             This violates submission specifications}
+    \fi
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{onecolumn}
+%  \begin{macro}{twocolumn}
+%  \begin{macro}{10pt}
+%  \begin{macro}{11pt}
+%  \begin{macro}{12pt}
+%  \begin{macro}{doublespace}
+%  \begin{macro}{singlespace}
+%  \begin{macro}{flushtitleft}
+%  \begin{macro}{flushtitleright}
+%   The various layout parameters can be set individually, overriding the
+%   values set by the specified submission mode.
+%    \begin{macrocode}
+\DeclareOption{onecolumn}{%
+    \cescg@optwarning{onecolumn}
+    \renewcommand{\cescg@columnmode}{onecolumn}}
+\DeclareOption{twocolumn}{%
+    \renewcommand{\cescg@columnmode}{twocolumn}}
+\DeclareOption{10pt}{%
+    \cescg@optwarning{10pt}
+    \renewcommand{\cescg@pointsize}{10pt}}
+\DeclareOption{11pt}{%
+    \cescg@optwarning{11pt}
+    \renewcommand{\cescg@pointsize}{11pt}}
+\DeclareOption{12pt}{%
+    \cescg@optwarning{12pt}
+    \renewcommand{\cescg@pointsize}{12pt}}
+\DeclareOption{singlespace}{%
+    \cescg@doublespacedfalse}
+\DeclareOption{doublespace}{%
+    \cescg@optwarning{doublespace}
+    \cescg@doublespacedtrue}
+\DeclareOption{flushtitleleft}{%
+    \cescg@flushtitlelefttrue}
+\DeclareOption{flushtitleright}{%
+    \cescg@flushtitleleftfalse}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%   Set the default flushtitle to right.
+%    \begin{macrocode}
+\ExecuteOptions{flushtitleright}
+%    \end{macrocode}
+%
+% \subsubsection{Remaining options}
+%
+%  Disable the |titlepage| and |landscape| options, and pass any remaining
+%  options on to the |article| class.
+%
+%    \begin{macrocode}
+\DeclareOption{titlepage}{%
+    \OptionNotUsed%
+    \ClassWarningNoLine{cescg}{titlepage option not allowed}}
+\DeclareOption{landscape}{%
+    \OptionNotUsed%
+    \ClassWarningNoLine{cescg}{landscape option not allowed}}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
+%    \end{macrocode}
+%
+% \subsubsection{Option processing}
+%
+%  Process the options, cause the appropriate column and point size options
+%  to be passed to the |article| class, and load the |article| class.
+%
+%    \begin{macrocode}
+\ProcessOptions
+\PassOptionsToClass{a4paper}{article}
+\PassOptionsToClass{\cescg@columnmode}{article}
+\ifdim\cescg@pointsize>10pt
+    \PassOptionsToClass{\cescg@pointsize}{article}
+\fi
+\LoadClass{article}
+% \changes{v0.1.2}{2005/11/25}{GZ: load font packages} 
+\RequirePackage{mathptmx} 
+\RequirePackage[scaled=.90]{helvet} 
+\RequirePackage{courier} 
+%    \end{macrocode}
+%
+% \subsection{Preprint text}
+%  \begin{macro}{\preprinttext}
+%   Set up default message for preprints and command to change it.
+%    \begin{macrocode}
+\newcommand{\cescg@preprinttext}{To appear in the CESCG conference proceedings}
+\newcommand{\preprinttext}[1]{\renewcommand{\cescg@preprinttext}{#1}}
+\newcommand{\cescg@footertext}{Proceedings of CESCG 2013: The 17th Central European Seminar on Computer Graphics (non-peer-reviewed)}
+\newcommand{\footertext}[1]{\renewcommand{\cescg@footertext}{#1}}
+%    \end{macrocode}
+%  \end{macro}
+%
+%
+% \subsection{Conditional text}
+%
+%  \begin{macro}{\ifcamera}
+%  \begin{macro}{\ifreview}
+%  \begin{macro}{\ifcameraelse}
+%  \begin{macro}{\ifreviewelse}
+%   Here we define the commands to include text conditionally, based on
+%   the submission mode.
+%    \begin{macrocode}
+\newcommand{\ifcamera}[1]{\ifcescg@review \else #1 \fi}
+\newcommand{\ifreview}[1]{\ifcescg@review #1 \fi}
+\newcommand{\ifcameraelse}[2]{\ifcescg@review #2 \else #1 \fi}
+\newcommand{\ifreviewelse}[2]{\ifcescg@review #1 \else #2 \fi}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%
+% \subsection{Page layout}
+%
+% Set the margins, header and footer sizes, column separation, and indentation.
+%
+%    \begin{macrocode}
+\setlength{\textheight}{24cm}
+\setlength{\topmargin}{-0.85cm}
+\setlength{\headheight}{0.5cm}
+\setlength{\headsep}{0.65cm}
+\setlength{\footskip}{1.25cm}
+\flushbottom
+\setlength{\hoffset}{-0.54cm}
+\setlength{\textwidth}{17cm}
+\setlength{\oddsidemargin}{0cm}
+\setlength{\evensidemargin}{0cm}
+\setlength{\marginparsep}{0cm}
+\setlength{\marginparwidth}{0pt}
+\setlength{\columnsep}{0.7cm}
+\setlength{\parindent}{1em}
+%    \end{macrocode}
+%
+% Modify plain and empty page styles to turn off page numbering or turn on
+%  preprint message.
+%
+%    \begin{macrocode}
+\renewcommand{\ps@plain}%
+    {%
+    \ifcescg@preprint%
+\renewcommand{\@oddhead}{\hfil\textit{\large\cescg@preprinttext}\hfil}%
+    \else%
+\renewcommand{\@oddhead}{}%
+    \fi%
+    \ifcescg@camera%
+    \renewcommand{\@oddfoot}{\hfil\textit{\cescg@footertext}\hfil}%
+    \else%
+\renewcommand{\@oddfoot}{\hfil\textrm{\thepage}\hfil}%
+    \fi%	
+    \renewcommand{\@evenhead}{\@oddhead}%
+    \renewcommand{\@evenfoot}{\@oddfoot}%
+    }
+\renewcommand{\ps@empty}%
+    {%
+    \ifcescg@preprint%
+\renewcommand{\@oddhead}{\hfil\textit{\large\cescg@preprinttext}\hfil}%
+    \else%
+    \renewcommand{\@oddhead}{}%
+    \fi%
+    \renewcommand{\@oddfoot}{\hfil\textit{\cescg@footertext}\hfil}%
+    \renewcommand{\@evenhead}{\@oddhead}%
+    \renewcommand{\@evenfoot}{\@oddfoot}%
+    }
+\pagestyle{plain}
+%    \end{macrocode}
+%
+% \subsection{Section headings}
+%
+%  \begin{macro}{\sectionfont}
+%   The |\sectionfont| command lets the user modify the font used for
+%   section headings and the title.
+%    \begin{macrocode}
+\newcommand{\cescg@sectionfont}{}
+\newcommand{\sectionfont}[1]{\renewcommand{\cescg@sectionfont}{#1}}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\section}
+%  \begin{macro}{\subsection}
+%  \begin{macro}{\subsubsection}
+%  \begin{macro}{\paragraph}
+%  \begin{macro}{\subparagraph}
+%   We redefine the section headings to use bold sans serif type plus
+%   any modifications set with |\sectionfont|.  (Otherwise
+%   these are the same definitions given in the |classes.dtx| file.)
+%    \begin{macrocode}
+\renewcommand\section{\@startsection {section}{1}{\z@}%
+                {-3.5ex \@plus -1ex \@minus -.2ex}%
+                {2.3ex \@plus.2ex}%
+                {\reset@font\Large\sffamily\bfseries\cescg@sectionfont}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                {-3.25ex\@plus -1ex \@minus -.2ex}%
+                {1.5ex \@plus .2ex}%
+                {\reset@font\large\sffamily\bfseries\cescg@sectionfont}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                {-3.25ex\@plus -1ex \@minus -.2ex}%
+                {1.5ex \@plus .2ex}%
+                {\reset@font\normalsize\sffamily\bfseries\cescg@sectionfont}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                {3.25ex \@plus1ex \@minus.2ex}%
+                {-1em}%
+                {\reset@font\normalsize\sffamily\bfseries\cescg@sectionfont}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+                {3.25ex \@plus1ex \@minus .2ex}%
+                {-1em}%
+                {\reset@font\normalsize\sffamily\bfseries\cescg@sectionfont}}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%
+%
+%
+% \subsection{Title block}
+%
+%  \begin{macro}{\cescg@empty}
+%   This is used to check whether the affiliation and teaser have been set.
+%    \begin{macrocode}
+\newcommand{\cescg@empty}{}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\affiliation}
+%  \begin{macro}{\cescg@affiliation}
+%   We define the |\affiliation| macro to set the authors' affiliation,
+%   and the |\cescg@affiliation| macro to hold it.
+%    \begin{macrocode}
+\newcommand{\cescg@affiliation}{}
+\newcommand{\affiliation}[1]{\renewcommand{\cescg@affiliation}{#1}}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%
+%  \begin{macro}{\supervisor}
+%  \begin{macro}{\cescg@supervisor}
+%   We define the |\supervisor| macro to set the supervisor name,
+%   and the |\cescg@supervisor| macro to hold it.
+%    \begin{macrocode}
+\newcommand{\cescg@supervisor}{}
+\newcommand{\supervisor}[1]{\renewcommand{\cescg@supervisor}{\emph{Supervised by: {#1}}}}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%
+%  \begin{macro}{\category}
+%  \begin{macro}{\cescg@category}
+%  \begin{macro}{\format}
+%  \begin{macro}{\cescg@format}
+%   These macros set and hold the paper's category and format.
+%    \begin{macrocode}
+\newcommand{\cescg@category}{}
+\newcommand{\category}[1]{\renewcommand{\cescg@category}{#1}}
+\newcommand{\cescgcategory}[1]{\category{#1}}
+\newcommand{\cescg@format}{}
+\newcommand{\format}[1]{\renewcommand{\cescg@format}{#1}}
+\newcommand{\cescgformat}[1]{\format{#1}}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%
+%  \begin{macro}{\titlespace}
+%   We also need to set up length for the distance between the title block
+%   and the rest of the text.  We initialize it to $\frac{1}{4}$ inches.
+%    \begin{macrocode}
+\newlength{\titlespace}
+\setlength{\titlespace}{0.25in}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%
+%  \begin{macro}{\@maketitle}
+%   Now we redefine the \@maketitle command to properly format the title block.
+%   For camera-ready papers, it should have the title, authors, and affiliation.
+%   For review papers, it should have the title, paper category and format,
+%   plus all information specified with the |\thanks| command should be
+%   suppressed.
+%    \begin{macrocode}
+\ifcescg@review
+    \renewcommand{\@maketitle}{%
+        \begin{flushright}%
+            \renewcommand{\thanks}[1]{}
+            {\LARGE\sffamily\bfseries\cescg@sectionfont \@title \par}%
+            \vspace{1\baselineskip}%
+            {Category: \cescg@category \par}%
+            \vspace{\titlespace}%
+        \end{flushright} \par%
+    }
+\else
+    \renewcommand{\@maketitle}{%
+        \begin{center}%
+            {\LARGE\sffamily\bfseries\cescg@sectionfont \@title \par}%
+            \vspace{1\baselineskip}%
+            \large
+            \begin{tabular}[t]{@{}c@{}}%
+              \@author
+            \end{tabular}\par%
+			\cescg@supervisor\par%
+            \ifx\cescg@affiliation\cescg@empty \else%
+                \vspace{1\baselineskip}%
+                \cescg@affiliation\par%
+            \fi%
+            \vspace{\titlespace}%
+        \end{center}%
+        \par%
+    }
+\fi
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\maketitle}
+%   We also need to make several modifications to the |\maketitle| command.
+%   Since |\maketitle| wipes out the values of the title, author, etc\ldots,
+%   we have to make sure a copy gets saved.
+%   We also save a copy of the definition of |\and|, since |\maketitle|
+%   clears it and we will still need it for the cover page
+%   After the title block is output,
+%   the page numbering for the first page should be turned off, and
+%   double spacing, if selected, should be turned on.
+%    \begin{macrocode}
+\let\cescg@origmaketitle\maketitle%
+\let\and\crcr%
+\let\cescg@origand\and%
+\renewcommand{\maketitle}{%
+    \let\cescg@title\@title%
+    \let\cescg@author\@author%
+    \cescg@origmaketitle%
+    \thispagestyle{empty}%
+    \ifcescg@doublespaced%
+        \renewcommand{\baselinestretch}{1.66}\selectfont%
+    \fi
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%
+%
+% \subsection{Capturing the abstract}
+%
+%  \begin{environment}{abstract}
+%   In order to have the abstract appear on the cover sheet, we need to
+%   redefine the |abstract| environment to store its contents so that
+%   it can be used later.
+%   This seemingly trivial problem is actually quite difficult.
+%   The code to do it is a modified version of the |\@collectbody| stuff
+%   from the AMS-\LaTeX{} source code.
+%   See that code for a more detailed explanation of how it works.
+%
+%  \begin{macro}{\cescg@abs}
+%   The |\cescg@abs| token list is used to store the text of the abstract.
+%    \begin{macrocode}
+\newtoks\cescg@abs
+%    \end{macrocode}
+%  \end{macro}
+%
+%   We only make these modifications if we are in review mode.
+%    \begin{macrocode}
+\ifcescg@review
+%    \end{macrocode}
+%
+%  \begin{macro}{\cescg@add}
+%   The |\cescg@add| command appends its argument to |\cescg@abs|.
+%    \begin{macrocode}
+    \long\def\cescg@add#1{\global\cescg@abs\expandafter{\the\cescg@abs#1}}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\cescg@collect}
+%  \begin{macro}{\cescg@@collect}
+%   The |\cescg@collect| and |\cescg@@collect| commands scan the input for the
+%   |\end{abstract}| command and place all input tokens leading up to it
+%   into |\cescg@abs|.
+%    \begin{macrocode}
+    \long\def\cescg@collect{%
+        \global\cescg@abs{}%
+        \let\abstract\cescg@@collect
+        \abstract
+    }
+    \long\def\cescg@@collect#1\end#2{%
+        \def\@tempa{#2}%
+        \ifx\@tempa\@currenvir
+            \cescg@add{#1}%
+            \edef\abstract{\noexpand\end{\@tempa}}%
+        \else
+            \cescg@add{#1\end{#2}}%
+        \fi
+        \abstract
+    }
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%
+%  \begin{macro}{\cescg@modify}
+%   The |\cescg@modify| command makes the actual modifications to the |abstract|
+%   environment.
+%   The new |abstract| stores its contents with the above macros, then
+%   outputs the abstract using its original definition.
+%    \begin{macrocode}
+    \newcommand{\cescg@modify}{%
+        \let\cescg@origabs\abstract%
+        \let\cescg@origendabs\endabstract%
+        \renewenvironment{abstract}%
+            {\cescg@collect}%
+            {\begingroup
+                \let\abstract\cescg@origabs
+                \let\endabstract\cescg@origendabs
+                \begin{abstract} \the\cescg@abs \end{abstract}
+            \endgroup}%
+    }
+%    \end{macrocode}
+%  \end{macro}
+%
+%  We want to allow the user to redefine the appearance of the |abstract|
+%  environment however he/she likes, so we hold off actually making the 
+%  modifications to |abstract| until after the preamble.
+%    \begin{macrocode}
+    \AtBeginDocument{\cescg@modify}
+%    \end{macrocode}
+%
+%  End of review mode conditional:
+%    \begin{macrocode}
+\fi
+%    \end{macrocode}
+%  \end{environment}
+%
+%
+%
+% \subsection{Keywords}
+%
+%  \begin{macro}{\keywordlist}
+%   For the keywordlist, we start an unindented paragraph and print
+%    ``Keywords:'' in bold, followed by the list set with the |\keywords|
+%    macro.
+%    \begin{macrocode}
+\newcommand{\keywordlist}{%
+    \vspace{0.5\baselineskip}%
+    \par\noindent \textbf{Keywords: } \cescg@keywords%
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+% \subsection{Cover page}
+% 
+%  \begin{macro}{\contactname}
+%  \begin{macro}{\cescg@contactname}
+%  \begin{macro}{\contactaddress}
+%  \begin{macro}{\cescg@contactaddress}
+%  \begin{macro}{\contactphone}
+%  \begin{macro}{\cescg@contactphone}
+%  \begin{macro}{\contactfax}
+%  \begin{macro}{\cescg@contactfax}
+%  \begin{macro}{\contactemail}
+%  \begin{macro}{\cescg@contactemail}
+%  \begin{macro}{\keywords}
+%  \begin{macro}{\cescg@keywords}
+%  \begin{macro}{\estpages}
+%  \begin{macro}{\cescg@estpages}
+%   We define macros to set and hold all the information about the person
+%   to be contacted about the paper and the author to receive compensation.
+%    \begin{macrocode}
+\newcommand{\cescg@contactname}{}
+\newcommand{\contactname}[1]{\renewcommand{\cescg@contactname}{#1}}
+\newcommand{\cescg@contactaddress}{}
+\newcommand{\contactaddress}[1]{\renewcommand{\cescg@contactaddress}{#1}}
+\newcommand{\cescg@contactphone}{}
+\newcommand{\contactphone}[1]{\renewcommand{\cescg@contactphone}{#1}}
+\newcommand{\cescg@contactfax}{}
+\newcommand{\contactfax}[1]{\renewcommand{\cescg@contactfax}{#1}}
+\newcommand{\cescg@contactemail}{}
+\newcommand{\contactemail}[1]{\renewcommand{\cescg@contactemail}{#1}}
+\newcommand{\cescg@keywords}{}
+\newcommand{\keywords}[1]{\renewcommand{\cescg@keywords}{#1}}
+\newcommand{\cescg@estpages}{}
+\newcommand{\estpages}[1]{\renewcommand{\cescg@estpages}{#1}}
+%    \end{macrocode}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%  \end{macro}
+%
+%  \begin{macro}{cescg@cover}
+%   Set up a control to determine whether or not to print the cover page.
+%    \begin{macrocode}
+\newif\ifcescg@cover
+\ifcescg@review
+    \cescg@covertrue
+\else
+    \cescg@coverfalse
+\fi
+\newcommand{\suppresscover}{\cescg@coverfalse}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\cescg@coverpage}
+%   The |\cescg@coverpage| macro handles the formatting of the cover page.
+%    \begin{macrocode}
+\newcommand{\cescg@coverpage}{%
+    \begin{titlepage}%
+        \def\thanks##1{}
+        \let\and\cescg@origand
+        \normalsize
+        \renewcommand{\baselinestretch}{1}\selectfont
+        \begin{center}%
+            \vspace*{\fill}
+            {\LARGE\sffamily\bfseries\cescg@sectionfont \cescg@title \par}%
+            \vspace{2\baselineskip}%
+            {\large
+                \begin{tabular}[t]{c}%
+                \cescg@author
+             \end{tabular}\par%
+            }%			
+            \vspace{1\baselineskip}%
+			{\large \cescg@supervisor \par}%
+			\vspace{1\baselineskip}%
+            {\large \cescg@affiliation \par}%
+            \addvspace{3\baselineskip}%
+            {Category: \cescg@category \par}%
+            \vspace{0.5\baselineskip}%
+            {Format: \cescg@format \par}%
+            \vspace{3\baselineskip}%
+            \begin{tabular}{ll}
+                Contact: & \cescg@contactname \\[1\baselineskip]
+                         & \begin{tabular}[b]{@{}l@{}}
+                               \cescg@contactaddress
+                               \end{tabular} \\[1\baselineskip]
+                phone: & \cescg@contactphone \\
+                fax: & \cescg@contactfax \\
+                email: & \cescg@contactemail
+            \end{tabular}\par%
+            \vspace*{3\baselineskip}%
+            {Estimated \# of pages: \cescg@estpages \par}%
+            \vspace*{\baselineskip}%
+            {Keywords: \cescg@keywords \par}%
+            \vspace*{\fill}%
+            \begin{minipage}{5in}%
+                \the\cescg@abs
+            \end{minipage}\par%
+            \vspace*{\fill}
+        \end{center}%
+    \end{titlepage}%
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+% We cause the cover page to be generated at the end of the paper.
+%    \begin{macrocode}
+\AtEndDocument{\ifcescg@cover \cescg@coverpage \fi}
+%    \end{macrocode}
+%
+% \subsection{Configurations file}
+%
+% Finally, we load the configuration file if it exists.
+%
+%    \begin{macrocode}
+\InputIfFileExists{cescg.cfg}
+        {\typeout{***************************************^^J%
+                  * Local config file cescg.cfg used    *^^J%
+                  ***************************************}}
+        {}
+%    \end{macrocode}
+%
+% \iffalse
+%</class>
+% \fi
+%
+% \iffalse ============== EXAMPLE FILE ================================
+%<*sample>
+% \fi
+%
+% \iffalse Don't include the example file in the User's Guide
+% \section{Example File}
+%
+%    \begin{macrocode}
+ %%% The document class command loads the CESCG class and sets the basic
+ %%%  options.  See the user's guide for more options and their meaning.
+
+%<*gobble>
+        %% GZ: Given that the review etc. options are deprecated anyway,
+        %% there is no need to have these lines here.       
+\documentclass[cameraready]{cescg} % Use this for the final paper
+ %deprecated - do not use this \documentclass[review]{cescg}     % Use this for a submission for review
+ %deprecated - do not use this \documentclass[widereview]{cescg} % Use this for a wide spaced review paper
+ %deprecated - do not use this \documentclass[preprint]{cescg}   % Use this for a preprint
+ %deprecated - do not use this \preprinttext{Never appearing anywhere}  % Uncomment to change preprint info
+%</gobble> 
+
+\documentclass{cescg}[2005/11/12] % Use this for your submission and the final paper
+ %%% Use e.g. this package to include figures via \includegraphics[options]{filename}.
+ %%% If you don't have it in your latex installation, complain to your
+ %%% sysadmin that he's not doing his job.
+\usepackage{graphicx}
+ %%% The following packages are somewhat system and installation dependent, and may not work
+ %%% on some systems. 
+ %%% If you use pdfLaTeX on Windows (part of MiKTeX), you may use package epstopdf to automatically
+ %%% convert eps files to pdf. Use this line:
+ %\usepackage{epstopdf}
+ %%% Linux users may have to call epstopdf on the command line or configure a Makefile appropriately.
+
+ %%% If you know how to create bounding boxes for png and jpg files, you can uncomment this
+ %%% to include png files etc. directly. 
+ %%% For example bmeps -b myfigure.png >myfigure.bb will do the trick in Windows.
+ %%% Also, dvips needs the option "-I c3r8f" to be able to convert the bitmaps.
+ %%% See the bmeps faq for more info: http://bmeps.sourceforge.net/faq.html
+ %\ifx\pdfoutput\undefined \DeclareGraphicsExtensions{.eps,.png,.gif,.jpg} \fi
+
+
+ %%% Now we set the fields for the title block and cover sheet
+ %%% See the user's guide for more information on these items
+
+ %% Title, author(s), and affiliation
+ %%  Note that we have included both individual affiliations for each author
+ %%   within the author block, as well as a common affiliation.  Only one
+ %%   of these is necessary.
+ %%  Footnotes to items in the title block should be created with the \thanks
+ %%   command.
+\title{What to Do With Money}
+\author{Andreas Xnai\thanks{andreas@xnai.com} %
+        \and John Jim Brown\thanks{jjb@widget.com}}
+\supervisor{Molly Teacher\thanks{mt@cescg.org}}
+\affiliation{Institute of Computer Graphics\\
+             Whatever University of Technology\\
+             Alexandria~/~Egypt}
+
+%<*gobble>
+ %% GZ: We don't need this currently.
+           
+ %% Paper type
+\cescgcategory{survey}
+\cescgformat{print}
+
+ %% Who to contact about the paper
+\contactname{Paula Vomlach}
+\contactaddress{   On the Way 2130\\
+                   888 88 Bratislava \\
+                   Slovak Republic \\}
+\contactphone{(123) 456--7890}
+\contactfax{(321) 654--0987}
+\contactemail{paula@pixel.area.volume.com}
+%</gobble>
+ %% Keywords of paper
+\keywords{Bank Sector, Save Trees, Sparefroh}
+% \iffalse GZ: 2005-11-28: taken out, we don't need it currently.
+%<*gobble>
+% estimated length of paper
+\estpages{3}
+
+ %%% GZ: Currently unused
+ %%% This command suppresses printing of the cover page.  To conserve paper
+ %%%  (and compile time), you should probably not comment it out until you
+ %%%  are ready to send in the paper for review.
+\suppresscover
+%</gobble>
+% \fi
+ %%% Begin the paper
+\begin{document}
+
+ %%% Create the title block
+\maketitle
+
+ %%% The abstract
+\begin{abstract}
+  In the time being the popularity of money is permanently decreasing. 
+  The question what to do with unusable money arose among the others.
+  We would like to consider all aspects of this phenomenon according to the 
+  present knowledge and the state of the art. We collected huge amount of 
+  ideas and last ten years we sort them. Unfortunately up to now we have 
+  not found two of the same category. But our effort is not at the end.
+\end{abstract}
+
+ %%% Keywords 
+
+\keywordlist
+
+ %%% The main text
+\section{Introduction}
+
+This is the main text of the contribution containing various information on 
+the topic, which has several aspects including those mentioned in Barry Williams
+book~\cite{Williams}. It is not terribly fun for the rest of us.
+No one of us can say wht will be in future with money. They are becoming useless.
+In this paper, we detail the results of our study.%
+\footnote{Note: This is a note to the text.}
+
+This\footnote{This is another note to the text.}
+ is the main text of the contribution containing various information on 
+the topic, which has several aspects including those mentioned in a book by
+Karabas~\cite{Karabas}. It is not terribly fun for the rest of us.
+No one of us can say what will be in future with money. They are becoming useless.
+In this paper, we detail the results of our study. Compare with the literature,
+e.g.~\cite{Williams,Karabas}%
+
+In Section~\ref{sec:what}, we describe the present state of methods used in the 
+ area.
+In Section~\ref{sec:who}, we discuss difficulties and describe
+ techniques which we subsequently developed (see Figure~\ref{fig:example}) to overcome them.
+Finally, in Section~\ref{sec:why}, we examine the effects of these
+ techniques on mind health of the user.
+
+\section{Background}\label{sec:what}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+ \footnote{This is one more footnote for you.}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+\section{Getting Away With It}\label{sec:who}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+%%% Figure inclusion. If the file extension is left away, pdfLaTeX will use
+%%% png/gif/jpg/pdf versions of your figures automatically if you provide them.
+%%% "Classic" LaTeX needs .eps figures with BoundingBox information.
+\begin{figure}[ht]
+  \centering
+    \includegraphics[width=0.8\linewidth]{example}
+  \caption{Example Tree}
+  \label{fig:example}
+\end{figure}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.%
+ \footnote{You're not still reading are you? It just goes on like this.}.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+\section{Results}\label{sec:why}
+
+As shown in figure \ref{fig:example} and table \ref{table_1}
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+\begin{table}[t]
+  \centering
+   \begin{tabular}{|r|c|l|}
+     \hline
+     heading 1&heading 2&heading 3\\
+     \hline
+     1&2&3\\
+     one&two&three\\
+     \hline
+   \end{tabular}
+   \caption{Example Table}
+  \label{table_1}
+\end{table}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+\section{Conclusions}
+
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick
+brown fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+Blah blah blah etc etc so on and so on and so on ad infinitum the quick brown
+fox jumped over the lazy dog that came to the aid of its country.
+
+ %%% The bibliography
+\bibliographystyle{plain}
+\bibliography{smplbib}
+
+\end{document}
+%    \end{macrocode}
+% \fi
+%
+% \iffalse
+%</sample>
+% \fi
+%
+%
+% \iffalse
+%<*bib>
+% \fi
+%
+% \iffalse Don't include the sample bibliography in the User's Guide
+% \section{Bibliography for Sample File}
+%
+%    \begin{macrocode}
+@BOOK{Williams,
+ author={Barry Williams},
+ title={Money, Money, Money},
+ publisher={Andrews and McMeel},
+ address={Black City},
+ year=1998,
+}
+
+@BOOK{Karabas,
+ author={Barabas Karabas},
+ title={How to Make Money out of Wood},
+ publisher={Sprinter},
+ year=1998,
+}
+%    \end{macrocode}
+% \fi
+%
+% \iffalse
+%</bib>
+% \fi
+%<*eps>
+%<<EOF
+%!PS-Adobe-2.0 EPSF-2.0
+%%Title: example.eps
+%%Creator: fig2dev Version 3.2 Patchlevel 3d
+%%CreationDate: Sun Oct 21 16:13:08 2001
+%%For: atrax@Yggdrasill (Andreas Traxler,home,,)
+%%BoundingBox: 0 0 177 121
+%%Magnification: 1.0000
+%%EndComments
+/$F2psDict 200 dict def
+$F2psDict begin
+$F2psDict /mtrx matrix put
+/col-1 {0 setgray} bind def
+/col0 {0.000 0.000 0.000 srgb} bind def
+end
+save
+newpath 0 121 moveto 0 0 lineto 177 0 lineto 177 121 lineto closepath clip newpath
+-109.5 315.1 translate
+1 -1 scale
+
+/cp {closepath} bind def
+/ef {eofill} bind def
+/gr {grestore} bind def
+/gs {gsave} bind def
+/sa {save} bind def
+/rs {restore} bind def
+/l {lineto} bind def
+/m {moveto} bind def
+/rm {rmoveto} bind def
+/n {newpath} bind def
+/s {stroke} bind def
+/sh {show} bind def
+/slc {setlinecap} bind def
+/slj {setlinejoin} bind def
+/slw {setlinewidth} bind def
+/srgb {setrgbcolor} bind def
+/rot {rotate} bind def
+/sc {scale} bind def
+/sd {setdash} bind def
+/ff {findfont} bind def
+/sf {setfont} bind def
+/scf {scalefont} bind def
+/sw {stringwidth} bind def
+/tr {translate} bind def
+/tnt {dup dup currentrgbcolor
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add
+  4 -2 roll dup 1 exch sub 3 -1 roll mul add srgb}
+  bind def
+/shd {dup dup currentrgbcolor 4 -2 roll mul 4 -2 roll mul
+  4 -2 roll mul srgb} bind def
+ /DrawEllipse {
+        /endangle exch def
+        /startangle exch def
+        /yrad exch def
+        /xrad exch def
+        /y exch def
+        /x exch def
+        /savematrix mtrx currentmatrix def
+        x y tr xrad yrad sc 0 0 1 startangle endangle arc
+        closepath
+        savematrix setmatrix
+        } def
+
+/$F2psBegin {$F2psDict begin /$F2psEnteredState save def} def
+/$F2psEnd {$F2psEnteredState restore end} def
+
+$F2psBegin
+10 setmiterlimit
+ 0.06299 0.06299 sc
+%
+% Fig objects follow
+%
+% Polyline
+7.500 slw
+n 3600 4950 m 4050 4050 l 3600 3150 l
+ 2250 4050 l gs col0 s gr 
+% Polyline
+n 4500 4950 m
+ 4050 4050 l gs col0 s gr 
+% Polyline
+n 2250 3150 m
+ 3600 3150 l gs col0 s gr 
+% Polyline
+n 1800 4500 m
+ 2700 4950 l gs col0 s gr 
+% Polyline
+n 1800 4500 m
+ 2250 4050 l gs col0 s gr 
+% Polyline
+n 1800 3600 m
+ 2250 4050 l gs col0 s gr 
+% Ellipses
+n 2242 3145 47 47 0 360 DrawEllipse gs 0.00 setgray ef gr gs col-1 s gr
+n 4047 4055 47 47 0 360 DrawEllipse gs 0.00 setgray ef gr gs col-1 s gr
+n 3586 3148 47 47 0 360 DrawEllipse gs 0.00 setgray ef gr gs col-1 s gr
+n 2250 4047 47 47 0 360 DrawEllipse gs 0.00 setgray ef gr gs col-1 s gr
+n 1794 3587 47 47 0 360 DrawEllipse gs 0.00 setgray ef gr gs col-1 s gr
+n 1803 4504 47 47 0 360 DrawEllipse gs 0.00 setgray ef gr gs col-1 s gr
+n 2681 4928 47 47 0 360 DrawEllipse gs 0.00 setgray ef gr gs col-1 s gr
+n 3580 4948 47 47 0 360 DrawEllipse gs 0.00 setgray ef gr gs col-1 s gr
+n 4483 4933 47 47 0 360 DrawEllipse gs 0.00 setgray ef gr gs col-1 s gr
+$F2psEnd
+rs
+%EOF
+%</eps>
+% \Finale
+
+
+
+
+
+
+
+
