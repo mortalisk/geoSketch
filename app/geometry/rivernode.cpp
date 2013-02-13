@@ -45,10 +45,20 @@ RiverNode::RiverNode(QVector<QVector2D> uvs, bool drawWater, float width) : Base
 float RiverNode::dist(float s, float t) {
     QVector2D p(s,t);
     float distance = FLT_MAX;
-    for (int i = 0; i<uv.size(); i++) {
-        float dist = (uv[i] - p).length();
+    for (int i = 0; i<lefts.size(); i++) {
+        float dist = (lefts[i] - p).length();
         if (dist < distance) {
             distance = dist;
+            editLeft = true;
+
+        }
+    }
+    for (int i = 0; i<rigths.size(); i++) {
+        float dist = (rigths[i] - p).length();
+        if (dist < distance) {
+            distance = dist;
+            editRight = true;
+            editLeft = false;
         }
     }
     return distance;
@@ -248,8 +258,8 @@ void RiverNode::setActive(bool a) {
                 nearestRight = l;
         }
 
-        editLeft = nearestLeft < nearestRight;
-        editRight = !editLeft;
+//        editLeft = nearestLeft < nearestRight;
+//        editRight = !editLeft;
     } else {
         editLeft = false;
         editRight = false;
@@ -417,8 +427,8 @@ void RiverNode::drawSelf() {
 void RiverNode::drawSplines() {
     float r = active?1:0;
     if (drawWater || active) {
-        drawSpline(spline,editLeft);
-        drawSpline(rightSpline,editRight);
+        drawSpline(spline,active && editLeft);
+        drawSpline(rightSpline,active && editRight);
 
         glDisable(GL_STENCIL_TEST);
         drawSpline(sketchingSpline,r);

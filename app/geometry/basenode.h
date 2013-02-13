@@ -5,6 +5,7 @@
 #include "morten3d/Vector3.h"
 #include "shape.h"
 #include "spline.h"
+#include "spline2DE.h"
 #include <QVariantMap>
 #include <QAction>
 #include <QToolBar>
@@ -24,8 +25,8 @@ public:
     QVector<BaseNode*> children;
     Spline spline;
     Spline sketchingSpline;
-    QVector<QVector2D> uvSpline;
-    QVector<QVector2D> uvSketchingSpline;
+    Spline2d uvSpline;
+    Spline2d uvSketchingSpline;
 
     bool drawing;
     bool splineDone;
@@ -46,7 +47,7 @@ public:
     BaseNode(Shape * shape, QString name);
     BaseNode(BaseNode &other)
         : QObject(), shape(other.shape),position(other.position),
-        spline(other.spline),sketchingSpline(other.sketchingSpline),
+          spline(other.spline),sketchingSpline(other.sketchingSpline),uvSketchingSpline(other.uvSketchingSpline),uvSpline(other.uvSpline),
           drawing(other.drawing),splineDone(other.splineDone),visible(other.visible),proxy(NULL), diffuse(other.diffuse), ambient(other.ambient)
     {
         init();
@@ -80,7 +81,7 @@ public:
 
     virtual BaseNode * findIntersectingNode(Vector3& from, Vector3& direction, Vector3& point);
 
-    virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction);
+    virtual QVector<Vector3> intersectionPoints(Vector3 from,Vector3 direction, float&s, float&t);
 
     /** adds a point to currend spline */
     virtual void addPoint(Vector3 from, Vector3 direction);
@@ -100,12 +101,16 @@ public:
     virtual void drawSplines();
     void drawSpline(Spline & spline, float r);
 
+    virtual Vector3 getPointFromUv(QVector2D point) {
+        // not needed everywhere
+        return Vector3(0,0,0);
+    }
 
     void correctSketchingDirection();
 
     void doOversketch();
-    void oversketchSide(Vector3& pointInSketch, int nearest, bool first);
-    virtual bool isPointNearerSide(Vector3& point, int indexInSpline);
+    void oversketchSide(QVector2D& pointInSketch, int nearest, bool first);
+    virtual bool isPointNearerSide(QVector2D& point, int indexInSpline);
 
     void moveSketchingPointsToSpline();
 

@@ -4,12 +4,13 @@
 #include "ridgenode.h"
 #include "rivernode.h"
 #include "deposit.h"
+#include "boxnode.h"
 #include "util.h"
 #include <QAction>
 #include <QMenu>
 #include <isurfacefeature.h>
 
-SurfaceNode::SurfaceNode(QString name , Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(250), skip(4),below(below),front(front), right(right), back(back), left(left)
+SurfaceNode::SurfaceNode(QString name , Spline2d& front, Spline2d& right, Spline2d& back, Spline2d& left, SurfaceNode * below) : BaseNode(name),  hasContructedLayer(false),resolution(250), skip(4),below(below),front(front), right(right), back(back), left(left)
 {
     //constructLayer();
 }
@@ -50,7 +51,7 @@ void SurfaceNode::invalidate() {
     shape = NULL;
 }
 
-void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) { 
+void SurfaceNode::makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& boxoutline) {
     bool waterNode = spline.getPoints().size() == 2;
 
     Vector3 splinep1 = spline.getPoints()[0];
@@ -173,11 +174,15 @@ void SurfaceNode::constructLayer() {
     QVector4D c(0.1, 0.3, 0.4, 1.0);
     QVector<Vector3> previousRow;
 
+    BoxNode * box = dynamic_cast<BoxNode * > (parent);
 
-    Vector3 frontRight = right.getPoint(0.0);
-    Vector3 frontLeft = left.getPoint(1.0);
-    Vector3 backLeft = left.getPoint(0.0);
-    Vector3 backRight = right.getPoint(1.0);
+    Vector3 frontRight = box->rightNode->getPointFromUv(right.getPoint(0.0));
+
+    Vector3 frontLeft = box->frontNode->getPointFromUv(front.getPoint(0.0));
+
+    Vector3 backLeft = box->leftNode->getPointFromUv(left.getPoint(0.0));
+
+    Vector3 backRight = box->backNode->getPointFromUv(back.getPoint(0.0));
 
     rows.clear();
     intersectRows.clear();
@@ -191,13 +196,15 @@ void SurfaceNode::constructLayer() {
         Vector3 rowLeft = frontLeft*(1.0-zif) + backLeft *(zif);
         Vector3 rowRigth = frontRight*(1.0-zif) + backRight * (zif);
 
-        Vector3 leftp = left.getPoint(1.0-zif);
-        Vector3 rightp = right.getPoint(zif);
+        Vector3 leftp = box->leftNode->getPointFromUv(left.getPoint(1.0-zif));
+
+        Vector3 rightp = box->rightNode->getPointFromUv(right.getPoint(zif));
         for (int xi = 0;xi<=resolution;xi++) {
             float xif = xi/(float)resolution;
 
-            Vector3 frontp = front.getPoint(xif);
-            Vector3 backp = back.getPoint(1.0-xif);
+            Vector3 frontp = box->frontNode->getPointFromUv(front.getPoint(xif));
+
+            Vector3 backp = box->backNode->getPointFromUv(back.getPoint(1.0-xif));
 
             // the normal approach
             Vector3 colInt = rowLeft * (1.0-xif) + rowRigth * xif;
@@ -336,10 +343,20 @@ void SurfaceNode::constructLayer() {
     QVector<Vector3> outline;
 
     if (below) {
-        makeSide(below->front, front, triangles, outline);
-        makeSide(below->right, right, triangles, outline);
-        makeSide(below->back, back, triangles, outline);
-        makeSide(below->left, left, triangles, outline);
+        Spline belowFront = box->frontNode->getPoints(below->front);
+        Spline belowRight = box->rightNode->getPoints(below->right);
+        Spline belowBack = box->backNode->getPoints(below->back);
+        Spline belowLeft = box->leftNode->getPoints(below->left);
+
+        Spline thisFront = box->frontNode->getPoints(front);
+        Spline thisRight = box->rightNode->getPoints(right);
+        Spline thisBack = box->backNode->getPoints(back);
+        Spline thisLeft = box->leftNode->getPoints(left);
+
+        makeSide(belowFront, thisFront, triangles, outline);
+        makeSide(belowRight, thisRight, triangles, outline);
+        makeSide(belowBack, thisBack, triangles, outline);
+        makeSide(belowLeft, thisLeft, triangles, outline);
     }
 
 
@@ -551,13 +568,20 @@ BaseNode * SurfaceNode::findIntersectingNode(Vector3& from, Vector3& direction, 
     if (points.size() > 0 && s >= 0 && t >= 0){
         float distance = FLT_MAX;
         BaseNode * cand = NULL;
+        float depositDist = FLT_MAX;
+        Deposit * depositCand = NULL;
         foreach(BaseNode* c, children) {
             ISurfaceFeature * i = dynamic_cast<ISurfaceFeature*>(c);
             Deposit * d = dynamic_cast<Deposit*>(c);
             if(d) {
-                QVector<Vector3> pointsD = d->intersectionPoints(from, direction);
+                float ss, tt;
+                QVector<Vector3> pointsD = d->intersectionPoints(from, direction,ss,tt);
                 if (pointsD.size() > 0) {
-                    return d;
+                    float depDist = (pointsD[0] - from).lenght();
+                    if (depDist < depositDist) {
+                        depositCand = d;
+                        depositDist = depDist;
+                    }
                 }
             }else if (i) {
                 float dist = i->dist(s, t);
@@ -567,9 +591,12 @@ BaseNode * SurfaceNode::findIntersectingNode(Vector3& from, Vector3& direction, 
                 }
             }
         }
-        if (cand && distance < 0.05) {
+        if (depositCand) {
+            return depositCand;
+        }
+
+        if (cand && distance < 0.02) {
             return cand;
-            point = points[0];
         }
     }
 

@@ -16,10 +16,11 @@ RidgeNode::RidgeNode(QVector<QVector2D> uv) : BaseNode("rigde"), uv(uv)
 }
 
 QVector<Vector3> RidgeNode::intersectionPoints(Vector3 from, Vector3 direction) {
+    float ss, tt;
     if (active) {
-        return BaseNode::intersectionPoints(from, direction);
+        return BaseNode::intersectionPoints(from, direction,ss,tt);
     }else {
-        QVector<Vector3> intersects = parent->intersectionPoints(from, direction);
+        QVector<Vector3> intersects = parent->intersectionPoints(from, direction,ss,tt);
         if (intersects.size() > 0) {
             for (float i = 0.0; i < 1.01;i+=0.1) {
                 Vector3 p = spline.getPoint(i);

@@ -105,18 +105,18 @@ void BoxNode::setUpSurfaces() {
 }
 
 void BoxNode::makeWaterNode() {
-    Spline front;
-    Spline right;
-    Spline back;
-    Spline left;
-    front.addPoint(frontNode->lowerLeft);
-    front.addPoint(frontNode->lowerRigth);
-    right.addPoint(rightNode->lowerLeft);
-    right.addPoint(rightNode->lowerRigth);
-    back.addPoint(backNode->lowerLeft);
-    back.addPoint(backNode->lowerRigth);
-    left.addPoint(leftNode->lowerLeft);
-    left.addPoint(leftNode->lowerRigth);
+    Spline2d front;
+    Spline2d right;
+    Spline2d back;
+    Spline2d left;
+    front.addPoint(QVector2D(0,0));
+    front.addPoint(QVector2D(1,0));
+    right.addPoint(QVector2D(0,0));
+    right.addPoint(QVector2D(1,0));
+    back.addPoint(QVector2D(0,0));
+    back.addPoint(QVector2D(1,0));
+    left.addPoint(QVector2D(0,0));
+    left.addPoint(QVector2D(1,0));
 
     bottomDummyNode = new SurfaceNode("BottomDummy", front, right, back, left, NULL);
     currentBelowNode = new SurfaceNode(*bottomDummyNode);
@@ -144,8 +144,9 @@ float BoxNode::getHeight() {
 
 float BoxNode::intersectionPoint(Vector3 from, Vector3 direction) {
     float dist = FLT_MAX;
+    float ss, tt;
     foreach (BaseNode * s, surfaces) {
-        QVector<Vector3> points = s->intersectionPoints(from, direction);
+        QVector<Vector3> points = s->intersectionPoints(from, direction,ss,tt);
         if (points.size() >0) {
             Vector3& p = points[0];
             float d = (p-from).lenght();
@@ -179,15 +180,17 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
     // we must find the nearest intersection point
     float candidateDistance = FLT_MAX;
     Vector3 candidatePoint;
+    QVector2D uvCandidate;
     SideNode * candidate = NULL;
-
+    float ss, tt;
     foreach (SideNode * s, surfaces) {
-        QVector<Vector3> points = s->intersectionPoints(from, direction);
+        QVector<Vector3> points = s->intersectionPoints(from, direction,ss,tt);
         if (points.size() >0 ) {
                 float dist = (points[0]-from).lenght();
                 if ((activeSurface == NULL || s == activeSurface) && dist < candidateDistance) {
                     candidateDistance = dist;
                     candidatePoint = points[0];
+                    uvCandidate = QVector2D(ss, tt);
                     candidate=s;
                }
 
@@ -196,6 +199,7 @@ void BoxNode::addPoint(Vector3 from, Vector3 direction) {
 
     if (candidate) {
         candidate->sketchingSpline.addPoint(candidatePoint);
+        candidate->uvSketchingSpline.addPoint(uvCandidate);
 
 
         activeSurface = candidate;
@@ -206,13 +210,15 @@ void BoxNode::determineActionOnStoppedDrawing() {
         if (activeSurface == topNode||activeSurface == bottomNode){
             activeSurface->spline.clear();
             activeSurface->sketchingSpline.clear();
+            activeSurface->uvSpline.clear();
+            activeSurface->uvSketchingSpline.clear();
             activeSurface = NULL;
             return;
         }
 	if (activeSurface) {
             activeSurface->correctSketchingDirection();
 
-            if (activeSurface->spline.getPoints().size() == 0) {
+            if (activeSurface->uvSpline.getPoints().size() == 0) {
                 activeSurface->moveSketchingPointsToSpline();
             } else {
                 activeSurface->doOversketch();
@@ -224,25 +230,34 @@ void BoxNode::determineActionOnStoppedDrawing() {
 
             activeSurface = NULL;
 	}
+
+    frontNode->redrawPoints();
+
+    leftNode->redrawPoints();
+
+    rightNode->redrawPoints();
+
+    backNode->redrawPoints();
+
 }
 
 void BoxNode::makeSuggestionFor(SideNode* side) {
 
 
-    if (side->opposite->spline.isSuggestion && side->left->spline.isSuggestion && side->right->spline.isSuggestion) {
+    if (side->opposite->uvSpline.isSuggestion && side->left->uvSpline.isSuggestion && side->right->uvSpline.isSuggestion) {
         side->opposite->spline.clear();
-
+        side->opposite->uvSpline.clear();
         // project points from this side to opposite
         Vector3 direction = side->opposite->lowerRigth - side->lowerLeft;
-        side->opposite->projectPoints(direction, side->spline.getPoints());
+        side->opposite->projectPoints(direction, side->uvSpline.getPoints());
 
-        side->opposite->spline.isSuggestion = true;
+        side->opposite->uvSpline.isSuggestion = true;
     }
 
-    Vector3 left = side->spline.getLeftPoint();
-    Vector3 right = side->spline.getRightPoint();
-    Vector3 leftOpposite = side->opposite->spline.getLeftPoint();
-    Vector3 rightOpposite = side->opposite->spline.getRightPoint();
+    QVector2D left = side->uvSpline.getLeftPoint();
+    QVector2D right = side->uvSpline.getRightPoint();
+    QVector2D leftOpposite = side->opposite->uvSpline.getLeftPoint();
+    QVector2D rightOpposite = side->opposite->uvSpline.getRightPoint();
 
     side->left->addInterpolatedSuggestion(rightOpposite.y(), left.y());
     side->right->addInterpolatedSuggestion(right.y(), leftOpposite.y());
@@ -252,7 +267,7 @@ void BoxNode::makeSuggestionFor(SideNode* side) {
     backNode->ensureLeftToRigth();
     leftNode->ensureLeftToRigth();
 
-    side->spline.isSuggestion = false;
+    side->uvSpline.isSuggestion = false;
 
 }
 
@@ -273,18 +288,26 @@ void BoxNode::childDeleted(BaseNode *child) {
 
 void BoxNode::makeLayer() {
 
-    if (frontNode->spline.getPoints().size() < 1||rightNode->spline.getPoints().size() <1
-            ||backNode->spline.getPoints().size() <1||leftNode->spline.getPoints().size() <1)
+    if (frontNode->uvSpline.getPoints().size() < 1||rightNode->uvSpline.getPoints().size() <1
+            ||backNode->uvSpline.getPoints().size() <1||leftNode->uvSpline.getPoints().size() <1)
         return;
+
+    frontNode->redrawPoints();
+    backNode->redrawPoints();
+    leftNode->redrawPoints();
+    rightNode->redrawPoints();
 
     SurfaceNode * below = currentBelowNode;
 
-    SurfaceNode * n = new SurfaceNode( "Layer", frontNode->spline, rightNode->spline, backNode->spline, leftNode->spline, below);
+    SurfaceNode * n = new SurfaceNode( "Layer", frontNode->uvSpline, rightNode->uvSpline, backNode->uvSpline, leftNode->uvSpline, below);
     children.append(n);
     n->parent = this;
 
     foreach(SideNode* s, surfaces) {
+        s->uvSpline.clear();
+        s->uvSketchingSpline.clear();
         s->spline.clear();
+        s->sketchingSpline.clear();
         s->spline.isSuggestion = true;
     }
 
@@ -313,6 +336,7 @@ void BoxNode::draw() {
 
     glPushMatrix();
 
+    glTranslatef(position.x(), position.y(), position.z());
 
     drawChildren();
     if (waterNode->visible) {
@@ -334,7 +358,6 @@ void BoxNode::drawSelf() {
 
     if (!visible) return;
     //Node::drawSelf();
-    glTranslatef(position.x(), position.y(), position.z());
 
     glDisable(GL_LIGHTING);
     glDisable(GL_LIGHT0);

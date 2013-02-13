@@ -20,13 +20,13 @@ class SurfaceNode : public BaseNode
     void makeSide(Spline& belowSpline, Spline& spline, QVector<vertex>& triangles, QVector<Vector3>& outline);
 public:
     SurfaceNode* below;
-    Spline front, right, back, left;
+    Spline2d front, right, back, left;
     QVector < QVector < Vector3 > > rows;
     int resolution;
     int skip;
     void invalidate();
     SurfaceNode() {}
-    SurfaceNode(QString name, Spline& front, Spline& right, Spline& back, Spline& left, SurfaceNode * below = NULL);
+    SurfaceNode(QString name, Spline2d& front, Spline2d& right, Spline2d& back, Spline2d& left, SurfaceNode * below = NULL);
     SurfaceNode(SurfaceNode& other);
     void constructLayer();
     virtual BaseNode* copy();
